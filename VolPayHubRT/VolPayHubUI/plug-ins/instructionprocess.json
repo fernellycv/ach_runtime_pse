@@ -1,0 +1,22 @@
+[{
+    "Page": "/app/allpayments",
+    "REST": "/rest/v2/paymentprocess",
+    "REST_Method": "PUT",
+    "SuccessURL": "/app/allpayments",
+    "failureURL": "",
+    "Actions": [{
+            "CurrentStatus": ["FOR_BULKING"],
+            "DropDownList": ["REIMBURSEMENT"]
+        }, {
+            "CurrentStatus": ["REPAIR"],
+            "DropDownList": ["CANCEL", "REPROCESS"]
+        }, {
+            "CurrentStatus": ["WAREHOUSED"],
+            "DropDownList": ["CANCEL", "FORCEPAY"]
+        },
+        {
+            "CurrentStatus": ["WAITING_OFACRESPONSE"],
+            "DropDownList": ["OVERRIDE"]
+        }
+    ]
+}]

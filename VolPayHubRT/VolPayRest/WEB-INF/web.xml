@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+	<display-name>Volante Payment Engine</display-name>
+	<description>Volante Payment Engine</description>
+	<!-- location of spring xml files -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/META-INF/spring/*camelContext.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SCOPE</param-name>
+		<param-value>REST</param-value>
+	</context-param>
+
+	<!-- <context-param>
+		<param-name>HOST</param-name>
+		<param-value>env.Host</param-value>
+	</context-param>
+	<context-param>
+		<param-name>PORT</param-name>
+		<param-value>env.Port</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SCHEME</param-name>
+		<param-value>env.Scheme</param-value>
+	 </context-param> -->
+	<!-- <context-param>
+	<param-name>ISIPV4</param-name>
+	<param-value>FALSE</param-value>
+    </context-param>-->
+	<!--<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>VolantePaymentEngine</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		&lt;!&ndash;<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>&ndash;&gt;
+	</security-constraint>-->
+	<listener>
+		<listener-class>com.volantetech.services.ApplicationWarmupListener</listener-class>
+    </listener>
+	  <listener>
+	<listener-class>com.volantetech.volante.services.LoggingStartupListener</listener-class>
+    </listener>
+	<listener>
+	<listener-class>com.volantetech.volante.services.ApplicationStartupListener</listener-class>
+    </listener>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+	<listener-class>com.volantetech.volante.services.camel.listerner.CamelContextStartupListener</listener-class>
+    </listener>
+	<listener>
+		<listener-class>com.volantetech.volante.services.ESAPISupressNoisyMessageListener</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>volante-servlet</servlet-name>
+		<servlet-class>com.tplus.transform.runtime.rest.server.VolanteRestServlet</servlet-class>
+		<init-param><!-- For Error handler-->
+			<param-name>error.handler</param-name>
+			<param-value>com.volantetech.volante.services.AchVolPayRestErrorHandler</param-value>
+		</init-param>
+		<!--For Authentication Handler -->
+		<init-param>
+			<param-name>authentication.handler</param-name>
+			<param-value>com.volantetech.volante.services.ACHSamlAuthenticationHandler</param-value>
+		</init-param>	
+		
+		<!--
+		For servlet listener 
+		<init-param>
+			<param-name>servlet.listener</param-name>
+			<param-value>com.volantetech.volante.services.datamasking.ResponseInterceptor</param-value>
+		</init-param>
+		-->
+		<init-param>
+			<param-name>servlet.listener</param-name>
+			<param-value>com.volantetech.volante.services.FormatLocaleResponseMessage</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>saml-login-servlet</servlet-name>
+		<servlet-class>com.volantetech.volante.services.saml.ACHSAMLLoginServletUsrEvnts</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>saml-login-servlet</servlet-name>
+		<url-pattern>/saml/login</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>volante-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	 
+	<context-param>
+		<param-name>authentication.class</param-name>
+		<param-value>com.volantetech.volante.services.ACHSamlAuthenticationHandler</param-value>
+	</context-param>
+	
+	<!--authentication.class is used to indicate which Authentication Class to use for REST authentication layer.-->
+	<!--<context-param>
+		<param-name>authentication.class</param-name>
+		<param-value>com.volantetech.volante.services.SiteMinderAuthenticationHandler</param-value>
+	</context-param>
+	<context-param>
+		<param-name>authentication.header</param-name>
+		<param-value>principal</param-value>
+	</context-param>-->
+	<context-param>
+      <param-name>authentication.class</param-name>
+      <!-- <param-value>com.volantetech.volante.services.VolPaySessionAuthenticationHandler</param-value> -->
+      <param-value>com.volantetech.volante.services.ACHSessionAuthenticationHandler</param-value>
+	  <!--Above property needs to be disabled to get the logs for impersonized user -->
+	  <!--Below property needs to be enabled to get the logs for impersonized user -->
+<!--  <param-value>com.volantetech.volante.services.VolPaySessionAuthenticationImpersonizedHandler</param-value> -->
+    </context-param>
+	<context-param>
+      <param-name>authentication.header</param-name>
+      <param-value>Authorization</param-value>
+    </context-param>
+<!--	<filter>
+		<filter-name>AuthorizationFilter</filter-name>
+		<filter-class>com.volantetech.volante.services.SiteMinderAgentSimulator</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>AuthorizationFilter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>-->
+	
+	<filter>
+		<filter-name>SetResponseHeader</filter-name>
+		<filter-class>com.volantetech.volante.services.ResponseHeaderSetter</filter-class>
+		<init-param>
+			 <param-name>Cache-Control</param-name>
+			 <param-value>no-cache, no-store, must-revalidate</param-value>
+		 </init-param>
+		<init-param>
+			 <param-name>pragma</param-name>
+			 <param-value>no-cache</param-value>
+		 </init-param>
+		 <init-param>
+			 <param-name>Expires</param-name>
+			 <param-value>0</param-value>
+		 </init-param>
+		 <init-param>
+			 <param-name>X-Content-Type-Options</param-name>
+			 <param-value>nosniff</param-value>
+		 </init-param>
+		  <init-param>
+			 <param-name>X-Frame-Options</param-name>
+			 <param-value>SAMEORIGIN</param-value>
+		 </init-param>
+		 <init-param>
+			 <param-name>Content-Security-Policy</param-name>
+			 <param-value>default-src 'self'</param-value>
+		 </init-param>
+          <init-param>
+ 			<param-name>X-XSS-Protection</param-name>
+			<param-value>1; mode=block</param-value>
+		 </init-param>
+ 		 <init-param>
+ 			<param-name>Strict-Transport-Security</param-name>
+			<param-value>max-age=31536000; includeSubDomains</param-value>
+		 </init-param>
+</filter>                       
+	<filter-mapping>
+		<filter-name>SetResponseHeader</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!--  Please uncomment the filter during cors filter deployment  -->
+	<!-- <filter>
+		<filter-name>CorsFilter</filter-name>
+		<filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+		<init-param>
+			<param-name>cors.allowed.origins</param-name>
+			<param-value>*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cors.allowed.methods</param-name>
+			<param-value>GET,POST,HEAD,OPTIONS,PUT,DELETE</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cors.allowed.headers</param-name>
+			<param-value>Content-Type,X-Requested-With,accept,Origin,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Accept-Encoding,source-indicator,X-CSRF-Token,forcematchcount,template-name,draft,Force-Save,clone,idempotency-key
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cors.exposed.headers</param-name>
+			<param-value>Access-Control-Allow-Origin,Access-Control-Allow-Credentials,totalCount,filteredCount,queriedCount</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cors.support.credentials</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cors.preflight.maxage</param-name>
+			<param-value>10</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CorsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
+	
+	<!--CSRF Filter provided by Tomcat to prevent CSRF attacks. Please uncomment the filter when using SiteMinder configuration to prevent CSRF attacks-->
+	
+	<!--<filter>
+	  <filter-name>RestCSRF</filter-name>
+	  <filter-class>org.apache.catalina.filters.RestCsrfPreventionFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>RestCSRF</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+</web-app>

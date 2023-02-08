@@ -1,0 +1,207 @@
+<!-- BEGIN PAGE HEADER-->
+<!--<div class="breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <ul class="page-breadcrumb">
+        <li>
+           <i class="fa fa-home"></i>
+           <a href="javascript:void(0);" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i> 
+        </li>
+        <li>
+            <i class="fa fa fa-cog"></i>
+            <a href="javascript:void(0);" translate="">Sidebar.PaymentModule</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a translate>Sidebar.FileUpload</a>
+
+        </li>
+    </ul>
+</div>-->
+<div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="">
+                    <span class="removeCursor" translate>Sidebar.FileUpload</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+<!--<div id="loaderContainer" httploader>
+    <img src="themes/images/preloader.gif" class="httpLoader"/>
+</div>-->
+<div class="contentContainer">
+    <div class="pageTitle">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2 translate>Transport File Upload</h2>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="row tab-content" style="margin:0;">
+
+
+        <div style=" font-size: 14px;" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="autoAdjustAlert bold animated bounce" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+        </div>
+
+
+        <div class="col-md-6" style="margin-top:15px">
+            <form class="form-horizontal" role="form" ng-submit="uploadFile(filelocation)" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4">Location <span class="requiredClass" aria-required="true">*</span>
+                    </label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="location" id="location" ng-model="filelocation" placeholder="Please Enter Location" ng-required="true" />
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4"> </label>
+
+                    <div class="col-md-4" style="margin-top:10px;word-wrap:break-word;">
+                        <input type="file" id="uploadBtn" file-model="myFile" style="font-size:15px;float:left" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this);" required />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4"></label>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btnStyle" id="uploadHere" style="font-size:15px;margin-top:21px;"><i class="fa fa-upload" aria-hidden="true"></i>
+                            &nbsp;<span translate>BtnGroup.ClicktoUpload</span></button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="portlet-title cursorPointer">
+                    <div class="row" ng-init="fileInformation = false" ng-click="fileInformation = !fileInformation">
+
+                        <div class="col-md-9">
+                            <i class="fa fa-file" aria-hidden="true"></i>
+                            <span class="caption">File Details</span>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bold fa fa-chevron-circle-right pull-right" style="font-size: 20px;padding-top:2px;" ng-class="{'fa-chevron-circle-down': !fileInformation, 'fa-chevron-circle-right': fileInformation}"></i>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <!--<div class="portlet-title cursorPointer fa-fs14" style="border: 1px solid #ccc;width:100%;margin-bottom:0;padding:0px 3px 0px 5px;" ng-init="fileInformation = false" ng-click="fileInformation = !fileInformation">
+
+                    <div class="caption caption-md ProfileHeaderStyles">
+                        <i class="fa fa-file" aria-hidden="true"></i>
+                        <span class="caption-subject bold uppercase">File Details</span>
+
+                    </div>
+
+                    <div class="pull-right">
+                        &nbsp;&nbsp;&nbsp;<i style="padding: 5px 0;font-size: 20px;" class="pull-right bold fa fa-chevron-circle-right" ng-class="{'fa-chevron-circle-down': !fileInformation, 'fa-chevron-circle-right': fileInformation}"></i>
+                    </div>
+                </div>-->
+
+
+                <div class="portlet-body" collapse="fileInformation">
+                    <div class="portlet-inner-box">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold">File Name :
+                                </label>
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left">{{file.name
+                                    || '**********' | underscoreRemove}}</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold">File Size :
+                                </label>
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left" ng-if="UploadedFileSize">
+                                    <span ng-switch="file.size > 1024*1024" class="fileSize">
+                                        <span ng-switch-when="true"> {{UploadedFileSize | number:2}} MB</span>
+                                        <span ng-switch-default> {{UploadedFileSize | number:2}} kB</span>
+                                    </span>
+                                </label>
+                                <lable class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left" ng-if="!UploadedFileSize">****</lable>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold">File Format :
+                                </label>
+                                <label ng-if="!SwiftFileType" class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left"> {{file.type || '**********'}}</label>
+                                <label ng-if="SwiftFileType" class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left">{{SwiftFileType || '**********'}}</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold">File Status :
+                                </label>
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 bold" style="text-align:left" ng-if="file" ng-class="{'text-primary':fileStatus == 'File selected', 'text-success': fileStatus == 'Uploaded','text-warning':fileStatus == 'Upload in progress', 'text-danger':fileStatus != 'File selected'&& fileStatus != 'Uploaded' && fileStatus != 'Upload in progress'&&fileStatus!='','text-default':fileStatus =='File selected'&& fileStatus != 'Uploaded' && fileStatus != 'Upload in progress' && fileStatus==''}">
+                                    <span ng-if="fileStatus">{{fileStatus}}</span>
+                                    <span ng-if="!fileStatus">*****</span>
+
+
+                                    <span ng-if="fileStatus == 'Upload in progress'"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span ng-if="fileStatus == 'Uploaded'"><i class="fa fa-check-circle"></i></span>
+                                    <span ng-if="fileStatus != 'File selected'&& fileStatus != 'Uploaded' && fileStatus != 'Upload in progress'&& fileStatus!=''"><i
+                                            class="fa fa-times" aria-hidden="true"></i></span>
+
+                                </label>
+
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left" ng-if="!file">******</label>
+                            </div>
+
+
+                            <div class="form-group" ng-show="uploaded">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold">Progress :
+                                </label>
+                                <div class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6" style="text-align:left">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped active" ng-class="{'progress-bar-warning':progress<90,'progress-bar-success':progress>90}" role="progressbar" ng-style="{width: progress+'%'}">
+                                            {{progress+'%'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+
+                    <div style="clear:both"></div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

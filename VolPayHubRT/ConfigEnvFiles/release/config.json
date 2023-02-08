@@ -1,0 +1,52 @@
+{
+    "Application_Title": "VolPay",
+    "BaseUrl": "",
+    "RestUrl": "/rest/v2/",
+    "IsRESTServerInSameMachine": "Yes",
+    "RESTWebApp": "VolPayRest",
+    "ThemeName": "volante",
+    "HomePagefooter": true,
+    "MultiLanguage": true,
+    "Model": "HYBRID",
+    "Authorization": "External",
+    "LogoutUrl": "https://login.microsoftonline.com/3ee6a440-dc4d-433b-a286-25c4e4524118/oauth2/v2.0/logout",
+    "401ErrorUrl": "/errorpages/unauthorized.html",
+    "403ErrorUrl": "/errorpages/403.html",
+    "404ErrorUrl": "/errorpages/404.html",
+    "500ErrorUrl": "/errorpages/500.html",
+    "AllowDirectURLAccess": true,
+    "RetryFor401": false,
+    "IdleTimeOut": true,
+    "RefreshTimeOut": 1,
+    "SourceIndicator": "volpay-ui",
+    "InstructionMOPStatus": true,
+    "UserCaseSensitive": true,
+    "isCaseSensitive": false,
+    "exportAsExcel": {
+        "enable": true,
+        "enableDetailsExport": true,
+        "disableAllFiltersMatching": false,
+        "currentFilter" : ["CSV"],
+        "allFilter" : ["TXT","CSV","PDF","XLS","PRINT"]
+    },
+    "enableWildCardSearchFlag": false,
+    "customLoginURL": "https:///ec2-3-143-219-126.us-east-2.compute.amazonaws.com:8443/VolPayHubUI",
+    "customLoginunAuthorisedURL": "https:///ec2-3-143-219-126.us-east-2.compute.amazonaws.com:8443/VolPayHubUI/#/hybridlogin",
+	"AzureSAMLAuth":false,
+	"AzureSSOSAMLConfig":[
+		{
+			"ApplicationName":"ach.volpay.com",
+			"ApplicationID":"860bd827-1e81-4e02-b6ff-7c050681a0b1",
+			"TenantID":"3ee6a440-dc4d-433b-a286-25c4e4524118",
+			"BaseURL":"https://myapps.microsoft.com/signin"
+		}
+	],
+    "RESTServer": [{
+        "UIDomainName": ["localhost", "127.0.0.1"],
+        "RESTDomainName": "127.0.0.1",
+        "Protocol": "https",
+        "Port": "8443",
+        "LogoutUrl": "",
+        "401ErrorUrl": "/errorpages/401.html"
+    }]
+}

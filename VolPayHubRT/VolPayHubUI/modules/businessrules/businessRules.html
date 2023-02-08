@@ -1,0 +1,568 @@
+<style type="text/css">
+    p {
+        margin: 0;
+    }
+    
+    .diamond {
+        margin: 22px 0 2px 0;
+        width: 100px;
+        height: 100px;
+        transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        position: relative;
+        border: 1px solid rgba(52, 73, 94, 1.0);
+        cursor: pointer;
+    }
+    
+    .diamond-inner {
+        color: rgba(52, 73, 94, 1.0);
+        font-size: 1em;
+        line-height: 1.4em;
+        text-align: center;
+        transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+        position: absolute;
+        left: -14px;
+        top: 27px;
+    }
+    
+    .lnr-arrow-down {
+        font-size: 30px;
+        color: rgba(52, 73, 94, 1.0);
+    }
+    
+    .lnr-arrow-right {
+        font-size: 30px;
+        color: rgba(52, 73, 94, 1.0);
+    }
+    
+    .yes-cond {
+        border: 1px solid rgba(52, 73, 94, 1.0);
+        padding: 10px 15px;
+        color: rgba(52, 73, 94, 1.0);
+    }
+    
+    .tooltip.right .tooltip-inner {
+        padding: 20px;
+        background: rgba(9, 78, 128, 0.8);
+        max-width: 340px;
+        word-break: break-all;
+    }
+    
+    .modal-content {
+        background: rgba(236, 240, 241, 1.0);
+        border: none;
+    }
+    
+    .media {
+        padding: 15px;
+    }
+    
+    .nonbtndisable {
+        cursor: not-allowed !important;
+        filter: alpha(opacity=65);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        opacity: .65;
+        pointer-events: none;
+    }
+    
+    @media(max-width: 460px) {
+        .container {
+            padding: 10px;
+        }
+    }
+</style>
+<!-- BEGIN PAGE HEADER-->
+<!--<div class="breadCrumb" ng-controller="activeController">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+           <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <i class="fa fa-building-o"></i>
+            <a href="#/app/businessrules" translate>Sidebar.BankData</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li translate>
+            BusinessRules.PageTitle
+        </li>
+    </ul>
+</div>-->
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-building-o"></i>
+                    <a href="#/app/businessrules" translate>Sidebar.BankData</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate>BusinessRules.PageTitle</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+<!-- <style>
+pre{
+white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap; white-space: -o-pre-wrap; word-wrap: break-word; 
+}
+</style> -->
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="title__container">
+                    <h2 translate>BusinessRules.PageTitle</h2>
+                    <p translate> BusinessRules.SubTitle</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--<div id="loaderContainer" httploader>
+    <img src="themes/images/preloader.gif" class="httpLoader"/>
+</div>-->
+    <div class="animated bounce autoAdjustAlert bold" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div class="wrapper" style=" padding:5px;">
+        <div class="countbar-title">
+            <div class="row">
+
+                <div class="col-md-3 col-sm-3 col-xs-12  ng-binding">
+                    <div class="caption">
+                        <span class="highlight">{{restVal.length-1}} out of {{totalForCountbar}}</span> {{'BankDataDts.recordsshown' | translate}}
+                    </div>
+                </div>
+                <!--<div class="row CountBar ng-scope" style="margin:0px 0px 15px 0px;padding: 5px;box-sizing: border-box;background-color: #44b6ae;color: white;">
+        <div class="col-md-6 col-sm-8 col-xs-12 ng-binding" style="padding: 5px; font-size: 17px; padding-left: 25px;">
+            {{restVal.length-1}}{{'BankDataDts.recordsshown' | translate}}
+        </div>-->
+
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <div class="btn-group" style="float:right;">
+                        <button style="border: 1px solid #fff;box-sizing: border-box;margin-left:5px;float:left;" ng-if="!changeViewFlag" class="btn-trans viewbtn" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}" tooltip="{{(permission.C)?'Add New':'You dont have permission'}}"
+                            ng-click="(permission.C)?addFxRate():''"><i class="fa fa-plus-square fa-fs14"></i></button>
+                        <button style="border: 1px solid #fff;box-sizing: border-box;margin-left:5px;float:left;" ng-click="loadData()" class="btn-trans" tooltip="{{'ToolTips.Refresh' | translate}}"><i class="fa fa-refresh fa-fs14"></i></button>
+
+                        <div id="sortBy" class="dropdown customDropdown" style="float: left;">
+                            <button style="border: 1px solid #fff;box-sizing: border-box;margin-left: 5px;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" tooltip="{{'ToolTips.Sort' | translate}}" ng-click="setHeight($event)">
+						<i class="fa fa-sort-amount-desc fa-fs14"></i>
+					</button>
+
+                            <ul class="dropdown-menu dropdown-menu-default pull-right" style="min-width: 300px;padding:10px 0px;">
+                                <form ng-submit="searchFilter(filterParams)">
+                                    <li id="sortBy" class="dropdown-header">{{'BankDataDts.SortBy' | translate}}<i> ({{'BankDataDts.ClicktoSort' | translate}}) </i> <i style="float: right; cursor: pointer; color: #9e9e9e; font-weight: bolder;" ng-click="clearSort('#sort')"><u>{{'BankDataDts.ResetAll' | translate}}</u></i></li>
+                                    <div id="sort" class="dataGroups" style="padding: 0px 15px;margin:0;width:100%;float: left;max-height: 300px;overflow: auto;">
+                                        <div ng-repeat="x in sortMenu" style="color:#fff;display: table;width: 100%;margin-bottom: 2px;">
+                                            <div ng-if="x.label != 'Rule'" id="sort_{{$index}}" style="margin-bottom: 2px;display: table-row;width: 100%;">
+                                                <span style="display: table-cell;background: #9e9e9e;padding: 5px 8px;border-right: 1px solid #fff;width: 90%;">{{x.label}}</span>
+                                                <a tooltip-placement="top" style="display: table-cell;background: #9e9e9e;padding: 6px;text-align: center;vertical-align: middle;width: 10%;" ng-click="gotoSorting(x)"><i id="{{x.FieldName}}_icon" class='fa fa-minus fa-sm' style="color:#2b3643 !important"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ul>
+                        </div>
+                        <div id="Filter" class="dropdown customDropdown" style="float: left;">
+                            <button style="border: 1px solid #fff;box-sizing: border-box;margin-left: 5px;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" tooltip="{{'Filter'}}">
+					<i class="fa fa-filter fa-fs14"></i>
+				</button>
+
+                            <ul class="dropdown-menu dropdown-menu-default pull-right xyz" style="min-width: 300px;padding:10px 0px;">
+                                <form ng-submit="searchFilter(filterParams)">
+                                    <li id="Filter" class="dropdown-header" style="padding: 8px 14px 2px 14px;margin: 0;">{{'BankDataDts.ApplyFilter' | translate}}:</li>
+                                    <div id="Filter" class="row input-group" style="padding: 8px 14px 2px 14px;margin: 0;display: inline-block;width: 100%;">
+                                        <span class="cstmDrop" style="display:inline-block;color:#000;cursor: pointer;position: relative;box-sizing: border-box;">
+							<input style="color: #000;" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="filterParams.keywordSearch" placeholder="Keyword Search" ng-required="showCustom || filterParams.keywordSearch || filterParams.Status.length ? false : true">
+						</span>
+                                        <span class="input-group-addon" style="cursor:pointer;float: left;width: 15%;height: 100%;padding: 9px;" ng-click="searchFilter(filterParams)" ng-class="filterParams.keywordSearch?'':'nonbtndisable'"><i class="fa fa-search"></i></span>
+                                    </div>
+                                    <li id="Filter" class="dropdown-header">{{'BankDataDts.FilterStatus' | translate}}</li>
+                                    <div id="Filter" style="padding: 8px 10px 2px 10px;">
+                                        <button type="button" class="filterBystatus" ng-repeat="x in Status" ng-click="setStatusvalue(x.displayvalue,filterParams)" id="{{x.displayvalue}}">
+                                    <div class="clearfix" ng-if="$index % 2 == 0"></div>
+                                    <div style="clear:both;" ng-if="$index % 2 == 0"></div>
+                                    <div style="padding: 0px 5px;float: left;">
+                                        <i class="fa fa-circle" ng-style="{'color':(x.displayvalue | chooseStatus)}"></i>
+                                        <span style="display: inline-block;font-size: 10px;width: auto;text-align: left;line-height: 10px;padding: 2px;"> {{x.displayvalue}} </span>
+                                        <!-- {{x.displayvalue +' ('+'00'+') '}} -->
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </button>
+                                        <div style="clear:both;"></div>
+                                    </div>
+
+                                    <div style="clear:both"></div>
+                                    <li id="Filter" class="dropdown-header">{{'BankDataDts.FilterByDate' | translate}}</li>
+                                    <div id="Filter" style="padding: 8px 10px 2px 10px;">
+                                        <button type="button" class="filterBydate" ng-repeat="x in filterBydate" ng-click="setEffectivedate(x,filterParams)" id="{{x.displayvalue|removeSpace}}">
+                                    <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                                    <div style="clear:both;" ng-if="$index % 2 == 0"></div>
+                                    <div style="padding: 0px 5px;float: left;">
+                                        <span style="display: inline-block;font-size: 10px;width: auto;text-align: left;line-height: 10px;padding: 2px;"> {{x.displayvalue}}</span>
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <!-- <div style="clear:both;"></div> -->
+                                </button>
+                                        <div style="clear:both;"></div>
+                                        <div id="customPicker" class="row fade-in-up" ng-show="showCustom" style="padding: 10px 0px 0px 0px;">
+                                            <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months" style="display:inline">
+                                                <div class="input-group col-md-12" style="padding: 0px 20px;">
+                                                    <input type="text" class="form-control DatePicker" ng-model="filterParams.startDate" id="startDate" style="width:100%"  placeholder="{{'BankDataDts.From' | translate}}" onpaste="return false;" ng-blur="removeFn()" onkeypress="return tabOrder(event)">
+                                                    <span class="input-group-addon" ng-click="focusInfn('startDate')"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                                <span class="input-group-addon" style="border:none;background-color:transparent;">{{'BankDataDts.To' | translate}}</span>
+                                                <div class="input-group col-md-12" style="padding: 0px 20px;">
+                                                    <input type="text" class="form-control DatePicker" ng-model="filterParams.endDate" id="endDate" style="width:100%"  placeholder="{{'BankDataDts.To' | translate}}" ng-blur="removeFn()" onpaste="return false;" onkeypress="return tabOrder(event)">
+                                                    <span class="input-group-addon" ng-click="focusInfn('endDate')"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    <!--<li id="Filter" class="dropdown-header">ASSOCIATED SERVICE</li>
+					<div id="Filter" class="row input-group" style="padding: 8px 14px 2px 14px;margin: 0;">
+						<input style="color: #000;" type="text" class="form-control ng-pristine ng-untouched ng-valid" ng-model="filterParams.assService" placeholder="Start typing the service name">
+						<span class="input-group-addon" style="cursor:pointer"><i class="fa fa-search"></i></span>
+					</div> -->
+                                    <div style="clear:both"></div>
+                                    <div class="row input-group pull-right" style="padding: 8px 14px 2px 14px;margin: 0;">
+                                        <button type="button" class="btn-trans btnStyle" tooltip="{{'BtnGroup.Cancel' | translate}}" style="margin-right: 10px;" ng-click="clearFilter()"><i class="fa fa-times"></i></button>
+                                        <button type="submit" class="btn-trans btnStyle" tooltip="{{'BtnGroup.Search'| translate}}" style="cursor: pointer;" ng-class="showCustom || filterParams.keywordSearch || filterParams.Status.length?'cmmonBtnColors':'disabledBtnColor'">
+							<i class="fa fa-search"></i>
+						</button>
+                                    </div>
+                                </form>
+                            </ul>
+                        </div>
+
+                        <!--<div class="dwnBtn" style="float:left;margin-left:5px;">
+                    <button style="border: 1px solid #fff;box-sizing: border-box;" class="btn-trans exprtbtn" tooltip="{{'Export'}}"><i class="fa fa-download fa-fs14" aria-hidden="true"></i></button>
+                    <ul class="download-window">
+                        <li>
+
+                            <span> <input type="radio" name="gender" value="Current" checked class="radiobtns">{{'BankDataDts.CurrentScreen' | translate}} </span>
+                            <span class="disabledBtnColor"><input type="radio" name="gender" value="All" class="radiobtns">{{'BankDataDts.AllMatchingFilter' | translate}} </span>
+                        </li>
+                        
+                        <li tooltip="{{'BankDataDts.Excel' | translate}}"  class="excelprint" style="margin-left:30px;" id="expbtn" ng-click="exportToExcel($event)"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i></li>
+                        <li tooltip="{{'Print'}}" class="excelprint" ng-click="printFn()"><i class="fa fa-print fa-fs14" aria-hidden="true"></i></li>
+                    </ul>
+                </div>-->
+
+                        <div class="dwnBtn" style="float:left;margin-left:5px;">
+                            <button style="border: 1px solid #fff;box-sizing: border-box;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" ng-click="setHeight($event)" aria-expanded="true" tooltip="{{'Export'}}"> <i class="fa fa-download" aria-hidden="true"></i></button>
+                            <ul class="download-window dropdown-menu dropdown-menu-excel pull-right" style="z-index: 10000;">
+                                <li>
+                                    <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="Current" checked class="radiobtns">{{'BankDataDts.CurrentScreen' | translate}} </span>
+                                    <!--<span  ng-class="(readData.length > 19)?'':'disabledBtnColor'">All<br><input type="radio" name="excelVal" value="All"></span>-->
+                                    <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="All" class="radiobtns">{{'BankDataDts.AllMatchingFilter' | translate}}</span>
+                                </li>
+                                <!--<li tooltip="{{'PDF'}}" style="float:left" class="disabledBtnColor"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></li>-->
+                                <li tooltip="{{'BankDataDts.Excel' | translate}}"  class="excelprint" style="margin-left:40px;" ng-click="exportAsExcel($event)"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                                </li>
+                                <li tooltip="{{'Print'}}" class="excelprint" ng-click="printFn()"><i class="fa fa-print fa-fs14" aria-hidden="true"></i>
+                                </li>
+
+
+                            </ul>
+                        </div>
+
+
+
+                        <button style="border: 1px solid #fff;box-sizing: border-box;border-right:0px;margin-left:5px" class="btn-trans" id="btn_1" ng-class="changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" tooltip="List View"><i class="fa fa-list fa-fs14"></i></button>
+                        <button style="border: 1px solid #fff;box-sizing: border-box;border-left:0px;margin-left:5px" class="btn-trans" id="btn_2" ng-class="!changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" tooltip="Grid View"><i class="fa fa-table fa-fs14"></i></button>
+
+
+                    </div>
+                </div>
+                <!--<div class="clearfix"></div>-->
+            </div>
+        </div>
+        <!--<div class="row" style="margin:0;padding: 5px;background-color:#fff;">
+    <div class="col-md-8 col-sm-8 col-xs-12" style="padding: 0px;">
+      <div ng-repeat="x in Status" style="color:#fff;">
+        <div id="sort_{{$index}}" style="float:left;">
+          <span style="display:inline-block; padding: 5px 0px 5px 5px" ng-style="{'color':(x.actualvalue | chooseStatus)}"><i style="font-size: 16px;line-height:16px" class="fa fa-circle"></i> {{x.displayvalue}}</span>
+          <span class="cstmDrop" style="display:inline-block;color:#000;cursor: pointer;position: relative;box-sizing: border-box;">
+          <i class="fa fa-ellipsis-v" aria-hidden="true" style="padding: 5px;"></i>
+           
+          </span>       
+        </div>
+        <div ng-if="$last"style="clear:both"></div>
+      </div>
+    </div>
+    </div>-->
+
+        <!-- Delete popup Window Start-->
+        <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+            <div class="modal-dialog modal-md" style="top: 200px;">
+                <div class="modal-content modalbdy animated tada">
+                    <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                        <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                    </div>
+                    <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                         <h1 translate>BankDataDts.Areyousure</h1>
+                        <!--  <h4 translate>BankDataDts.PopupRecoverMsg</h4> -->
+                    </div>
+                    <div class="modal-footer modalftr">
+                        <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                        <button tabindex="0" type="button" class="buton yess" ng-click="deleteData();" translate >BankDataDts.Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete popup Window End-->
+        <div id="dummyExportContent" ng-show="false">
+            <table class="table table-bordered" id="sample_2">
+                <thead>
+                    <tr>
+                        <th ng-repeat="val in sortMenu" ng-if="val.label != 'Flow View'">
+                            {{val.label}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="BusinessRule in restVal">
+                        <td ng-repeat="val in sortMenu">{{BusinessRule[val.FieldName]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="alert alert-warning" ng-show="dataFound">
+            <strong><h4  style="margin:0;text-align:center;" translate>BankDataDts.NoRecordsFound</h4></strong>
+        </div>
+
+
+        <div style="position:relative;margin:0;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="listView FixHead dataGroupsScroll table-responsive" ng-show="!dataFound && !changeViewFlag" style="overflow-x:auto !important">
+                        <table class="table table-bordered smallTable floatThead stickyheader">
+                            <thead>
+                                <tr>
+                                    <th nowrap ng-repeat="val in sortMenu" ng-if="val.visible" ng-click="(val.FieldName != 'Rule')? gotoSorting(val,$index,$event):''" ng-style="{'cursor':(val.FieldName != 'Rule')?'pointer':'default'}">
+                                        <span>{{val.label}}</span>
+                                        <span id="{{val.FieldName}}_Icon" class=""></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id={ { 'displayingWindow_'+$index}} class="displayWindow collapse in cursorPointer" ng-repeat="BusinessRule in restVal" ng-class="{oddClas:($index%2)== 1}" ng-if="(!$first)" ng-click="viewData(BusinessRule,true)">
+                                    <td ng-repeat="val in sortMenu" ng-if="val.visible" ng-style="{'text-align':(val.FieldName=='Status')?'center':'','max-width':(val.FieldName == 'Rule')?'750px':''}">
+
+                                        <span ng-if="val.FieldName == 'Status'" ng-style="{'color':(BusinessRule.Status | chooseStatus)}"><i style="font-size: 20px;line-height:20px" class="fa fa-circle" tooltip="{{BusinessRule.Status}}" tooltip-placement="bottom"></i></span>
+                                        <span ng-if="val.FieldName == 'Rule'" id={ { 'Rule_'+$index}}>
+                    <pre style="background-color:transparent !important;border: 0px solid #fff !important;max-width:700px">{{BusinessRule.Rule|beautify}}</pre>
+                </span>
+                                        <span ng-if='val.FieldName == "11"'><button class='btn btnStyle modal-btn' data-toggle="modal" data-target="#flowchart" ng-click="flowchart(BusinessRule,$event)">View</button></span>
+                                        <span ng-if="(val.FieldName != 'Status')&&(val.FieldName != 'Rule')">{{BusinessRule[val.FieldName]}}</span>
+                                    </td>
+
+                                </tr>
+
+                        </table>
+                    </div>
+                </div>
+                <!--<div class="clearfix"></div>-->
+
+                <div class="listView" ng-show="changeViewFlag">
+                    <div class="panel-group" id="accordion">
+                        <div ng-repeat="BusinessRule in restVal" ng-init="colIndexx = $index">
+                            <div class="clearfix" style="background-color: transparent;" ng-if="$index % 4 == 0"> </div>
+                            <div style="clear:both" ng-if="$index % 4 == 0"></div>
+
+                            <div ng-if="$first" class="panel paneltrans col-md-3" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" tooltip="{{(permission.C)?'':'You dont have permission'}}">
+                                <div style="background: rgb(158, 158, 158); text-align: center; min-height: 140px; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; height: 200px;" ng-style="{'height':callStyle()}" ng-click="(permission.C)?addFxRate():''">
+                                    <div style="display: inline-block;font-size: 20px;color: #fff;">
+                                        <i class="fa fa-plus-square" style="font-size: 70px; line-height: 70px;"></i><br>
+                                        <span class="ng-binding">Add Business Rule</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-if="(!$first)" class="panel paneltrans col-md-3">
+
+                                <div class="panel-heading listViewPanelHeading" id="listViewPanelHeading_{{$index}}" style="padding-bottom:0px;padding-right:15px;">
+                                    <div class="row dataGroups" id="dataGroup_{{$index}}" ng-click="viewData(BusinessRule,true)" style="cursor:pointer;min-height:150px;max-height:150px;margin:0">
+
+                                        <div class="col-md-12" style="padding:5px 15px 5px 0;position: relative;">
+                                            <div class="panel-wrapper-inside">
+                                                <div class="ruleHead pull-left" style="font-size: 19px;" ng-style="{'color':(BusinessRule.Status | chooseStatus)}">
+                                                    {{BusinessRule.RuleName}} - {{BusinessRule.RuleCode}}
+                                                </div>
+
+                                                <div class="pull-right" data-original-title="{{BusinessRule['Status']}}" data-container="body" data-toggle="tooltip" ng-style="{'color':(BusinessRule.Status | chooseStatus)}">
+                                                    <i style="font-size: 20px;line-height:27px" class="fa fa-circle" ng-if="BusinessRule['Status']"></i>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-12" style="padding:5px 15px 5px 0" ng-repeat="val in sortMenu" ng-if="(val.visible && val.FieldName !='RuleCode' && val.FieldName !='11' && val.FieldName !='Status' && val.FieldName !='RuleName'  && val.FieldName !='Rule' && val.FieldName !='EffectiveFromDate' && val.FieldName !='EffectiveTillDate')"
+                                            style="padding:5px 15px">
+                                            <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                                {{val.label}} :
+                                            </div>
+                                            <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">
+                                                <span>{{BusinessRule[val.FieldName]}}</span>
+
+                                            </div>
+                                        </div>
+
+
+                                        <!--<div class="col-md-12"  style="padding:5px 15px;position: absolute; top: 50%; transform: translateY(-50%);padding: 5px 15px;" >
+                                        <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                            <span>{{((BusinessRule.EffectiveFromDate)&&(BusinessRule.EffectiveTillDate))?'Effective Date':'Effective From Date'}} :</span></div>
+                                        <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;"><span>{{((BusinessRule.EffectiveFromDate)&&(BusinessRule.EffectiveTillDate))?((BusinessRule.EffectiveFromDate)+' to '+(BusinessRule.EffectiveTillDate)):(BusinessRule.EffectiveFromDate)}}</span></div>
+                                    </div>-->
+
+                                        <!--
+                                    <div class="col-md-12" style="padding:5px 15px">
+                                        <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                            <span>{{((BusinessRule.EffectiveFromDate)&&(BusinessRule.EffectiveTillDate))?'Effective Date':'Effective From Date'}} :</span></div>
+                                        <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;"><span>{{((BusinessRule.EffectiveFromDate)&&(BusinessRule.EffectiveTillDate))?((BusinessRule.EffectiveFromDate)+' to '+(BusinessRule.EffectiveTillDate)):(BusinessRule.EffectiveFromDate)}}</span></div>
+                                    </div>
+                                    <div class="col-md-12" style="padding:5px 15px;overflow:auto;margin-bottom:10px;">
+                                        <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                            Rule :</div>
+                                        <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">
+                                            <pre style="background-color: #fff !important;border: 0px solid #fff !important;">{{BusinessRule.Rule|beautify}}</pre> </div>
+                                    </div>-->
+                                        <!-- <div class="col-md-12" style="padding:5px 15px">
+                                    <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                        OfficeCode :</div>
+                                    <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">{{BusinessRule.OfficeCode}}</div>
+                                 </div><div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Rule Code :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">{{BusinessRule.RuleCode}}</div>
+                            </div><div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Rule Name :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">{{BusinessRule.RuleName}}</div>
+                            </div><div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Rule Phase :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">{{BusinessRule.RulePhase}}</div>
+                            </div><div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Status :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;" ng-style="{'color':(BusinessRule | chooseColor)}">{{BusinessRule.Status}}</div>
+                            </div><div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Description :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">{{BusinessRule.Description}}</div>
+                            </div>
+                                <div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Rule Creation Date :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;">{{BusinessRule.RuleCreationDate}}</div>
+                            </div>
+                                <div class="col-md-12" style="padding:5px 15px">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    <span>{{((BusinessRule.EffectiveFromDate)&&(BusinessRule.EffectiveTillDate))?'Effective Date':'Effective From Date'}} :</span> :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;"><span>{{((BusinessRule.EffectiveFromDate)&&(BusinessRule.EffectiveTillDate))?((BusinessRule.EffectiveFromDate)+' to '+(BusinessRule.EffectiveTillDate)):(BusinessRule.EffectiveFromDate)}}</span></div>
+                            </div>
+                            <div class="col-md-12" style="padding:5px 15px;overflow:auto;margin-bottom:10px;">
+                                <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-wrap: break-word;float: left;">
+                                    Rule :</div>
+                                <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;word-wrap: break-word;float: left;"><pre style="background-color: #fff !important;border: 0px solid #fff !important;">{{BusinessRule.Rule|beautify}}</pre> </div>
+                            </div> -->
+
+
+                                        <div style="clear:both"></div>
+
+                                    </div>
+
+                                    <div class="row actionRow">
+                                        <a ng-init="showEditWin = true" class="actionIcons" ng-style="(permission.U)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" tooltip="{{(permission.U)?'Edit':'You dont have permission'}}" ng-click="(permission.U)?viewData(BusinessRule,false):''"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+                                        <a class="actionIcons" data-toggle="modal" data-target="{{(permission.D)?'#delPopup':''}}" ng-style="(permission.D)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(permission.D)?takeDeldata(BusinessRule,$index):''"
+                                            tooltip="{{(permission.D)?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"><i class="fa fa-trash-o Iclr1"></i></a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade flow-model" tabindex="-1" role="dialog" id="flowchart" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header modalHeaderColor" style="background: rgba(52, 73, 94,1.0);">
+                        <button type="button" class="close" data-dismiss="modal" style="font-size: 27px;
+            color: #fff;opacity: 1;">&times;</button>
+                        <h4 class="modal-title" style="padding-left: 5px;">Rule Name - {{ruleName}}</h4>
+                    </div>
+                    <div class="container">
+                        <div class="row" style="padding:15px 0;">
+                            <div class="col-md-offset-3 col-md-3 col-sm-offset-3 col-sm-3 media" align="center">
+                                <span class="yes-cond">Start</span>
+                                <p style="margin-top: 14px;"><span class="fa fa-long-arrow-down"></span></p>
+
+                                <div class="diamond" rel="tooltip" data-toggle="tooltip" data-container="body" data-placement="right" title={{condition}}>
+                                    <div class="diamond-inner">
+                                        {{substr}}.....
+                                    </div>
+                                </div>
+                                <p style="margin:25px 0 10px;">
+                                    <span class="fa fa-long-arrow-down"></span></p>
+                                <span class="yes-cond">Yes</span>
+                                <p style="margin:13px 0 0;">
+                                    <span class="fa fa-long-arrow-down"></span></p>
+                                <p class="yes-cond" style="word-break: break-all;">{{result}}</p>
+                                <p style="margin: 0 0 10px 0;"><span class="fa fa-long-arrow-down"></span></p>
+                                <span class="yes-cond">End</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('.date').datepicker({
+                autoclose: true,
+                forceParse: false,
+                Default: true,
+                pickDate: true,
+                todayHighlight: false
+
+            });
+            $('body').tooltip({
+                selector: "[data-toggle=tooltip]",
+                container: "body"
+            });
+            window.setTimeout(function() {
+                $('[data-toggle="tooltip"]').click(function() {
+                    $(this).trigger('mouseleave');
+                })
+            }, 100)
+        });
+        //  $('[data-toggle="tooltip"]').tooltip();
+    </script>

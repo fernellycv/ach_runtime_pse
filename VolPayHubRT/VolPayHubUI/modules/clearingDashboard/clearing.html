@@ -1,0 +1,269 @@
+<style>
+    .custom-refresh-time {
+        margin-right: 1em;
+        margin-top: 0.5em;
+    }
+
+    .clear-margin {
+        margin-top: 5px;
+    }
+
+    .cust-margin-bottom {
+        margin-bottom: 10px;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    svg {
+        font: 10px sans-serif;
+        shape-rendering: crispEdges;
+    }
+
+    .y .tick line {
+        stroke: #ddd;
+    }
+
+    .group-label {
+        font-weight: bold;
+        text-anchor: end;
+    }
+
+    form {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    vertical-bar-chart, vertical-stacked-bar-chart  {
+        width: 100%;
+        height: 100%;
+        display: block;
+        /* overflow: hidden; */
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<!-- BEGIN PAGE HEADER-->
+<div class="ui-wrapper">
+    <div class="page-bar breadCrumb" ng-controller="activeController" style="z-index:2">
+        <div class="row">
+            <div class="col-md-6 ">
+                <ul class="page-breadcrumb">
+
+                    <li>
+                        <i class="fa fa fa-cog"></i>
+                        <a href="javascript:void(0);" translate class="removeCursor">Sidebar.ClearingModule</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <span class="removeCursor" translate>Sidebar.ClearingDashboard</span>
+                    </li>
+                </ul>
+            </div>
+            <!--<div style="clear:both">    </div>-->
+            <div class="col-md-6 headerVals">
+                <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="contentContainer" id="container">
+        <div class="pageTitle  alertWidthonResize">
+            <div class="row">
+                <div class="col-lg-8 col-sm-8 col-xs-8">
+                    <div class="title__container">
+                        <h2 translate>ClearingDashboard.PageTitle</h2>
+                        <p translate>ClearingDashboard.SubTitle</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-xs-4">
+                    <div class="bar__icons pull-right">
+                        <button class="btn-transdashbrd" id="rBtn" ng-click="reloadPment()" data-toggle="tooltip"
+                            tooltip="Refresh"><i class="fa fa-refresh"></i></button>
+                        <button class="btn-transdashbrd" ng-click="dashboardPrint()"><i class="fa fa-print"
+                                data-toggle="tooltip" tooltip="Print"></i></button>
+                        <!--<button class="btn-trans" ng-click=""><i class="fa fa-file-excel-o"></i></button>
+                    <button class="btn-trans" ng-click=""><i class="fa fa-ellipsis-v"></i></button>-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 cust-margin-bottom">
+                <div class="statusbar__wrapper">
+                    <div class="clear-margin">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <select class="form-control" id="mopFamily" name="mopFamily"
+                                        ng-model="clearing.data.mopFamilyValue" ng-required="true">
+                                        <option value="">--Select--</option>
+                                        <option value="{{mopF.actualvalue}}"
+                                            ng-repeat="mopF in clearing.mopFamily track by $index">{{mopF.displayvalue}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <select class="form-control" id="ltermIds" name="ltermIds"
+                                        ng-model="clearing.data.ltermIdValue" ng-required="true">
+                                        <option value="">--Select--</option>
+                                        <option value="{{ltermId.actualvalue}}"
+                                            ng-repeat="ltermId in clearing.ltermId track by $index">
+                                            {{ltermId.displayvalue}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <select class="form-control" id="currentBusinessDates" name="currentBusinessDates"
+                                        ng-model="clearing.data.currentBusinessDateValue" ng-required="true">
+                                        <option value="">--Select--</option>
+                                        <option value="{{currentBusinessDate.actualvalue}}"
+                                            ng-repeat="currentBusinessDate in clearing.currentBusinessDate track by $index">
+                                            {{currentBusinessDate.displayvalue}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear-margin" ng-if="clearing.data.currentBusinessDateValue">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <button class="btn btnStyle" type="submit"
+                                ng-click="clearing.onSubmit(clearing.data)">Submit</button>
+                            <!-- <button class="btn btnStyle" type="button" ng-click="resetForm()">Reset</button> -->
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 cust-margin-bottom" ng-if="countVSMsgTypes">
+                <div class="row-fluid">
+                    <button type="button" class="btn btn-default btnStyle pull-right"
+                        ng-click="clearing.onReset(clearing.data)">Refresh</button>
+                    <div class="pull-right custom-refresh-time">
+                        <label for="lastRefreshed">Last Refreshed : </label>
+                        <span id="lastRefreshed" name="lastRefreshed">{{clearing.resetDate}}</span>
+                    </div>
+                </div>
+                <div class="alert alert-warning"
+                    ng-show="countVSMsgTypes.length == 0 && valueVSMsgTypes.length == 0 && msgTypeVSDirection.length == 0 ">
+                    <strong>
+                        <h4 style="margin:0;text-align:center;"><i class="fa fa-warning"></i> No Records Found</h4>
+                    </strong>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 cust-margin-bottom"
+                ng-if="countVSMsgTypes && valueVSMsgTypes && msgTypeVSDirection">
+                <!-- statusbar__wrapper -->
+                <div class="row-fluid">
+                    <div id="chart1" class="col-lg-4 col-md-4 col-sm-12 my-charts" style="height: 400px;">
+                        <vertical-bar-chart id="countVSMsgTypes.id" data="countVSMsgTypes.chartData"
+                            width="countVSMsgTypes.width" height="countVSMsgTypes.height" color="countVSMsgTypes.color"
+                            titles="countVSMsgTypes.titles" xaxis="countVSMsgTypes.xAxis" yaxis="countVSMsgTypes.yAxis"
+                            ng-style="{ 'height': countVSMsgTypes.height + 'px', 'width': countVSMsgTypes.width + 'px'}">
+                        </vertical-bar-chart>
+                    </div>
+                    <div id="chart2" class="col-lg-4 col-md-4 col-sm-12 my-charts" style="height: 400px;">
+                        <vertical-bar-chart id="valueVSMsgTypes.id" data="valueVSMsgTypes.chartData"
+                            width="valueVSMsgTypes.width" height="valueVSMsgTypes.height" color="valueVSMsgTypes.color"
+                            titles="valueVSMsgTypes.titles" xaxis="valueVSMsgTypes.xAxis" yaxis="valueVSMsgTypes.yAxis"
+                            ng-style="{ 'height': valueVSMsgTypes.height + 'px', 'width': valueVSMsgTypes.width + 'px'}">
+                        </vertical-bar-chart>
+                    </div>
+                    <div id="chart3" class="col-lg-4 col-md-4 col-sm-12 my-charts" style="height: 400px;">
+                        <vertical-stacked-bar-chart id="msgTypeVSDirection.id" data="msgTypeVSDirection.chartData"
+                            width="msgTypeVSDirection.width" height="msgTypeVSDirection.height"
+                            titles="msgTypeVSDirection.titles" color="msgTypeVSDirection.color"
+                            xaxis="msgTypeVSDirection.xAxis" yaxis="msgTypeVSDirection.yAxis"
+                            ng-style="{ 'height': msgTypeVSDirection.height + 'px', 'width': msgTypeVSDirection.width + 'px'}">
+                        </vertical-stacked-bar-chart>
+                    </div>
+                </div>
+                <!-- <div class="clearfix"></div> -->
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12" ng-if="ltermFinalReport.length > 0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Date</th>
+                                <th>LTERM Final Report</th>
+                                <th>Matching Status</th>
+                                <th>Dr Value IN</th>
+								<th>Dr Value OUT</th>
+                                <th>Cr Value IN</th>
+								<th>Cr Value OUT</th>
+                                <th>Dr Count IN</th>
+								<th>Dr Count OUT</th>
+                                <th>Cr Count IN</th>
+								<th>Cr Count OUT</th>
+                                <th>SVR Count IN</th>
+								<th>SVR Count OUT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="ltermFinalReport in ltermFinalReport">
+                                <td>{{$index+1}}</td>
+                                <td>{{ltermFinalReport.DATE}}</td>
+                                <td>{{ltermFinalReport.LTERMFinalreport}}</td>
+                                <td>{{ltermFinalReport.MatchingStatus}}</td>
+                                <td>{{ltermFinalReport.DRValueIN}}</td>
+								<td>{{ltermFinalReport.DRValueOUT}}</td>
+                                <td>{{ltermFinalReport.CRValueIN}}</td>
+								<td>{{ltermFinalReport.CRValueOUT}}</td>
+                                <td>{{ltermFinalReport.DRCountIN}}</td>
+								<td>{{ltermFinalReport.DRCountOUT}}</td>
+                                <td>{{ltermFinalReport.CRCountIN}}</td>
+								<td>{{ltermFinalReport.CRCountOUT}}</td>
+                                <td>{{ltermFinalReport.SVRCountIN}}</td>
+								<td>{{ltermFinalReport.SVRCountOUT}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <div class="clearfix"></div> -->
+            </div>
+            <!-- && ltermFinalReport.length == 0 -->
+        </div>
+    </div>
+    <!-- END MAIN CONTENT -->
+    <!-- BEGIN MAIN JS & CSS -->
+</div>
+<script>
+    // $('[data-toggle="tooltip"]').tooltip();
+    // var mq = window.matchMedia("(max-width: 991px)");
+    // if (mq.matches) {
+    //     $('#resizeWindow').resizable({
+    //         minHeight: 400,
+    //         minWidth: 500
+    //     });
+    // }
+    // else {
+    //     $('#resizeWindow').resizable({
+    //         minHeight: 800,
+    //         minWidth: 830
+    //     });
+    // }
+    // $('[data-toggle="tooltip"]').click(function () {
+    //     $(this).trigger('mouseleave');
+    // })  
+</script>
+<!-- BEGIN MAIN JS & CSS -->

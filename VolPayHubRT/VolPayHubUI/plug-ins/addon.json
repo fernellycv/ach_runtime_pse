@@ -1,0 +1,139 @@
+[{
+    "ParentName": "Add on",
+    "Link": "webformPlugin",
+    "IconName": "fa-building-o",
+    "subMenu": [
+	{
+		"Id": "1403",
+		"Name": "VPH Transaction Types",
+		"Link": "vphtrxtypecontrols",
+		"IconName": "fa-list-alt"
+	},	
+	{
+		"Id": "1404",
+		"Name": "VPH Trx Type Constraints",
+		"Link": "vphtrxtypeconstraintscontrols",
+		"IconName": "fa-list-alt"
+	},
+	{
+		"Id": "1405",
+		"Name": "Party Types",
+		"Link": "vphpartytypescontrols",
+		"IconName": "fa-money"
+	},
+	{
+		"Id": "1406",
+		"Name": "Admin Accounts",
+		"Link": "vphadminacctpsecontrols",
+		"IconName": "fa-list-alt"
+	},
+	{
+		"Id": "1407",
+		"Name": "Limits",
+		"Link": "limits",
+		"IconName": "fa-lock"
+	},
+	{
+		"Id": "1408",
+		"Name": "Limit Per Bank",
+		"Link": "minimumlimits",
+		"IconName": "fa-flag"
+	},
+	{
+		"Id": "1409",
+		"Name": "Minimum Amount FE Report",
+		"Link": "minamountfereport",
+		"IconName": "fa-level-down"
+	},
+	{
+		"Id": "1410",
+		"Name": "Register Accounts",
+		"Link": "vphauthorizedaccount",
+		"IconName": "fa-pencil"
+	},
+	{
+		"Id": "1411",
+		"Name": "ACH Register Accounts",
+		"Link": "vphauthorizedaccountach",
+		"IconName": "fa-check"
+	},
+	{
+		"Id": "1418",
+		"Name": "Accounts Approve",
+		"Link": "vphauthorizedaccountapprove",
+		"IconName": "fa-check"
+	},
+	{
+		"Id": "1412",
+		"Name": "VPH Daily Rates",
+		"Link": "vphdailyrates",
+		"IconName": "fa-calendar"
+	},
+	{
+		"Id": "1413",
+		"Name": "VPH Cycle Time",
+		"Link": "vphcycletime",
+		"IconName": "fa-clock-o"
+	},
+	{
+		"Id": "1414",
+		"Name": "VPH CYCLE EXTENSION",
+		"Link": "vphcycleextensionef",
+		"IconName": "fa-file-text-o"
+	},
+	{
+		"Id": "1415",
+		"Name": "VPH CYCLE EXTENSION ACH",
+		"Link": "vphcycleextensionach",
+		"IconName": "fa-file-text-o"
+	},
+	{
+		"Id": "1416",
+		"Name": "Notifications",
+		"Link": "notifront",
+		"IconName": "fa-check"
+	},
+	{
+		"Id": "1419",
+		"Name": "Events",
+		"Link": "contacts",
+		"IconName": "fa-calendar"
+	},
+	{
+		"Id": "9756",
+		"Name": "Inbox",
+		"Link": "inbox",
+		"IconName": "fa-inbox"
+	},
+	{
+		"Id": "9757",
+		"Name": "Register Refunds",
+		"Link": "vphregisterrefund",
+		"IconName": "fa-refresh"
+	},
+	{
+		"Id": "9759",
+		"Name": "ACH_INTERNATIONALIZATIONDEFINITION",
+		"Link": "internationalizationdefinition",
+		"IconName": "fa-file"
+	},
+    {
+		"Id": "9760",
+		"Name": "XML File Generation",
+		"Link": "xmlfilegeneration",
+		"IconName": "fa-building-o"
+	},
+    {
+		"Id": "175",
+		"Name": "Mail Configuration",
+		"Link": "ACHmailConfig",
+		"IconName": "fa-pencil"
+	},
+	{
+		"Id": "9762",
+		"Name": "Audit Logs",
+		"Link": "ach/auditable",
+		"IconName": "fa-building-o"
+	}
+   ]
+}]

@@ -1,0 +1,1124 @@
+<style>
+    .highlight{
+    background-color: #dadada;
+    }
+    #sectionThreeTableOne 
+    #forcematch
+    {
+    display: none !important;
+    }
+    .h4, h4 {
+        font-size: 1rem;
+    }
+
+    .searchContainer {
+        background-color: #e7e9eb;
+        height: auto;
+        }
+
+     .dropdowncustm{
+      transform: translate3d(0.313rem, 2.188rem, 0rem)!important;
+      }
+</style>
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.MatchingModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span translate class="removeCursor">Sidebar.ManualMatching</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2 translate>Sidebar.ManualMatching</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts" ng-if="alert.msg != 'Payment not found'">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+	
+	<div class="row">
+	<!-- Section One Begins -->
+    <div class="col-md-12">
+		<!-- <h5>Section One</h5> -->
+		<!-- <div style="clear:both"></div> -->
+        <form class="form-horizontal" style="background-color: #CAD5EB;" name="matchingForm" ng-submit="loadSectionOne(matching);">
+            <div class="row" style="padding: 10px 10px">
+            <!-- <div class="col-lg-12 col-md-12"> -->
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="form-group row">
+                        <label class="control-label col-md-4" translate>MatchingModuleDts.MatchingType</label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="Types" name="Types" ng-model="matching.Types" ng-change="selectType(matching.Types)" required>
+                                <option value="">--Select--</option>
+                                <option ng-repeat="type in Types" value="{{type.actualValue}}">{{type.displayValue}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="form-group row">
+                        <label class="control-label col-md-4" translate>MatchingModuleDts.Match</label>
+                        <div class="col-md-8" ng-class="{true: 'error'}[updatesubmitted && benelistForm.party.$invalid]">
+                            <select class="form-control" id="Match" name="Match" ng-model="matching.Match" ng-change="selectmatch(matching.Match,matching.Types)" required>
+                                <option value="">--Select--</option>
+                                <option ng-repeat="match in Matches" value="{{match.actualValue}}">{{match.displayValue}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="form-group row">
+                        <label class="control-label col-md-4" translate>MatchingModuleDts.With</label>
+                        <div class="col-md-8" ng-class="{true: 'error'}[updatesubmitted && benelistForm.party.$invalid]">
+                            <select class="form-control" id="With" name="With" ng-model="matching.With" ng-change="selectwith(matching.With)" required>
+                                <option value="">--Select--</option>
+                                <option ng-repeat="with in dataWith" value="{{with.actualValue}}">{{with.displayValue}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <button class="btn btnStyle" type="submit" translate>BtnGroup.Submit</button>
+					<button class="btn btnStyle" type="button" ng-click="resetForm()" translate>BtnGroup.Reset</button>
+                </div>
+            <!-- </div> -->
+            </div>        
+        </form>
+    </br>
+    </div>
+	<div style="clear:both"></div>
+	<br/>
+	<!-- Section One Ends -->
+	
+	<!-- Section Two Begins -->
+    <div id= "sectionTwoTableOne" class="col-md-12" >
+		<!-- <h5>Section Two</h5> -->
+		<!-- <div style="clear:both"></div>	 -->
+        <div class="alert alert-warning" ng-if="!sectionTwoDatas.length">
+            <strong><h4  style="margin:0;text-align:center;"><i class="fa fa-warning"></i> {{'MatchingModuleDts.SelectionOne' | translate}} </h4></strong>
+        </div>
+		<div ng-if="sectionTwoDatas.length">
+		<h3>Match</h3>
+			<!--Filter HTML Begins -->
+			<div id="Match" class="searchholder" style="margin:0">
+				<ng-include src="(matching['Match'] === 'bankstatement' && matching['Types'] === 'paymentstatement') ? 'statementpaymentSearch' : ((matching['Match'] === 'customercredittransfer' || matching['Match'] === 'financialinstitutiontransfer')&& matching['Types'] === 'paymentstatement') ? 'paymentstatementSearch' : ''"></ng-include>
+					<ng-include src="(matching['Match'] === 'MT900' && matching['Types'] === 'paymentconfirmation') ? 'confirmationpaymentSearch' : ((matching['Match'] === 'customercredittransfer' || matching['Match'] === 'financialinstitutiontransfer')&& matching['Types'] === 'paymentconfirmation') ? 'paymentconfirmationSearch' : ''"></ng-include>
+			</div>
+			<div  class="FixHead" style="max-height: 400px;overflow-y: auto;">
+	
+			<table  style="max-height:150px; overflow-y:auto" class="table table-bordered maintable" ng-if= " (matching['Match'] === 'customercredittransfer' || matching['Match'] === 'financialinstitutiontransfer') && (matching['Types'] === 'paymentstatement')"> 
+				<thead>
+					<tr>
+						<th>S.No</th>
+						<th>Payment ID</th>
+						<th>MOP</th>
+						<th>Payment Status</th>
+						<th>Original Payment Reference</th>
+						<th>Output Instruction ID</th>
+						<th>Account ID</th>
+						<th>Account Currency</th>
+						<th>Account Type</th>
+						<th>Posting Entry Type</th>
+						<th>Amount</th>
+						<th>Debit/Credit</th>
+						<th>Posting Override (Y/N)</th>
+						<th>Status Reason</th>
+						<th>Status</th>
+						<th>Posting Date</th>
+						<th>Entry Status</th>
+						<th>SELECT</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr ng-repeat="data in sectionTwoDatas" >
+						<td>{{$index+1}}</td>
+						<td style="cursor:pointer;color:#2d4063;" class="bold" ng-click="loadSectionTwo(data, matching, $event)">{{data.PaymentID}} </td>
+						<td ng-click="loadSectionTwo(data, matching, $event)">{{data.MethodOfPayment}}</td>
+						<td ng-click="loadSectionTwo(data, matching, $event)">{{data.Status}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.OriginalPaymentReference}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.OutputInstructionID}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.AccountID}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.AccountCCY}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.AccountType}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.EntryType}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.Amount}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.DrCrInd}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.PostingOverrideIndicator}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatusReason}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementMatchingStatus}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.PostingDate}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.EntryStatus}}</td>
+						  <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action"  ng-model="data.Selected"  class="selectCheckbox1 checkBoxClass cursorPointer" ng-click="collectdata({'payment' : data})" id="action{{$index}}">
+                            <label for="action{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+						<!-- <td>
+							<span ng-switch="file.size > 1024*1024" class="fileSize">
+							<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+							<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+							</span>
+						</td> -->
+
+						<!-- <td>{{data.TimeTaken}}</td>-->
+						<!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+						<!-- <td>{{data.UploadTime}}</td>
+						<td>{{data.FileType}}</td> -->
+					</tr>
+
+				</tbody>
+			</table>
+				<table class="table table-bordered maintable" ng-if="matching['Match'] === 'bankstatement' && matching['Types'] === 'paymentstatement'" >
+            <thead>
+                <tr>
+				    <th>S.No</th>
+                    <th>Reference ID</th>
+                    <th>Account Servicing Instruction</th>
+                    <th>Account Number</th>
+                    <th>Account Name</th>
+                    <th>Original Reference ID</th>
+                    <th>DRCRINDICATIOR</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+					<th>Reversal Indicator</th>
+					<th>Booking Date</th>
+					<th>Value Date</th>
+					<th>Bank Reference ID</th>
+					<th>TXN2EID</th>
+					<th>Additional Info</th>
+					<th>Status</th>
+					<th>SELECT</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="data in sectionTwoDatas" >
+					<td>{{$index+1}}</td>
+				<td style="cursor:pointer;color:#2d4063;" class="bold" ng-click="loadSectionTwo(data, matching, $event)">{{data.EntryReferenceId}}</td>
+				
+                    <td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementData.StatementAccountDetails.StmtAccServicingInstitution}}</td>
+                    <td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementData.StatementAccountDetails.StmtAccountNo}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementData.StatementAccountDetails.StmtAccountName}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementData.StatementEntryDetails.EntryOrigReferenceId}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryDrCrIndicator}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryAmount}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryCurrency}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryReversalIndicator}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryBookingDate}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryValueDate}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryBankReferenceId}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryTxnE2EId}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.EntryAdditionalInfo}}</td>
+					<td ng-click="loadSectionTwo(data, matching, $event)">{{data.StatementEntryDetails.Status}}</td>
+					  <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action1"  ng-model="data.Selected"  class=" selectCheckbox1 checkBoxClass cursorPointer" ng-click="collectdata({'statement' : data})" id="action1{{$index}}" >
+                            <label for="action1{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+
+                    <!-- <td>
+						<span ng-switch="file.size > 1024*1024" class="fileSize">
+						<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+						<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+						</span>
+                    </td> -->
+                    <!-- <td>{{data.TimeTaken}}</td> -->
+                    <!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+                    <!-- <td>{{data.UploadTime}}</td>
+                    <td>{{data.FileType}}</td> -->
+                </tr>
+
+            </tbody>
+        </table>
+		
+	<table class="table table-bordered maintable" ng-if= "matching['Match'] === 'MT900' && matching['Types'] === 'paymentconfirmation'" >
+         <thead>
+					<tr>
+						<th>S.No</th>
+						<th>Payment ID</th>
+						<th>CCDID</th>
+						<th>RespInstrID</th>
+						<th>ConfStatusCode</th>
+						<th>ConfMessageMatchStatus</th>
+						<th>CCDTimeStamp</th>
+						<th>ConfProcessingStatus</th>
+						<th>SELECT</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr ng-repeat="data in sectionTwoDatas" >
+						<td>{{$index+1}}</td>
+						<td style="cursor:pointer;color:#2d4063;" class="bold" ng-click="loadSectionTwo(data, matching, $event)">{{data.PaymentID}} </td>
+						<td ng-click="loadSectionTwo(data, matching, $event)">{{data.CCDID}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.RespInstrID}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.ConfStatusCode}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.ConfMessageMatchStatus}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.CCDTimeStamp}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.ConfProcessingStatus}}</td>
+						 <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action"  ng-model="data.Selected"  class="selectCheckbox1 checkBoxClass cursorPointer" ng-click="collectdata({'payment' : data})" id="action{{$index}}">
+                            <label for="action{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+						<!-- <td>
+							<span ng-switch="file.size > 1024*1024" class="fileSize">
+							<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+							<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+							</span>
+						</td> -->
+
+						<!-- <td>{{data.TimeTaken}}</td>-->
+						<!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+						<!-- <td>{{data.UploadTime}}</td>
+						<td>{{data.FileType}}</td> -->
+					</tr>
+
+				</tbody>
+        </table>	
+		
+		</div>
+		</div>
+    </div>
+	
+	<div style="clear:both"></div>
+	<!-- Section Two Ends -->
+	
+	<!-- Section Three Begins -->
+    <div class="col-md-12"  id="sectionThreeTableOne">
+		<!-- <h5>Section Three</h5> -->
+		<!-- <div style="clear:both"></div> -->
+		<div class="alert alert-warning" ng-if="!sectionThreeDatas.length">
+            <strong><h4  style="margin:0;text-align:center;"><i class="fa fa-warning"></i>{{'MatchingModuleDts.SelectionTwo' | translate}}</h4></strong>
+        </div>
+		<div ng-if="sectionThreeDatas.length">
+			<h3 translate>MatchingModuleDts.With</h3>
+			<!--Filter HTML Begins -->
+       <div id="With" class="searchholder" style="margin:0">
+				<ng-include src="(matching['With'] === 'bankstatement' && matching['Types'] ==='paymentstatement' ) ? 'statementpaymentSearch' : ((matching['With'] === 'customercredittransfer' || matching['With'] === 'financialinstitutiontransfer')&&matching['Types'] ==='paymentstatement') ? 'paymentstatementSearch' : ''"></ng-include>
+			</div>	
+	    <div id="SectionThreeTable" class="FixHead1" style="max-height: 400px;overflow-y: auto;">
+			<table class="table table-bordered maintable" ng-if="(matching['With'] === 'customercredittransfer' || matching['With'] === 'financialinstitutiontransfer')&& (matching['Types'] === 'paymentstatement')"> 
+				<thead>
+					<tr>
+						<th>S.No</th>
+						<th>Payment ID</th>
+						<th>MOP</th>
+						<th>Payment Status</th>
+						<th>Original Payment Reference</th>
+						<th>Output Instruction ID</th>
+						<th>Account ID</th>
+						<th>Account Currency</th>
+						<th>Account Type</th>
+						<th>Posting Entry Type</th>
+						<th>Amount</th>
+						<th>Debit/Credit</th>
+						<th>Posting Override (Y/N)</th>
+						<th>Status Reason</th>
+						<th>Status</th>
+						<th>Posting Date</th>
+						<th>Entry Status</th>
+						<th>SELECT</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="data in sectionThreeDatas" >
+						<td>{{$index+1}}</td>
+						<td style="cursor:pointer;color:#2d4063;" class="bold" >{{data.PaymentID}}</td>
+						<td>{{data.MethodOfPayment}}</td>
+						<td>{{data.Status}}</td>
+						 <td>{{data.OriginalPaymentReference}}</td>
+						 <td>{{data.OutputInstructionID}}</td>
+						 <td>{{data.AccountID}}</td>
+						 <td>{{data.AccountCCY}}</td>
+						 <td>{{data.AccountType}}</td>
+						 <td>{{data.EntryType}}</td>
+						 <td>{{data.Amount}}</td>
+						 <td>{{data.DrCrInd}}</td>
+						 <td>{{data.PostingOverrideIndicator}}</td>
+						 <td>{{data.StatusReason}}</td>
+						 <td>{{data.StatementMatchingStatus}}</td>
+						 <td>{{data.PostingDate}}</td>
+						 <td>{{data.EntryStatus}}</td>
+						  <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action2"  ng-model="data.Selected"  class=" selectCheckbox checkBoxClass cursorPointer" ng-click="collectdata({'payment' : data})" id="action2{{$index}}">
+                            <label for="action2{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+
+					
+					
+						<!-- <td>
+							<span ng-switch="file.size > 1024*1024" class="fileSize">
+							<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+							<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+							</span>
+						</td> -->
+
+						<!-- <td>{{data.TimeTaken}}</td>-->
+						<!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+						<!-- <td>{{data.UploadTime}}</td>
+						<td>{{data.FileType}}</td> -->
+					</tr>
+
+				</tbody>
+			</table>
+			<table class="table table-bordered maintable" ng-if="matching['With'] === 'bankstatement'&& matching['Types'] === 'paymentstatement'">
+            <thead>
+                <tr>
+				    <th>S.No</th>
+                    <th>Reference ID</th>
+                    <th>Account Servicing Instruction</th>
+                    <th>Account Number</th>
+                    <th>Account Name</th>
+                    <th>Original Reference ID</th>
+                    <th>DRCRINDICATIOR</th>
+                    <th>Amount</th>
+                    <th>Currency</th>
+					<th>Reversal Indicator</th>
+					<th>Booking Date</th>
+					<th>Value Date</th>
+					<th>Bank Reference ID</th>
+					<th>TXN2EID</th>
+					<th>Additional Info</th>
+					<th>Status</th>
+					<th>SELECT</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="data in sectionThreeDatas" >
+				  <td>{{$index+1}}</td>
+                    <td style="cursor:pointer;color:#2d4063;" class="bold" >{{data.EntryReferenceId}}</td>
+                    <td>{{data.StatementData.StatementAccountDetails.StmtAccServicingInstitution}}</td>
+                    <td>{{data.StatementData.StatementAccountDetails.StmtAccountNo}}</td>
+					<td>{{data.StatementData.StatementAccountDetails.StmtAccountName}}</td>
+					<td>{{data.StatementData.StatementEntryDetails.EntryOrigReferenceId}}</td>
+					<td>{{data.StatementEntryDetails.EntryDrCrIndicator}}</td>
+					<td>{{data.StatementEntryDetails.EntryAmount}}</td>
+					<td>{{data.StatementEntryDetails.EntryCurrency}}</td>
+					<td>{{data.StatementEntryDetails.EntryReversalIndicator}}</td>
+					<td>{{data.StatementEntryDetails.EntryBookingDate}}</td>
+					<td>{{data.StatementEntryDetails.EntryValueDate}}</td>
+					<td>{{data.StatementEntryDetails.EntryBankReferenceId}}</td>
+					<td>{{data.StatementEntryDetails.EntryTxnE2EId}}</td>
+					<td>{{data.StatementEntryDetails.EntryAdditionalInfo}}</td>
+					<td>{{data.MatchingStatus}}</td>
+					  <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action4"  ng-model="data.Selected"  class="selectCheckbox checkBoxClass cursorPointer" ng-click="collectdata({'statement' : data})" id="action4{{$index}}" >
+                            <label for="action4{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+		
+                    <!-- <td>
+						<span ng-switch="file.size > 1024*1024" class="fileSize">
+						<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+						<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+						</span>
+                    </td> -->
+                    <!-- <td>{{data.TimeTaken}}</td> -->
+                    <!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+                    <!-- <td>{{data.UploadTime}}</td>
+                    <td>{{data.FileType}}</td> -->
+                </tr>
+
+            </tbody>
+        </table>
+		
+			<table class="table table-bordered maintable" ng-if="matching['With'] === 'credittransfer' && matching['Types'] === 'paymentconfirmation'">
+          <thead>
+					<tr>
+						<th>S.No</th>
+						<th>Payment ID</th>
+						<th>MOP</th>
+						<th>Original Payment Reference</th>
+						<th>Output Instruction ID</th>
+						<th>Original Value Date</th>
+						<th>Value Date</th>
+						<th>Product Supported</th>
+						<th>Amount</th>
+						<th>Currency</th>
+						<th>Status</th>
+						<th>SELECT</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr ng-repeat="data in sectionThreeDatas" >
+						<td>{{$index+1}}</td>
+						<td style="cursor:pointer;color:#2d4063;" class="bold" >{{data.PaymentID}} </td>
+						<td>{{data.MethodOfPayment}}</td>
+						 <td>{{data.OriginalPaymentReference}}</td>
+						 <td>{{data.OutputInstructionID}}</td>
+						 <td>{{data.OriginalValueDate}}</td>
+						 <td>{{data.ValueDate}}</td>
+						 <td>{{data.ProductSupported}}</td>
+						 <td>{{data.Amount}}</td>
+						 <td>{{data.Currency}}</td>
+						 <td>{{data.Status}}</td>
+						  <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action"  ng-model="data.Selected"  class="selectCheckbox1 checkBoxClass cursorPointer" ng-click="collectdata({'payment' : data})" id="action{{$index}}">
+                            <label for="action{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+						<!-- <td>
+							<span ng-switch="file.size > 1024*1024" class="fileSize">
+							<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+							<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+							</span>
+						</td> -->
+
+						<!-- <td>{{data.TimeTaken}}</td>-->
+						<!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+						<!-- <td>{{data.UploadTime}}</td>
+						<td>{{data.FileType}}</td> -->
+					</tr>
+
+				</tbody>
+        </table>
+			<table class="table table-bordered maintable" ng-if="matching['With'] === 'credittransfer' && matching['Types'] === 'paymentconfirmation'">
+          <thead>
+					<tr>
+						<th>S.No</th>
+						<th>Payment ID</th>
+						<th>MOP</th>
+						<th>Original Payment Reference</th>
+						<th>Output Instruction ID</th>
+						<th>Original Value Date</th>
+						<th>Value Date</th>
+						<th>Product Supported</th>
+						<th>Amount</th>
+						<th>Currency</th>
+						<th>Status</th>
+						<th>SELECT</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr ng-repeat="data in sectionThreeDatas" >
+						<td>{{$index+1}}</td>
+						<td style="cursor:pointer;color:#2d4063;" class="bold" >{{data.PaymentID}} </td>
+						<td>{{data.MethodOfPayment}}</td>
+						 <td>{{data.OriginalPaymentReference}}</td>
+						 <td>{{data.OutputInstructionID}}</td>
+						 <td>{{data.OriginalValueDate}}</td>
+						 <td>{{data.ValueDate}}</td>
+						 <td>{{data.ProductSupported}}</td>
+						 <td>{{data.Amount}}</td>
+						 <td>{{data.Currency}}</td>
+						 <td>{{data.Status}}</td>
+						  <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action"  ng-model="data.Selected"  class="selectCheckbox1 checkBoxClass cursorPointer" ng-click="collectdata({'payment' : data})" id="action{{$index}}">
+                            <label for="action{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+						<!-- <td>
+							<span ng-switch="file.size > 1024*1024" class="fileSize">
+							<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+							<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+							</span>
+						</td> -->
+
+						<!-- <td>{{data.TimeTaken}}</td>-->
+						<!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+						<!-- <td>{{data.UploadTime}}</td>
+						<td>{{data.FileType}}</td> -->
+					</tr>
+
+				</tbody>
+        </table>
+		
+		
+		<table class="table table-bordered maintable" ng-if= "matching['With'] === 'MT900' && matching['Types'] === 'paymentconfirmation'" >
+         <thead>
+					<tr>
+						<th>S.No</th>
+						<th>Payment ID</th>
+						<th>CCDID</th>
+						<th>RespInstrID</th>
+						<th>ConfStatusCode</th>
+						<th>ConfMessageMatchStatus</th>
+						<th>CCDTimeStamp</th>
+						<th>ConfProcessingStatus</th>
+						<th>SELECT</th>
+
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr ng-repeat="data in sectionTwoDatas" >
+						<td>{{$index+1}}</td>
+						<td style="cursor:pointer;color:#2d4063;" class="bold" ng-click="loadSectionTwo(data, matching, $event)">{{data.PaymentID}} </td>
+						<td ng-click="loadSectionTwo(data, matching, $event)">{{data.CCDID}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.RespInstrID}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.ConfStatusCode}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.ConfMessageMatchStatus}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.CCDTimeStamp}}</td>
+						 <td ng-click="loadSectionTwo(data, matching, $event)">{{data.ConfProcessingStatus}}</td>
+						 <td class="txtCenter">
+                        <div class="checkbox checkbox-primary">
+                            <input type="checkbox" name="action"  ng-model="data.Selected"  class="selectCheckbox1 checkBoxClass cursorPointer" ng-click="collectdata({'payment' : data})" id="action{{$index}}">
+                            <label for="action{{$index}}" style="margin-left:25px;"></label>
+                        </div> 
+                    </td>
+						<!-- <td>
+							<span ng-switch="file.size > 1024*1024" class="fileSize">
+							<span ng-switch-when="true"> {{data.FileSize | number:2}} MB</span>
+							<span ng-switch-default> {{data.FileSize | number:2}} kB</span>
+							</span>
+						</td> -->
+
+						<!-- <td>{{data.TimeTaken}}</td>-->
+						<!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+						<!-- <td>{{data.UploadTime}}</td>
+						<td>{{data.FileType}}</td> -->
+					</tr>
+
+				</tbody>
+        </table>	
+			</div>
+			</div>
+	</div>
+	<div style="clear:both"></div>
+	<!-- Section Two Ends -->
+	</div>
+	   <div id="matchconfirmation" class="modal fade" role="dialog"  >
+                <div class="modal-dialog">
+
+                    <div class="modal-content" style="width: 600px;">
+                        <div class="modal-header modalHeaderColor">
+                            <h5 class="modal-title"> ADJUSTMENT ACCOUNTING ENTRIES CONFIRMATION</h5>
+                            <button type="button" class="close" data-dismiss="modal" ng-click="resetWebform(collectedData);">&times;</button>
+                        </div>
+                        <div class="modal-body" style="overflow: hidden;">
+							<form role="form" class="simple-form form-horizontal" name="popupWebForm" ng-submit="NEWFUNCTION(collectedData, true); popupWebformSubmit=false">
+								<div class="ForAddNewScroll" style='max-height:600px;' ng-if="metaInfoSaveChanges"">
+									<web-form input="metaInfoSaveChanges" output="collectedData['AdjustmentAccountEntriesConfirmation']" config="{editable: true, submit: popupWebformSubmit, form: popupWebForm}"></web-form>
+								</div>
+								<div class="col-xs-12"style="padding:15px;margin-top:15px;border-top:1px solid">
+									<button type="submit" class="btn btnStyle clr" ng-click="popupWebformSubmit=true;" tooltip="{{'BtnGroup.Submit' | translate}}">
+										<span translate> BtnGroup.Submit</span>
+									</button>
+									<button type="button" class="btn btnStyle clr" tooltip="{{'BtnGroup.Cancel' | translate}}" ng-click="resetWebform(collectedData); popupWebformSubmit=false" data-toggle="modal" data-target="#matchconfirmation">
+										<span translate> BtnGroup.Cancel</span>
+									</button>
+								</div>
+							</form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+</div>
+<script type="text/ng-template" id="paymentstatementSearch">
+	<div class="row">
+
+        <div class="col-lg-8 col-md-7 col-sm-12">
+            <div class="form-group ">
+                <div class="input-group-prepend">
+                    <input type="text" name="PaymentID" ng-model="uorVal['PaymentID']" placeholder="Payment ID" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' ng-keyup="getExistVal($event)" ng-mouseup="checkinfo($event)" id="searchBox" />
+                    <span class="input-group-text search-addon" ng-click="uorSearch($event)" data-toggle="tooltip" tooltip="Search" style="cursor:pointer;background-color:#fff;border:none;" id="SearchFontIcon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                </div>
+            </div>
+        </div>		
+        <div class="col-lg-4 col-md-5 col-sm-12">
+			<button id ="forcematch" type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" ng-click="NEWFUNCTION(collectedData,false)"; ng-disabled="(collectedData.payment && collectedData.statement) ? false : true"> FORCE MATCH </button>
+            <button type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" data-toggle="collapse" data-target="#distSearch1" ng-click="advanceSearchCollaspe('distSearch1');showSearchWarning = false;">
+                <!-- ng-click="distSearch=!distSearch;showSearchWarning = false;" -->
+                <span ng-if="distSearch1" style="color:#fff !important;"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-right circle-o"></i></span>
+                <span ng-if="!distSearch1" style="color:#fff !important;"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-down circle-o"></i></span>
+            </button>	 
+        </div>
+    </div>
+</div>
+
+<div id="distSearch1" class="searchContainer collapse" style="margin:0;margin-bottom:8px;padding-bottom:10px;">
+    <div class="row" style="padding: 15px 4px 15px 4px;margin:0;margin-bottom:20px;">
+        <div class="col-md-7 col-sm-6 col-xs-12" style="float:right">
+            <ul class="btn pull-right" style="padding:0;border-radius:5px !important;">
+                <li class="dropdown mega-dropdown">
+                   <!--  <a class="dropdown-toggle btn btnStyle" style="text-decoration:none;border-radius: 5px !important;" tabindex="0">
+                        <i class="fa fa-filter"></i> <span translate>BtnGroup.AddRemoveFilters</span>
+                    </a> -->
+
+                    <ul class="dropdown-menu mega-dropdown-menu customDropDown" style="margin-left:-3px;min-width:213px !important;">
+                        <li ng-repeat="data in paymentstatementField">
+                            <div class="row" style="margin:0;margin-top:5px;">
+                                <div class="col-md-9" style="white-space:normal;">
+                                    <span style="margin-left:0px;display:inline-block;margin-top:3px;">{{data.label}}</span>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="checkbox" style="margin:0;">
+                                        <span class="green switch green ng-valid ng-pristine ng-untouched" style="width:34px !important; height:14px !important; border-radius:20px !important;margin-top:5px;" ng-init="active = data.visible" ng-click="active=!active;SelectValue($index)" ng-class="{checked:active}" ng-model="active" ng-keydown="toggleFocus($event, $index, true)">
+                                    <small style="width:12px !important;height:12px !important;" tabindex="0" ></small>
+                                    <input type="checkbox" style="opacity:0;display:none;" class="ng-pristine ng-untouched ng-valid"/>
+                                    <span class="switch-text"> </span>
+                                        </span>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        
+        </div>
+    </div>
+
+    <div class="row" style="margin:0;" ng-if="showSearchWarning && !buildSearchClicked">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+            <div class="alert alert-info alert-block bold" style="text-align:center;" id="showWarning">
+                <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+    <div class="row" style="margin:0;">
+
+        <form class="form-horizontal" role="form">
+            <div class="row m-0">
+
+            <div class="col-md-6 pt-3" ng-repeat="fields in paymentstatementField" ng-if="fields.visible">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="text-align:left;">{{fields.label}}</label>
+
+                    <div class="col-md-6" ng-if="fields.type == 'text'">
+                        <input type="text" class="form-control" ng-model="search[fields.value]" placeholder="{{fields.label}}" ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event) : ''" />
+                    </div>
+
+					<!-- Payment search Date -->
+
+                    <div class="col-md-8" style="padding:0" ng-if="fields.type=='dateRange'">
+                        <div class="col-md-9 col-sm-9">
+                            <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control DatePicker dateTypeKey" placeholder="( TimeZone )" id="{{fields.value +'_Payment'}}"
+								ng-model="search[fields.value]" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)" ng-focus="activatePicker($event)">
+                                <span class="input-group-text" ng-click="focusInfn(fields.value)"><span class="fa fa-calendar"></span></span>
+
+                            </div>
+                        </div>
+
+                    </div>
+					
+                    <div style="clear:both;visibility:hidden;" ng-if="($index % 2) == 1"> {{$index % 2}}</div>
+                </div>
+            </div>
+        </div>
+            <div style="clear:both"></div>
+            <hr/ style="border-color:#ccc;">
+                	<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="pull-right" style="margin-right:15px;">
+								<button type="button" value="Search" id="AdSearchBtn" class="btn btnStyle" ng-click="buildSearch($event,'distSearch1')"> <i class="fa fa-search"></i> <span translate>BtnGroup.Search</span> </button>
+								<button class="btn btnStyle" value="Reset Filter" ng-click="search = ResetForm(search)" style="margin-right:5px;"><i class="fa fa-refresh"></i> <span translate>BtnGroup.ResetFilter</span> </button>
+								<!-- <button type="button" value="Cancel" class="btn btnStyle" ng-click="sectionTwoSearch = true"><i class="fa fa-times"></i> <span translate>BtnGroup.Cancel</span> </button> -->
+							</div>
+						</div>
+					</div>
+          
+        </form>
+    </div>
+</script>
+<!--- Payement statement Search ends -->
+
+<!--- Statement payment Search begins -->
+<script type="text/ng-template" id="statementpaymentSearch">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-12">
+            <div class="form-group ">
+                <div class="input-group-prepend">
+                    <input type="text" name="InstructionID" ng-model="uorVal['InstructionID']" placeholder="{{'PaymentModuleDts.StatementID' | translate}}" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' ng-keyup="getExistVal($event)" ng-mouseup="checkinfo($event)" id="searchBox" />
+                    <span class="input-group-text search-addon" ng-click="uorSearch($event)" data-toggle="tooltip" tooltip="{{'BtnGroup.Search'| translate}}"  style="cursor:pointer;background-color:#fff;border:none;" id="SearchFontIcon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-12">
+			<button id ="forcematch" type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" ng-click="NEWFUNCTION(collectedData,false)" ng-disabled="(collectedData.payment && collectedData.statement) ? false : true"> FORCE MATCH </button>
+            <button type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle"  data-toggle="collapse" data-target="#distSearch2" ng-click="advanceSearchCollaspe('distSearch2');showSearchWarning = false;">
+                <span ng-if="distSearch2" style="color:#fff !important;"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-right circle-o"></i></span>
+                <span ng-if="!distSearch2" style="color:#fff !important;"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-down circle-o"></i></span>
+            </button>	 
+        </div>
+    </div>
+</div>
+
+<div id="distSearch2" class="collapse searchContainer" style="margin:0;margin-bottom:8px;padding-bottom:10px;">
+    <div class="row" style="padding: 10px 4px 15px 4px;margin:0;margin-bottom:20px;">
+        <div class="col-md-5" style="font-size:22px;" translate>PaymentModuleDts.SearchFilters</div>
+        <div class="col-md-7 col-sm-6 col-xs-12" style="float:right">
+            <ul class="btn pull-right" style="padding:0;border-radius:5px !important;">
+                <li class="dropdown mega-dropdown">
+                   <!--  <a class="dropdown-toggle btn btnStyle" style="text-decoration:none;border-radius: 5px !important;" tabindex="0">
+                        <i class="fa fa-filter"></i> <span translate>BtnGroup.AddRemoveFilters</span>
+                    </a> -->
+
+                    <ul class="dropdown-menu mega-dropdown-menu customDropDown" style="margin-left:-3px;min-width:100px !important;">
+                        <li ng-repeat="data in statementpaymentField">
+                            <div class="row" style="margin:0;margin-top:5px;">
+                                <div class="col-md-9" style="white-space:normal;">
+                                    <span style="margin-left:0px;display:inline-block;margin-top:3px;">{{data.label}}</span>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="checkbox" style="margin:0;">
+                                        <span class="green switch green ng-valid ng-pristine ng-untouched" style="width:34px !important; height:14px !important; border-radius:20px !important;margin-top:5px;" ng-init="active = data.visible" ng-click="active=!active;SelectValue($index)" ng-class="{checked:active}" ng-model="active" ng-keydown="toggleFocus($event, $index, true)">
+                                    <small style="width:12px !important;height:12px !important;" tabindex="0" ></small>
+                                    <input type="checkbox" style="opacity:0;display:none;" class="ng-pristine ng-untouched ng-valid"/>
+                                    <span class="switch-text"> </span>
+                                        </span>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        
+        </div>
+    </div>
+
+    <div class="row" style="margin:0;" ng-if="showSearchWarning && !buildSearchClicked">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+            <div class="alert alert-info alert-block bold" style="text-align:center;" id="showWarning">
+                <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+    <div class="row" style="margin:0;">
+
+        <form class="form-horizontal" role="form">
+            <div class="row m-0">
+            <div class="col-md-6 pt-3" ng-repeat="fields in statementpaymentField" ng-if="fields.visible">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="text-align:left;">{{fields.label}}</label>
+
+                    <div class="col-md-6" ng-if="fields.type == 'text'">
+                        <input type="text" class="form-control" ng-model="search[fields.value]" placeholder="{{fields.label}}" ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event) : ''" />
+                    </div>
+
+					
+                    <!--  Statement AdvancedSearch Date -->
+					
+					<div class="col-md-8" style="padding:0" ng-if="fields.type=='dateRange'">
+                        <div class="col-md-9 col-sm-9">
+                            <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control DatePicker dateTypeKey" placeholder="( TimeZone )" id="{{fields.value +'_Stmt'}}"
+								ng-model="search[fields.value]" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)" ng-focus="activatePicker($event)">
+                                <span class="input-group-text" ng-click="focusInfn(fields.value)"><span class="fa fa-calendar"></span></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div style="clear:both;visibility:hidden;" ng-if="($index % 2) == 1"> {{$index % 2}}</div>
+                </div>
+            </div>
+        </div>
+            <div style="clear:both"></div>
+            <hr/ style="border-color:#ccc;">
+                					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="pull-right" style="margin-right:15px;">
+								<button type="button" value="Search" id="AdSearchBtn" class="btn btnStyle" ng-click="buildSearch($event)"> <i class="fa fa-search"></i> <span translate>BtnGroup.Search</span> </button>
+								<button class="btn btnStyle" value="Reset Filter" ng-click="search = ResetForm(search)" style="margin-right:5px;"><i class="fa fa-refresh"></i> <span translate>BtnGroup.ResetFilter</span> </button>
+								<!-- <button type="button" value="Cancel" class="btn btnStyle" ng-click="sectionTwoSearch = true"><i class="fa fa-times"></i> <span translate>BtnGroup.Cancel</span> </button> -->
+							</div>
+						</div>
+					</div>
+
+        </form>
+    </div>
+</script>
+<script type="text/ng-template" id="paymentconfirmationSearch">
+	<div class="row">
+
+        <div class="col-lg-8 col-md-7 col-sm-12">
+            <div class="form-group ">
+                <div class="input-group-prepend">
+                    <input type="text" name="PaymentID" ng-model="uorVal['PaymentID']" placeholder="Payment ID" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' ng-keyup="getExistVal($event)" ng-mouseup="checkinfo($event)" id="searchBox" />
+                    <span class="input-group-text search-addon" ng-click="uorSearch($event)" data-toggle="tooltip" tooltip="Search" style="cursor:pointer;background-color:#fff;border:none;" id="SearchFontIcon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                </div>
+            </div>
+        </div>		
+        <div class="col-lg-4 col-md-5 col-sm-12">
+			<button id ="forcematch" type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" data-toggle="modal" data-target="#matchconfirmation" ng-disabled="(collectedData.payment && collectedData.statement) ? false : true"> FORCE MATCH </button>
+            <button type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" data-toggle="collapse" data-target="#distSearch3" ng-click="advanceSearchCollaspe('distSearch3');showSearchWarning = false;">
+                <span ng-if="distSearch3" style="color:#fff !important;"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-right circle-o"></i></span>
+                <span ng-if="!distSearch3" style="color:#fff !important;"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-down circle-o"></i></span>
+            </button>	 
+        </div>
+	
+    </div>
+</div>
+
+<div id="distSearch3" class="collapse searchContainer" style="margin:0;margin-bottom:8px;padding-bottom:10px;">
+    <div class="row" style="padding: 15px 4px 15px 4px;margin:0;margin-bottom:20px;">
+        <div class="col-md-5" style="font-size:18px;" translate>PaymentModuleDts.SearchFilters</div>
+        <div class="col-md-7 col-sm-6 col-xs-12" style="float:right">
+            <ul class="btn pull-right" style="padding:0;border-radius:5px !important;">
+                <li class="dropdown mega-dropdown">
+                   <!--  <a class="dropdown-toggle btn btnStyle" style="text-decoration:none;border-radius: 5px !important;" tabindex="0">
+                        <i class="fa fa-filter"></i> <span translate>BtnGroup.AddRemoveFilters</span>
+                    </a> -->
+
+                    <ul class="dropdown-menu mega-dropdown-menu customDropDown" style="margin-left:-3px;min-width:213px !important;">
+                        <li ng-repeat="data in paymentconfirmationField">
+                            <div class="row" style="margin:0;margin-top:5px;">
+                                <div class="col-md-9" style="white-space:normal;">
+                                    <span style="margin-left:0px;display:inline-block;margin-top:3px;">{{data.label}}</span>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="checkbox" style="margin:0;">
+                                        <span class="green switch green ng-valid ng-pristine ng-untouched" style="width:34px !important; height:14px !important; border-radius:20px !important;margin-top:5px;" ng-init="active = data.visible" ng-click="active=!active;SelectValue($index)" ng-class="{checked:active}" ng-model="active" ng-keydown="toggleFocus($event, $index, true)">
+                                    <small style="width:12px !important;height:12px !important;" tabindex="0" ></small>
+                                    <input type="checkbox" style="opacity:0;display:none;" class="ng-pristine ng-untouched ng-valid"/>
+                                    <span class="switch-text"> </span>
+                                        </span>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        
+        </div>
+    </div>
+
+    <div class="row" style="margin:0;" ng-if="showSearchWarning && !buildSearchClicked">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+            <div class="alert alert-info alert-block bold" style="text-align:center;" id="showWarning">
+                <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+    <div class="row" style="margin:0;">
+
+        <form class="form-horizontal" role="form">
+            <div class="row m-0">
+            <div class="col-md-6 pt-3" ng-repeat="fields in paymentconfirmationField" ng-if="fields.visible">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="text-align:left;">{{fields.label}}</label>
+
+                    <div class="col-md-6" ng-if="fields.type == 'text'">
+                        <input type="text" class="form-control" ng-model="search[fields.value]" placeholder="{{fields.label}}" ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event) : ''" />
+                    </div>
+
+          
+                    <div class="col-md-8" style="padding:0" ng-if="fields.type=='dateRange'">
+                        <div class="col-md-12 col-sm-9">
+                            <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control DatePicker dateTypeKey" placeholder="From  ( TimeZone - {{profileName}} )" id="{{fields.value+'Start'}}" ng-model="search.InstructionData[fields.value].Start" onpaste="return false">
+                                <span class="input-group-text" ng-click="focusInfn(fields.value+'Start')"><span class="fa fa-calendar"></span></span>
+
+                                <span class="input-group-text" style="border:none;background-color:transparent;">{{'BankDataDts.To' | translate}}</span>
+                                <input type="text" class="form-control DatePicker dateTypeKey" placeholder="To  ( TimeZone - {{profileName}} )" id="{{fields.value+'End'}}" ng-model="search.InstructionData[fields.value].End" style="text-align:start;" onpaste="return false">
+                                <span class="input-group-text" ng-click="focusInfn(fields.value+'End')"><span class="fa fa-calendar"></span></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div style="clear:both;visibility:hidden;" ng-if="($index % 2) == 1"> {{$index % 2}}</div>
+                </div>
+            </div>
+        </div>
+            <div style="clear:both"></div>
+            <hr/ style="border-color:#ccc;">
+                	<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="pull-right" style="margin-right:15px;">
+								<button type="button" value="Search" id="AdSearchBtn" class="btn btnStyle" ng-click="buildSearch($event)"> <i class="fa fa-search"></i> <span translate>BtnGroup.Search</span> </button>
+								<button class="btn btnStyle" value="Reset Filter" ng-click="search = ResetForm(search)" style="margin-right:5px;"><i class="fa fa-refresh"></i> <span translate>BtnGroup.ResetFilter</span> </button>
+								<!-- <button type="button" value="Cancel" class="btn btnStyle" ng-click="sectionTwoSearch = true"><i class="fa fa-times"></i> <span translate>BtnGroup.Cancel</span> </button> -->
+							</div>
+						</div>
+					</div>
+
+        </form>
+    </div>
+</script>
+<script type="text/ng-template" id="confirmationpaymentSearch">
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-12">
+            <div class="form-group ">
+                <div class="input-group-prepend">
+                    <input type="text" name="CCDID" ng-model="uorVal['CCDID']" placeholder="CCDID" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' ng-keyup="getExistVal($event)" ng-mouseup="checkinfo($event)" id="searchBox" />
+                    <span class="input-group-text search-addon" ng-click="uorSearch($event)" data-toggle="tooltip" tooltip="{{'BtnGroup.Search'| translate}}" style="cursor:pointer;background-color:#fff;border:none;" id="SearchFontIcon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-12">
+			<button id ="forcematch" type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" data-toggle="modal" data-target="#matchconfirmation" ng-disabled="(collectedData.payment && collectedData.confirmation) ? false : true"> FORCE MATCH </button>
+            <button type="button" style=" width: auto; display: inline-block; margin: 0 " class="btn btn-block btnStyle" data-toggle="collapse" data-target="#distSearch4" ng-click="advanceSearchCollaspe('distSearch4');showSearchWarning = false;">
+                <span ng-if="distSearch4" style="color:#fff !important;"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-right circle-o"></i></span>
+                <span ng-if="!distSearch4" style="color:#fff !important;"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-down circle-o"></i></span>
+            </button>	 
+        </div>
+    </div>
+</div>
+
+<div id="distSearch4" class="collapse searchContainer" style="margin:0;margin-bottom:8px;padding-bottom:10px;">
+    <div class="row" style="padding: 10px 4px 15px 4px;margin:0;margin-bottom:20px;">
+        <div class="col-md-5" style="font-size:22px;" translate>PaymentModuleDts.SearchFilters</div>
+        <div class="col-md-7 col-sm-6 col-xs-12" style="float:right">
+            <ul class="btn pull-right" style="padding:0;border-radius:5px !important;">
+                <li class="dropdown mega-dropdown">
+                   <!--  <a class="dropdown-toggle btn btnStyle" style="text-decoration:none;border-radius: 5px !important;" tabindex="0">
+                        <i class="fa fa-filter"></i> <span translate>BtnGroup.AddRemoveFilters</span>
+                    </a> -->
+
+                    <ul class="dropdown-menu mega-dropdown-menu customDropDown" style="margin-left:-3px;min-width:100px !important;">
+                        <li ng-repeat="data in confirmationpaymentField">
+                            <div class="row" style="margin:0;margin-top:5px;">
+                                <div class="col-md-9" style="white-space:normal;">
+                                    <span style="margin-left:0px;display:inline-block;margin-top:3px;">{{data.label}}</span>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="checkbox" style="margin:0;">
+                                        <span class="green switch green ng-valid ng-pristine ng-untouched" style="width:34px !important; height:14px !important; border-radius:20px !important;margin-top:5px;" ng-init="active = data.visible" ng-click="active=!active;SelectValue($index)" ng-class="{checked:active}" ng-model="active" ng-keydown="toggleFocus($event, $index, true)">
+                                    <small style="width:12px !important;height:12px !important;" tabindex="0" ></small>
+                                    <input type="checkbox" style="opacity:0;display:none;" class="ng-pristine ng-untouched ng-valid"/>
+                                    <span class="switch-text"> </span>
+                                        </span>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        
+        </div>
+    </div>
+
+    <div class="row" style="margin:0;" ng-if="showSearchWarning && !buildSearchClicked">
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+            <div class="alert alert-info alert-block bold" style="text-align:center;" id="showWarning">
+                <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+            </div>
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+    <div class="row" style="margin:0;">
+
+        <form class="form-horizontal" role="form">
+            <div class="row m-0">
+            <div class="col-md-6 pt-3" ng-repeat="fields in confirmationpaymentField" ng-if="fields.visible">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4" style="text-align:left;">{{fields.label}}</label>
+
+                    <div class="col-md-6" ng-if="fields.type == 'text'">
+                        <input type="text" class="form-control" ng-model="search[fields.value]" placeholder="{{fields.label}}" ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event) : ''" />
+                    </div>
+
+           
+                    <div class="col-md-8" style="padding:0" ng-if="fields.type=='dateRange'">
+                        <div class="col-md-12 col-sm-9">
+                            <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control DatePicker dateTypeKey" placeholder="From  ( TimeZone - {{profileName}} )" id="{{fields.value+'Start'}}" ng-model="search.InstructionData[fields.value].Start" onpaste="return false">
+                                <span class="input-group-text" ng-click="focusInfn(fields.value+'Start')"><span class="fa fa-calendar"></span></span>
+
+                                <span class="input-group-text" style="border:none;background-color:transparent;">{{'BankDataDts.To' | translate}}</span>
+                                <input type="text" class="form-control DatePicker dateTypeKey" placeholder="To  ( TimeZone - {{profileName}} )" id="{{fields.value+'End'}}" ng-model="search.InstructionData[fields.value].End" style="text-align:start;" onpaste="return false">
+                                <span class="input-group-text" ng-click="focusInfn(fields.value+'End')"><span class="fa fa-calendar"></span></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div style="clear:both;visibility:hidden;" ng-if="($index % 2) == 1"> {{$index % 2}}</div>
+                </div>
+            </div>
+        </div>
+            <div style="clear:both"></div>
+            <hr/ style="border-color:#ccc;">
+                					<div class="row">
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+							<div class="pull-right" style="margin-right:15px;">
+								<button type="button" value="Search" id="AdSearchBtn" class="btn btnStyle" ng-click="buildSearch($event,'distSearch4')"> <i class="fa fa-search"></i> <span translate>BtnGroup.Search</span> </button>
+								<button class="btn btnStyle" value="Reset Filter" ng-click="search = ResetForm(search)" style="margin-right:5px;"><i class="fa fa-refresh"></i> <span translate>BtnGroup.ResetFilter</span> </button>
+								<!-- <button type="button" value="Cancel" class="btn btnStyle" ng-click="sectionTwoSearch = true"><i class="fa fa-times"></i> <span translate>BtnGroup.Cancel</span> </button> -->
+							</div>
+						</div>
+					</div>
+
+        </form>
+    </div>
+</script>

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<!--Importing queue configuration file-->
+	<import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+
+	<camelContext id="VOLPAY_PAYMENTPROCESSING" xmlns="http://camel.apache.org/schema/spring"
+                  threadNamePattern="VOLPAY_PAYMENT_THREADPOOL-#counter#" useBreadcrumb="false">
+
+		<!-- loading properties file  -->
+		<propertyPlaceholder id="properties"
+                             location="classpath:${env:VOLPAY_DOMAIN}_paymentprocessing_config.properties"/>
+
+		<!-- ThreadPool configuration -->
+		<threadPool id="InterfacePool" threadName="InterfaceThread" poolSize="4" maxPoolSize="8" maxQueueSize="-1"/>
+
+		<!-- Handling all kind of exception occurs during exchage failures-->
+		<onException>
+			<exception>javax.jms.JMSException</exception>
+			<exception>org.apache.camel.CamelException</exception>
+			<exception>org.apache.camel.RuntimeCamelException</exception>
+			<exception>java.lang.RuntimeException</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<bean ref="bean:camellogger" method="composeExchangeException"/>
+		</onException>
+
+
+		<route id="InterfaceBulkHandler" autoStartup="false">
+			<from uri="direct-vm:bulk-interfacehandler"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{INTERFACEBULKHANDLER}}"/>
+		</route>
+
+		<route id="BulkHandler_Queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{INTERFACEBULKHANDLER}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:CallInterfaceBulking"/>
+		</route>
+
+		<route id="InterfaceTimeOutManager" startupOrder="1">
+			<from uri="timer://schmain?fixedRate=true&amp;period=30000"/>
+			<!-- <onCompletion>
+		<bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+	      </onCompletion> 
+	      <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ignore</simple>
+			</setBody>
+			<to uri="volante:InterfaceTimeOutManagerFlow"/>
+		</route>
+
+		<route id="PAYMENTSTATUS">
+			<from uri="direct-vm:PaymentStatus"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTSTATUS}}"/>
+		</route>
+
+		<route id="OFACExternalSystem">
+			<from uri="direct-vm:OFACExternalSystem"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:ExternalSystemFlow"/>
+		</route>
+
+		<!-- <route id="Send_response">
+			<from uri="direct-vm:OFACStub.DomainInternal"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{ASYNCOFACINTERFACERESPONSE}}"/>
+		</route> -->
+          <route id="Send_response">
+			<from uri="direct-vm:FircosoftStub.DomainInternal"/>
+			<!--<removeHeaders pattern="JMS*"/>-->
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{ASYNCOFACINTERFACERESPONSE}}"/>
+		</route>
+		   
+		<!-- <route id="Send_request">
+			<from uri="direct-vm:OFAC.InterfaceResponse"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="breadcrumbId"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{ASYNCOFACINTERFACEREQUEST}}"/>
+		</route>
+		 -->
+          <route id="Send_request_Fircosoft">
+			<from uri="direct-vm:Fircosoft.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="breadcrumbId"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{ASYNCOFACINTERFACEREQUEST}}"/>
+		</route>
+		
+		<!-- Account Postings -->
+		<route id="Send_Ext_response_AP">			
+			<from uri="{{QUEUE_PREFIX}}:{{APDOMAININ}}"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>			
+			<to uri="volante:APInvocationPointIdentifierFlow"/>
+		</route>
+
+		<route id="Send_GoodFundsAccountPosting_response">
+			<from uri="direct-vm:GoodFundsAccountPosting.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:GoodFundsRes"/>
+		</route>
+
+		<route id="Send_AccountPostings_response">
+			<from uri="direct-vm:AccountPostings.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:AccountPostingsRes"/>
+		</route>
+
+		<route id="Send_AccountPostings_response2">
+			<from uri="direct-vm:AccountPostings_2.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:AccountPostingsRes2"/>
+		</route>
+
+		<route id="Send_AccountPostings_response3">
+			<from uri="direct-vm:AccountPostings_3.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:AccountPostingsRes3"/>
+		</route>
+
+		<route id="Send_AccountPostings_response4">
+			<from uri="direct-vm:AccountPostings_4.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:AccountPostingsRes4"/>
+		</route>
+
+		<route id="Send_AccountPostings_response5">
+			<from uri="direct-vm:AccountPostings_5.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:AccountPostingsRes5"/>
+		</route>
+
+		<route id="Send_FinalizedAccountPosting_response">
+			<from uri="direct-vm:FinalizedAccountPosting.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:FinalizedRes"/>
+		</route>
+
+		<route id="Send_FinalizedAccountPosting_response2">
+			<from uri="direct-vm:FinalizedAccountPosting_2.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:FinalizedRes2"/>
+		</route>
+
+		<route id="Send_FinalizedAccountPosting_response3">
+			<from uri="direct-vm:FinalizedAccountPosting_3.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:FinalizedRes3"/>
+		</route>
+		<route id="Send_FinalizedAccountPosting_response4">
+			<from uri="direct-vm:FinalizedAccountPosting_4.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:FinalizedRes4"/>
+		</route>
+
+		<route id="Send_FinalizedAccountPosting_response5">
+			<from uri="direct-vm:FinalizedAccountPosting_5.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:FinalizedRes5"/>
+		</route>
+
+		<route id="VolpayHubServiceRegistryTimeOutManager" startupOrder="2">
+			<from uri="quartz2://hubServiceRegistryTimeOut?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+		<bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+	      </onCompletion> 
+	      <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ignore</simple>
+			</setBody>
+			<to uri="volante:ServiceRegistryHealthChecker"/>
+		</route>
+
+		<route id="ServiceRegistryCleanupCheck">
+			<from uri="quartz2://RouteReg?cron=0+0/30+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+		<bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+	      </onCompletion> 
+	      <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<!--configure sleep for CONCURRENCYMGR table for a particular time period-->
+			<setHeader headerName="invocationFrequency">
+				<constant>30</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>SERVICEREGISTRY_CLEANUPCHECK</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ServiceRegistryCleanupCheck</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!-- Automatic Resend of OFAC Request-->
+		<!--<route id="InterfaceResendSchedular">
+	  <from uri="quartz2://InterfaceResend?cron=*+0/1+*+?+*+*+*&amp;trigger.timeZone=UTC"/>
+	  <removeHeaders pattern="JMS*"/>
+	  <setHeader headerName="invocationFrequency">
+	    <constant>1</constant>
+	  </setHeader>
+	  <setHeader headerName="identifier">
+	    <constant>INTERFACE_RESEND</constant>
+	  </setHeader>
+	  <convertBodyTo type="byte[]"/>
+	  <setBody>
+	    <simple>InterfaceResendSchedularFlow</simple>
+	  </setBody>
+	  <to uri="volante:ScheduledFlowInvoker"/>
+	</route>-->
+
+		<!-- Debit Fx Response-->
+		<route id="Send_DebitFX_response">
+			<from uri="direct-vm:DebitFx.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:DebitFxResponse"/>
+		</route>
+
+		<!-- Credit Fx Response-->
+		<route id="Send_CreditFX_response">
+			<from uri="direct-vm:CreditFx.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:CreditFxResponse"/>
+		</route> 
+
+		<!-- GoodFunds Debit Fx Response-->
+		<route id="Send_GoodFundsDebitFX_response">
+			<from uri="direct-vm:GoodFundsDebitFx.DomainIn"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="direct-vm:GoodFundsDebitFxResponse"/>
+		</route>
+
+		<!--FX-->
+		<!-- FX Invacation Point Indetifier-->
+		<route id="Send_Ext_response_FX">			
+			<from uri="{{QUEUE_PREFIX}}:{{FXDOMAININ}}?concurrentConsumers=1&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:FxInvocationPointIdentifierFlow"/>
+		</route>
+	</camelContext>
+</beans>

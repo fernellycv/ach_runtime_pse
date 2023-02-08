@@ -1,0 +1,739 @@
+<style>
+    /*.select2-container .select2-search__field {
+	    width: 100% !important;
+	}*/
+
+    .info-row {
+        padding: 0.938rem 0;
+        background: #e8e9eb;
+        margin-bottom: 0.625rem;
+        box-shadow: 0.188rem 0.188rem 0.125rem lightgrey;
+        border-left: 0.25rem solid #2d4063;
+    }
+
+    .field-info {
+        padding: 0.313rem 0rem;
+    }
+
+    .dropdowncustm {
+        transform: translate3d(0.313rem, 2.188rem, 0rem) !important;
+    }
+
+    .searchContainer {
+        background-color: #e7e9eb;
+        height: auto;
+    }
+
+    /* .input-group .form-control{
+          //  z-index: 0 !important;
+    } */
+    .baltab {
+        border-bottom-color: white !important;
+        border-left-color: white !important;
+    }
+    .iconSearch {
+        cursor: pointer;
+        background-color: #fff;
+        border: none;
+    }
+
+    .width100 {
+        width: 100%;
+    }
+
+    .btnSavedAlighn {
+        margin: 0;
+        margin-top: 0.313rem;
+        margin-bottom: 0.313rem;
+    }
+
+    .btnSavedData {
+        margin-left: 0.625rem;
+        display: inline-block;
+        margin-top: 0.188rem;
+    }
+
+    .btnSavedCancel {
+        border: 0.063rem solid #DE2F2B;
+        background-color: #D05450;
+        border-radius: 0.625rem;
+        color: #F5E6E6;
+        font-size: 0.813rem;
+    }
+
+    .btnAdvsearch {
+        width: 100%;
+        padding-left: 0.188rem;
+    }
+
+    .btnAdvshowhide {
+        color: #fff !important;
+    }
+
+    .btnAdvCircle {
+        padding-top: 0.125rem;
+    }
+
+    .modalAlertbox {
+        top: 12.5rem;
+    }
+
+    .modalAlertalighn {
+        padding: 0rem !important;
+        border: 0rem !important
+    }
+
+    .modalWidth {
+        width: 37.5rem;
+    }
+
+    .modalSavedsearch {
+        line-height: 0.5 !important;
+    }
+
+    .modalSearchname {
+        padding: 0.625rem;
+        margin: 0
+    }
+
+    .asterisk {
+        color: #e02222;
+        font-size: 0.75rem;
+        padding-left: 0.125rem
+    }
+
+    .modalRequired {
+        color: red;
+        margin-left: 0.625rem;
+    }
+
+    .modalBtnalighn {
+        float: right;
+        padding: 0.625rem;
+        margin: 0
+    }
+
+    .clearBoth {
+        clear: both
+    }
+
+    .btnAdvBody {
+        margin: 0;
+        margin-bottom: 0.5rem;
+        padding: 1.25rem;
+    }
+
+    .btnAdvsearchAlighn {
+        padding: 0.625rem 0.25rem 0.625rem 0.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .btnAdvFont {
+        font-size: 1.375rem;
+    }
+
+    .btnAddRemove {
+        min-width: 13.563rem !important;
+    }
+
+    .btnAddRemoveBody {
+        margin: 0;
+        margin-top: 0.313rem;
+        margin-right: 0.313rem;
+    }
+
+    .addRemoveLabel {
+        display: inline-block;
+        margin-top: 0.188rem;
+    }
+
+    .addremoveSwitch {
+        width: 2.125rem !important;
+        height: 0.875rem !important;
+        border-radius: 1.25rem !important;
+        margin-top: 0.313rem;
+    }
+
+    .addremoveSmall {
+        width: 0.75rem !important;
+        height: 0.75rem !important;
+    }
+
+    .addremoveOpacity {
+        opacity: 0;
+        display: none;
+    }
+
+    .advBtnalighn {
+        margin-right: 0.313rem;
+    }
+
+    .dateTo {
+        border: none;
+        background-color: transparent;
+    }
+
+    .textStart {
+        text-align: start;
+    }
+
+    .advBtnsearch {
+        margin-right: 0.938rem;
+    }
+
+    .advBtnborder {
+        border-color: #ccc;
+    }
+
+    .countbarAlighn {
+        padding: 0.313rem;
+        background: #fff;
+    }
+
+    .countbarDisp {
+        margin-bottom: 0.625rem;
+        width: 100%;
+    }
+
+    .countbarBtn {
+        float: right;
+        box-sizing: border-box;
+    }
+
+    .listBtn {
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-right: 0rem;
+        margin-left: 0.313rem
+    }
+
+    .gridBtn {
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-left: 0rem
+    }
+
+    .dwnBtnalighn {
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+    }
+
+    .dwnIndex {
+        z-index: 10000;
+    }
+
+    .excelIcon {
+        margin-left: 2.5rem !important;
+    }
+
+    .refreshIcon {
+        float: right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left: 0.313rem;
+    }
+
+    .btnAll {
+        float: right;
+        box-sizing: border-box;
+        margin-left: 0.625rem;
+    }
+
+    .btnAllalighn {
+        float: right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left: 0.625rem;
+    }
+
+    .btnAllfont {
+        font-size: 0.938rem;
+    }
+
+    .btnAlldrop {
+        font-size: 0.813rem !important
+    }
+
+    .btnAllpointer {
+        pointer-events: none
+    }
+
+    .btnAllCstm {
+        text-align: center;
+        color: #000;
+    }
+
+    .modalCstm {
+        padding: 0.938rem;
+    }
+
+    .searchCriteria {
+        margin: 0;
+        word-wrap: break-word;
+    }
+
+    .dsearchAlighn {
+        font-size: 0.813rem;
+        word-wrap: break-word;
+    }
+
+    .btnWrapper {
+        vertical-align: middle;
+    }
+
+    .wrapperDisp {
+        display: block;
+        float: right;
+    }
+
+    .noRecord {
+        margin: 0;
+        text-align: center;
+    }
+
+    .cursorPoint {
+        cursor: pointer
+    }
+
+    .iconDownload {
+        text-decoration: underline;
+    }
+
+    .acitiondisp {
+        padding: 0.25rem;
+    }
+
+    .dwndisp {
+        padding: 0 0.813rem;
+    }
+
+    .listviewAlighn {
+        margin: 0rem;
+        overflow-x: auto !important;
+        margin-bottom: 1.25rem;
+        max-height: 32.813rem !important;
+    }
+
+
+    .ui-datepicker {
+        z-index: 99 !important
+    }
+
+    ;
+</style>
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-file"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.CycleSummary</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span class="removeCursor" translate>Sidebar.CycleSummary</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="contentContainer mb-2">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2 translate>Sidebar.CycleSummary</h2>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="searchholder">
+        <div class="row">
+            <div class="col-md-12">
+
+                <form class="form-horizontal" role="form" ng-submit="getInitialDataFeed()">
+
+                    <div class="row m-0">
+
+                        <div class="col-md-12 mt-2">
+
+                            <div class="form-group row">
+
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <label class="control-label col-md-3 text-left mt-1" translate>CycleSummary.Date</label>
+                                        <div class="col-md-9 col-sm-9">
+                                            <div class="input-group-prepend date" data-date-format="yyyy-mm-dd"
+                                                data-date-viewmode="years" data-date-minviewmode="months">
+                                                <input type="text" class="form-control DatePicker dateTypeKey"
+                                                placeholder="{{'Placeholder.format' | translate}}"  id="FromDate"
+                                                    onpaste="return false" ng-model="constructObj.date">
+                                                <span class="input-group-text" ng-click="activatePicker($event)"><span
+                                                        class="fa fa-calendar"></span></span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <label class="control-label col-md-3 text-left mt-1"
+                                            translate>CycleSummary.Cycle</label>
+                                        <div class="col-md-8 col-sm-8">
+                                            <select id="CycleSelect1" name="CycleSelect" class="form-control"
+                                                ng-model="constructObj['cycle']">
+                                                <option value="">select</option>
+                                                <option ng-repeat="items in closesheetInfo.CycleColls"
+                                                    value="{{items.Cycles}}">{{items.Cycles}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <button type="submit" id="okBtn" class="btnSuccess btnStyle" translate>CycleSummary.Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearBoth"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="countbarAlighn">
+
+        <div class="row">
+            <div class="col-sm-11">
+                <h5 style="text-align: center;"><span>{{getSettlement.date | date:'yyyy-MM-dd'}}</span></h5>
+                <h5 style="text-align: center;"><span translate>CycleSummary.Title</span></h5>
+            </div>
+           
+            <div class="col-sm-1">
+                <div class="btn-group refreshIcon" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'ToolTips.Refresh' |translate}}">
+                    <button class="btn-trans" ng-click="refresh()"><i class="fa fa-refresh fa-fs14"></i></button>
+                </div>
+                <div class="dwnBtn float-right">
+                   
+                    <button ng-if="newPermission.Export" class="btn-trans downloadBtn" type="button"
+                        data-toggle="{{(datas.length !=0 )?'dropdown':''}}" ng-click="setHeight($event)"
+                        ng-style="{'opacity':(datas.length != 0)?'1':'0.5'}" data-toggle-second="tooltip"
+                        data-placement="top" data-original-title="{{'ToolTips.Export' | translate}}"> <i
+                            class="fa fa-download" aria-hidden="true"></i></button>
+                    <a id='dwnldLnk' style="display:none;"></a>
+                    <ul
+                        class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
+                        <li>
+
+                            <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="txt" class="radiobtns radioBtnAlighn">{{'CycleSummary.Reporttxts' |
+                                translate}}</span>
+                            <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="csv" class="radiobtns radioBtnAlighn">{{'CycleSummary.ExportCSV' |
+                                translate}}</span>
+                                <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="PDF" class="radiobtns radioBtnAlighn" >{{'commissions.PDF' | translate}}</span>
+                            <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="XLS" class="radiobtns radioBtnAlighn" >{{'commissions.XLS' | translate}}</span>
+                           
+                        </li>
+
+                        <li data-toggle-second="tooltip" data-placement="top"
+                            data-original-title="{{'ReportGenerate.TableDownload' | translate}}"
+                            class="excelprint excelIcon" ng-click="exportToExcelFlist($event)"><i
+                                class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-warning mt-2" ng-show="!closeSheetData">
+            <strong>
+                <h5 class="noRecord"><i class="fa fa-warning"></i> {{'BankDataDts.NoRecordsFound'|translate}}</h5>
+            </strong>
+        </div>
+
+        <!--   <pre>{{data.sentTransactionDetails}}</pre> -->
+        <div class="listView FixHead dataGroupsScroll mt-2 listviewAlighn" ng-show="closeSheetData">
+            <table class="table table-bordered" id="cntrlID">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th rowspan="2"  colspan="1" translate>CycleSummary.Entity</th>
+                        <th colspan="2" translate>CycleSummary.MonetarydebitsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.pre-notificationsdebitsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.MonetarycreditsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.Pre-notificationscreditsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.ReturnstocreditsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.Returnstopre-notificationcreditsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.ReturnstodebitsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.Returnstopre-notificationdebitInFavor</th>
+                        <th colspan="2" translate>CycleSummary.MonetarydebitsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.pre-notificationsdebitsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.MonetarycreditsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.Pre-notificationscreditsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.ReturnstoDebitsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.Returnstopre-notificationcreditInFavor</th>
+                        <th colspan="2" translate>CycleSummary.ReturnstoCreditsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.Returnstopre-notificationdebitAgainst</th>
+                        <th colspan="2" translate>CycleSummary.SocialSecurityAgainst</th> 
+                        <th colspan="2" translate>CycleSummary.SocialSecurityInFavor</th> 
+                        <th colspan="2" translate>CycleSummary.SubtotalAchInFavor</th>
+                        <th colspan="2" translate>CycleSummary.SubtotalAchAgainst</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.totalAchInFavor</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.totalAchAgainst</th>
+                        <th colspan="2" translate>CycleSummary.PaymentsCompanyInFavor</th>
+                        <th colspan="2" translate>CycleSummary.PaymentsCompanyAgainst</th>
+                        <th colspan="2" translate>CycleSummary.PaymentsSSSAgainst</th>
+                        <th colspan="2" translate>CycleSummary.PaymentsSSSInFavor</th>
+                        <th colspan="2" translate>CycleSummary.SSSPaymentsOtherChannelsAgainst</th>
+                        <th colspan="2" translate>CycleSummary.SSSPaymentsOtherChannelsInFavor</th>
+                        <th colspan="2" translate>CycleSummary.PaymentsDianAgainst</th>
+                        <th colspan="2" translate>CycleSummary.PaymentsDianInFavor</th>
+                        <th colspan="2" translate>CycleSummary.SubTotalPseInFavor</th>
+                        <th colspan="2" translate>CycleSummary.SubTotalPseAgainst</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.TotalPseInFavor</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.TotalPseAgainst</th>
+                        <th colspan="2" translate>CycleSummary.reversals</th>
+                        <th colspan="2" translate>CycleSummary.Commissions</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.TotalInFavorAch</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.TotalAgainsAch</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.WorthNetInFavor</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.WorthNetAgainst</th>
+                        <th rowspan="2" colspan="1" translate>CycleSummary.SebraAccounts</th>
+                    </tr>
+                    <tr>
+                        <th ng-repeat="i in subMenu track by $index" translate>
+                            {{i}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="st in closeSheetData">
+                        <td>{{st.PartyName}}</td>
+                        <td style="text-align:right">{{st.Sent.mondb.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.mondb.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.predb.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.predb.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.moncr.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.moncr.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.precr.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.precr.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.devcr.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.devcr.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.dvprc.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.dvprc.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.devdb.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.devdb.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Sent.dvprd.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Sent.dvprd.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.mondb.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.mondb.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.predb.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.predb.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.moncr.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.moncr.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.precr.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.precr.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.devdb.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.devdb.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.dvprc.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.dvprc.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.devcr.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.devcr.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Received.dvprd.NoTrx}}</td>
+                        <td style="text-align:right">{{st.Received.dvprd.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.ONIFDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.ONIFDebits.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.ONIFCredits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.ONIFCredits.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SubtotalAchInFavor.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SubtotalAchInFavor.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SubtotalAchAgainst.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SubtotalAchAgainst.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.TotalAchInFavor.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.TotalAchAgainst.Amount| currency:'$'}}</td>
+                        <td style="text-align:right">{{st.PSEDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.PSEDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.PSECredits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.PSECredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SSS15Credits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SSS15Credits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SSS15Debits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SSS15Debits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SSSCredits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SSSCredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SSSDebits.NoTrx}} </td>
+                        <td style="text-align:right">{{st.SSSDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.DIANDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.DIANDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.DIANCredits.NoTrx}}</td>
+                        <td style="text-align:right">{{st.DIANCredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SubTotalPseInFavor.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SubTotalPseInFavor.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.SubTotalPseAgainst.NoTrx}}</td>
+                        <td style="text-align:right">{{st.SubTotalPseAgainst.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.TotalPseInFavor.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.TotalPseAgainst.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Reversals.In_favor | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Reversals.Against | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Commissions.In_favor | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.Commissions.Against | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.TotalInFavorAch | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.TotalAgainsAch | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.WorthNetInFavor | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.WorthNetAgainst | currency:'$'}}</td>
+                        <td style="text-align:right">{{st.DefaultAccount}}</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <th>TOTAL</th>
+                        <td style="text-align:right">{{totals.Sent.mondb.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.mondb.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.predb.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.predb.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.moncr.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.moncr.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.precr.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.precr.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.devcr.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.devcr.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.dvprc.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.dvprc.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.devdb.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.devdb.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Sent.dvprd.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Sent.dvprd.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.mondb.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.mondb.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.predb.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.predb.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.moncr.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.moncr.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.precr.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.precr.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.devdb.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.devdb.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.dvprc.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.dvprc.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.devcr.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.devcr.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.Received.dvprd.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.Received.dvprd.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.ONIFDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.ONIFDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.ONIFCredits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.ONIFCredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SubtotalAchInFavor.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SubtotalAchInFavor.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SubtotalAchAgainst.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SubtotalAchAgainst.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.TotalAchInFavor.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.TotalAchAgainst.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.PSEDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.PSEDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.PSECredits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.PSECredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SSS15Credits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SSS15Credits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SSS15Debits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SSS15Debits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SSSCredits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SSSCredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SSSDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SSSDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.DIANDebits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.DIANDebits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.DIANCredits.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.DIANCredits.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SubTotalPseInFavor.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SubTotalPseInFavor.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.SubTotalPseAgainst.NoTrx}}</td>
+                        <td style="text-align:right">{{totals.SubTotalPseAgainst.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.TotalPseInFavor.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.TotalPseAgainst.Amount | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.ReversalsTotal.In_favor | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.ReversalsTotal.Against | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.CommissionsTotal.In_favor | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.CommissionsTotal.Against | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.TotalInFavorAch | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.TotalAgainsAch | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.WorthNetInFavor | currency:'$'}}</td>
+                        <td style="text-align:right">{{totals.WorthNetAgainst | currency:'$'}}</td>
+
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <th colspan="71" style="text-align-last:end;" translate>CycleSummary.Difference</th>
+                        <td colspan="1" style="text-align-last:end;">{{totals.Difference.In_favor | currency:'$'}}
+                            <td colspan="1" style="text-align-last:end;">{{totals.Difference.Against | currency:'$'}}
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+        <div class="clearBoth"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var showFlag = false;
+        customDateRangePicker('CstartDate', 'CendDate')
+        customDateRangePicker("GeneratedDateStart", "GeneratedDateEnd")
+        //customDateRangePicker
+
+        $('.input-group-text').on('click focus', function (e) {
+            $(this).prev().focus().click()
+
+        })
+
+        setTimeout(function () {
+            $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+        }, 1000)
+
+
+        $('li.dropdown.mega-dropdown a').on('click', function (event) {
+            $(this).parent().addClass("open");
+        });
+
+        $('li.dropdown.mega-dropdown1 a').on('click', function (event) {
+            $(this).parent().toggleClass("open");
+        });
+
+        $('li.dropdown.mega-dropdown a').focus(function (event) {
+            $(this).parent().addClass("open");
+        });
+
+        $('body').click(function (e) {
+
+            // if ($(e.target).attr('id') == 'DropId') {
+            //     if (!showFlag) {
+            //         $('.customDropDown1').show()
+            //     } else {
+            //         $('.customDropDown1').hide()
+            //     }
+            // } else {
+            //     if ($(e.target).parent().hasClass('cancel')) {
+            //         $('.customDropDown1').show()
+            //     } else {
+            //         $('.customDropDown1').hide()
+            //     }
+            // }
+
+            if (!$('li.dropdown.mega-dropdown').is(e.target) && $('li.dropdown.mega-dropdown').has(e.target).length === 0 && $('.open').has(e.target).length === 0) {
+                $('li.dropdown.mega-dropdown').removeClass('open');
+            }
+        })
+    })
+</script>

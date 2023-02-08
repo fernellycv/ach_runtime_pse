@@ -1,0 +1,1160 @@
+<style>
+    input:required {
+        box-shadow: none;
+    }
+    /*input:invalid {
+		box-shadow:0 0 3px red;
+	}*/
+    
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+    
+    .input-group-addon {
+        padding: 0;
+    }
+    
+    /* .fa {
+        padding: 9px 0.625rem ;
+    } */
+    
+    .addAdditionalFields {
+        /*color: #333;*/
+        background-color: #f5f5f5;
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+    
+    .addBorder {
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+    
+    .close {
+        opacity: 1;
+    }
+    
+    .DatePicker,
+    .TimePicker {
+        z-index: 0 !important
+    }
+    /* Colopicker custom Styles Begins  */
+    
+    .sp-replacer {
+        padding: 0.375rem0.25rem;
+        border: 1px solid #c1bdbd;
+        width: 13%;
+    }
+    
+    .sp-clear-display {
+        background-image: url(themes/images/picker.png);
+        background-size: 100% 100%;
+    }
+    
+    .sp-clear-enabled .sp-hue {
+        top: 0;
+        height: 100%;
+    }
+    
+    .sp-clear-enabled .sp-clear {
+        display: none;
+    }
+
+
+    .fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.fileUpload.btn.btn-primary {
+    width: 25vw;
+    margin-left: 5vw;
+}
+#bolder{
+    font-weight: bold;
+}
+    /* Colopicker custom Styles Ends  */
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa {{ParentIconName}}"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">{{'Sidebar.'+parentInput.ulName|nospace}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoParent()" translate>{{showPageTitle}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <!-- <a href="javascript:void(0);" translate>{{(parentInput.Operation == 'Add')?'Add New':'Edit'}}</a> -->
+                    <!-- 	{{parentInput.Operation}} -->
+                    <a href="javascript:void(0);" class="removeCursor" translate>{{(((parentInput.Operation =='Add')||(parentInput.Operation == ' Add'))?'BtnGroup.AddNew':showsubTitle) }}</a>
+
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both"></div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize" style="margin: 0rem 0rem 0.625rem 0rem; padding:0">
+        <div class="title__container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>
+                        <div ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}" ng-if="parentInput.Operation == 'Edit'" translate>
+                            {{showsubTitle}}
+                        </div>
+                    </h2>
+                    <div ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}" ng-if="parentInput.Operation == 'Add' || parentInput.Operation == 'Clone'">
+                        <!-- <h2>{{'Onboarding New '+parentInput.pageTitle}}</h2> -->
+                        <h2 style="display: inline">{{'BtnGroup.AddCloneTitle' | translate}} </h2>
+                        <h2 style="display: inline" translate>{{showPageTitle}}</h2> 
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- <small>{{'Onboard a new '+parentInput.pageTitle+' by submitting all the mandatory fields below.'}}</small> -->
+		    <div ng-if="Title == 'Events'">
+			    <p translate>Branch.ForMandatory</p>
+			    <p><span id="bolder" translate>Events.PreMessage</span><span translate>Events.Message</span></p>
+		    </div>
+		    <div ng-if="Title != 'Events'">
+			    <p translate>Branch.ForMandatory</p>
+		    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="statusBox" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger','alert alert-warning':alert.type == 'warning'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg | replaceASCII}}
+    </div>
+
+    <div id="custmstatusBox" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in custmalerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger','alert alert-warning':alert.type == 'warning'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="Condition_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 12.5rem;">
+            <div class="modal-content" style="padding: 0.625rem 1.25rem;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0rem !important;border: 0rem !important;text-align: left;">
+                    <p>Provide Conditions for the Transport. The condition can be multiplied. The message will be sent to the destination upon satisfying all the conditions by the message. Predicate takes the name of the Condition and Value is the Condition
+                        value.
+                    </p>
+                    <p>Conditions can be provided only for <b>Interfaces with ASYNC-OUT direction</b> Transport. Only
+                        <b>one default ASYNC-OUT transport</b> can be configured by providing no condition.</p>
+                    <p><b><u>NOTE:</u></b> Transport cannot be created, if Condition is provided for other direction or adding more than one another default Transport for ASYNC-OUT.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg"  style="max-width: 600px;">
+
+
+            <div class="modal-content" style="border:0.125rem solid #243250a6;" ng-if="madeChanges">
+                <div class="modal-body">
+                    <h5 translate>BankDataDts.PopupMsg</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btnDeny btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    <button type="button" class="btnSuccess btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" id="SetHeaders_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 12.5rem;">
+            <div class="modal-content" style="padding: 0.625rem 1.25rem;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0rem !important;border: 0rem !important;text-align: left;">
+                    <p>Adds Headers to the message. Based on the Header Name and its Value, the message will be transformed accordingly. <b>Header Name</b> can be any <b>Camel Header</b> that is supported on selected Transport Type (FILE, QUEUE).</p>
+                    <p>Following Camel headers can be provided in Set Header pane based on the Transport Type.</p>
+                </div>
+                <div class="modal-body" style="padding: 0rem !important; border: 0rem !important">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Transport Type</th>
+                                <th>Header Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: left">
+                            <tr>
+                                <td rowspan="3">FILE<sup>[1]</sup></td>
+                                <td>CamelFileName</td>
+                                <td>Name of the consumed file as a relative file path.</td>
+                            </tr>
+                            <tr>
+                                <td>CamelFileNameOnly</td>
+                                <td>Only the file name (the name with no leading paths).</td>
+                            </tr>
+                            <tr>
+                                <td>CamelFileNameProduced</td>
+                                <td>The absolute file path (path + filename) for the output file that was written with the name provided by end-user.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">QUEUE<sup>[2]</sup></td>
+                                <td>CamelJmsDestinationName</td>
+                                <td>Computing the Destination at Runtime by name.</td>
+                            </tr>
+                            <tr>
+                                <td>JMSDeliveryMode</td>
+                                <td rowspan="2">JMS Properties</td>
+                            </tr>
+                            <tr>
+                                <td>JMSPriority</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0">
+                    <sup style="color:red">&#42;</sup>Highly Recommended to use the property.<br />
+                    <b style="display: inline-block;padding: 0.313rem 0rem;"><u>To add other Camel Headers, visit Message
+                            Headers section of
+                            below links:</u></b><br />
+                    <b style="width:20%;display: inline-block;padding: 0.313rem 0rem;">For File Transport<sup>[1]</sup> :</b>
+                    <a href="http://camel.apache.org/file2.html" target="_blank">http://camel.apache.org/file2.html</a><br />
+                    <b style="width:20%;display: inline-block;padding: 0.313rem 0rem;">For Queue Transport<sup>[2]</sup> :</b>
+                    <a href="http://camel.apache.org/jms.html" target="_blank">http://camel.apache.org/jms.html</a><br />
+                    <b style="width:20%;display: inline-block;padding: 0.313rem 0rem;">For File Language<sup>[3]</sup> :</b>
+                    <a href="http://camel.apache.org/file-language.html" target="_blank">http://camel.apache.org/file-language.html</a><br />
+                    <p><b><u>NOTE:</u></b> For IBM MQ, if there is an exception thrown on sending messages to queue thrown, then provide the below Header Name and Value.</p>
+                    <p><b>Header Name:</b> CamelJmsDestinationName.</p>
+                    <p><b>Value: </b>queue: ///&lt;QUEUE_NAME&gt;? targetClient=1.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="RemoveHeaders_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 200rem;">
+            <div class="modal-content" style="padding: 0.625rem 1.25rem;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0rem !important;border: 0rem !important;text-align: left;">
+                    <p>The Remove Headers pattern removes any headers whose name matches the specified pattern from the message (Pattern can be a regex or simple text).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="Property_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 200rem;">
+            <div class="modal-content" style="padding: 0.625rem  1.25rem;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0rem !important;border: 0rem !important;text-align: left;">
+                    <p>Following Camel Options can be provided in the Property pane based on the Transport Type.</p>
+                </div>
+                <div class="modal-body" style="padding: 0rem !important; border: 0rem !important">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Transport Type</th>
+                                <th>Property Name</th>
+                                <th>Property Value</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: left">
+                            <tr>
+                                <td rowspan="4">FILE<sup>[1]</sup></td>
+                                <td>maxMessagesPerPoll<sup style="color:red">&#42;</sup></td>
+                                <td>An integer to define a maximum message to gather per poll. <b>Recommended to set the
+                                        value to 1.</b></td>
+                            </tr>
+                            <tr>
+                                <td>fileName</td>
+                                <td>Use Expression such as <b>File Language</b><sup>[2]</sup> to dynamically set the filename generated.</td>
+                            </tr>
+                            <tr>
+                                <td>delay</td>
+                                <td>Milliseconds before the next poll of the file/directory.</td>
+                            </tr>
+                            <tr>
+                                <td>doneFileName</td>
+                                <td>If provided, the file will be consumed if a <b>done file exists.</b></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">QUEUE<sup>[3]</sup></td>
+                                <td>transacted<sup style="color:red">&#42;</sup></td>
+                                <td>Provide a Boolean value, whether to use transacted mode for sending/receiving messages. <b>Recommended to
+                                        set value to true.</b></td>
+                            </tr>
+                            <tr>
+                                <td>concurrentConsumers</td>
+                                <td>Specifies the default number of concurrent consumers.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0">
+                    <sup style="color:red">&#42;</sup>Highly Recommended to use the property<br />
+                    <b style="display: inline-block;padding: 0.313rem 0rem;"><u>To add other Camel Properties, visit URI
+                            Options section of
+                            below links:</u></b><br />
+                    <b style="width:20%;display: inline-block;padding: 0.313rem 0rem;">For File Transport<sup>[1]</sup> :</b>
+                    <a href="http://camel.apache.org/file2.html" target="_blank">http://camel.apache.org/file2.html</a><br />
+                    <b style="width:20%;display: inline-block;padding: 0.313rem 0rem;">For Queue Transport<sup>[2]</sup> :</b>
+                    <a href="http://camel.apache.org/jms.html" target="_blank">http://camel.apache.org/jms.html</a><br />
+                    <b style="width:20%;display: inline-block;padding: 0.313rem 0rem;">For File Language<sup>[3]</sup> :</b>
+                    <a href="http://camel.apache.org/file-language.html" target="_blank">http://camel.apache.org/file-language.html</a><br />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="" style="margin:0">
+
+        <form role="form" class="simple-form form-horizontal" id="dynamicModuleForm" name="bankDataForm" ng-submit="createData(fieldData,subSectionfieldData); submitted=false;">
+            <div class="ForAddNewScroll" style='margin:0;max-height:550px;min-height:550px;'>
+                <div class="control-group" ng-repeat="field in parentInput.pageInfo.Section" ng-class="{true: 'error'}[submitted && bankDataForm.{{field.FieldName}}.$invalid] && !(field.Mandatory)" style="margin-top: 0.313rem;">
+                    <div class="clearfix" style="background-color: transparent;" ng-if="$index % 3 == 0"></div>
+                    <div ng-if="field.visible && field.FieldName != 'files'" class="form-group row" ng-style="(nameofthefield == field.FieldName || field.webform) ? {'margin':'0rem','padding':'0rem 0.625rem '}:''">
+                        <label for="{{field.name}}" class="control-label " ng-class="{'col-sm-12 col-md-12 col-lg-12 col-xs-12 addAdditionalFields':nameofthefield == field.FieldName  || field.webform,'col-md-2':nameofthefield != field.FieldName && !field.webform}" style='font-weight:bold;padding-top: 6px;'
+                            ng-style="{'text-align':(nameofthefield == field.FieldName || field.webform)?'left':'right'}" ng-hide="((parentInput.parentLink == 'businessrules') && (field.Label == 'Rule Structure')) || !field.visible">{{field.Label | translate}}<span
+                                ng-hide="{{field.Mandatory}}" style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                aria-required="true">*</span></label>
+
+                        <div class="col-md-3" ng-if="(field.InputType == 'TextField' && (field.customRenderer != 'ColourPicker'))&&((field.Type == 'Integer')||(field.Type == 'String')||(field.Type == 'BigDecimal')||(field.Type == 'BigInteger')) && field.property[0].value.toLowerCase() != 'range'" ng-show="field.visible">
+
+                            <input class="form-control" id="{{field.Label}}" type="text" maxlength="{{field.MaxLength == -1 ? 100 : field.MaxLength}}" name="{{field.FieldName}}" ng-model="fieldData[field.FieldName]" placeholder="{{((field.Type == 'Integer')||(field.Type == 'BigInteger'))?('Placeholder.OnlyNumber' | translate ):('Placeholder.PleaseEnter' | translate)+ (field.Label| translate)}}"
+                                ng-blur="multipleEmptySpace($event)" ng-focus="field.property[0].name == 'LeadingZero' ? LeadingZero($event) : ''" ng-required="!(field.Mandatory) || (fieldData.FileDuplicatecheck && (field.FieldName == 'FDCNumberOfdays') || fieldData.PaymentDuplicatecheck && (field.FieldName == 'PDCNumberOfdays'))"
+                                ng-keydown="checkType($event,field.Type)" ng-change="NumberCalculation(fieldData)"  ng-disabled="calldisabled(field.FieldName)" ng-readonly='!field.enabled' autocomplete="off">
+                        </div>
+
+                        <div class="col-md-3" ng-if="(field.InputType == 'TextField' && (field.customRenderer != 'ColourPicker'))&&((field.Type == 'Integer')||(field.Type == 'String')||(field.Type == 'BigDecimal')) && field.property[0].value.toLowerCase() == 'range'" ng-show="field.visible"
+                            style="display:inline-flex;">
+                            <input class="form-control" name="field.property[1].value" id="field.property[1].value" type="Integer" ng-model="fieldData[field.property[1].value]" placeholder="min value">
+                            <input class="form-control" name="field.property[2].value" id="field.property[2].value" type="Integer" ng-model="fieldData[field.property[2].value]" placeholder="max value" style="margin-left: 5px;">
+                        </div>
+
+                        <div class="col-md-3" ng-if="(field.InputType == 'password' && (field.customRenderer != 'ColourPicker'))&&((field.Type == 'Integer')||(field.Type == 'String')||(field.Type == 'BigDecimal'))" ng-show="field.visible">
+
+                            <input class="form-control key" id="{{field.Label}}" type="text" maxlength="{{field.MaxLength == -1 ? 100 : field.MaxLength}}" name="{{field.FieldName}}" ng-model="fieldData[field.FieldName]" placeholder="{{(field.Type == 'Integer')?field.Label +' Only Number':'Please Enter '+field.Label}}"
+                                ng-blur="multipleEmptySpace($event)" ng-required="!(field.Mandatory) || (fieldData.FileDuplicatecheck && (field.FieldName == 'FDCNumberOfdays') || fieldData.PaymentDuplicatecheck && (field.FieldName == 'PDCNumberOfdays'))"
+                                ng-keydown="checkType($event,field.Type)" ng-disabled="calldisabled(field.FieldName)" ng-readonly='!field.enabled' autocomplete="off" ng-keyup="changetoPasswordFormat($event,fieldData[field.FieldName])">
+                        </div>
+
+                        <!-- <pre ng-if="field.FieldName == 'FileDuplicatecheck'">{{fieldData | json}}</pre> -->
+                        <div ng-class="{'col-md-12 addBorder':nameofthefield == field.FieldName || field.webform,'col-md-9':nameofthefield != field.FieldName && !field.webform}" ng-if="(field.InputType == 'TextArea')" ng-show="field.visible">
+                            <textarea ng-if="nameofthefield != field.FieldName && !field.webform" style="resize:vertical" rows="{{getTextAreaRows((field.Rows*field.MaxLength)/150)}}" cols="{{field.MaxLength}}" class="form-control" id="{{field.Label}}" maxlength="{{field.Rows*field.MaxLength}}"
+                                name="{{field.FieldName}}" ng-model="fieldData[field.FieldName]" placeholder="{{(field.Type == 'Integer')?field.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+(field.Label 
+                            | translate)}}" ng-blur="multipleEmptySpace($event)" ng-required="!(field.Mandatory)"
+                                ng-keydown="(field.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(field.FieldName)" ng-readonly='!field.enabled'></textarea>
+
+                            <!-- <a href="javascript:void(0)"  ng-if="(((parentInput.parentLink == 'businessrules')&&(field.Label == 'Rule'))&& ((((parentInput.Operation == 'Add') || (parentInput.Operation == ' Add')) && (!fieldData.Rule)) || (parentInput.Operation == 'Edit') || (parentInput.Operation == 'Clone')))" ng-click="toRuleBuilder(fieldData)">Go to Rule Builder</a> -->
+
+                            <a href="javascript:void(0)" ng-if="(((parentInput.parentLink == 'businessrules')&&(field.Label == 'Rule'))&& ((((parentInput.Operation == 'Add') || (parentInput.Operation == ' Add')) && (!fieldData.Rule)) || (parentInput.Operation == 'Edit') || (parentInput.Operation == 'Clone'))&&(fieldData['WorkFlowCode'].length>=1))"
+                                ng-click="toRuleBuilder(fieldData,'')">Go to Rule Builder</a>
+
+
+                            <!-- <span style="color:#e02222;padding-left:0.125rem" ng-if="" >Please select any of the fields </span> -->
+
+                            <!-- Inserted Fileds -->
+                            <div ng-if="field.webform">
+                                <div ng-repeat="webformfield in field.webform.Section">
+                                    <div class="control-group col-lg-6 col-md-6 col-sm-12 col-xs-12" ng-class="{true: 'error'}[submitted && bankDataForm.{{field.FieldName}}.$invalid] && !(field.Mandatory)" style="padding: 0.313rem 0rem;">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-5 col-md-4" style='font-weight:bold;' ng-show="webformfield.visible">{{webformfield.Label}}<span
+                                                    ng-hide="{{webformfield.Mandatory}}"
+                                                    style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                                    aria-required="true">*</span></label>
+                                            <div class="col-sm-7" ng-if="((webformfield.InputType == 'TextField')&&((webformfield.Type == 'Integer')||(webformfield.Type == 'String')||(webformfield.Type == 'BigDecimal')||(webformfield.Type == 'Character')))" ng-show="webformfield.visible">
+
+                                                <input class="form-control" id="{{webformfield.FieldName}}" type="text" maxlength="{{(webformfield.Type == 'Character') ? 1 : webformfield.MaxLength == -1 ? 100 : webformfield.MaxLength}}" name="{{webformfield.FieldName}}" ng-model="fieldData[field.FieldName][webformfield.FieldName]"
+                                                    placeholder="{{(webformfield.Type == 'Integer')?webformfield.Label +' Only Number':'Please Enter '+webformfield.Label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(webformfield.Mandatory)" ng-keydown="(webformfield.Type == 'Character')?'':checkType($event,webformfield.Type)"
+                                                    ng-disabled="calldisabled(webformfield.FieldName)" ng-readonly="!webformfield.enabled" autocomplete="off">
+                                            </div>
+                                            <div class="col-sm-7" ng-if="(webformfield.InputType == 'TextArea')" ng-show="webformfield.visible">
+                                                <textarea style="resize:vertical" rows="{{getTextAreaRows((webformfield.Rows*webformfield.MaxLength)/150)}}" cols="{{webformfield.MaxLength}}" class="form-control" id="{{webformfield.FieldName}}" maxlength="{{webformfield.Rows*webformfield.MaxLength}}"
+                                                    name="{{webformfield.FieldName}}" ng-model="fieldData[field.FieldName][webformfield.FieldName]" placeholder="{{(webformfield.Type == 'Integer')?webformfield.Label +' Only Number':('Placeholder.PleaseEnter' | translate) +webformfield.Label}}"
+                                                    ng-blur="multipleEmptySpace($event)" ng-required="!(webformfield.Mandatory)" ng-keydown="(webformfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(webformfield.FieldName)"
+                                                    ng-readonly="!webformfield.enabled"></textarea>
+                                            </div>
+                                            <div class="col-sm-7" ng-if="(webformfield.Type == 'String')&&(webformfield.InputType == 'Choice')" ng-show="webformfield.visible">
+
+
+                                                <select name="{{webformfield.FieldName}}" class="form-control" id="{{webformfield.FieldName}}" ng-model="fieldData[field.FieldName][webformfield.FieldName]" ng-required="!(webformfield.Mandatory)" ng-disabled="calldisabled(webformfield.FieldName)" detailsoffield="{{webformfield}}"
+                                                    ng-readonly="!webformfield.enabled">
+                                                    <option
+                                                        ng-if="webformfield.ChoiceOptions[webformfield.ChoiceOptions.length-1].displayvalue != 'MULTISELECT' ? webformfield.ChoiceOptions[webformfield.ChoiceOptions.length-1].actualvalue : false"
+                                                        value="">{{'BankDataDts.Select'|translate}}</option>
+                                                    <option ng-if="webformfield.ChoiceOptions[0].displayvalue"
+                                                        ng-repeat="x in webformfield.ChoiceOptions"
+                                                        value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+                                                </select>
+                                            </div>
+                                            <div ng-if="(webformfield.Type == 'Boolean')&&(webformfield.InputType == 'Choice')" class="col-sm-7" style="border:none;" ng-show="webformfield.visible">
+                                                <label class="radio-inline" ng-repeat="x in webformfield.ChoiceOptions" ng-if="x.actualvalue">
+                                                    <input type="radio" name="{{webformfield.FieldName}}" class=""
+                                                        ng-model="fieldData[field.FieldName][webformfield.FieldName]"
+                                                        ng-value="{{x.actualvalue}}"
+                                                        ng-required="!(webformfield.Mandatory)"
+                                                        ng-disabled="calldisabled(webformfield.FieldName)"
+                                                        ng-readonly="!webformfield.enabled">
+                                                    <span style="padding:0.313rem">{{x.displayvalue}}</span>
+                                                </label>
+                                            </div>
+                                            <div ng-if="(webformfield.Type == 'DateTime') || (webformfield.Type == 'DateOnly') || (webformfield.Type == 'TimeOnly')" class="input-group col-sm-7 input-append" style="padding-right:0.938rem;padding-left:0.75rem;float:left;" ng-show="webformfield.visible">
+                                                <input class="form-control" ng-class="(webformfield.Type == 'DateOnly') ? 'DatePicker':(webformfield.Type == 'DateTime') ? 'DateTimePicker':(webformfield.Type == 'TimeOnly') ? 'TimePicker':''" id="{{webformfield.name}}" type="text" maxlength="{{webformfield.MaxLength}}"
+                                                    name="{{webformfield.FieldName}}" ng-model="fieldData[field.FieldName][webformfield.FieldName]" placeholder="{{'Please Enter '+webformfield.Label}}" onpaste="return false" ng-required="!(webformfield.Mandatory)"
+                                                    onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)" ng-disabled="calldisabled(webformfield.FieldName)">
+                                                <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (webformfield.FieldName == parentInput.pageInfo.Section[0].FieldName)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+                                                    <span class="fa"
+                                                        ng-class="(webformfield.Type == 'DateOnly') ? 'fa-calendar date-set' :'' || (webformfield.Type == 'DateTime') ? 'fa-calendar date-set': '' || (webformfield.Type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                                </span>
+                                            </div>
+                                            <div style="clear:both"></div>
+                                        </div>
+                                        <div style="clear:both"></div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div class="card panel-default" ng-repeat="webformfield in field.webform.Subsection">
+                                    <h4 class="card-header ng-binding" style="margin: 0;cursor:pointer">
+                                        {{webformfield.Label}}
+                                    </h4>
+                                    <div class="card-body collapse show" id="{{webformfield.FieldName+'_'+field.FieldName}}" style="padding: 0.625rem ; max-height: 230rem; overflow-y: auto; min-height: 70rem;">
+                                        <div style="clear:both"></div>
+
+                                        <div class="row col-md-12 anitem" style="margin:0;padding: 0;" ng-repeat="sub_fieldData in fieldData[field.FieldName][webformfield.FieldName]" id="{{webformfield.FieldName+'_'+field.FieldName+'_'+$index}}" ng-init="sub_fieldIndex = $index">
+
+                                            <div class="col-md-10 col-sm-12" style="padding:0.313rem 0rem">
+                                                <div ng-repeat="sub_field in webformfield.subSectionData" class="col-md-10 col-sm-12" style="padding: 0; margin:0;">
+                                                    <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+
+                                                    <label class="control-label col-md-2 col-sm-12" style='font-weight:bold;padding-left: 0rem;padding-right: 1.25rem;' ng-show="sub_field.visible">{{sub_field.Label}}<span
+                                                            ng-hide="{{sub_field.Mandatory}}"
+                                                            style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                                            aria-required="true">*</span></label>
+                                                    <div class="col-md-4 col-sm-12" ng-if="(sub_field.InputType == 'TextField')&&((sub_field.Type == 'Integer')||(sub_field.Type == 'String')||(sub_field.Type == 'BigDecimal'))" style="padding:0" ng-show="sub_field.visible">
+                                                        <input class="form-control" id="{{sub_field.FieldName}}" type="text" maxlength="{{sub_field.MaxLength}}" name="{{sub_field.FieldName}}" ng-model="sub_fieldData[sub_field.FieldName]" placeholder="{{(sub_field.Type == 'Integer')?sub_field.Label +' Only Number':'Please Enter '+sub_field.Label}}"
+                                                            ng-blur="multipleEmptySpace($event)" ng-keydown="checkType($event,sub_field.Type)" ng-disabled="calldisabled(sub_field.FieldName)" ng-readonly="!sub_field.enabled">
+                                                    </div>
+                                                    <div class="col-md-4 col-sm-12" ng-if="(sub_field.Type == 'String')&&(sub_field.InputType == 'Choice')" style="padding:0" ng-show="sub_field.visible">
+                                                        <!-- <select ng-class="(sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(sub_field,field.FieldName,webformfield.FieldName):''" name="{{sub_field.FieldName}}" class="form-control"  id="{{sub_field.FieldName}}"  ng-model="sub_fieldData[sub_field.FieldName]" ng-disabled="calldisabled(sub_field.FieldName)" detailsoffield = "{{sub_field}}">
+													<option ng-if="sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].displayvalue != 'MULTISELECT' ? sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue : false" value="">Select</option>
+													<option ng-if="sub_field.ChoiceOptions[0].displayvalue" ng-repeat="x in sub_field.ChoiceOptions" value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+													</select> -->
+
+                                                        <select ng-class="(sub_field.ChoiceOptions[0].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(sub_field.ChoiceOptions[0].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(sub_field,field.FieldName,webformfield.FieldName, sub_fieldIndex):''"
+                                                            name="{{sub_field.FieldName}}" class="form-control" id="{{sub_field.FieldName}}" ng-model="sub_fieldData[sub_field.FieldName]" ng-disabled="calldisabled(sub_field.FieldName)" detailsoffield="{{sub_field}}"
+                                                            ng-required="(fieldData.FileDuplicatecheck && (sub_field.FieldName == 'FieldPath') || fieldData.PaymentDuplicatecheck && (sub_field.FieldName == 'fldName'))" ng-readonly="!sub_field.enabled">
+                                                            <option
+                                                                ng-if="sub_field.Multiple[sub_field.Multiple.length-1].displayvalue != 'MULTISELECT' ? sub_field.Multiple[sub_field.Multiple.length-1].actualvalue : false"
+                                                                value="">Select</option>
+                                                            <option ng-if="sub_field.ChoiceOptions[0].displayvalue"
+                                                                ng-repeat="x in sub_field.ChoiceOptions"
+                                                                value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <span class="help-inline col-md-2 col-sm-12" ng-show="(submitted && !(sub_fieldData[sub_field.FieldName]) && bankDataForm.{{sub_field.FieldName}}.$error.required)" style="display:block;margin:0;color:#EF1C1C !important">{{'Placeholder.Required' | translate}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="pull-right" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
+                                                <span ng-if="webformfield.MaxOccarance == -1" style="display: inline-block;padding: 0rem 50rem;margin: 0;font-size: 0;" class="ng-scope">
+                                                    <a id="{{'AddSection_'+$index}}"  data-placement="bottom" title="{{'ToolTips.AddNewSection' | translate}}"
+                                                       
+                                                        style="font-size: 1.5rem !important;line-height: 1.5rem; cursor:pointer; text-decoration: none; color:#827f7f"
+                                                        class="fa fa-plus-circle ng-scope my-tooltip" custom-tooltip aria-hidden="true"
+                                                        ng-click="add_Section($index, fieldData[field.FieldName], webformfield.FieldName,webformfield.FieldName+'_'+field.FieldName,webformfield)"
+                                                        ng-style="$last ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                                        <a id="{{'RemoveSection_'+$index}}"  data-placement="bottom" title="{{'ToolTips.RemoveSection' | translate}}"
+                                                       
+                                                        style="line-height: 1.5rem; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 0.625rem ; font-size: 1.5rem !important;"
+                                                        class="fa fa-minus-circle my-tooltip" custom-tooltip aria-hidden="true"
+                                                        ng-click="remove_Section($index, fieldData[field.FieldName], webformfield.FieldName,webformfield.FieldName+'_'+field.FieldName)"
+                                                        ng-style="(fieldData[field.FieldName][webformfield.FieldName].length > 1) ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                                </span>
+                                            </div>
+                                            <div class="clearfix" style="background-color: transparent;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Inserted Fileds -->
+
+                            <!-- Inserted Fileds -->
+                            <div ng-if="nameofthefield == field.FieldName">
+                                <div ng-repeat="fielded in fieldAddedDetails.Section">
+                                    <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                                    <div class="control-group col-lg-6 col-md-6 col-sm-12 col-xs-12" ng-class="{true: 'error'}[submitted && bankDataForm.{{fielded.FieldName}}.$invalid] && !(fielded.Mandatory)" style="padding: 0.313rem 0rem;">
+
+                                        <div class="form-group">
+
+                                            <label class="col-sm-12 col-md-5 col-lg-5 col-xs-12 " style='font-weight:bold;' ng-show="fielded.visible">{{fielded.Label}}<span
+                                                    ng-hide="{{fielded.Mandatory}}"
+                                                    style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                                    aria-required="true">*</span></label>
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xs-12 " ng-if="((fielded.InputType == 'TextField')&&((fielded.Type == 'Integer')||(fielded.Type == 'String')||(fielded.Type == 'BigDecimal')||(fielded.Type == 'Character')))" ng-show="fielded.visible">
+                                                <input class="form-control" id="{{fielded.FieldName}}" type="text" maxlength="{{(fielded.Type == 'Character') ? 1 : fielded.MaxLength == -1 ? 100 : fielded.MaxLength}}" name="{{fielded.FieldName}}" ng-model="replaceFieldData[fielded.FieldName]" placeholder="{{(fielded.Type == 'Integer')?fielded.Label +' Only Number':'Please Enter '+fielded.Label}}"
+                                                    ng-focus="fielded.property[0].name == 'LeadingZero' ? LeadingZero($event) : ''" ng-blur="multipleEmptySpace($event)" ng-required="!(fielded.Mandatory)" ng-keydown="(fielded.Type == 'Character')?'':checkType($event,fielded.Type)"
+                                                    ng-disabled="calldisabled(fielded.FieldName)" ng-readonly="!fielded.enabled">
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xs-12 " ng-if="(fielded.InputType == 'TextArea')" ng-show="fielded.visible">
+                                                <textarea style="resize:vertical" rows="{{getTextAreaRows((fielded.Rows*fielded.MaxLength)/150)}}" cols="{{fielded.MaxLength}}" class="form-control" id="{{fielded.FieldName}}" maxlength="{{fielded.Rows*fielded.MaxLength}}" name="{{fielded.FieldName}}"
+                                                    ng-model="replaceFieldData[fielded.FieldName]" placeholder="{{(fielded.Type == 'Integer')?fielded.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+fielded.Label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(fielded.Mandatory)"
+                                                    ng-keydown="(fielded.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(fielded.FieldName)" ng-readonly="!fielded.enabled"></textarea>
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xs-12 " ng-if="(fielded.Type == 'String')&&(fielded.InputType == 'Choice')" ng-show="fielded.visible">
+
+                                                <select name="{{fielded.FieldName}}" class="form-control" id="{{fielded.FieldName}}" ng-model="replaceFieldData[fielded.FieldName]" ng-required="!(fielded.Mandatory)" ng-disabled="calldisabled(fielded.FieldName)" detailsoffield="{{fielded}}" ng-readonly="!fielded.enabled">
+                                                    <option
+                                                        ng-if="fielded.Multiple[0].displayvalue != 'MULTISELECT' ? fielded.Multiple[0].actualvalue : false"
+                                                        value="">{{((fielded.FieldName == 'ApplicationName') && (parentInput.parentLink == 'logconfig'))?'ALL':
+														'Select'}}</option>
+                                                    <option ng-if="fielded.ChoiceOptions[0].displayvalue"
+                                                        ng-repeat="x in fielded.ChoiceOptions"
+                                                        value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+                                                </select>
+                                            </div>
+
+                                            <div ng-if="(fielded.Type == 'Boolean')&&(fielded.InputType == 'Choice')" class="col-sm-12 col-md-6 col-lg-6 col-xs-12 " style="border:none;" ng-show="fielded.visible">
+                                                <label class="radio-inline" ng-repeat="x in fielded.ChoiceOptions" ng-if="x.actualvalue">
+                                                    <input type="radio" name="{{fielded.FieldName}}" class=""
+                                                        ng-model="replaceFieldData[fielded.FieldName]"
+                                                        ng-value="{{x.actualvalue}}" ng-required="!(fielded.Mandatory)"
+                                                        ng-disabled="calldisabled(fielded.FieldName)"
+                                                        ng-readonly="!fielded.enabled">
+                                                    <span style="padding:0.313rem">{{x.displayvalue}}</span>
+                                                </label>
+                                            </div>
+
+                                            <div ng-if="(fielded.Type == 'DateTime') || (fielded.Type == 'DateOnly') || (fielded.Type == 'TimeOnly')" class="input-group col-sm-12 col-md-6 col-lg-6 col-xs-12 input-append" style="padding-right:0.938rem;padding-left:0.75rem;float:left;" ng-show="fielded.visible">
+                                                <input class="form-control" ng-class="(fielded.Type == 'DateOnly') ? 'DatePicker':(fielded.Type == 'DateTime') ? 'DateTimePicker':(fielded.Type == 'TimeOnly') ? 'TimePicker':''" id="{{fielded.name}}" type="text" maxlength="{{fielded.MaxLength}}" name="{{fielded.FieldName}}"
+                                                    ng-model="replaceFieldData[fielded.FieldName]" placeholder="{{'Please Enter '+fielded.Label}}" onpaste="return false" ng-required="!(fielded.Mandatory)" onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)"
+                                                    ng-blur="multipleEmptySpace($event)" ng-disabled="calldisabled(fielded.FieldName)" ng-readonly="!fielded.enabled">
+                                                <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (fielded.FieldName == parentInput.pageInfo.Section[0].FieldName)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+                                                    <span class="fa"
+                                                        ng-class="(fielded.Type == 'DateOnly') ? 'fa-calendar date-set' :'' || (fielded.Type == 'DateTime') ? 'fa-calendar date-set': '' || (fielded.Type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                                </span>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+                                                <span class="help-inline" ng-show="submitted&&bankDataForm.{{fielded.FieldName}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                                                <span class="help-inline" ng-show="came == bankDataForm[fielded.FieldName].$name" style="display:block;margin:0;color:#EF1C1C !important">Should be a unique value</span>
+                                            </div>
+                                            <div style="clear:both"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--{{bankDataForm[fielded.FieldName].$name + came + 'sd'}}-->
+
+                                <div class="control-group" ng-repeat="fielded in fieldAddedDetails.Subsection" ng-class="{true: 'error'}[submitted && updateForm.{{fielded.FieldName}}.$invalid] && !(subfield.Mandatory)" style="padding: 0rem 1.875rem;">
+
+                                    <div class="clearfix" style="background-color: transparent;"></div>
+                                    <!-- <div class="col-md-12" ng-if="field.MaxOccarance == -1"> -->
+                                    <label class="control-label col-md-2" style='font-weight:bold;'>{{fielded.Label}}<span ng-hide="{{fielded.Mandatory}}"
+                                            style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                            aria-required="true">*</span></label>
+                                    <div style="clear:both"></div>
+                                    <div id="{{fielded.FieldName}}" style="border: 0.313rem solid #9E9E9E; background-color: #efecec; overflow-y: auto;">
+
+                                        <div class="col-md-12 anitem" style="margin:0;padding: 0.625rem  0rem;" ng-repeat="subfieldedData in replaceFieldData[fielded.FieldName]" id="{{fielded.FieldName+'_'+$index}}">
+                                            <div class="col-md-10 col-sm-12" style="padding:0.313rem 0rem">
+                                                <div ng-repeat="subfielded in fielded.subSectionData" class="col-md-5" style="padding: 0rem 0rem 0.938rem 0rem;margin:0;">
+
+                                                    <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+
+                                                    <label class="control-label col-md-4" style='font-weight:bold;padding-left: 0rem;padding-right: 1.25rem;' ng-show="subfielded.visible">{{subfielded.Label}}<span
+                                                            ng-hide="{{subfielded.Mandatory}}"
+                                                            style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                                            aria-required="true">*</span></label>
+
+                                                    <div class="col-md-8" ng-if="(subfielded.InputType == 'TextField')&&((subfielded.Type == 'Integer')||(subfielded.Type == 'String')||(subfielded.Type == 'BigDecimal'))" style="padding:0" ng-show="subfielded.visible">
+                                                        <input class="form-control" id="{{subfielded.FieldName}}" type="text" maxlength="{{subfielded.MaxLength}}" name="{{subfielded.FieldName}}" ng-model="subfieldedData[subfielded.FieldName]" placeholder="{{(subfielded.Type == 'Integer')?subfielded.Label +' Only Number':'Please Enter '+subfielded.Label}}"
+                                                            ng-blur="multipleEmptySpace($event)" ng-keydown="checkType($event,subfielded.Type)" ng-disabled="calldisabled(subfielded.FieldName)" ng-readonly="!subfielded.enabled">
+                                                    </div>
+
+                                                    <div ng-if="(subfielded.Type == 'DateTime') || (subfielded.Type == 'DateOnly') || (subfielded.Type == 'TimeOnly')" class="input-group col-md-3 input-append" style="padding-right:0.938rem; padding-left:0.75rem; float:left;" ng-show="subfielded.visible">
+                                                        <input class="form-control" ng-class="(subfielded.Type == 'DateOnly') ? 'DatePicker':(subfielded.Type == 'DateTime') ? 'DateTimePicker':(subfielded.Type == 'TimeOnly') ? 'TimePicker':''" id="{{subfielded.FieldName}}" type="text" maxlength="{{subfielded.MaxLength}}"
+                                                            name="{{subfielded.FieldName}}" ng-model="subfieldedData[subfielded.FieldName]" ng-value="subfieldedData[subfielded.FieldName]" placeholder="{{'Please Enter '+subfielded.Label}}" onpaste="return false"
+                                                            onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)" ng-disabled="calldisabled(subfielded.FieldName)" ng-readonly="!subfielded.enabled">
+                                                        <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (subfielded.FieldName == parentInput.pageInfo.Section[0].FieldName)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+                                                            <span class="fa"
+                                                                ng-class="(subfielded.Type == 'DateOnly') ? 'fa-calendar date-set' :'' || (subfielded.Type == 'DateTime') ? 'fa-calendar date-set': '' || (subfielded.Type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="col-md-9" ng-if="(subfielded.type == 'TextArea')" ng-show="subfielded.visible">
+                                                        <textarea style="resize:none" rows="{{getTextAreaRows((subfielded.Rows*subfielded.MaxLength)/150)}}" cols="{{subfielded.MaxLength}}" class="form-control" id="{{subfielded.FieldName}}" maxlength="{{subfielded.Rows*subfielded.MaxLength}}" name="{{subfielded.FieldName}}"
+                                                            ng-model="subfieldedData[fielded.FieldName][subfielded.FieldName]" placeholder="{{(subfielded.Type == 'Integer')?subfielded.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+ (subfielded.Label | translate) }}" ng-blur="multipleEmptySpace($event)"
+                                                            ng-keydown="(subfielded.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(subfielded.FieldName)" ng-readonly="!subfielded.enabled"></textarea>
+                                                    </div>
+                                                    <div class="col-md-3" ng-if="(subfielded.Type == 'String')&&(subfielded.InputType == 'Choice')" ng-show="subfielded.visible">
+                                                        <select ng-class="(subfielded.ChoiceOptions[subfielded.ChoiceOptions.length-1].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(subfielded.ChoiceOptions[subfielded.ChoiceOptions.length-1].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(subfielded):''"
+                                                            name="{{subfielded.FieldName}}" class="form-control" id="{{subfielded.Label}}" ng-model="subfieldedData[subfielded.FieldName]" ng-disabled="calldisabled(subfielded.FieldName)" detailsoffield="{{subfielded}}"
+                                                            ng-readonly="!subfielded.enabled">
+                                                            <option
+                                                                ng-if="subfielded.ChoiceOptions[subfielded.ChoiceOptions.length-1].displayvalue != 'MULTISELECT' ? subfielded.ChoiceOptions[field.ChoiceOptions.length-1].actualvalue : false"
+                                                                value="">Select</option>
+                                                            <option ng-if="subfielded.ChoiceOptions[0].displayvalue"
+                                                                ng-repeat="x in subfielded.ChoiceOptions"
+                                                                value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div ng-if="(subfielded.Type == 'Boolean')&&(subfielded.Type == 'Choice')" class="col-md-3" style="border:none;" ng-show="subfielded.visible">
+                                                        <label class="radio-inline" ng-repeat="x in subfielded.ChoiceOptions" ng-if="x.actualvalue">
+                                                            <input type="radio" name="{{subfielded.FieldName}}" class=""
+                                                                ng-model="subfieldedData[subfielded.FieldName]"
+                                                                ng-value="{{x.actualvalue}}"
+                                                                ng-disabled="calldisabled(subfielded.FieldName)"
+                                                                ng-readonly="!subfielded.enabled">
+                                                            <span style="padding:0.313rem">{{x.displayvalue}}</span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div style="clear:both"></div>
+                                                    <span class="help-inline" ng-show="submitted && updateForm.{{subfielded.FieldName}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-sm-6" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
+                                                <span ng-if="fielded.MaxOccarance == -1" style="display: inline-block;margin: 0;font-size: 0;" class="ng-scope">
+                                                    <a id="AddSection_$index"  data-placement="bottom" title="{{'ToolTips.AddNewSection' | translate}}"
+                                                       
+                                                        style="font-size: 1.5rem !important;line-height: 1.5rem; cursor:pointer; text-decoration: none; color:#827f7f"
+                                                        class="fa fa-plus-circle ng-scope my-tooltip" custom-tooltip aria-hidden="true"
+                                                        ng-click="addsubfieldedSection($index, subfieldedData, fielded.FieldName)"
+                                                        ng-style="$last ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                                        <a id="RemoveSection_$index"  data-placement="bottom" title="{{'ToolTips.RemoveSection' | translate}}"
+                                                       
+                                                        style="line-height: 1.5rem; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 0.625rem ; font-size: 1.5rem !important;"
+                                                        class="fa fa-minus-circle my-tooltip" custom-tooltip aria-hidden="true"
+                                                        ng-click="removesubfieldedSection($index, subfieldedData, fielded.FieldName)"
+                                                        ng-style="(replaceFieldData[fielded.FieldName].length > 1) ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                                </span>
+                                            </div>
+                                            <div class="clearfix" style="background-color: transparent;"></div>
+                                        </div>
+                                        <!-- </div>	 -->
+                                        <div style="clear:both"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Inserted Fileds -->
+                        </div>
+
+                        <div class="col-md-3" ng-if="(field.Type == 'String')&&(field.InputType == 'Choice')&& (field.FieldName != 'Category')" ng-show="field.visible">
+
+                            <select ng-class="(field.ChoiceOptions[field.ChoiceOptions.length-1].actualvalue == 'REST')?'appendSelect2':''" select2-model-append name="{{field.FieldName}}" class="form-control" id="{{field.Label}}" ng-init="val=(((fieldData[field.FieldName])&&(field.Label === 'Resource Name') && (parentInput.pageTitle === 'Approval Condition'))||((fieldData[field.FieldName])&&(field.Label === 'Direction') && (parentInput.pageTitle === 'Transport'))||((fieldData[field.FieldName])&&(field.Label === 'Transport Type') && (parentInput.pageTitle === 'Transport'))||((fieldData[field.FieldName])&&(field.FieldName === 'InputFormat') && (parentInput.pageTitle === 'Party Service Association')) || ((fieldData[field.FieldName])&&(field.Label === 'Agent Bank Party Code') && (parentInput.pageTitle === 'Bank Routing'))||((fieldData[field.FieldName])&&(field.FieldName === 'PartyCode') && (parentInput.pageTitle === 'Party Service Association'))||((fieldData[field.FieldName])&&(field.FieldName === 'PermittedAccountNos') && (parentInput.pageTitle === 'Party Service Association')) || (((fieldData[field.FieldName])&&(field.Label === 'Incidence Code')||(fieldData[field.FieldName])&&(field.Label === 'Process Name')) && (parentInput.pageTitle === 'Incidence Definition'))||((field.Label === 'Service Code') && (parentInput.pageTitle === 'Party Service Association')) || ((fieldData[field.FieldName])&&(field.Label === 'Work Flow Code') && (parentInput.pageTitle === 'Status Action')) || ((fieldData[field.FieldName])&&((field.Label === 'Process Code') || (field.Label === 'WorkFlow Code')) && (parentInput.pageTitle === 'Business Rules')) )?dependedDropval(field.Label,fieldData[field.FieldName],field.FieldName,field):((field.ChoiceOptions[field.ChoiceOptions.length-1].actualvalue == 'REST') && ((parentInput.Operation != 'Add')))?setInitval(field):''"
+                                ng-model="fieldData[field.FieldName]" ng-required="!(field.Mandatory)" ng-disabled="calldisabled(field.FieldName)" ng-change="((field.Label === 'Resource Name') && (parentInput.pageTitle === 'Approval Condition'))||((field.Label === 'Direction') && (parentInput.pageTitle === 'Transport'))||((field.Label === 'Transport Type') && (parentInput.pageTitle === 'Transport'))||((field.FieldName === 'InputFormat') && (parentInput.pageTitle === 'Party Service Association'))||((field.FieldName === 'PartyCode') && (parentInput.pageTitle === 'Party Service Association'))||((field.FieldName === 'PermittedAccountNos') && (parentInput.pageTitle === 'Party Service Association')) || (((field.Label === 'Incidence Code')||(field.Label === 'Process Name')) && (parentInput.pageTitle === 'Incidence Definition'))||((field.Label === 'Service Code') && (parentInput.pageTitle === 'Party Service Association')) || ((field.Label === 'Work Flow Code') && (parentInput.pageTitle === 'Status Action')) || ((field.Label === 'Work Flow Code') && (parentInput.pageTitle === 'StatusTimeOutProfile')) || ((field.Label === 'Party Code') && (parentInput.pageTitle === 'StatementBulker')) || (((field.Label === 'Process Code') || (field.Label === 'WorkFlow Code')) && (parentInput.pageTitle === 'Business Rules')) || ((field.Label === 'Agent Bank Party Code') && (parentInput.pageTitle === 'Bank Routing')) ? dependedDropval(field.Label,fieldData[field.FieldName],field.FieldName,'',true):'';Autodatepopulate(fieldData[field.FieldName], field.FieldName)"
+                                detailsoffield="{{field}}" ng-readonly="!field.enabled" onchange="angular.element(this).scope().validate(this,angular.element(this).scope().field.Label)">
+                                <!-- <option ng-if="field.ChoiceOptions[field.ChoiceOptions.length-1].displayvalue != 'MULTISELECT' ? field.Multiple[0].actualvalue : false" value="">{{((field.FieldName == 'ApplicationName') && (parentInput.parentLink == 'logconfig'))?'ALL': 'Select'}}</option>
+								<option ng-if="field.ChoiceOptions[0].displayvalue" ng-repeat="x in field.ChoiceOptions" value="{{(x.actualvalue == 'REST') ? x : x.actualvalue}}">{{x.displayvalue}}</option> -->
+
+                                <option ng-if="field.Multiple[field.Multiple.length-1].displayvalue != 'MULTISELECT' ? field.Multiple[field.Multiple.length-1].actualvalue : false" value="">{{((field.FieldName == 'ApplicationName') && (parentInput.parentLink == 'logconfig'))?'ALL':'Placeholder.Select' | translate}}</option>
+                                <option ng-if="field.ChoiceOptions[0].displayvalue && (x.actualvalue !='FILESALERT' || newPermission.AlertFiles) && (x.actualvalue !='ALERT' || newPermission.DefaultType) && (x.actualvalue !='SMTP' || newPermission.DefaultType) && (x.actualvalue !='BROADCAST' || newPermission.DefaultType) " ng-repeat="x in field.ChoiceOptions" value="{{(x.actualvalue == 'REST') ? x : x.actualvalue | replaceASCII}}" translate>{{x.displayvalue | replaceASCII}}</option>
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-3" ng-if="(((field.FieldName == 'Category') && (parentInput.parentLink == 'logconfig')))" ng-show="field.visible">
+                            <input list="{{field.FieldName}}" name="{{field.FieldName}}" class="form-control" id="{{field.FieldName}}_List" ng-model="fieldData[field.FieldName]" ng-required="!(field.Mandatory)" ng-disabled="calldisabled(field.FieldName)" autocomplete="off" ng-readonly="!field.enabled">
+                            <datalist id="{{field.FieldName}}">
+                                <option ng-if="field.ChoiceOptions[0].displayvalue" ng-repeat="x in field.ChoiceOptions" value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+                            </datalist>
+                        </div>
+
+                        <div class="col-md-3" ng-if="(field.Type == 'Binary')" ng-show="field.visible">
+                            <input type="file" id="uploadBtn" file-model="fieldData[field.FieldName]" class="fileNamealighn" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,null);" required/>
+                        </div>
+
+                        
+
+                        <div ng-if="(field.Type == 'Boolean')&&(field.InputType == 'Choice')" class="col-md-3" style="border:none;" ng-show="field.visible">
+                            <label class="radio-inline" ng-repeat="x in field.ChoiceOptions" ng-if="x.actualvalue">
+                                <input type="radio" name="{{field.FieldName}}" class=""
+                                    ng-model="fieldData[field.FieldName]" ng-value="{{x.actualvalue}}"
+                                    ng-required="!(field.Mandatory)" ng-disabled="calldisabled(field.FieldName)"
+                                    ng-readonly="!field.enabled">
+                                <span style="padding:0.313rem">{{x.displayvalue | translate}}</span>
+                            </label>
+                        </div>
+
+                        <div ng-if="(field.Type == 'DateTime') || (field.Type == 'DateOnly') || (field.Type == 'TimeOnly')" class="input-group col-md-3" style="padding-right:0.938rem;padding-left:0.75rem;float:left;" ng-show="field.visible">
+                            <input class="form-control" ng-class="(field.Type == 'DateOnly') ? 'DatePicker':(field.Type == 'DateTime') ? 'DateTimePicker':(field.Type == 'TimeOnly') ? 'TimePicker':''" id="{{field.Label}}" type="text" maxlength="{{field.MaxLength}}" name="{{field.FieldName}}"
+                            ng-model="fieldData[field.FieldName]" placeholder="{{'Placeholder.Select' | translate}}" onpaste="return false" ng-required="!(field.Mandatory)" onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)"
+                                ng-disabled="calldisabled(field.FieldName)" ng-readonly="!field.enabled">
+                            <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (field.FieldName == parentInput.pageInfo.Section[0].FieldName)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+                                <span class="fa"
+                                    ng-class="(field.Type == 'DateOnly') ? 'fa-calendar date-set' :'' || (field.Type == 'DateTime') ? 'fa-calendar date-set': '' || (field.Type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                            </span>
+                        </div>
+                        <span class="help-inline"  ng-if="field.FieldName == 'EffectiveTillDate'" ng-show="CompareDates()" style="display:block;margin:0;color:#EF1C1C !important; text-align: center;">{{'Placeholder.ValidateTillDate' | translate}}</span>
+                        <div ng-if="(field.customRenderer == 'ColourPicker')" class="input-group col-md-3 appendColorPic" style="padding-right:0.938rem;padding-left:0.75rem;float:left;" ng-show="field.visible">
+                            <input style="width: 87%;border-right: none;" class="form-control inputColorPic" id="{{field.Label}}" type="text" maxlength="{{field.MaxLength}}" name="{{field.FieldName}}" ng-model="fieldData[field.FieldName]" placeholder="{{'Please Pick '+field.Label}}"
+                                onpaste="return false" ng-required="!(field.Mandatory)" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)" ng-disabled="calldisabled(field.FieldName)" style="border-right: none;" ng-readonly="!field.enabled">
+                        </div>
+
+                        <span class="help-inline" ng-show="(submitted && (bankDataForm.{{field.FieldName}}.$error.required || bankDataForm.{{field.FieldName}}.$modelValue == '')) || (field.FieldName == 'PreferredAccount' && submitted && fieldData.ServiceCode == 'CXC' && !fieldData.PreferredAccount)" style="display:block;margin:0;color:#EF1C1C !important">{{'Placeholder.Required' | translate}}</span>
+
+                        <div style="clear:both"></div>
+
+                    </div>
+                </div>
+                <div class="control-group"  ng-repeat="field in parentInput.pageInfo.Subsection" ng-class="{true: 'error'}[submitted && updateForm.{{field.FieldName}}.$invalid] && !(subfield.Mandatory)" style="padding: 0rem 1.875rem;" ng-if="(field.FieldName != 'attachment_list') || uploadFiles">
+                    <div class="clearfix" style="background-color: transparent;"></div>
+                    <!-- <div class="col-md-12" ng-if="field.MaxOccarance == -1"> -->
+                    <label class="control-label col-md-2" style='font-weight:bold;text-align: right;'>{{field.Label | translate}}<span
+                            ng-hide="{{field.Mandatory}}" style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                            aria-required="true">*</span></label>
+                    <div style="clear:both"></div>
+                    <div id="{{field.FieldName}}" style="border: 0.313rem solid #9E9E9E; background-color: #efecec; overflow-y: auto;">
+                        <div class="col-md-12 row anitem" ng-if="(parentInput.parentLink == 'notifront')&& (parentInput.fieldData.attachment_list || parentInput.Operation == 'Add' || parentInput.Operation == ' Add')" style="margin:0;padding: 0.625rem  0rem;"  id="{{field.FieldName+'_'+$index}}">
+                            <div class="col-lg-8 col-md-12" style="padding:0.313rem 0rem">
+                                <div ng-repeat="subfield in field.subSectionData" class="row col-md-12" style="padding: 0rem 0rem 0.938rem 0rem;margin:0;">
+                                    <label class="control-label col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-2" style='font-weight:bold;padding-left: 0rem;padding-right: 1.25rem;' ng-if="subfield.Label != 'Notifications.Content'" ng-show="subfield.visible">{{subfield.Label | translate}}<span
+                                            ng-hide="{{subfield.Mandatory}}"
+                                            style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                            aria-required="true">*</span></label>
+
+                                    <div class="col-md-4 " ng-if="(subfield.InputType == 'TextField')&&((subfield.Type == 'Integer')||(subfield.Type == 'String')) && (subfield.FieldName != 'AccessKey') && (subfield.FieldName != 'SecretKey' && subfield.property[0].value.toLowerCase() != 'range')" style="padding:0" ng-show="subfield.visible">
+                                        <input class="form-control" id="{{subfield.FieldName}}" type="text" maxlength="{{subfield.MaxLength}}" name="{{subfield.FieldName}}" ng-model="subSectionfieldData[field.FieldName][subfield.FieldName]" placeholder="{{(subfield.Type == 'Integer')?subfield.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+(subfield.Label | translate)}}"
+                                            ng-blur="multipleEmptySpace($event)" ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled">
+                                    </div>
+
+                                    <div class="col-md-4"
+                                        ng-if="(subfield.InputType == 'TextField')&&((subfield.Type == 'Integer')||(subfield.Type == 'String')) && (subfield.FieldName != 'AccessKey') && (subfield.FieldName != 'SecretKey') && subfield.property[0].value.toLowerCase() == 'range'"
+                                        style="padding:0;display:inline-flex;" ng-show="subfield.visible">
+                                        <input class="form-control" name="subfield.property[1].value"
+                                            id="subfield.property[1].value" type="Integer"
+                                            ng-model="subSectionfieldData[field.FieldName][subfield.property[1].value]" placeholder="min value"
+                                            ng-blur="multipleEmptySpace($event)"
+                                            ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''"
+                                            ng-disabled="calldisabled(subfield.FieldName)"
+                                            ng-readonly="!subfield.enabled">
+                                        <input class="form-control" name="subfield.property[2].value"
+                                            id="subfield.property[2].value" type="Integer"
+                                            ng-model="subSectionfieldData[field.FieldName][subfield.property[2].value]" placeholder="max value"
+                                            ng-blur="multipleEmptySpace($event)"
+                                            ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''"
+                                            ng-disabled="calldisabled(subfield.FieldName)"
+                                            ng-readonly="!subfield.enabled" style="margin-left: 5px;">
+                                    </div>
+                                    
+                                    <div class="col-md-4" ng-if="(subfield.InputType == 'TextField')&&((subfield.Type == 'Integer')||(subfield.Type == 'String')) && ((subfield.FieldName == 'AccessKey') || (subfield.FieldName == 'SecretKey'))" style="padding:0" ng-show="subfield.visible">
+                                        <input class="form-control" id="{{subfield.FieldName}}" type="password" maxlength="{{subfield.MaxLength}}" name="{{subfield.FieldName}}" ng-model="subSectionfieldData[field.FieldName][subfield.FieldName]" placeholder="{{(subfield.Type == 'Integer')?subfield.Label +' Only Number':'Please Enter '+subfield.Label}}"
+                                            ng-blur="multipleEmptySpace($event)" ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled">
+                                    </div>
+
+                                    <div class="col-md-3" ng-if="(subfield.Type == 'Binary')" ng-show="subfield.visible">
+                                        <!--<input type="file" id="{{subfield.FieldName + subIndex}}"  file-model="subSectionfieldData[field.FieldName][subIndex][subfield.FieldName]" name="{{subIndex}}" class="fileNamealighn btn btnStyle d-flex uploadalighn" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,angular.element(this).scope().subIndex);" required/>-->
+                                        <!--<input type="button" id="loadFileXml" value="loadXml" onclick="document.getElementById('{{subfield.FieldName + subIndex}}').click();" />-->
+                                        <!--<input type="file" id="{{subfield.FieldName + subIndex}}"  file-model="subSectionfieldData[field.FieldName][subIndex][subfield.FieldName]" name="{{subIndex}}" class="fileNamealighn btn btnStyle d-flex uploadalighn inputFile" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,angular.element(this).scope().subIndex);" required/>-->
+                                        <div class="fileUpload btn btn-primary">
+                                            <span>{{'Notifications.upload' | translate}}</span>
+                                            <input type="file" id="{{subfield.FieldName}}"  file-model="subSectionfieldData[field.FieldName][subfield.FieldName]" name="{{subIndex}}" class="fileNamealighn btn btnStyle d-flex uploadalighn inputFile upload" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,angular.element(this).scope().subIndex);" required/>
+                                            <!--<input type="file" class="upload" />-->
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="(subfield.Type == 'DateTime') || (subfield.Type == 'DateOnly') || (subfield.Type == 'TimeOnly')" class="input-group col-md-4 pl-0 pr-0 input-append" style="float:left;" ng-show="subfield.visible">
+                                        <input class="form-control" ng-class="(subfield.Type == 'DateOnly') ? 'DatePicker':(subfield.Type == 'DateTime') ? 'DateTimePicker':(subfield.Type == 'TimeOnly') ? 'TimePicker':''" id="{{subfield.FieldName}}" type="text" maxlength="{{subfield.MaxLength}}"
+                                            name="{{subfield.FieldName+'_'+subIndex}}" ng-model="subSectionfieldData[field.FieldName][subfield.FieldName]" ng-value="subSectionfieldData[field.FieldName][subfield.FieldName]" placeholder="{{'Please Enter '+subfield.Label}}" onpaste="return false" onkeypress='return tabOrder(event)'
+                                            ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)" ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled">
+                                        <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (subfield.FieldName == parentInput.pageInfo.Section[0].FieldName)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+                                            <span class="fa"
+                                                ng-class="(subfield.Type == 'DateOnly') ? 'fa-calendar date-set' :'' || (subfield.Type == 'DateTime') ? 'fa-calendar date-set': '' || (subfield.Type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-9" ng-if="(subfield.InputType == 'TextArea')" ng-show="subfield.visible">
+                                        <textarea style="resize:none" rows="{{getTextAreaRows((subfield.Rows*subfield.MaxLength)/150)}}" cols="{{subfield.MaxLength}}" class="form-control" id="{{subfield.FieldName}}" maxlength="{{subfield.Rows*subfield.MaxLength}}" name="{{subfield.FieldName}}"
+                                            ng-model="subSectionfieldData[field.FieldName][subfield.FieldName]" placeholder="{{(subfield.Type == 'Integer')?subfield.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+ (subfield.Label | translate) }}" ng-blur="multipleEmptySpace($event)" ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''"
+                                            ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled"></textarea>
+                                    </div>
+                                    <div class="col-md-3" ng-if="(subfield.Type == 'String')&&(subfield.InputType == 'Choice')" ng-show="subfield.visible">
+                                        <select ng-class="(subfield.ChoiceOptions[subfield.ChoiceOptions.length-1].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(subfield.ChoiceOptions[subfield.ChoiceOptions.length-1].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(subfield):''"
+                                            name="{{subfield.FieldName}}" class="form-control" id="{{subfield.Label}}" ng-model="subSectionfieldData[field.FieldName][subfield.FieldName]" ng-disabled="calldisabled(subfield.FieldName)" detailsoffield="{{subfield}}" ng-readonly="!subfield.enabled" onchange="angular.element(this).scope().validate(this,angular.element(this).scope().subfield.Label)" >
+						                    <option value="">{{'Placeholder.Select' | translate}}</option>
+                                            <option ng-if="subfield.ChoiceOptions[0].displayvalue"
+                                                ng-repeat="x in subfield.ChoiceOptions" value="{{x.actualvalue}}" translate>
+                                                {{x.displayvalue | translate}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div ng-if="(subfield.Type == 'Boolean')&&(subfield.Type == 'Choice')" class="col-md-3" style="border:none;" ng-show="subfield.visible">
+                                        <label class="radio-inline" ng-repeat="x in subfield.ChoiceOptions" ng-if="x.actualvalue">
+                                            <input type="radio" name="{{subfield.FieldName}}" class=""
+                                                ng-model="subSectionfieldData[field.FieldName][subfield.FieldName]" ng-value="{{x.actualvalue}}"
+                                                ng-disabled="calldisabled(subfield.FieldName)"
+                                                ng-readonly="!subfield.enabled">
+                                            <span style="padding:0.313rem">{{x.displayvalue | translate}}</span>
+                                        </label>
+                                    </div>
+
+
+                                    <div style="clear:both"></div>
+                                    <span class="help-inline" ng-show="submitted && updateForm.{{subfield.FieldName}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                                </div>
+                            </div>
+                            <div ng-show="(parentInput.pageTitle === 'Transport')" class="col-md-1 col-sm-6" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
+                                <a class="btn" style="float: left;" data-toggle="modal" data-target="{{'#'+field.FieldName+'_model'}}" custom-tooltip data-toggle-second="tooltip" data-placement="bottom" title="{{'ToolTips.ShowHelp' | translate}}" >Help</a>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
+                                <span ng-if="field.MaxOccarance == -1" style="display: inline-block;padding: 0rem 1.25rem; width: 80%;margin: 0;font-size: 0;" class="ng-scope">
+                                    <a id="AddSection_$index"  data-placement="bottom" title="{{'ToolTips.AddNewSection' | translate}}" 
+                                        style="font-size: 1.5rem !important;line-height: 1.5rem; cursor:pointer; text-decoration: none; color:#827f7f"
+                                        class="fa fa-plus-circle ng-scope my-tooltip" custom-tooltip aria-hidden="true"
+                                        ng-click="addsubSection($index, subData, field)"
+                                        ng-style="$last ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                        <a id="RemoveSection_$index"  data-placement="bottom" title="{{'ToolTips.RemoveSection' | translate}}"  
+                                        style="line-height: 1.5rem; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 0.625rem ; font-size: 1.5rem !important;"
+                                        class="fa fa-minus-circle my-tooltip" custom-tooltip aria-hidden="true"
+                                        ng-click="removesubSection($index, subData, field.FieldName)"
+                                        ng-style="(subSectionfieldData[field.FieldName].length > 1) ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                </span>
+                            </div>
+                            <div class="clearfix" style="background-color: transparent;"></div>
+                        </div>
+
+
+                        <div class="col-md-12 row anitem" ng-if="(parentInput.parentLink != 'notifront')" style="margin:0;padding: 0.625rem  0rem;" ng-repeat="(subIndex, subData) in subSectionfieldData[field.FieldName]" id="{{field.FieldName+'_'+$index}}">
+                            <div class="col-lg-8 col-md-12" style="padding:0.313rem 0rem">
+                                <div ng-repeat="subfield in field.subSectionData" class="row col-md-12" style="padding: 0rem 0rem 0.938rem 0rem;margin:0;">
+                                    <label class="control-label col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-2" style='font-weight:bold;padding-left: 0rem;padding-right: 1.25rem;' ng-if="subfield.Label != 'Notifications.Content'" ng-show="subfield.visible">{{subfield.Label | translate}}<span
+                                            ng-hide="{{subfield.Mandatory}}"
+                                            style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
+                                            aria-required="true">*</span></label>
+
+                                    <div class="col-md-4 " ng-if="(subfield.InputType == 'TextField')&&((subfield.Type == 'Integer')||(subfield.Type == 'String')) && (subfield.FieldName != 'AccessKey') && (subfield.FieldName != 'SecretKey' && subfield.property[0].value.toLowerCase() != 'range')" style="padding:0" ng-show="subfield.visible">
+                                        <input class="form-control" id="{{subfield.FieldName}}" type="text" maxlength="{{subfield.MaxLength}}" name="{{subfield.FieldName}}" ng-model="subData[subfield.FieldName]" placeholder="{{(subfield.Type == 'Integer')?subfield.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+(subfield.Label | translate)}}"
+                                            ng-blur="multipleEmptySpace($event)" ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled">
+                                    </div>
+
+                                    <div class="col-md-4"
+                                        ng-if="(subfield.InputType == 'TextField')&&((subfield.Type == 'Integer')||(subfield.Type == 'String')) && (subfield.FieldName != 'AccessKey') && (subfield.FieldName != 'SecretKey') && subfield.property[0].value.toLowerCase() == 'range'"
+                                        style="padding:0;display:inline-flex;" ng-show="subfield.visible">
+                                        <input class="form-control" name="subfield.property[1].value"
+                                            id="subfield.property[1].value" type="Integer"
+                                            ng-model="subData[subfield.property[1].value]" placeholder="min value"
+                                            ng-blur="multipleEmptySpace($event)"
+                                            ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''"
+                                            ng-disabled="calldisabled(subfield.FieldName)"
+                                            ng-readonly="!subfield.enabled">
+                                        <input class="form-control" name="subfield.property[2].value"
+                                            id="subfield.property[2].value" type="Integer"
+                                            ng-model="subData[subfield.property[2].value]" placeholder="max value"
+                                            ng-blur="multipleEmptySpace($event)"
+                                            ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''"
+                                            ng-disabled="calldisabled(subfield.FieldName)"
+                                            ng-readonly="!subfield.enabled" style="margin-left: 5px;">
+                                    </div>
+                                    
+                                    <div class="col-md-4" ng-if="(subfield.InputType == 'TextField')&&((subfield.Type == 'Integer')||(subfield.Type == 'String')) && ((subfield.FieldName == 'AccessKey') || (subfield.FieldName == 'SecretKey'))" style="padding:0" ng-show="subfield.visible">
+                                        <input class="form-control" id="{{subfield.FieldName}}" type="password" maxlength="{{subfield.MaxLength}}" name="{{subfield.FieldName}}" ng-model="subData[subfield.FieldName]" placeholder="{{(subfield.Type == 'Integer')?subfield.Label +' Only Number':'Please Enter '+subfield.Label}}"
+                                            ng-blur="multipleEmptySpace($event)" ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled">
+                                    </div>
+
+                                    <div class="col-md-3" ng-if="(subfield.Type == 'Binary')" ng-show="subfield.visible">
+                                        <!--<input type="file" id="{{subfield.FieldName + subIndex}}"  file-model="subSectionfieldData[field.FieldName][subIndex][subfield.FieldName]" name="{{subIndex}}" class="fileNamealighn btn btnStyle d-flex uploadalighn" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,angular.element(this).scope().subIndex);" required/>-->
+                                        <!--<input type="button" id="loadFileXml" value="loadXml" onclick="document.getElementById('{{subfield.FieldName + subIndex}}').click();" />-->
+                                        <!--<input type="file" id="{{subfield.FieldName + subIndex}}"  file-model="subSectionfieldData[field.FieldName][subIndex][subfield.FieldName]" name="{{subIndex}}" class="fileNamealighn btn btnStyle d-flex uploadalighn inputFile" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,angular.element(this).scope().subIndex);" required/>-->
+                                        <div class="fileUpload btn btn-primary">
+                                            <span>{{'Notifications.upload' | translate}}</span>
+                                            <input type="file" id="{{subfield.FieldName}}"  file-model="subSectionfieldData[field.FieldName][subIndex][subfield.FieldName]" name="{{subIndex}}" class="fileNamealighn btn btnStyle d-flex uploadalighn inputFile upload" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,angular.element(this).scope().subIndex);" required/>
+                                            <!--<input type="file" class="upload" />-->
+                                        </div>
+                                    </div>
+
+                                    <div ng-if="(subfield.Type == 'DateTime') || (subfield.Type == 'DateOnly') || (subfield.Type == 'TimeOnly')" class="input-group col-md-4 pl-0 pr-0 input-append" style="float:left;" ng-show="subfield.visible">
+                                        <input class="form-control" ng-class="(subfield.Type == 'DateOnly') ? 'DatePicker':(subfield.Type == 'DateTime') ? 'DateTimePicker':(subfield.Type == 'TimeOnly') ? 'TimePicker':''" id="{{subfield.FieldName}}" type="text" maxlength="{{subfield.MaxLength}}"
+                                            name="{{subfield.FieldName+'_'+subIndex}}" ng-model="subData[subfield.FieldName]" ng-value="subData[subfield.FieldName]" placeholder="{{'Please Enter '+subfield.Label}}" onpaste="return false" onkeypress='return tabOrder(event)'
+                                            ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)" ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled">
+                                        <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (subfield.FieldName == parentInput.pageInfo.Section[0].FieldName)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+                                            <span class="fa"
+                                                ng-class="(subfield.Type == 'DateOnly') ? 'fa-calendar date-set' :'' || (subfield.Type == 'DateTime') ? 'fa-calendar date-set': '' || (subfield.Type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="col-md-9" ng-if="(subfield.InputType == 'TextArea')" ng-show="subfield.visible">
+                                        <textarea style="resize:none" rows="{{getTextAreaRows((subfield.Rows*subfield.MaxLength)/150)}}" cols="{{subfield.MaxLength}}" class="form-control" id="{{subfield.FieldName}}" maxlength="{{subfield.Rows*subfield.MaxLength}}" name="{{subfield.FieldName}}"
+                                            ng-model="subData[subfield.FieldName]" placeholder="{{(subfield.Type == 'Integer')?subfield.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+ (subfield.Label | translate) }}" ng-blur="multipleEmptySpace($event)" ng-keydown="(subfield.Type == 'Integer') ? allowOnlyNumbersAlone($event) : ''"
+                                            ng-disabled="calldisabled(subfield.FieldName)" ng-readonly="!subfield.enabled"></textarea>
+                                    </div>
+                                    <div class="col-md-3" ng-if="(subfield.Type == 'String')&&(subfield.InputType == 'Choice')" ng-show="subfield.visible">
+                                        <select ng-class="(subfield.ChoiceOptions[subfield.ChoiceOptions.length-1].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(subfield.ChoiceOptions[subfield.ChoiceOptions.length-1].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(subfield):''"
+                                            name="{{subfield.FieldName}}" class="form-control" id="{{subfield.Label}}" ng-model="subData[subfield.FieldName]" ng-disabled="calldisabled(subfield.FieldName)" detailsoffield="{{subfield}}" ng-readonly="!subfield.enabled" onchange="angular.element(this).scope().validate(this,angular.element(this).scope().subfield.Label)" >
+						                    <option value="">{{'Placeholder.Select' | translate}}</option>
+                                            <option ng-if="subfield.ChoiceOptions[0].displayvalue"
+                                                ng-repeat="x in subfield.ChoiceOptions" value="{{x.actualvalue}}" translate>
+                                                {{x.displayvalue | translate}}</option>
+                                        </select>
+                                    </div>
+
+                                    <div ng-if="(subfield.Type == 'Boolean')&&(subfield.Type == 'Choice')" class="col-md-3" style="border:none;" ng-show="subfield.visible">
+                                        <label class="radio-inline" ng-repeat="x in subfield.ChoiceOptions" ng-if="x.actualvalue">
+                                            <input type="radio" name="{{subfield.FieldName}}" class=""
+                                                ng-model="subData[subfield.FieldName]" ng-value="{{x.actualvalue}}"
+                                                ng-disabled="calldisabled(subfield.FieldName)"
+                                                ng-readonly="!subfield.enabled">
+                                            <span style="padding:0.313rem">{{x.displayvalue | translate}}</span>
+                                        </label>
+                                    </div>
+
+
+                                    <div style="clear:both"></div>
+                                    <span class="help-inline" ng-show="submitted && updateForm.{{subfield.FieldName}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                                </div>
+                            </div>
+                            <div ng-show="(parentInput.pageTitle === 'Transport')" class="col-md-1 col-sm-6" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
+                                <a class="btn" style="float: left;" data-toggle="modal" data-target="{{'#'+field.FieldName+'_model'}}" custom-tooltip data-toggle-second="tooltip" data-placement="bottom" title="{{'ToolTips.ShowHelp' | translate}}" >Help</a>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
+                                <span ng-if="field.MaxOccarance == -1" style="display: inline-block;padding: 0rem 1.25rem; width: 80%;margin: 0;font-size: 0;" class="ng-scope">
+                                    <a id="AddSection_$index"  data-placement="bottom" title="{{'ToolTips.AddNewSection' | translate}}" 
+                                        style="font-size: 1.5rem !important;line-height: 1.5rem; cursor:pointer; text-decoration: none; color:#827f7f"
+                                        class="fa fa-plus-circle ng-scope my-tooltip" custom-tooltip aria-hidden="true"
+                                        ng-click="addsubSection($index, subData, field)"
+                                        ng-style="$last ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                        <a id="RemoveSection_$index"  data-placement="bottom" title="{{'ToolTips.RemoveSection' | translate}}"  
+                                        style="line-height: 1.5rem; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 0.625rem ; font-size: 1.5rem !important;"
+                                        class="fa fa-minus-circle my-tooltip" custom-tooltip aria-hidden="true"
+                                        ng-click="removesubSection($index, subData, field.FieldName)"
+                                        ng-style="(subSectionfieldData[field.FieldName].length > 1) ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+                                </span>
+                            </div>
+                            <div class="clearfix" style="background-color: transparent;"></div>
+                        </div>
+                        <!-- </div>	 -->
+                        <div style="clear:both"></div>
+                    </div>
+                </div>
+
+                <div class="clearfix" style="background-color: transparent;"></div>
+            </div>
+            <div class="col-xs-12" style="padding:0.938rem;margin-top:0.938rem;border-top:1px solid">
+                <button type="button" class="btnDefault btnStyle clr my-tooltip" custom-tooltip data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="submitted=false;gotoCancelFn()" title="{{'BtnGroup.Cancel' | translate}}"><span translate> BtnGroup.Cancel</span></button>
+                <button ng-hide="Title == 'Accounts Approve'" type="submit" ng-disabled="CompareDates()" class="btnSuccess btnStyle clr" ng-click="submitted=true" custom-tooltip data-toggle-second="tooltip" data-placement="top" title="{{(parentInput.fieldData && parentInput.Operation == 'Edit')?'ToolTips.Edit':'ToolTips.Add' | translate}} {{showPageTitle | translate}}" ><span>{{(parentInput.fieldData && parentInput.Operation == 'Edit')?'BtnGroup.SaveChanges':'BtnGroup.Create' | translate}}</span></button>
+                <button ng-if="Title == 'Accounts Approve'" type="button" ng-disabled="CompareDates()" class="btnSuccess btnStyle clr" custom-tooltip data-toggle-second="tooltip" data-placement="top" title="{{(parentInput.fieldData && parentInput.Operation == 'Edit')?'ToolTips.Edit':'ToolTips.Add' | translate}} {{showPageTitle | translate}}" data-toggle="modal" data-target="#ApprovalLimit"><span>{{'BtnGroup.SaveChanges' | translate}}</span></button>
+                <!--<button type="reset" class="btn btnStyle clr" ng-click="submitted=false;gotoParent()" tooltip="{{'BtnGroup.Cancel' | translate}}" ><span translate> BtnGroup.Cancel</span></button>-->
+            </div>
+        </form>
+        <!-- custom modal for approval accounts per limit-->
+        <div class="modal fade" tabindex="-1" id="ApprovalLimit" role="dialog">
+            <div class="modal-dialog modal-md" style="top: 60px;max-width: 600px !important;">
+                <div class="modal-content modalbdy animated tada">
+                    <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                        <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                    </div>
+                    <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                        <h1 ng-if="fieldData['Limit'] == 'Limite D' && fieldData['Status'] == 'ACTIVE'" style="font-size: 1.5rem; padding:15px;" translate>{{'AccountsApprove.SpecialAmountLimitD'}}</h1>
+                        <h1 ng-if="(fieldData['Limit'] != 'Limite D' && fieldData['Status'] == 'ACTIVE')" translate>{{'AccountsApprove.SpecialAmountLimitBorC'}}</h1>
+                        <h1 ng-if="fieldData['Status'] == 'INACTIVE'" translate>{{'AccountsApprove.AccountInactive'}}</h1>
+                        <h1 ng-if="fieldData['Status'] == 'CREATED'" translate>{{'AccountsApprove.AccountCreated'}}</h1>
+                        <!-- <h4>You will not be able to recover this Data!</h4> -->
+                    </div>
+                    <div class="modal-footer modalftr">
+                        <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                        <button type="submit" tabindex="0" type="button" class="buton yess" ng-click="createData(fieldData,subSectionfieldData); submitted=true;" translate >{{(fieldData['Status'] == 'ACTIVE')? 'BtnGroup.Authorize' : 'BtnGroup.Continue'}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- approval popup Window End-->
+    </div>
+</div>
+<script>
+    // $('[data-toggle="tooltip"]').tooltip();
+    // $('.my-tooltip').tooltip({ trigger: "hover" });
+
+    // setTimeout(function() {
+    //         $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+    //         $('.my-tooltip').tooltip({ trigger: "hover" });
+    // }, 1000);
+    
+    $(document).ready(function() {
+        $('.inputColorPic').each(function() {
+            $(this).spectrum({
+                //color:  "#000",
+                showPalette: true,
+                //hideAfterPaletteSelect:true,
+                showPaletteOnly: true,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                palette: [
+                    ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+                    ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+                    ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
+                    ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+                    ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+                    ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+                    ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+                    ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+                ],
+                preferredFormat: "hex",
+                allowEmpty: true,
+                move: function(color) {
+                    $(this).val(color.toHexString())
+                },
+                change: function() {
+
+                }
+            }).show();
+            /*$("#btnEnterAColor").click(function() {
+            	$("#triggerSet").spectrum("set", $("#enterAColor").val());
+            });*/
+        });
+
+        $('.inputColorPic').on('focus', function(e) {
+            $(this).click();
+            return false;
+        })
+        $('.inputColorPic').on('click', function(e) {
+            $(this).spectrum("show");
+            return false;
+        })
+        $('.inputColorPic').on('input', function(e) {
+            if (!$(this).val()) {
+                $(this).spectrum("set", '');
+                $(this).spectrum({
+                    //color:  "#000",
+                    showPalette: true,
+                    //hideAfterPaletteSelect:true,
+                    showPaletteOnly: true,
+                    togglePaletteOnly: true,
+                    togglePaletteMoreText: 'more',
+                    togglePaletteLessText: 'less',
+                    palette: [
+                        ["#000", "#444", "#666", "#999", "#ccc", "#eee", "#f3f3f3", "#fff"],
+                        ["#f00", "#f90", "#ff0", "#0f0", "#0ff", "#00f", "#90f", "#f0f"],
+                        ["#f4cccc", "#fce5cd", "#fff2cc", "#d9ead3", "#d0e0e3", "#cfe2f3", "#d9d2e9", "#ead1dc"],
+                        ["#ea9999", "#f9cb9c", "#ffe599", "#b6d7a8", "#a2c4c9", "#9fc5e8", "#b4a7d6", "#d5a6bd"],
+                        ["#e06666", "#f6b26b", "#ffd966", "#93c47d", "#76a5af", "#6fa8dc", "#8e7cc3", "#c27ba0"],
+                        ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
+                        ["#900", "#b45f06", "#bf9000", "#38761d", "#134f5c", "#0b5394", "#351c75", "#741b47"],
+                        ["#600", "#783f04", "#7f6000", "#274e13", "#0c343d", "#073763", "#20124d", "#4c1130"]
+                    ],
+                    preferredFormat: "hex",
+                    allowEmpty: true,
+                    move: function(color) {
+                        $(this).val(color.toHexString())
+                    },
+                    change: function() {
+
+                    }
+                }).show();
+            }
+        })
+
+        var dat = {}
+            /*var prevPH = ''
+            $('.DatePicker, .TimePicker').focus(function(){
+                prevPH = $(this).attr('placeholder')
+                $(this).attr('placeholder', $(this).hasClass('DatePicker') ? 'YYYY MM DD' : $(this).hasClass('TimePicker') ? 'HH MM SS' : 'Please Enter '+$(this).attr('id'))
+            })
+            $('.DatePicker, .TimePicker').blur(function(){
+                $(this).attr('placeholder', prevPH)
+            })*/
+            // $('.DatePicker').datetimepicker({
+            //     format: "YYYY-MM-DD",
+            //     useCurrent: false,
+            //     showClear: true
+            // })
+            // $('.TimePicker').datetimepicker({
+            //         format: 'HH:mm:ss',
+            //         useCurrent: false,
+            //         showClear: true
+            //     })
+            /*.on('dp.change', function (selected) {	
+            if(selected.date){		
+                var pickerOne = selected.currentTarget.name == 'BulkingStartTime' || selected.currentTarget.name == 'BulkingEndTime' ? selected.currentTarget.name : '';
+                if(pickerOne){
+                    var frmTime = {
+                            'hours'		:	0,
+                            'minutes'	:	0,
+                            'seconds'	:	0
+                        };
+                    var toTime = {
+                            'hours'		:	23,
+                            'minutes'	:	59,
+                            'seconds'	:	59
+                        };
+                    var pickerTwo = '';
+                    if(pickerOne == 'BulkingStartTime'){
+                        pickerTwo = 'BulkingEndTime'
+                        toTime = {
+                            'hours'		:	Number(selected.date.format("HH")),
+                            'minutes'	:	Number(selected.date.format("mm")),
+                            'seconds'	:	Number(selected.date.format("ss"))
+                        }
+                    }
+                    else if(pickerOne == 'BulkingEndTime'){
+                        pickerTwo = 'BulkingStartTime';					
+                        frmTime = {
+                            'hours'		:	Number(selected.date.format("HH")),
+                            'minutes'	:	Number(selected.date.format("mm")),
+                            'seconds'	:	Number(selected.date.format("ss"))
+                        }
+                    }
+                    $('input[name=BulkingEndTime]').datetimepicker().on('dp.show', function(ev){
+                        $(this).data("DateTimePicker").date($('input[name=BulkingStartTime]').val());
+                    })
+                    $('input[name='+pickerTwo+']').datetimepicker().on('dp.show', function(ev){
+                        $(this).data("DateTimePicker").disabledTimeIntervals([[moment().hour(frmTime.hours).minutes(frmTime.minutes).seconds(frmTime.seconds), moment().hour(toTime.hours).minutes(toTime.minutes).seconds(toTime.seconds)]]);
+                    })
+                }
+            }	
+            });
+            $('.TimePicker').each(function(){
+                if($(this).val()){
+                    $('input[name=BulkingEndTime]').data("DateTimePicker").disabledTimeIntervals([[moment().hour(0).minutes(0).seconds(0), moment().hour($('input[name=BulkingEndTime]').val().split(':')[0]).minutes($('input[name=BulkingEndTime]').val().split(':')[1]).seconds($('input[name=BulkingEndTime]').val().split(':')[2])]]);
+                    $('input[name=BulkingStartTime]').data("DateTimePicker").disabledTimeIntervals([[moment().hour($('input[name=BulkingStartTime]').val().split(':')[0]).minutes($('input[name=BulkingStartTime]').val().split(':')[1]).seconds($('input[name=BulkingStartTime]').val().split(':')[2]), moment().hour(23).minutes(59).seconds(59)]]);
+                }
+            })*/
+    })
+</script>

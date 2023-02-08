@@ -1,0 +1,366 @@
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <a href="javascript:void(0);" translate class="removeCursor">AllPayments.PageTitle</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate> Bulk Override </span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2>Bulk Override</h2>
+                    <!-- <p> {{globalObj.metaInfoName}}</p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="animated bounce bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div>
+
+        <form class="form-horizontal" name="interfaceForm" ng-submit="interfaceSubmit(fieldData)">
+
+            <div class="control-group" ng-repeat="field in fieldDetails.section" ng-class="{true: 'error'}[submitted && interfaceForm.{{field.name}}.$invalid] && !(field.notnull)" style="margin-top: 5px;" ng-if="field.enabled">
+                <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{field.name}}" class="control-label col-md-4" style='font-weight:bold;'>{{field.label}}
+                              <span ng-if="!field.notnull && field.label" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></label>
+
+                        <div class="col-md-7" ng-if="(field.renderer[field.renderer.type].type == 'TextField')&&((field.type == 'Integer')||(field.type == 'String')||(field.type == 'BigDecimal') || (field.type == 'Double') )">
+                            <input class="form-control" id="{{field.label}}" type="text" maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}" name="{{field.name | nospace}}" ng-model="fieldData[field.name]" placeholder="{{(field.type == 'Integer')?field.label +' Only Number':'Please Enter '+field.label}}"
+                                ng-blur="multipleEmptySpace($event)" ng-required="!(field.notnull)" ng-keydown="checkType($event,field.type)" ng-disabled="!field.enabled">
+                        </div>
+
+                        <div class="col-md-8" ng-if="(field.renderer[field.renderer.type].type == 'TextArea')">
+                            <textarea style="resize:vertical" rows="{{getTextAreaRows((field.renderer[field.renderer.type].rows*field.renderer[field.renderer.type].width)/50)}}" cols="{{field.renderer[field.renderer.type].width}}" class="form-control" id="{{field.label}}" maxlength="{{field.renderer[field.renderer.type].rows*field.renderer[field.renderer.type].width}}"
+                                name="{{field.name | nospace}}" ng-model="fieldData[field.name]" placeholder="{{(field.type == 'Integer')?field.label +' Only Number':'Please Enter '+field.label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(field.notnull)"
+                                ng-keydown="(field.type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="!field.enabled"></textarea>
+                        </div>
+                        <div class="col-md-7" ng-if="(field.type == 'String')&&(field.renderer[field.renderer.type].type == 'Choice')">
+
+                            <select name="{{field.name}}" name="{{field.FieldName | nospace}}" class="form-control" id="{{field.label}}" ng-model="fieldData[field.name]" ng-required="!(field.notnull)" ng-disabled="!field.enabled" detailsoffield="{{field}}" ng-change="diabledFields(fieldData[field.name],field)">
+                                  <option value="">Select</option>  
+                                  <option ng-if="field.renderer.Choice.choiceOptions[0].displayvalue" ng-repeat="x in field.renderer.Choice.choiceOptions" value="{{(x.actualvalue == 'REST') ? x : x.actualvalue}}">{{x.displayvalue}}</option>
+                                 
+                              </select>
+                        </div>
+
+                        <div ng-if="(field.type == 'Boolean')&&(field.renderer[field.renderer.type].type == 'Choice')" class="col-md-3" style="border:none;">
+                            <label class="radio-inline" ng-repeat="x in field.ChoiceOptions" ng-if="x.actualvalue">
+                              <input type="radio" name="{{field.name | nospace}}" class="" ng-model="fieldData[field.name]" ng-value="{{x.actualvalue}}" ng-required = "!(field.notnull)" ng-disabled="!field.enabled">
+                              <span style="padding:5px">{{x.displayvalue}}</span>
+                          </label>
+                        </div>
+
+                        <div ng-if="(field.type == 'DateTime') || (field.type == 'ISODateTime') || (field.type == 'DateOnly') || (field.type == 'TimeOnly')" class="input-group col-md-7 input-append" style="padding-right:15px;padding-left:12px;float:left;" data="{{Pgroup.name +'_'+ Sgroup.name}}">
+                            <input class="form-control" ng-class="(field.type == 'DateOnly') ? 'DatePicker':((field.type == 'DateTime') )? 'DateTimePicker':(field.type == 'TimeOnly') ? 'TimePicker':((field.type == 'ISODateTime')?'ISODateTime':'')" id="{{field.name}}" type="text"
+                                maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}" name="{{field.name | nospace}}" ng-model="fieldData[field.name]" placeholder="{{'Please Enter '+field.label}}"
+                                onpaste="return false" ng-required="!(field.notnull)" onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)" ng-disabled="!field.enabled" aName="{{field.name}}">
+
+                            <span class="input-group-addon" style="cursor:pointer" ng-style="(!field.enabled)? {'pointer-events':'none'} : {'pointer-events':'auto'}" ng-click="triggerPicker($event)">
+                              <span class="glyphicon" ng-class="(field.type == 'DateOnly') ? 'glyphicon-calendar date-set' :'' || ((field.type == 'DateTime') || (field.type == 'ISODateTime')) ? 'glyphicon-calendar date-set': '' || (field.type == 'TimeOnly') ? 'glyphicon-time': ''"></span>
+                            </span>
+                        </div>
+
+                        <span class="help-inline" ng-show="submitted&&interfaceForm.{{field.name | nospace}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="ForAddNewScroll" style="max-height:650px;min-height:650px;">
+                <div class="panel panel-default " ng-repeat="Pgroup in fieldDetails.subSection">
+
+                    <div class="panel-heading col-xs-12" data-toggle="collapse" data-target="{{'#'+Pgroup.name}}" style="cursor:pointer" ng-init="expanded = false" ng-click="expanded = !expanded">
+                        <h5 class="panel-title col-xs-12">{{Pgroup.sectionheader}}
+                            <i style="padding-top:2px;" class="pull-right  bold fa fa-angle-down" ng-class="{'fa-angle-down': !expanded, 'fa-angle-right': expanded}"></i>
+                        </h5>
+                    </div>
+
+
+                    <div class="panel-body col-xs-12" id="{{Pgroup.name}}" collapse="{{expanded}}">
+                        <div class="panel panel-default" ng-repeat="Sgroup in Pgroup.subArr" ng-if="Sgroup.maxoccurs == 1" style="border: 1px solid #cecbcb;margin: 0px 10px 5px 0px;">
+
+                            <h5 class="panel-heading" data-toggle="collapse" data-target="{{'#'+Sgroup.name}}" style="margin: 0;cursor:pointer" ng-init="expanded = false" ng-click="expanded = !expanded">{{Sgroup.sectionheader}}
+                                <i style="padding-top:2px;" class="pull-right  bold fa fa-angle-down" ng-class="{'fa-angle-down': !expanded, 'fa-angle-right': expanded}"></i>
+                            </h5>
+
+                            <div class="panel-body collapse in" id="{{Sgroup.name}}">
+
+                                <div class="col-md-6" ng-repeat="field in Sgroup.subArr" ng-if="field.enabled">
+
+
+                                    <div class="control-group" ng-class="{true: 'error'}[submitted && interfaceForm.{{field.name}}.$invalid] && !(field.notnull)" style="margin-top: 5px;">
+                                        <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                                        <div class="form-group">
+                                            <label for="{{field.name}}" class="control-label col-md-4" style='font-weight:bold;'>{{field.label}}
+                                  <span ng-if="!field.notnull && field.label" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></label>
+
+                                            <div class="col-md-7" ng-if="(field.renderer[field.renderer.type].type == 'TextField')&&((field.type == 'Integer')||(field.type == 'String')||(field.type == 'BigDecimal') || (field.type == 'Double') )">
+                                                <input class="form-control" id="{{field.label}}" type="text" maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}" name="{{field.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][field.name]"
+                                                    placeholder="{{(field.type == 'Integer')?field.label +' Only Number':'Please Enter '+field.label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(field.notnull)" ng-keydown="checkType($event,field.type)"
+                                                    ng-disabled="!field.enabled">
+                                            </div>
+
+                                            <div class="col-md-8" ng-if="(field.renderer[field.renderer.type].type == 'TextArea')">
+                                                <textarea style="resize:vertical" rows="{{getTextAreaRows((field.renderer[field.renderer.type].rows*field.renderer[field.renderer.type].width)/50)}}" cols="{{field.renderer[field.renderer.type].width}}" class="form-control" id="{{field.label}}" maxlength="{{field.renderer[field.renderer.type].rows*field.renderer[field.renderer.type].width}}"
+                                                    name="{{field.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][field.name]" placeholder="{{(field.type == 'Integer')?field.label +' Only Number':'Please Enter '+field.label}}" ng-blur="multipleEmptySpace($event)"
+                                                    ng-required="!(field.notnull)" ng-keydown="(field.type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="!field.enabled"></textarea>
+                                            </div>
+                                            <div class="col-md-7" ng-if="(field.type == 'String')&&(field.renderer[field.renderer.type].type == 'Choice')">
+                                                <select name="{{field.name}}" name="{{field.FieldName | nospace}}" class="form-control" id="{{field.label}}" ng-model="fieldData[Pgroup.name][Sgroup.name][field.name]" ng-required="!(field.notnull)" ng-disabled="!field.enabled" detailsoffield="{{field}}">
+                                      <option value="">Select</option>  
+                                      <option ng-if="field.renderer.Choice.choiceOptions[0].displayvalue" ng-repeat="x in field.renderer.Choice.choiceOptions" value="{{(x.actualvalue == 'REST') ? x : x.actualvalue}}">{{x.displayvalue}}</option>
+                                  </select>
+                                            </div>
+
+                                            <div ng-if="(field.type == 'Boolean')&&(field.renderer[field.renderer.type].type == 'Choice')" class="col-md-3" style="border:none;">
+                                                <label class="radio-inline" ng-repeat="x in field.ChoiceOptions" ng-if="x.actualvalue">
+                                  <input type="radio" name="{{field.name | nospace}}" class="" ng-model="fieldData[Pgroup.name][Sgroup.name][field.name]" ng-value="{{x.actualvalue}}" ng-required = "!(field.notnull)" ng-disabled="!field.enabled">
+                                  <span style="padding:5px">{{x.displayvalue}}</span>
+                              </label>
+                                            </div>
+
+                                            <div ng-if="(field.type == 'DateTime') || (field.type == 'ISODateTime') || (field.type == 'DateOnly') || (field.type == 'TimeOnly')" class="input-group col-md-7 input-append" style="padding-right:15px;padding-left:12px;float:left;" data="{{Pgroup.name +'_'+ Sgroup.name}}">
+                                                <input class="form-control" ng-class="(field.type == 'DateOnly') ? 'DatePicker':((field.type == 'DateTime') )? 'DateTimePicker':(field.type == 'TimeOnly') ? 'TimePicker':((field.type == 'ISODateTime')?'ISODateTime':'')" id="{{field.name}}" type="text"
+                                                    maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}" name="{{field.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][field.name]"
+                                                    placeholder="{{'Please Enter '+field.label}}" onpaste="return false" ng-required="!(field.notnull)" onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)"
+                                                    ng-disabled="!field.enabled" aName="{{Pgroup.name}}_{{Sgroup.name}}_{{field.name}}">
+
+                                                <span class="input-group-addon" style="cursor:pointer" ng-style="(!field.enabled)? {'pointer-events':'none'} : {'pointer-events':'auto'}" ng-click="triggerPicker($event)">
+                                  <span class="glyphicon" ng-class="(field.type == 'DateOnly') ? 'glyphicon-calendar date-set' :'' || ((field.type == 'DateTime') || (field.type == 'ISODateTime')) ? 'glyphicon-calendar date-set': '' || (field.type == 'TimeOnly') ? 'glyphicon-time': ''"></span>
+                                                </span>
+                                            </div>
+
+                                            <span class="help-inline" ng-show="submitted&&interfaceForm.{{field.name}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="panel panel-default" ng-repeat="Sgroup in Pgroup.subArr" ng-if="Sgroup.maxoccurs == -1" style="border: 1px solid #cecbcb;margin: 23px 10px 5px 0px;">
+
+                            <h5 class="panel-heading" data-toggle="collapse" data-target="{{'#'+Sgroup.name}}" style="margin: 0;cursor:pointer" ng-init="expanded = false" ng-click="expanded = !expanded">{{Sgroup.sectionheader}}
+                                <i style="padding-top:2px;" class="pull-right  bold fa fa-angle-down" ng-class="{'fa-angle-down': !expanded, 'fa-angle-right': expanded}"></i>
+
+                            </h5>
+
+                            <div class="panel-body collapse in" id="{{Sgroup.name}}">
+
+                                <div class="col-md-12" ng-if="Sgroup.subArr.length>1">
+                                    <span style="display:inline-block;padding: 0px 20px;margin:0;float:right;">
+                              
+                              
+                                  <a id='RemoveSection_ind' tooltip="Previous" tooltip-placement="bottom" style="line-height: 24px; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); font-size: 24px !important; opacity: 1;" class="fa fa-arrow-circle-o-left" aria-hidden="true" ng-click="removesubSection(Sgroup)" ng-style="{'opacity':(sectionCnt == 0)?'0.5':'1'}"></a>
+                                  <a id='AddSection_ind' tooltip="Next" tooltip-placement="bottom" style="line-height: 24px; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); font-size: 24px !important; opacity: 1;" class="fa fa-arrow-circle-o-right" aria-hidden="true" ng-click="addsubSection(Sgroup)" ng-style="{'opacity':(sectionCnt == Sgroup.subArr.length-1)?'0.5':'1'}"></a>
+                              </span>
+
+                                </div>
+
+
+                                <div ng-repeat="section in Sgroup.subArr" ng-init="ind = $index" style="border:5px solid #cecbcb;padding:5px;margin-top:5px;" ng-class="{'col-md-12':Sgroup.maxoccurs == 1,'col-md-12':Sgroup.maxoccurs == -1}" class="{{Sgroup.name}}" id="{{Sgroup.name}}_{{$index}}"
+                                    ng-style="{'display':($index == 0)?'block':'none'}">
+
+                                    <div ng-class="{'col-md-6': field.type != 'Section' , 'col-md-12':field.type == 'Section'}" ng-repeat="field in section.fields" ng-if="(field.type != 'Section')?field.enabled:!field.enabled">
+
+                                        <div class="control-group" ng-class="{true: 'error'}[submitted && interfaceForm.{{field.name}}.$invalid] && !(field.notnull)" style="margin-top: 5px;">
+                                            <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                                            <div class="form-group">
+                                                <label for="{{field.name}}" class="control-label col-md-4" style='font-weight:bold;'>{{field.label}}
+                          <span ng-if="!field.notnull && field.label" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></label>
+
+
+
+                                                <div class="col-md-7" ng-if="(field.renderer[field.renderer.type].type == 'TextField')&&((field.type == 'Integer')||(field.type == 'String')||(field.type == 'BigDecimal') || (field.type == 'Double') )">
+                                                    <input class="form-control" id="{{field.label}}" type="text" maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}" name="{{field.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name]"
+                                                        placeholder="{{(field.type == 'Integer')?field.label +' Only Number':'Please Enter '+field.label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(field.notnull)" ng-keydown="checkType($event,field.type)"
+                                                        ng-disabled="!field.enabled">
+                                                </div>
+
+                                                <div class="col-md-8" ng-if="(field.renderer[field.renderer.type].type == 'TextArea')">
+                                                    <textarea style="resize:vertical" rows="{{getTextAreaRows((field.renderer[field.renderer.type].rows*field.renderer[field.renderer.type].width)/50)}}" cols="{{field.renderer[field.renderer.type].width}}" class="form-control" id="{{field.label}}" maxlength="{{field.renderer[field.renderer.type].rows*field.renderer[field.renderer.type].width}}"
+                                                        name="{{field.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name]" placeholder="{{(field.type == 'Integer')?field.label +' Only Number':'Please Enter '+field.label}}" ng-blur="multipleEmptySpace($event)"
+                                                        ng-required="!(field.notnull)" ng-keydown="(field.type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="!field.enabled"></textarea>
+                                                </div>
+                                                <div class="col-md-7" ng-if="(field.type == 'String')&&(field.renderer[field.renderer.type].type == 'Choice')">
+                                                    <select name="{{field.name}}" name="{{field.FieldName | nospace}}" class="form-control" id="{{field.label}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name]" ng-required="!(field.notnull)" ng-disabled="!field.enabled" detailsoffield="{{field}}">
+                              <option value="">Select</option>  
+                              <option ng-if="field.renderer.Choice.choiceOptions[0].displayvalue" ng-repeat="x in field.renderer.Choice.choiceOptions" value="{{(x.actualvalue == 'REST') ? x : x.actualvalue}}">{{x.displayvalue}}</option>
+                          </select>
+                                                </div>
+
+                                                <div ng-if="(field.type == 'Boolean')&&(field.renderer[field.renderer.type].type == 'Choice')" class="col-md-3" style="border:none;">
+                                                    <label class="radio-inline" ng-repeat="x in field.ChoiceOptions" ng-if="x.actualvalue">
+                          <input type="radio" name="{{field.name | nospace}}" class="" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name]" ng-value="{{x.actualvalue}}" ng-required = "!(field.notnull)" ng-disabled="!field.enabled">
+                          <span style="padding:5px">{{x.displayvalue}}</span>
+                      </label>
+                                                </div>
+
+                                                <div ng-if="(field.type == 'DateTime') || (field.type == 'ISODateTime') || (field.type == 'DateOnly') || (field.type == 'TimeOnly')" class="input-group col-md-7 input-append" style="padding-right:15px;padding-left:12px;float:left;" data="{{Pgroup.name +'_'+ Sgroup.name}}">
+                                                    <input class="form-control" ng-class="(field.type == 'DateOnly') ? 'DatePicker':((field.type == 'DateTime') )? 'DateTimePicker':(field.type == 'TimeOnly') ? 'TimePicker':((field.type == 'ISODateTime')?'ISODateTime':'')" id="{{field.name}}" type="text"
+                                                        maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}" name="{{field.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name]"
+                                                        placeholder="{{'Please Enter '+field.label}}" onpaste="return false" ng-required="!(field.notnull)" onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)" ng-blur="multipleEmptySpace($event)"
+                                                        ng-disabled="!field.enabled" aName="{{Pgroup.name}}_{{Sgroup.name}}_{{ind}}_{{field.name}}">
+
+                                                    <span class="input-group-addon" style="cursor:pointer" ng-style="(!field.enabled)? {'pointer-events':'none'} : {'pointer-events':'auto'}" ng-click="triggerPicker($event)">
+                          <span class="glyphicon" ng-class="(field.type == 'DateOnly') ? 'glyphicon-calendar date-set' :'' || ((field.type == 'DateTime') || (field.type == 'ISODateTime')) ? 'glyphicon-calendar date-set': '' || (field.type == 'TimeOnly') ? 'glyphicon-time': ''"></span>
+                                                    </span>
+                                                </div>
+
+                                                <span class="help-inline" ng-show="submitted&&interfaceForm.{{field.name}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+
+
+                                                <div ng-if="(field.type == 'Section')" style="padding:10px;">
+
+
+
+                                                    <div class="panel panel-default" ng-if="field.maxoccurs == 1" style="border: 1px solid #cecbcb;margin: 0px 10px 5px 0px;">
+                                                        <h5 class="panel-heading" data-toggle="collapse" data-target="{{'#'+field.name}}" style="margin: 0;cursor:pointer" ng-init="expanded = false" ng-click="expanded = !expanded">{{field.sectionheader}}
+                                                            <i style="padding-top:2px;" class="pull-right  bold fa fa-angle-down" ng-class="{'fa-angle-down': !expanded, 'fa-angle-right': expanded}"></i> </h5>
+
+                                                        <div class="panel-body collapse in" id="{{field.name}}" ng-init="array = field.subArr">
+
+                                                            <div ng-repeat="subGroup in field.subArr" ng-if="subGroup.enabled">
+
+                                                                <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                                                                <div class="col-md-6">
+                                                                    <div class="control-group" ng-class="{true: 'error'}[submitted && interfaceForm.{{subGroup.name}}.$invalid] && !(subGroup.notnull)" style="margin-top: 5px;">
+                                                                        <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+                                                                        <div class="form-group">
+                                                                            <label for="{{subGroup.name}}" class="control-label col-md-3" style='font-weight:bold;'>{{subGroup.label}}
+                                  <span ng-if="!subGroup.notnull && subGroup.label" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></label>
+
+
+                                                                            <div class="col-md-7" ng-if="(subGroup.renderer[subGroup.renderer.type].type == 'TextField')&&((subGroup.type == 'Integer')||(subGroup.type == 'String')||(subGroup.type == 'BigDecimal') || (subGroup.type == 'Double') )">
+                                                                                <input class="form-control" id="{{subGroup.label}}" type="text" maxlength="{{subGroup.renderer[subGroup.renderer.type].width == -1 ? 100 : subGroup.renderer[subGroup.renderer.type].width}}" name="{{subGroup.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name][subGroup.name]"
+                                                                                    placeholder="{{(subGroup.type == 'Integer')?subGroup.label +' Only Number':'Please Enter '+subGroup.label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(subGroup.notnull)"
+                                                                                    ng-keydown="checkType($event,subGroup.type)" ng-disabled="!subGroup.enabled">
+                                                                            </div>
+                                                                            <div class="col-md-8" ng-if="(subGroup.renderer[subGroup.renderer.type].type == 'TextArea')">
+                                                                                <textarea style="resize:vertical" rows="{{getTextAreaRows((subGroup.renderer[subGroup.renderer.type].rows*subGroup.renderer[subGroup.renderer.type].width)/50)}}" cols="{{subGroup.renderer[subGroup.renderer.type].width}}" class="form-control" id="{{subGroup.label}}"
+                                                                                    maxlength="{{subGroup.renderer[subGroup.renderer.type].rows*subGroup.renderer[subGroup.renderer.type].width}}" name="{{subGroup.name | nospace}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name][subGroup.name]"
+                                                                                    placeholder="{{(subGroup.type == 'Integer')?subGroup.label +' Only Number':'Please Enter '+subGroup.label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(subGroup.notnull)"
+                                                                                    ng-keydown="(subGroup.type == 'Integer') ? allowOnlyNumbersAlone($event) : ''" ng-disabled="!subGroup.enabled"></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-7" ng-if="(subGroup.type == 'String')&&(subGroup.renderer[subGroup.renderer.type].type == 'Choice')">
+                                                                                <select name="{{subGroup.name}}" name="{{subGroup.FieldName | nospace}}" class="form-control" id="{{subGroup.label}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name][subGroup.name]" ng-required="!(subGroup.notnull)" ng-disabled="!subGroup.enabled"
+                                                                                    detailsoffield="{{subGroup}}">
+                                      <option value="">Select</option>  
+                                      <option ng-if="subGroup.renderer.Choice.choiceOptions[0].displayvalue" ng-repeat="x in subGroup.renderer.Choice.choiceOptions" value="{{(x.actualvalue == 'REST') ? x : x.actualvalue}}">{{x.displayvalue}}</option>
+                                  </select>
+                                                                            </div>
+
+                                                                            <div ng-if="(subGroup.type == 'Boolean')&&(subGroup.renderer[subGroup.renderer.type].type == 'Choice')" class="col-md-3" style="border:none;">
+                                                                                <label class="radio-inline" ng-repeat="x in subGroup.ChoiceOptions" ng-if="x.actualvalue">
+                                  <input type="radio" name="{{subGroup.name | nospace}}" class="" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name][subGroup.name]" ng-value="{{x.actualvalue}}" ng-required = "!(subGroup.notnull)" ng-disabled="!subGroup.enabled">
+                                  <span style="padding:5px">{{x.displayvalue}}</span>
+                              </label>
+                                                                            </div>
+
+                                                                            <div ng-if="(subGroup.type == 'DateTime') || (subGroup.type == 'ISODateTime') || (subGroup.type == 'DateOnly') || (subGroup.type == 'TimeOnly')" class="input-group col-md-7 input-append" style="padding-right:15px;padding-left:12px;float:left;" data="{{Pgroup.name +'_'+ Sgroup.name}}">
+                                                                                <input class="form-control" ng-class="(subGroup.type == 'DateOnly') ? 'DatePicker':((subGroup.type == 'DateTime') )? 'DateTimePicker':(subGroup.type == 'TimeOnly') ? 'TimePicker':((subGroup.type == 'ISODateTime')?'ISODateTime':'')" id="{{subGroup.name}}"
+                                                                                    type="text" maxlength="{{subGroup.renderer[subGroup.renderer.type].width == -1 ? 100 : subGroup.renderer[subGroup.renderer.type].width}}" name="{{subGroup.name}}" ng-model="fieldData[Pgroup.name][Sgroup.name][ind][field.name][subGroup.name]"
+                                                                                    placeholder="{{'Please Enter '+subGroup.label}}" onpaste="return false" ng-required="!(subGroup.notnull)" onkeypress='return tabOrder(event)' ng-focus="activatePicker($event)"
+                                                                                    ng-blur="multipleEmptySpace($event)" ng-disabled="!subGroup.enabled" aName="{{Pgroup.name}}_{{Sgroup.name}}_{{ind}}_{{field.name}}_{{subGroup.name}}">
+
+                                                                                <span class="input-group-addon" style="cursor:pointer" ng-style="(!subGroup.enabled)? {'pointer-events':'none'} : {'pointer-events':'auto'}" ng-click="triggerPicker($event)">
+                                  <span class="glyphicon" ng-class="(subGroup.type == 'DateOnly') ? 'glyphicon-calendar date-set' :'' || ((subGroup.type == 'DateTime') || (subGroup.type == 'ISODateTime')) ? 'glyphicon-calendar date-set': '' || (subGroup.type == 'TimeOnly') ? 'glyphicon-time': ''"></span>
+                                                                                </span>
+                                                                            </div>
+
+                                                                            <span class="help-inline" ng-show="submitted&&interfaceForm.{{subGroup.name}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="clearfix"></div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                <div class="panel-footer" style="background: transparent; border: 0;">
+                    <button type="submit" class="btn btn-success btnStyle" ng-click="submitted=true" translate>BtnGroup.Submit</button>
+                    <button type="reset" class="btn btn-success btnStyle" style="margin-left:2px" ng-click="resetInterface();submitted=false" translate>BtnGroup.Cancel</button>
+
+
+                    <div style="clear:both"></div>
+                </div>
+
+
+            </div>
+            <div class="clearfix"></div>
+        </form>
+    </div>
+
+
+
+
+
+
+
+
+</div>

@@ -1,0 +1,3 @@
+ACH_Volpay.xml      Debe ir en la carpeta conf del tomcat
+config.json         Este archivo esta en la ruta VolpayHubUI/conf. LLeva los IDs de la conexion con el azure de cada ambiente. Se debe reemplazar
+Context             Del archivo de ejemplo, tomar la parte correspondiente a la conexion al azure <!-- SAML AUTHENTICATION CHANGES -->

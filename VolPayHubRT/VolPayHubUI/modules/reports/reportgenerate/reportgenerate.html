@@ -1,0 +1,272 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <!--<li>
+                    <i class="fa fa-home"></i>
+                    <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>-->
+                <li>
+                    <i class="fa fa-file"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.Reports</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate class="removeCursor">Sidebar.ReportGenerate</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts"  ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"><a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title__container">
+                    <h2 translate>Sidebar.ReportGenerate</h2>
+                    <p translate></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="modal fade" id="myModal" role="dialog" tabindex="-1" ng-keydown="dummy($event)" ng-click="modelhide($event)">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modalHeaderColor">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="filterCancel()">&times;</button>
+                        <h4 class="modal-title">Select the Dates</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                    <input type="text" class="form-control" ng-model="startDate" id="startDate" style="width:100%"  placeholder="{{'BankDataDts.From' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)">
+                                    <span class="input-group-text" ng-click="focusInfn('startDate')"><span
+                                            class="fa fa-calendar"></span></span>
+
+                                    <span class="input-group-text" style="border:none;background-color:transparent;">{{'BankDataDts.To' | translate}}</span>
+                                    <input type="text" class="form-control" ng-model="endDate" id="endDate" style="width:100%"  placeholder="{{'BankDataDts.To' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)">
+                                    <span class="input-group-text" ng-click="focusInfn('endDate')"><span
+                                            class="fa fa-calendar"></span></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center;">
+                        <button type="button" id="okBtn" class="btn btnStyle" data-dismiss="modal" ng-click="FilterByDate1('custom')">OK</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="filterCancel()" translate>BtnGroup.Cancel</button>
+                        <button type="button" class="btn btnStyle" ng-click="CustomDatesReset()" translate>BtnGroup.Reset</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="" style="margin:0;">
+            <form class="form-horizontal" role="form" ng-submit="generateReport(RG)" autocomplete="off">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label bold" style="text-align:left;"><span translate>ReportGenerate.ReportName</span>
+                            <span ng-hide="false" style="color:#e02222;font-size:12px;padding-left:2px"
+                                aria-required="true">*</span>
+                        </label>
+                        <select class="form-control" ng-model="RG.ReportClass" ng-required="true">
+                            <option value="">&#45;&#45; {{'Placeholder.Select' | translate}} &#45;&#45;</option>
+                            <option ng-repeat="val in reportIdVal" value="{{val.ReportID}}">{{val.ReportID}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label bold" style="text-align:left;"><span translate>ReportGenerate.OutputFormat</span>
+                            <span ng-hide="false" style="color:#e02222;font-size:12px;padding-left:2px"
+                                aria-required="true">*</span>
+                        </label>
+                        <select class="form-control" ng-model="RG.OutputFormat" placeholder="Output Format" id="OutputFormat" ng-required="true">
+                            <option value="">&#45;&#45; {{'Placeholder.Select' | translate}} &#45;&#45;</option>
+                            <option value="PDF">PDF</option>
+                            <option value="XLS">XLS</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label bold" style="text-align:left;"><span translate>ReportGenerate.From</span>
+                        </label>
+                        <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                            <input type="text" class="form-control DatePicker dateTypeKey"  placeholder="{{'ReportGenerate.From' | translate}}" id="startDate1" ng-model="RG.startDate" onpaste="return false">
+                            <span class="input-group-text" ng-click="focusInfn('startDate1')">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="date" data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                            data-date-minviewmode="months">
+                            <input type="date" class="form-control" ng-model="RG.startDate" id="startDate"
+                                 placeholder="{{'BankDataDts.From' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)">
+
+                        </div> -->
+                    <div class="col-md-3">
+                        <label class="control-label bold" style="text-align:left;"><span translate>ReportGenerate.To</span>
+                        </label>
+                        <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                            <input type="text" class="form-control DatePicker dateTypeKey"  placeholder="{{'ReportGenerate.To' | translate}}" id="endDate1" ng-model="RG.endDate" style="text-align:start;" onpaste="return false">
+                            <span class="input-group-text" ng-click="focusInfn('endDate1')">
+                                <span class="fa fa-calendar"></span>
+                            </span>
+                        </div>
+
+                        <!-- <div class="date" data-date-format="yyyy-mm-dd" data-date-viewmode="years"
+                            data-date-minviewmode="months">
+                            <input type="date" class="form-control" ng-model="RG.endDate" id="endDate"  placeholder="{{'BankDataDts.To' | translate}}"
+                                ng-blur="removeFn()" onkeypress="return tabOrder(event)">
+                        </div> -->
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row" style="margin:0;padding-bottom: 1em;">
+                    <div class="form-group" style="padding:10px 0px;margin:0">
+                        <button type="submit" class="btnSuccess btnStyle btn-sm"><span translate>ReportGenerate.GenerateReportButton</span></button>  &nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+            </form>
+            <!-- <form class="form-horizontal" ng-submit="working()">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="email">Email:</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="pwd">Password:</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="pwd" placeholder="Enter password" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label><input type="checkbox"> Remember me</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default" translate>BtnGroup.Submit</button>
+                    </div>
+                </div>
+            </form>-->
+        </div>
+
+        <div class="portlet-title" style="width:100%;margin-bottom:0">
+
+            <div class="caption caption-md ProfileHeaderStyles">
+                <i class="fa fa-file-pdf-o"></i>
+                <span class="caption-subject bold" translate>Sidebar.Reports</span>
+                <span class="highlight">- {{(totalCount && items.length)? items.length +  ('BankDataDts.Outof' | translate ) +totalCount :
+                (items.length)?items.length:'' }} </span>&nbsp; <span translate>BankDataDts.recordsshown</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="portlet-inner-box">
+                <div class="alert alert-warning" ng-if="!items.length">
+                    <strong>
+                        <h4 style="margin:0;text-align:center;" translate>BankDataDts.NoRecordsFound</h4>
+                    </strong>
+                </div>
+                <div class="row scrollableDiv table-responsivve" style="margin:0;overflow:auto;max-height:350px;" ng-if="items.length">
+                    <table class="table table-bordered table-striped">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span translate>ReportGenerate.TableReportID</span>
+                                </th>
+                                <th>
+                                    <span translate>ReportGenerate.TableReportName</span>
+                                </th>
+                                <th>
+                                    <span translate>ReportGenerate.TableUserName</span>
+                                </th>
+                                <th>
+                                    <span translate>ReportGenerate.TableGeneratedDate</span>
+                                </th>
+                                <th>
+                                    <span translate>ReportGenerate.TableStatus</span>
+                                </th>
+                                <th>
+                                    <span translate>ReportGenerate.TableDetail</span>
+                                </th>
+                                <th>
+                                    <span translate>ReportGenerate.TableAction</span>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr ng-repeat="reports in items">
+                                <td>
+                                    <span>{{reports.ReportID}}</span>
+                                </td>
+                                <td>
+                                    <span>{{reports.ReportName}}</span>
+                                </td>
+                                <td>
+                                    <span>{{reports.UserName}}</span>
+                                </td>
+                                <td>
+                                    <span>{{reports.GeneratedDate|dateFormat}}</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-secondary" ng-class="{'badge-success':reports.Status=='SUCCESSFULL' || reports.Status=='SUCCESFULL','badge-danger':reports.Status=='ERROR'}" style="height: 21px !important;width: 100px;text-align: left;">
+                                        <i class="fa"
+                                            ng-class="{'fa-check':reports.Status=='SUCCESSFULL'  || reports.Status=='SUCCESFULL',' fa-times-circle':reports.Status=='ERROR'}"></i>
+
+                                        {{reports.Status}}</span>
+                                </td>
+                                <td nowrap>
+                                    <span>{{reports.Detail}}</span>
+                                </td>
+                                <td>
+                                    <a id='dwnldLnk' style="display:none;" /> </a>
+
+                                    <button type="button" class="cursorPointer" ng-click="Download(reports)" ng-disabled="(reports.Status=='ERROR')" ng-style="{'opacity' : (reports.Status=='ERROR') ? '0.7' : '' }"><i
+                                            class="fa fa-download " aria-hidden="true"></i>{{reports.TableDownload}}</button>
+
+                                    <!--<form accept-charset="UTF-8" role="form" method="POST" action="saveFile">
+                   
+							    	  	<div class="form-group">
+							    		    <input class="form-control" name="file" type="hidden" value="{{reports.rawOutPDF}}">
+							    		</div>
+							    		<button type="submit" class="cursorPointer"><i class="fa fa-download " aria-hidden="true"></i> Download</button>
+						
+			    	
+							      	</form>-->
+
+
+                                </td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

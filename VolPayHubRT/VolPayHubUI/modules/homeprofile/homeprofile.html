@@ -1,0 +1,106 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb" ng-if="!profileSetup">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate class="removeCursor">Sidebar.HomePage</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <div class="pull-right font-weight: bold">
+        <span id="clock" class="clock custmclock" ></span>
+    </div>
+ 
+    <div class="pageTitle tab-content alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+
+                <div class="title__container" style="text-align: center;font-weight: bold;">
+                    <h2  style="color: #00b7ff;" translate>MyProfile.Welcome</h2>
+                    <p >{{homepage.UserName}}</p>
+                    <p>{{homepage.Entity}}</p>
+                 <p> <span translate>MyProfile.Login</span>:{{homepage.LastLoggedinDateTime}}</p>
+                   <!-- <p > <span translate>MyProfile.Version</span>: {{homepage.Version}}</p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BEGIN PAGE CONTENT-->
+  
+    <div  class="autoAdjustAlert animated bounce bold" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+
+        <div class="col-md-12">
+        
+      <div class="countbar-title" >
+        <div style="font-weight:bold;text-align: center;" >{{'MyProfile.ProcessHours' | translate}}</div>
+
+        <div class="listView FixHead dataGroupsScroll" style="overflow-x: auto !important;" >
+            <table class="table table-bordered smallTable floatThead  maintable">
+                
+                <thead>
+                    <tr style="text-align: center;">
+                       
+                        <th style="font-weight:bold;" ng-repeat="(header,value) in homepage.CycleInfo[0]" translate>{{'MyProfile.'+header | nospace}}</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="text-align: center;"ng-repeat="rowdata in homepage.CycleInfo">
+                         <td ng-repeat="celldata in rowdata">
+                            {{celldata}}
+                         </td>
+                     </tr>
+        
+           </tbody>
+            </table>
+    
+    </div>
+
+    </div>
+   
+
+   
+</div>
+<!-- END PAGE CONTENT-->
+<script>
+    $(document).ready(function() {
+        $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+        setTimeout(function() {
+            $('.input-group-text').on('click focus', function(e) {
+                $(this).prev().focus().click()
+            });
+        }, 1000)
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover();
+    });
+
+    $('body').on('click', function(e) {
+        $('[data-toggle="popover"]').each(function() {
+            //the 'is' for buttons that trigger popups
+            //the 'has' for icons within a button that triggers a popup
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target)
+                .length === 0) {
+                $(this).popover('hide');
+            }
+        });
+    });
+</script>

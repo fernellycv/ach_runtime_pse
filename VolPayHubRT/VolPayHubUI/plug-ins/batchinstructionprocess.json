@@ -1,0 +1,22 @@
+[{
+    "Page": "/app/allbatches",
+    "REST": "/rest/v2/batchprocess",
+    "REST_Method": "PUT",
+    "SuccessURL": "/app/allbatches",
+    "failureURL": "",
+    "Actions": [{
+            "CurrentStatus": ["FOR_BULKING"],
+            "DropDownList": ["REIMBURSEMENT"]
+        }, {
+            "CurrentStatus": ["REPAIR"],
+            "DropDownList": ["CANCEL", "REPROCESS"]
+        }, {
+            "CurrentStatus": ["WAREHOUSED"],
+            "DropDownList": ["CANCEL", "FORCEPAY"]
+        },
+        {
+            "CurrentStatus": ["WAITING_OFACRESPONSE"],
+            "DropDownList": ["OVERRIDE"]
+        }
+    ]
+}]

@@ -1,0 +1,49 @@
+<div class="wrapper">
+
+    <!-- <div data-ng-include="'templates/header/VPheaderFoDevice.html'" data-ng-controller="headerCtrl" class="main-header" ng-if="!iframeFlag">
+   </div> -->
+    <div data-ng-include="'templates/header/VPheaderFoDevice.html'" data-ng-controller="headerCtrl" class="main-header headForDevice" ng-if="!iframeFlag">
+    </div>
+
+    <div data-ng-include="'templates/sidebar/VPsidebar.html'" data-ng-controller="sidebarController" class="main-sidebar" ng-if="!iframeFlag && !pwSet"></div>
+
+    <div class="content-wrapper" ng-class="{fullwidth: iframeFlag == true}">
+        <div ui-view class="fadeUp">
+
+        </div>
+    </div>
+
+    <div ng-include="footerPath" data-ng-controller="footerCtrl" class="main-footer newvisiblefooter" ng-if="!iframeFlag" ng-style="(currThemeVal == 'bnym' || userPWReset == 'NotSet') ? {'margin-left': '0'}  : {'margin-left': '230px'}">
+    </div>
+
+    <div style="clear:both"></div>
+    <script type="text/ng-template" id="warning-dialog.html">
+        <div class="modal-content">
+            <div class="modal-header modal-header-warning">
+
+                <h4 class="modal-title">You're Idle. Do Something!</h4>
+            </div>
+            <div class="modal-body" idle-countdown="countdown" ng-init="countdown=5">
+                You'll be logged out in <span class="badge badge-warning">{{countdown}}</span> second(s).
+                <div class="progress progress-striped" style="margin-top:5px">
+                    <div class="progress-bar progress-bar-warning" ng-style="{width: countdown*20+'%'}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="timedout-dialog.html">
+
+        <div class="modal-content">
+            <div class="modal-header modal-header-dander">
+                <h4 class="modal-title">You've Timed Out!</h4>
+            </div>
+            <div class="modal-body">
+                <p>You were idle too long. Please login again.</p>
+            </div>
+
+        </div>
+    </script>
+
+</div>

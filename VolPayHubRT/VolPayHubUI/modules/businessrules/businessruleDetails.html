@@ -1,0 +1,578 @@
+<style>
+    input:required {
+        box-shadow: none;
+    }
+    /*input:invalid {
+    box-shadow:0 0 3px red;
+}*/
+    
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+</style>
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="col-md-6">
+        <ul class="page-breadcrumb">
+            <!--<li>
+            <i class="fa fa-home"></i>
+           <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>-->
+            <li>
+                <i class="fa fa-building-o"></i>
+                <a href="javascript:void(0)" translate>Sidebar.BankData</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="#/app/businessrules" translate>BusinessRules.PageTitle</a>
+                <i class="fa fa-angle-right"></i>
+
+            </li>
+            <li>
+                {{fromAddNew ? 'Add New' : ViewClicked ? 'View' : 'Edit'}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6 headerVals">
+        <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+    </div>
+</div>
+
+
+<div class="contentContainer" style="padding: 0px 35px 35px;">
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div ng-if="ViewClicked && !fromAddNew">
+        <div class="panel panel-default" style="margin-top:40px;">
+
+            <div class="panel-heading" style="background-color:transparent;">
+
+                <div class="col-md-10 serviceHeading" ng-style="{'color':(BusinessRule.Status | chooseStatus)}"> {{BusinessRule.OfficeCode}}<br>
+                </div>
+
+                <div class="col-md-2 serviceHeading" ng-style="{'color':(BusinessRule.Status | chooseStatus)}" ng-if="BusinessRule.Status">
+                    <div class="col-md-2" style="padding: 0;text-align: center;">
+                        <i style="font-size: 20px;line-height:20px;" class="fa fa-circle ng-scope" tooltip="{{BusinessRule.Status}}" tooltip-placement="bottom"></i>
+                    </div>
+                    <div class="col-md-8 ng-binding" style="padding: 0;">{{BusinessRule.Status}}</div>
+                </div>
+
+                <div class="clearfix"></div>
+
+
+            </div>
+
+
+            <div class="panel-body" style="padding:9px 15px;background-color:#f9f9f9">
+                <div class="col-md-10" style="padding-left:0px;">
+                    Effective Date :
+                    <span class="ng-binding">{{BusinessRule.EffectiveFromDate}}</span>
+                </div>
+                <div class="col-md-2">
+                    <a style="display:inline-block" class="actionIcons" ng-style="(permission.U)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(permission.U)?gotoEdit():''" tooltip="{{(permission.U)?'Edit':'You dont have permission'}}"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+                    <a style="display:inline-block" class="actionIcons" data-toggle="modal" data-target="{{(permission.D)?'#delPopup':''}}" ng-style="(permission.D)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(permission.D)?takeDeldata(BusinessRule):''"
+                        tooltip="{{(permission.D)?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"><i class="fa fa-trash-o Iclr1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-group" style="border:1px solid #ccc;" ng-if="ViewClicked && !fromAddNew">
+
+            <div class="row" style="margin:0;line-height:30px;">
+                <!--<div class="row" style="margin:0;margin-top:10px;margin-bottom:34px;padding-left:0px;">
+                <div class="row" ng-repeat="field in strData" style="margin:0;" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}" ng-if="field.label != 'RuleStructure'">
+                    <label class="control-label bold col-md-3 col-sm-3"><span class="col-md-11 ng-binding"> {{field.label}}</span> <span class="col-md-1">:</span> </label>
+                    <div class="control-label col-md-9 col-sm-9 ng-binding subserviceInfo">
+                        <span class="ng-binding" ng-if="field.label != 'Rule'">{{field.value}}</span>
+                        <span class="ng-binding" ng-if="field.label == 'Rule'"><pre style="background-color:#fff;border:none;">{{field.value | beautify}}</pre></span>
+                    </div>
+
+                </div>
+            </div>-->
+
+                <div class="row col-md-12 col-sm-12 col-xs-12 ng-scope" ng-repeat="field in strData" style="margin: 0px; background-color: rgb(245, 245, 245);" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}" ng-if="field.label != 'RuleStructure'">
+                    <label class="control-label bold col-md-3 col-sm-4 col-xs-6"><span class="col-md-10 col-sm-10 col-xs-10 ng-binding">{{field.label}}</span>
+                    <span class="col-md-2 col-sm-2 col-xs-2" style="padding:0">:</span> </label>
+
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo ng-scope">
+                        <span class="ng-binding" ng-if="field.label != 'Rule'">{{field.value}}</span>
+                        <span class="ng-binding" ng-if="field.label == 'Rule'"><pre style="background-color:#fff;border:none;">{{field.value | beautify}}</pre></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" style="margin:0;margin-top:65px;" ng-if="editedLog.length">
+                <div class="col-md-12 bold control-label" style="margin:0;font-size:16px;" translate>ToolTips.EditLog</div>
+                <ul style="line-height:35px;margin-top:30px">
+                    <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'" style="padding: 0px 15px;">
+                        <div style="display:block;word-break: break-all;">
+                            <span style="float: left; width: 100%; padding: 0px 15px;"> <i class="fa fa-circle" aria-hidden="true" style="margin-right: 12px; font-size: 12px;line-height: 12px;"></i> 
+                        {{log.action}} on {{log.userAuditTimeStamp | dateFormat}} by {{log.UserId}}
+                        </span></div>
+                        <!--<span style="float: left; width: 100%; padding: 0px 15px;"> <i class="fa fa-circle" aria-hidden="true" style="margin-right: 12px; font-size: 12px;line-height: 12px;"></i> Created on {{log.userAuditTimeStamp | dateFormat}} by {{log.UserId}}.</span>-->
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <!-- <h4 translate>BankDataDts.PopupRecoverMsg</h4> -->
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData();" translate >BankDataDts.Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+
+
+
+
+    <div ng-if="!ViewClicked && !fromAddNew">
+
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12 ng-binding" ng-style="{'color':(parentInput.fieldData | chooseColor)}" style="color: rgb(65, 85, 195);">
+                    <div class="title__container">
+                        <h2 translate>BusinessRules.Edit</h2>
+                        <p translate> Branch.ForMandatory</p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row">
+            <div class="col-sm-12">
+                <small> All fields marked with an asterisk ( <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true" class="bold"> * </span> ) are mandatory.</small>
+            </div>
+        </div>-->
+        </div>
+
+        <div class="row">
+
+            <form role="form" class="simple-form form-horizontal" name="updateBusinessRuleform" ng-submit="updateData(BusinessRule); updatesubmitted=false;">
+                <div class="ForAddNewScroll" style="margin:0; max-height:600px; min-height:600px;">
+
+                    <div class="control-group" style="margin-top: 5px;">
+                        <div class="form-group ">
+                            <label for="OfficeCode" class="control-label col-md-2" style='font-weight:bold;'>Office Code
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.OfficeCode.$invalid]">
+                                <!--<input class="form-control" type="text" name="OfficeID" ng-model="BusinessRule.OfficeID" placeholder="Please Enter Office ID" required ng-blur="multipleEmptySpace($event)" ng-disabled="true">-->
+                                <select class="form-control" name="OfficeCode" ng-model="BusinessRule.OfficeCode" ng-required="true" ng-disabled="true" ng-init="setIntiVal()">
+                                <option value=''>Select</option>
+                                <option ng-repeat="val in officeCodeVal" value="{{val.actualvalue}}">{{val.displayvalue}}</option>
+                            </select>
+
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.OfficeCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                        </div>
+
+                        <div class=" form-group">
+
+                            <label for="RuleCode" class="col-md-2 control-label" style="font-weight:bold;">Rule Code
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCode.$invalid]">
+                                <input class="form-control" type="text" name="RuleCode" ng-model="BusinessRule.RuleCode" placeholder="Please Enter RuleCode" ng-required="true" ng-blur="multipleEmptySpace($event)" ng-disabled="true">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RuleCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Rule Name" class="control-label col-md-2" style='font-weight:bold;'>Rule Name
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleName.$invalid]">
+                                <input class="form-control" type="text" name="RuleName" ng-model="BusinessRule.RuleName" placeholder="Please Enter Rule Name" ng-blur="multipleEmptySpace($event)" ng-required="true">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RuleName.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+                        <div class=" form-group">
+
+                            <label for="Rule Creation Date" class="control-label col-md-2" style='font-weight:bold;'>Rule Creation Date
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <!--<div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCreationDate.$invalid]">
+                            <div class="input-group date date-picker" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control" name="RuleCreationDate" ng-model="BusinessRule.RuleCreationDate" onkeypress='return tabOrder(event)' placeholder="Please Select Rule Creation Date" required ng-disabled = "viewMe">
+                                <span class="input-group-addon" ng-style="viewMe ? { 'pointer-events':'none'} : { 'pointer-events':'auto'}"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                        </div>-->
+
+                            <div class="input-group col-md-3 input-append" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCreationDate.$invalid]" style="padding-right:15px;padding-left:12px;float:left;">
+                                <input class="form-control DatePicker" type="text" name="RuleCreationDate" ng-model="BusinessRule.RuleCreationDate" placeholder="Please Select RuleCreation Date" ng-required="true" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RuleCreationDate.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Rule Phase" class="control-label col-md-2" style='font-weight:bold;'>Rule Phase
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                         </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCreationDate.$invalid]">
+                                <select class="form-control" name="RulePhase" ng-model="BusinessRule.RulePhase" ng-required="true">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="val in rulePhaseValue" value="{{val.value}}">{{val.value}}</option>
+                            </select>
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RulePhase.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+
+                        <div class=" form-group">
+                            <label for="Status" class="col-md-2 control-label" style="font-weight:bold;">Status
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.Status.$invalid]">
+                                <!--<input class="form-control" type="text" name="Status" ng-model="BusinessRule.Status" placeholder="Please Enter Status" ng-blur="multipleEmptySpace($event)">-->
+
+                                <select class="form-control" name="Status" ng-model="BusinessRule.Status" ng-required="true">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="val in ['ACTIVE','SUSPENDED','CREATED','WAITINGFORAPPROVAL','APPROVED','FORREVISON','REJECTED','DELETED']" value="{{val}}">{{val}}</option>
+                            </select>
+                                <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.Status.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                            </div>
+
+                        </div>
+                        <div class=" form-group">
+                            <label for="Description" class="col-md-2 control-label" style="font-weight:bold;">Description</label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.Threshold.$invalid]">
+                                <input class="form-control" id="ex2" type="text" name="Description" ng-model="BusinessRule.Description" placeholder="Please Enter Description" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+
+                        <div class=" form-group">
+
+                            <label for="Effective From Date" class="control-label col-md-2" style='font-weight:bold;'>Effective From Date
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+
+
+                            <div class="input-group col-md-3 input-append" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.EffectiveFromDate.$invalid]" style="padding-right:15px;padding-left:12px;float:left;">
+                                <input class="form-control DatePicker" type="text" name="EffectiveFromDate" ng-model="BusinessRule.EffectiveFromDate" placeholder="Please Select Effective From Date" ng-required="true" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.EffectiveFromDate.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                        </div>
+                        <div class=" form-group">
+
+                            <label for="Effective Till Date" class="control-label col-md-2" style='font-weight:bold;'>Effective Till Date
+
+                        </label>
+                            <!--<div class="col-md-3" >
+                            <div class="input-group date date-picker" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control" name="EffectiveTillDate" ng-model="BusinessRule.EffectiveTillDate" onkeypress='return tabOrder(event)' placeholder="Please Select Effective Till Date" >
+                                <span class="input-group-addon" ng-style="viewMe ? { 'pointer-events':'none'} : { 'pointer-events':'auto'}"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                        </div>-->
+                            <div class="input-group col-md-3 input-append" style="padding-right:15px;padding-left:12px;float:left;">
+                                <input class="form-control DatePicker" type="text" name="EffectiveTillDate" ng-model="BusinessRule.EffectiveTillDate" placeholder="Please Select Effective Till Date" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Rule" class="control-label col-md-2" style='font-weight:bold;'>Rule
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <a href="javascript:void(0)" ng-click="toRuleBuilderEdit(BusinessRule,$index)" ng-if="BusinessRule.RuleStructure">Go to Rule Builder</a>
+                            <div class="col-md-5" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.Rule.$invalid]">
+                                <textarea class="form-control" rows="5" id="RuleCode_{{$index}}" name="Rule" ng-disabled="true" ng-model="BusinessRule.Rule" style="resize:vertical" ng-required="true"></textarea>
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.Rule.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+
+                        <div style="clear:both"></div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                    <button type="submit" class="btn btnStyle clr" ng-click="updatesubmitted=true" tooltip="{{'BtnGroup.Submit' | translate}}"><span class="ng-binding" translate>BtnGroup.SaveChanges</span></button>
+                    <button type="button" class="btn btnStyle clr" ng-click="updatesubmitted=false;gotoParent()" tooltip="{{'BtnGroup.Cancel' | translate}}"><span class="ng-scope" translate>BtnGroup.Cancel</span></button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div ng-if="fromAddNew">
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12 ng-binding">
+                    <div class="title__container">
+                        <div class="row">
+                            <div style="width:6%;float:left;">
+                                <h2 translate>BtnGroup.AddNew</h2>
+                            </div>
+                            <div style="width:10%;float:left;">
+                                <h2 translate>BusinessRules.PageTitle</h2>
+                            </div>
+                            <div class="clearfix"></div>
+                            <p translate>Branch.ForMandatory</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <form role="form" class="simple-form form-horizontal" name="updateBusinessRuleform" ng-submit="createData(BusinessRuleCreate); updatesubmitted=false;">
+                <div class="ForAddNewScroll" style="margin:0; max-height:600px; min-height:600px;">
+
+                    <div class="control-group" style="margin-top: 5px;">
+                        <div class="form-group ">
+                            <label for="OfficeCode" class="control-label col-md-2" style='font-weight:bold;'>Office Code
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.OfficeCode.$invalid]">
+                                <!--<input class="form-control" type="text" name="OfficeID" ng-model="BusinessRule.OfficeID" placeholder="Please Enter Office ID" required ng-blur="multipleEmptySpace($event)" ng-disabled="true">-->
+                                <select class="form-control" name="OfficeCode" ng-model="BusinessRuleCreate.OfficeCode" ng-required="true">
+                                <option value=''>Select</option>
+                                <option ng-repeat="val in officeCodeVal" value="{{val.actualvalue}}">{{val.displayvalue}}</option>
+                            </select>
+
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.OfficeCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                        </div>
+
+                        <div class=" form-group">
+
+                            <label for="RuleCode" class="col-md-2 control-label" style="font-weight:bold;">Rule Code
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCode.$invalid]">
+                                <input class="form-control" type="text" name="RuleCode" ng-model="BusinessRuleCreate.RuleCode" placeholder="Please Enter RuleCode" ng-required="true" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RuleCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Rule Name" class="control-label col-md-2" style='font-weight:bold;'>Rule Name
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleName.$invalid]">
+                                <input class="form-control" type="text" name="RuleName" ng-model="BusinessRuleCreate.RuleName" placeholder="Please Enter Rule Name" ng-blur="multipleEmptySpace($event)" ng-required="true">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RuleName.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+                        <div class=" form-group">
+
+                            <label for="Rule Creation Date" class="control-label col-md-2" style='font-weight:bold;'>Rule Creation Date
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <!--<div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCreationDate.$invalid]">
+                            <div class="input-group date date-picker" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control" name="RuleCreationDate" ng-model="BusinessRuleCreate.RuleCreationDate" onkeypress='return tabOrder(event)' placeholder="Please Select Rule Creation Date" required ng-disabled = "viewMe">
+                                <span class="input-group-addon" ng-style="viewMe ? { 'pointer-events':'none'} : { 'pointer-events':'auto'}"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                        </div>-->
+
+                            <div class="input-group col-md-3 input-append" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RuleCreationDate.$invalid]" style="padding-right:15px;padding-left:12px;float:left;">
+                                <input class="form-control DatePicker" type="text" name="RuleCreationDate" ng-model="BusinessRuleCreate.RuleCreationDate" placeholder="Please Select RuleCreation Date" ng-required="true" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)"
+                                    ng-focus="activatePicker($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RuleCreationDate.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Rule Phase" class="control-label col-md-2" style='font-weight:bold;'>Rule Phase
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.RulePhase.$invalid]">
+                                <select class="form-control" name="RulePhase" ng-model="BusinessRuleCreate.RulePhase" ng-required="true">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="val in rulePhaseValue" value="{{val.value}}">{{val.value}}</option>
+                            </select>
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.RulePhase.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+
+                        <div class=" form-group">
+                            <label for="Status" class="col-md-2 control-label" style="font-weight:bold;">Status
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.Status.$invalid]">
+                                <!--<input class="form-control" type="text" name="Status" ng-model="BusinessRuleCreate.Status" placeholder="Please Enter Status" ng-blur="multipleEmptySpace($event)">-->
+
+                                <select class="form-control" name="Status" ng-model="BusinessRuleCreate.Status" ng-required="true">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="val in ['ACTIVE','SUSPENDED','CREATED','WAITINGFORAPPROVAL','APPROVED','FORREVISON','REJECTED','DELETED']" value="{{val}}">{{val}}</option>
+                            </select>
+
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.Status.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+                        <div class=" form-group">
+                            <label for="Description" class="col-md-2 control-label" style="font-weight:bold;">Description</label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.Threshold.$invalid]">
+                                <input class="form-control" id="ex2" type="text" name="Description" ng-model="BusinessRuleCreate.Description" placeholder="Please Enter Description" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Effective From Date" class="control-label col-md-2" style='font-weight:bold;'>Effective From Date
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></label>
+                            </label>
+
+                            <div class="input-group col-md-3 input-append" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.EffectiveFromDate.$invalid]" style="padding-right:15px;padding-left:12px;float:left;">
+                                <input class="form-control DatePicker" type="text" name="EffectiveFromDate" ng-model="BusinessRuleCreate.EffectiveFromDate" placeholder="Please Select Effective From Date" ng-required="true" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)"
+                                    ng-focus="activatePicker($event)">
+                                <span class="input-group-addon cursorPointer">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.EffectiveFromDate.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+                        <div class=" form-group">
+                            <label for="Effective Till Date" class="control-label col-md-2" style='font-weight:bold;'>Effective Till Date
+                           </label>
+                            </label>
+
+                            <!--<div class="col-md-3"  ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.EffectiveTillDate.$invalid]">
+                            <div class="input-group date date-picker" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control" name="EffectiveTillDate" ng-model="BusinessRuleCreate.EffectiveTillDate" onkeypress='return tabOrder(event)' placeholder="Please Select Effective Till Date" >
+                                <span class="input-group-addon" ng-style="viewMe ? { 'pointer-events':'none'} : { 'pointer-events':'auto'}"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+                        </div>-->
+                            <div class="input-group col-md-3 input-append" style="padding-right:15px;padding-left:12px;float:left;">
+                                <input class="form-control DatePicker" type="text" name="EffectiveTillDate" ng-model="BusinessRuleCreate.EffectiveTillDate" placeholder="Please Select Effective Till Date" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)" ng-focus="activatePicker($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+
+                        </div>
+                        <div class=" form-group">
+                            <label for="Rule" class="control-label col-md-2" style='font-weight:bold;'>Rule
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <a href="javascript:void(0)" ng-click="toRuleBuilder(BusinessRuleCreate)" ng-if="!newRule123">Go to Rule Builder</a> &nbsp; <span ng-if="RBwarning" style="color:red;font-size:11pt;">Please fill the required fields</span>
+                            <div class="col-md-5" ng-class="{true: 'error'}[updatesubmitted && updateBusinessRuleform.Rule.$invalid]">
+                                <textarea class="form-control" rows="5" id="RuleCode_{{$index}}" name="Rule" ng-model="BusinessRuleCreate.Rule" style="resize:vertical" ng-disabled="true" ng-required="true"></textarea>
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateBusinessRuleform.Rule.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+
+
+                        <div style="clear:both"></div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                    <button type="submit" class="btn btnStyle clr" ng-click="updatesubmitted=true" tooltip="{{'BtnGroup.Submit' | translate}}"><span class="ng-binding">Add Business Rule</span></button>
+                    <button type="button" class="btn btnStyle clr" ng-click="updatesubmitted=false;gotoParent()" tooltip="{{'BtnGroup.Cancel' | translate}}"><span translate="" class="ng-scope">Cancel</span></button>
+                </div>
+
+
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        //    $('.DatePicker').datepicker({
+        //         format: 'yyyy-mm-dd',
+        //         autoclose: true
+        //     });
+
+
+        $('.DatePicker').datetimepicker({
+            format: "YYYY-MM-DD",
+            useCurrent: true,
+            showClear: true
+        })
+        $('.TimePicker').datetimepicker({
+            format: 'HH:mm:ss',
+            useCurrent: true
+        });
+
+        $('.input-group-addon').on('click focus', function(e) {
+            $(this).prev().focus().click()
+        });
+
+
+        /* $('.DatePicker').focus(function(e){
+
+                   if($(e.currentTarget).is('.DatePicker, .DateTimePicker, .TimePicker')){
+                       $(e.currentTarget).data("DateTimePicker").show();
+                   }
+                   else if($(e).is('.DatePicker, .DateTimePicker, .TimePicker')){
+                       $(e).data("DateTimePicker").show();
+                   }
+               })*/
+
+    })
+
+
+
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

@@ -1,0 +1,158 @@
+<style>
+    .tab {
+        float: left;
+        /* border: 1px solid #ccc; */
+        /* background-color: #f1f1f1; */
+        width: 20%;
+        height: 300px;
+        font-weight: 600;
+        font-size: 15px;
+    }
+    /* Style the buttons that are used to open the tab content */
+    
+    .tab button {
+        display: block;
+        background-color: inherit;
+        color: black;
+        padding: 12px 0px;
+        width: 100%;
+        border: none;
+        outline: none;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    /* Change background color of buttons on hover */
+    
+    .tab .btns:hover {
+        background-color: white;
+        /*   margin-top: 22px; */
+    }
+    /* Create an active/current "tab button" class */
+    
+    .tab .btns  .active {
+        background-color: #ffffff;
+    }
+    /* Style the tab content */
+    
+    .tabcontent {
+        float: left;
+        /* border: 1px solid #ccc; */
+        width: 50%;
+        border-left: none;
+        min-height: 350px;
+        max-height: auto;
+        background: white;
+        padding: 25px 38px 11px;
+        font-size: 15px;
+    }
+    
+    .fa-check {
+        color: green;
+    }
+    
+    .fa-remove {
+        color: red;
+    }
+    
+    .subFields {
+        padding: 3px;
+    }
+    
+    .tabLabel {
+        font-size: 17px;
+        margin-left: 9px;
+        font-weight: 600;
+    }
+</style>
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-user"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.UsersandRoles</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#/app/securityroles" translate>Sidebar.RoleManagement</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li translate>
+                    securityRolesPermissions.View
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="contentContainer">
+
+    <div class="row float-right">
+
+        <div class="" style="float:right;margin-right: 145px;">
+            <button style="box-sizing: border-box;" class="btn btnStyle my-tooltip" ng-disabled="rolesList.IsRoleEditable==false" ng-click="EditViewRole()" title="{{'BtnGroup.Edit' | translate}}" translate>BtnGroup.Edit</button>
+
+            <button type="button" title="{{'BtnGroup.Cancel' | translate}}" class="btn btnStyle my-tooltip" ng-click="cancelViewRole()" translate>BtnGroup.Cancel</button>
+        </div>
+    </div>
+
+    <div class="row" style="width: 100%;">
+
+        <div class="col-md-12">
+            <div class="tab col-md-6 " style="height:50px !important;">
+                <div class="btns">
+                    <button class="tablinks col-md-6 " style="font-weight: 600;" translate>securityRolesPermissions.Role Details</button>
+                </div>
+            </div>
+
+            <div class="tabcontent col-md-12" style="min-height: 50px;">
+                <div class="col-md-12 row"><label class="row col-md-6" style="font-size: 15px !important;font-weight: 600;" translate>
+                        securityRolesPermissions.Client Id </label><span class="col-md-6">{{rolesList.PartyCode}}</span></div>
+                        <div class="col-md-12 row"><label class=" row col-md-6" style="font-size: 15px !important;font-weight: 600;" translate> securityRolesPermissions.Role Name </label><span class="col-md-6">{{RoleName}}</span></div>
+                <div class="col-md-12 row"><label class=" row col-md-6" style="font-size: 15px !important;font-weight: 600;" translate> securityRolesPermissions.Status </label><span class="col-md-6">{{rolesList.Status}}</span></div>
+                <div class="col-md-12 row"><label class=" row col-md-6" style="font-size: 15px !important;font-weight: 600;" translate> securityRolesPermissions.Effective From Date</label><span class="col-md-6">{{rolesList.EffectiveFromDate}}</span></div>
+                <div class="col-md-12 row"><label class=" row col-md-6" ng-if="rolesList.EffectiveTillDate" style="font-size: 15px !important;font-weight: 600;" translate> securityRolesPermissions.Effective Till Date </label><span class="col-md-6">{{rolesList.EffectiveTillDate}}</span></div>
+
+            </div>
+        </div>
+    </div><br>
+
+    <div class="row" style="width: 100%;">
+
+        <div class="col-md-12">
+            <div class="tab col-md-6 ">
+                <div  ng-repeat="(keys, values) in roles track by $index">  
+                    <div class="btns">
+                    <button  class="tablinks col-md-12" ng-class="{active: key=='AuditReporting'}" ng-click="opentab($event,$index, key)" id="roleTab_{{keys}}" ng-repeat="(key,val) in values" style="font-weight: 600;">{{key}}</button>
+                </div>
+                </div>
+            </div>
+            <div>
+                <ul id="tabcontent_{{k}}" class="tabcontent col-md-12">
+                    <label class="row" style="font-size: 17px !important;font-weight: 600;">{{titleHead}}</label>
+                    <li ng-if="!(v.subfields == 'Delegate')" class="mt-2" ng-repeat="(k,v) in arrayValue track by $index">
+                        <span class="col-md-10 subFields">{{v.subfields}} </span>
+                        <span class="col-md-2 subFields float-right" ng-class="rolesList[v.title][v.FieldName] ? 'fa fa-check':'fa fa-remove'"></span>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    setTimeout(function() {
+				$('.my-tooltip').tooltip({ trigger: "hover" });
+            }, 1000)
+</script>

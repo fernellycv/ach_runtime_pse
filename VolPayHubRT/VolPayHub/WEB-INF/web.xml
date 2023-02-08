@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+    <!--<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+    <web-app>
+    -->
+    <display-name>Volante Payment Engine</display-name>
+    <description>Volante Payment Engine</description>
+    <!-- location of spring xml files -->
+  <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/META-INF/spring/*camelContext.xml</param-value>
+    </context-param>
+    <!--<security-constraint>
+        <web-resource-collection>
+            <web-resource-name>VolantePaymentEngine</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>  -->
+   <!-- <servlet>
+        <description>JAX-WS endpoint</description>
+        <display-name>WSServlet</display-name>
+        <servlet-name>WSServlet</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>-->
+   <!-- <servlet-mapping>
+        <servlet-name>WSServlet</servlet-name>
+        <url-pattern>/services/*</url-pattern>
+    </servlet-mapping>-->
+    <context-param>
+        <param-name>SCOPE</param-name>
+        <param-value>PAYMENT_VolPayHub</param-value>
+    </context-param>
+    <context-param>
+        <param-name>SEQUENCEDEXECUTIONFLOW</param-name>
+        <param-value>VolantePaymentEngineStartOfProcess,EntityValidator</param-value>
+    </context-param>
+	 <!-- <context-param>
+		<param-name>HOST</param-name>
+		<param-value>env.Host</param-value>
+	</context-param>
+	<context-param>
+		<param-name>PORT</param-name>
+		<param-value>env.Port</param-value>
+	</context-param>
+	<context-param>
+		<param-name>SCHEME</param-name>
+		<param-value>env.Scheme</param-value>
+	 </context-param> -->
+  <!-- <context-param>
+        <param-name>ISIPV4</param-name>
+        <param-value>FALSE</param-value>
+    </context-param>-->
+	<listener>
+        <listener-class>com.volantetech.volante.services.MigrationManager</listener-class>
+    </listener>
+	<listener>
+		<listener-class>com.volantetech.services.ApplicationWarmupListener</listener-class>
+	</listener>
+	<listener>
+        <listener-class>com.volantetech.volante.services.LoggingStartupListener</listener-class>
+    </listener>
+	<listener>
+        <listener-class>com.volantetech.volante.services.ApplicationStartupListener</listener-class>
+    </listener>
+	<listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+   <!-- <listener>
+        <listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>
+    </listener>-->
+	<listener>
+        <listener-class>com.volantetech.volante.services.camel.listerner.CamelContextStartupListener</listener-class>
+    </listener>
+    <servlet>
+		<servlet-name>volante-servlet</servlet-name>
+		<servlet-class>com.tplus.transform.runtime.rest.server.VolanteRestServlet</servlet-class>		
+                <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+		<servlet-name>volante-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+</web-app>

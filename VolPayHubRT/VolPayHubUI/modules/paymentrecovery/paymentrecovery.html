@@ -1,0 +1,75 @@
+<!-- BEGIN PAGE HEADER-->
+
+<div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="">
+                    <span class="removeCursor" translate>Sidebar.PaymentRecovery</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<!--<div id="loaderContainer" httploader>
+    <img src="themes/images/preloader.gif" class="httpLoader"/>
+</div>-->
+<div class="contentContainer">
+    <div class="pageTitle">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2 translate>PaymentRecovery.PageTitle</h2>
+                    <p translate>PaymentRecovery.SubTitle</p>
+                </div>
+				<div class="alert alert-warning" style="font-size: 14px;margin-bottom: unset;">
+                    <p><strong>Disclaimer:</strong> This menu should only be used only after exhausting all the recovery options available. This should not be used for any on going payment. If the ongoing payment Id is given would result in the duplicate
+                        interface call for the payment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style=" font-size: 14px;" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="autoAdjustAlert bold animated bounce" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div class="row tab-content" style="margin:0;">
+        
+
+
+        <div class="col-md-6" style="margin-top:15px">
+            <form class="form-horizontal" role="form" ng-submit="triggerRecovery(paymentid)" enctype="multipart/form-data">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4 text-sm-left text-md-right text-lg-right text-xl-right">Payment ID
+                        <span class="requiredClass" aria-required="true">*</span>
+                    </label>
+                    <div class="col-md-8">
+
+                        <select class="form-control js-select2-multiple" id="paymentID" select2-model-append data-placeholder="Select an option" name="paymentID" ng-model="paymentid" multiple="multiple" style="width: 100%">
+                        </select>
+                        <!-- <input type="text" class="form-control" name="paymentID" id="paymentID" ng-model="paymentid" placeholder="Payment ID" required="true" ng-required="true" valid-alpha-num /> -->
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-4"></label>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btnStyle" id="uploadHere" ng-disabled="UploadBtnTrigg" style="font-size:15px;margin-top:21px;"><span translate>BtnGroup.Submit</span></button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,588 @@
+<style>
+    input:required {
+        box-shadow: none;
+    }
+    
+    #SetHeader td {
+        vertical-align: middle;
+    }
+    
+    #Property_tabel td {
+        vertical-align: middle;
+    }
+    
+    .select2-container {
+        width: 100% !important;
+    }
+    
+    .modifiedClass {
+        background-color: #ffffb8;
+    }
+    
+    td>pre {
+        background: transparent;
+        max-height: 125px;
+        overflow: auto
+    }
+    
+    table>tbody>tr>th {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+    
+    .palatte_widget {
+        width: 50px;
+        height: 12px;
+        display: inline-block;
+        outline: 1px solid #9c9898;
+        border: 2px solid #ffffff;
+    }
+     .cardheaderAlign{
+        padding:0.563rem 0.938rem;
+        background-color:#f9f9f9;
+        border-bottom-width: 0rem;
+    }
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<!-- <div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa {{IconName}}"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">{{'Sidebar.'+parentInput.ulName|nospace}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate>{{showPageTitle}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" class="removeCursor" translate>{{(((parentInput.Operation =='Add')||(parentInput.Operation == ' Add'))?'BtnGroup.AddNew':showsubTitle) }}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div> -->
+
+<div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa {{IconName}}"></i>
+                    <a href="javascript:void(0);" class="removeCursor">Distribution Data</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoCancelFn()">{{parentInput['urlLink']['Name']}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" class="removeCursor">{{parentInput['Operation']}}</a>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both"></div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize" style="margin: 0px 0px 10px 0px; padding:0">
+        <div class="title__container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>
+                        <div ng-style="{'color':(parentInput.data.Status | chooseStatus)}" ng-if="parentInput['Operation'] == 'Edit' || parentInput['Operation'] == 'View'" translate>
+                            {{parentInput['urlLink']['Name']}}
+                        </div>
+                    </h2>
+                    <div ng-style="{'color':(parentInput.data.Status | chooseStatus)}" ng-if="parentInput.Operation == 'Add' || parentInput.Operation == 'Clone'">
+                        <h2>{{'Onboarding New '+parentInput['urlLink']['Name']}}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="parentInput['Operation'] !== 'View'">
+                <div class="col-sm-12">
+                    <p translate>Branch.ForMandatory</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="statusBox" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger','alert alert-warning':alert.type == 'warning'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div id="custmstatusBox" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in custmalerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger','alert alert-warning':alert.type == 'warning'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="Condition_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 200px;">
+            <div class="modal-content" style="padding: 10px 20px;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0px !important;border: 0px !important;text-align: left;">
+                    <p>Provide Conditions for the Transport. The condition can be multiplied. The message will be sent to the destination upon satisfying all the conditions by the message. Predicate takes the name of the Condition and Value is the Condition
+                        value.
+                    </p>
+                    <p>Conditions can be provided only for <b>Interfaces with ASYNC-OUT direction</b> Transport. Only
+                        <b>one default
+                            ASYNC-OUT transport</b> can be configured by providing no condition.</p>
+                    <p><b><u>NOTE:</u></b> Transport cannot be created, if Condition is provided for other direction or adding more than one another default Transport for ASYNC-OUT.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="SFTP_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 200px;">
+            <div class="modal-content" style="padding: 10px 20px;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0px !important;border: 0px !important;text-align: left;">
+                    <p>Provide Credential of user specified in connectionstring. The message will be sent to the destination using provided credential.</p>
+                    <p>This credential can be provided only for <b>SFTP </b> Transport.
+                        <p><b><u>NOTE:</u></b> If PPK file used for SFTP connection then no need to add this credential.
+                        </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border:2px solid #243250a6;" ng-if="madeChanges">
+                <div class="modal-body">
+                    <h4 translate>BankDataDts.PopupMsg</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    <!--<button type="button" class="btn btnStyle clr" ng-click="SaveAsDraft()" tooltip="{{'BtnGroup.SaveasDraft' | translate}} ><span translate> BtnGroup.SaveasDraft</span></button>-->
+                </div>
+            </div>
+
+            <div class="modal-content" style="border:2px solid #243250a6;" ng-if="!madeChanges">
+                <div class="modal-body">
+                    <h4 style="font-size:17px;">Primary key fields are missing.UUID will be autogenerated.<br>Do you wish to continue?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle clr" ng-click="callingDraftSave()"><span translate>
+                            Yes</span></button>
+
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="draftOverWriteModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border:2px solid #243250a6;" ng-if="!updateEntity">
+                <div class="modal-body">
+                    <h4>Draft Already Exists. Do you want to Overwrite?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="forceSaveDraft();" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" translate>BankDataDts.No</button>
+
+                </div>
+            </div>
+            <div class="modal-content" style="border:2px solid #243250a6;" ng-if="updateEntity">
+                <div class="modal-body">
+                    <h4>This will update the actual entity. Do you wish to continue?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="triggerSavechanges(method,takebankdatabckuplink,takebankdatabckup,subSectionNewData1);" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="resetAllDrafts()" translate>BankDataDts.No</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="SetHeaders_model" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="padding: 10px 20px;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0px !important;border: 0px !important;text-align: left;">
+                    <p>Adds Headers to the message. Based on the Header Name and its Value, the message will be transformed accordingly. <b>Header Name</b> can be any <b>Camel Header</b> that is supported on selected Transport Type (FILE, QUEUE).</p>
+                    <p>Following Camel headers can be provided in Set Header pane based on the Transport Type.</p>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                    <table class="table table-bordered" id="SetHeader">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Transport Type</th>
+                                <th>Header Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: left">
+                            <tr>
+                                <td rowspan="3">FILE<sup>[1]</sup></td>
+                                <td rowspan="2">CONSUMER</td>
+                                <td>CamelFileName</td>
+                                <td>Specifies the name of the file to write (relative to the endpoint directory). This name can be a String.</td>
+                            </tr>
+                            <tr>
+                                <td>CamelOverruleFileName</td>
+                                <td>It is used for overruling CamelFileName header and use the value instead (but only once, as the producer will remove this header after writing the file). The value can be only be a String. Notice that if the option fileName
+                                    has been configured, then this is still being evaluated.</td>
+                            </tr>
+                            <tr>
+                                <td>PRODUCER</td>
+                                <td>CamelFileName</td>
+                                <td>Specifies the name of the file to write (relative to the endpoint directory). This name can be a String.</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">QUEUE<sup>[2]</sup></td>
+                                <td rowspan="3">PRODUCER ONLY</td>
+                                <td>CamelJmsDestinationName</td>
+                                <td>Computing the Destination at Runtime by name.</td>
+                            </tr>
+                            <tr>
+                                <td>JMSDeliveryMode</td>
+                                <td rowspan="2">JMS Properties</td>
+                            </tr>
+                            <tr>
+                                <td>JMSPriority</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0">
+                    <!-- <sup style="color:red">&#42;</sup>Highly Recommended to use the property.<br/> -->
+                    <p style="padding: 5px 0px;margin:0"><b>CONSUMER :</b> Applicable to INPUT,RESPONSE Directions</p>
+                    <p style="padding: 5px 0px;margin:0;"><b>PRODUCER :</b> Applicable to ACK,OUTPUT Directions</p>
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For File Transport<sup>[1]</sup> :</b>
+                    <a href="http://camel.apache.org/file2.html" target="_blank" rel="noreferrer noopener">http://camel.apache.org/file2.html</a>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For Queue Transport<sup>[2]</sup> :</b>
+                    <a href="http://camel.apache.org/jms.html" target="_blank" rel="noreferrer noopener">http://camel.apache.org/jms.html</a>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For File Language<sup>[3]</sup> :</b>
+                    <a href="http://camel.apache.org/file-language.html" target="_blank" rel="noreferrer noopener">http://camel.apache.org/file-language.html</a>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For JMS DeliveryMode
+                        <!-- <sup>[3]</sup> --> :</b> <a href="https://docs.oracle.com/javaee/7/api/javax/jms/DeliveryMode.html" target="_blank" rel="noreferrer noopener">https://docs.oracle.com/javaee/7/api/javax/jms/DeliveryMode.html</a>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For JMS Priority
+                        <!-- <sup>[3]</sup> --> :</b> <a href="https://docs.oracle.com/cd/E19798-01/821-1841/bncfz/index.html" target="_blank" rel="noreferrer noopener">https://docs.oracle.com/cd/E19798-01/821-1841/bncfz/index.html</a>
+                    <br />
+                    <p><b><u>NOTE:</u></b> For IBM MQ, if there is an exception thrown on sending messages to queue thrown, then provide the below Header Name and Value.</p>
+                    <p><b>Header Name:</b> CamelJmsDestinationName.</p>
+                    <p><b>Value: </b>queue: ///&lt;QUEUE_NAME&gt;? targetClient=1.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="RemoveHeaders_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 200px;">
+            <div class="modal-content" style="padding: 10px 20px;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0px !important;border: 0px !important;text-align: left;">
+                    <p>The Remove Headers pattern removes any headers whose name matches the specified pattern from the message (Pattern can be a regex or simple text).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="Property_model" role="dialog">
+        <div class="modal-dialog modal-lg" style="top: 200px;">
+            <div class="modal-content" style="padding: 10px 20px;">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="modal-header" style="padding: 0px !important;border: 0px !important;text-align: left;">
+                    <p>Following Camel Options can be provided in the Property pane based on the Transport Type.</p>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                    <table class="table table-bordered" id="Property_tabel">
+                        <thead>
+                            <tr>
+                                <th>Transport Type</th>
+                                <th>Property Name</th>
+                                <th>Property Value</th>
+                            </tr>
+                        </thead>
+                        <tbody style="text-align: left">
+                            <tr>
+                                <td rowspan="4">FILE<sup>[1]</sup></td>
+                                <td>maxMessagesPerPoll<sup style="color:red">&#42;</sup></td>
+                                <td>An integer to define a maximum message to gather per poll. <b>Recommended to set the
+                                        value to 1.</b></td>
+                            </tr>
+                            <tr>
+                                <td>fileName</td>
+                                <td>Use Expression such as <b>File Language</b><sup>[2]</sup> to dynamically set the filename generated.</td>
+                            </tr>
+                            <tr>
+                                <td>delay</td>
+                                <td>Milliseconds before the next poll of the file/directory.</td>
+                            </tr>
+                            <tr>
+                                <td>doneFileName</td>
+                                <td>If provided, the file will be consumed if a <b>done file exists.</b></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">QUEUE<sup>[3]</sup></td>
+                                <td>transacted<sup style="color:red">&#42;</sup></td>
+                                <td>Provide a Boolean value, whether to use transacted mode for sending/receiving messages. <b>Recommended to
+                                        set value to true.</b></td>
+                            </tr>
+                            <tr>
+                                <td>concurrentConsumers</td>
+                                <td>Specifies the default number of concurrent consumers.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0">
+                    <sup style="color:red">&#42;</sup>Highly Recommended to use the property
+                    <br />
+                    <b style="display: inline-block;padding: 5px 0px;"><u>To add other Camel Properties, visit URI
+                            Options section of
+                            below links:</u></b>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For File Transport<sup>[1]</sup> :</b>
+                    <a href="http://camel.apache.org/file2.html" target="_blank" rel="noreferrer noopener">http://camel.apache.org/file2.html</a>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For Queue Transport<sup>[2]</sup> :</b>
+                    <a href="http://camel.apache.org/jms.html" target="_blank" rel="noreferrer noopener">http://camel.apache.org/jms.html</a>
+                    <br />
+                    <b style="width:20%;display: inline-block;padding: 5px 0px;">For File Language<sup>[3]</sup> :</b>
+                    <a href="http://camel.apache.org/file-language.html" target="_blank" rel="noreferrer noopener">http://camel.apache.org/file-language.html</a>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <h4 translate>BankDataDts.PopupRecoverMsg</h4>
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData()">Yes, delete
+                        it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web-form -->
+    <div class="" style="margin:0">
+
+        <div class="card panel-default " style="margin: 5px 0px 20px 0px;" ng-if="parentInput['Operation'] == 'View'">
+            <div ng-if="!parentInput.FromDraft">
+                <div class="card-header col-xl-12 col-lg-12  col-md-12 col-sm-12" style="background-color:transparent;">
+
+
+                    <div style="word-break: break-all; color: rgb(65, 85, 195);" class="col-xl-10 col-lg-6 col-md-6 col-sm-12 serviceHeading">
+                        {{data[parentInput.metaInfo.field[0].name]}} <br>
+                    </div>
+
+
+
+                    <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 serviceHeading" ng-style="{'color':(data[parentInput.metaInfo.field[6].name] | chooseStatus)}" ng-if="parentInput.metaInfo.field[6].name == 'Status'" style="text-align: right;">
+                        <!-- <div class="col-md-2" style="padding: 0;text-align: center;"> -->
+                        <!-- <i style="font-size: 20px;line-height:20px;" class="fa fa-circle" ng-if="parentInput.fieldData.Status" tooltip="{{parentInput.fieldData.Status}}" tooltip-placement="bottom"></i> -->
+                        <!-- </div> -->
+                        <div class="col-md-12" style="color:#666;padding: 0;"><i style="font-size: 20px;line-height:20px;margin-right: 10px;" ng-style="{'color':(data[parentInput.metaInfo.field[6].name] | chooseStatus)}" class="fa fa-circle" ng-if="parentInput.metaInfo.field[6].name == 'Status'" tooltip="{{data[parentInput.metaInfo.field[6].name]}}"
+                                tooltip-placement="bottom"></i>{{data[parentInput.metaInfo.field[6].name]}}</div>
+                    </div>
+                    <!-- <div class=" col-xl-2 col-lg-4 col-md-4 col-sm-12 " ng-if="!parentInput.fieldData.Status" ng-init="_permission = parentInput.fieldData['Status'] ? callforPermission(parentInput.Permission,parentInput.fieldData['Status']) : parentInput.Permission">
+                        <a style="display:inline-block" class="actionIcons" ng-click="(parentInput.Permission.C )? gotoState({'Operation':'Clone','fieldData':parentInput.fieldData}) :''"
+                            tooltip="{{(parentInput.Permission.C)?'ToolTips.Clone':'ToolTips.DontPermission' | translate}}" ng-style="(parentInput.Permission.C)?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                                class="fa fa-clone Iclr1"></i></a>
+                        <a style="display:inline-block" class="actionIcons" ng-click="(parentInput.Permission.U)? gotoState({'Operation':'Edit','fieldData':parentInput.fieldData}) :''"
+                            tooltip="{{(parentInput.Permission.U)?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}" ng-style="(parentInput.Permission.U)?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                                class="fa fa-pencil-square-o Iclr1"></i></a>
+                        <a style="display:inline-block" class="actionIcons" ng-style="(parentInput.Permission.D)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"
+                            data-toggle="modal" data-target="{{(parentInput.Permission.D)?'#delPopup':''}}" tooltip="{{(parentInput.Permission.D)?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"
+                            ng-click="(parentInput.Permission.D)?takeDeldata(parentInput.fieldData,$index):''"><i class="fa fa-trash-o Iclr1"></i></a>
+    
+    
+                    </div> -->
+                    <div style="clear:both"></div>
+                </div>
+                <div class="card-header row m-0 cardheaderAlign" style="padding:9px 15px;background-color:#f9f9f9">
+                    <div class="col-md-9" style="padding-left:0px;">
+                        Effective Date : <span>{{data[parentInput.metaInfo.field[7].name]}}</span>
+                    </div>
+                    <div class="col-md-3" style="text-align: right;" ng-init="_permission = parentInput.fieldData['Status'] ? callforPermission(parentInput.Permission,parentInput.fieldData['Status']) : parentInput.Permission">
+
+
+
+                        <!-- <a style="display:inline-block" class="actionIcons" ng-click="(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? gotoState({'Operation':'Clone','fieldData':parentInput.fieldData}) :''"
+                                         tooltip="{{(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Clone':'ToolTips.DontPermission' | translate}}"
+                                         ng-style="(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                                             class="fa fa-clone Iclr1"></i></a> -->
+                        <!-- <a style="display:inline-block" class="actionIcons" ng-click="(_permission.U && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? gotoState({'Operation':'Edit','fieldData':parentInput.fieldData}) :''"
+                                         tooltip="{{(_permission.U && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"
+                                         ng-style="(_permission.U && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                                             class="fa fa-pencil-square-o Iclr1"></i></a> -->
+                        <!-- {{_permission.C}} -->
+                        <a class="actionIcons" ng-style="(_permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}" ng-click="(_permission.C)?gotoClone(): ''" tooltip="Clone"><i
+                                class="fa fa-clone Iclr1"></i></a>
+
+                        <a class="actionIcons" ng-style="(_permission.U)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}" ng-click="(_permission.U)?gotoEdit():''" tooltip="Edit" style="cursor: pointer;"><i
+                                class="fa fa-pencil-square-o Iclr1"></i></a>
+
+                        <!-- <a class="actionIcons" ng-style="(_permission.D) && data['Status']!='SUSPENDED'? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"
+                                             data-toggle="modal" data-target="{{(_permission.D) && data['Status']!='SUSPENDED'?'#delPopup':''}}" tooltip="{{(_permission.D) && data['Status']!='SUSPENDED' ?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"
+                                             ng-click="(_permission.D) && data['Status']!='SUSPENDED'? takeDeldata(data,$index):''"><i class="fa fa-trash-o Iclr1"></i></a> -->
+
+
+                        <a class="actionIcons" ng-style="(_permission.D && data['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}" data-toggle="modal" data-target="{{(_permission.D && data['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup':''}}"
+                            tooltip="{{(_permission.D && ['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}" ng-click="(_permission.D && data['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? takeDeldata(data,$index):''"><i class="fa fa-trash-o Iclr1"></i></a>
+
+                        <a class="actionIcons" ng-if="((permission.ReActivate) && data['Status'] == 'DELETED' )" ng-click="(permission.ReActivate)?gotoReactivate(data):''" tooltip="{{(permission.ReActivate)?'ToolTips.ReActivate':'ToolTips.DontPermission' | translate}}"><i
+                                class="fa fa-repeat Iclr1"></i></a>
+
+
+                        <!-- <a style="display:inline-block" class="actionIcons" ng-style="(_permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"
+	                                         data-toggle="modal" data-target="{{(_permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup':''}}"
+	                                         tooltip="{{(_permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"
+	                                         ng-click="(_permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?takeDeldata(parentInput.fieldData,$index):''"><i
+	                                             class="fa fa-trash-o Iclr1"></i></a> -->
+
+
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- <div ng-if="parentInput.FromDraft">
+                    
+                                <div class="panel-heading col-xl-12 col-lg-12  col-md-12 col-sm-12" style="background-color:transparent;">
+                                    <div class="col-xl-10 col-lg-10 col-md-6 col-sm-12 serviceHeading">
+                                        <span tooltip="Business Primary Key">{{parentInput.totData.BPK}}</span>
+                                        <br>
+                                    </div>
+                                    <div class=" col-xl-2 col-lg-2 col-md-4 col-sm-12 pull-right">
+                                        <a style="display:inline-block" class="actionIcons" ng-click="(!deletedData)? gotoState({'Operation':'Clone','fieldData':parentInput.fieldData}) :''"
+                                         tooltip="{{(!deletedData)?'ToolTips.Clone':'ToolTips.DontPermission' | translate}}" ng-style="(!deletedData)?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                                             class="fa fa-clone Iclr1"></i></a>
+                                        <a style="display:inline-block" class="actionIcons" ng-click="(!deletedData)? gotoState({'Operation':' Add','fieldData':parentInput.fieldData}) :''"
+                                         tooltip="{{(!deletedData)?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}" ng-style="(!deletedData)?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                                             class="fa fa-pencil-square-o Iclr1"></i></a>
+                                        <a style="display:inline-block" class="actionIcons" ng-style="(!deletedData)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"
+                                         data-toggle="modal" data-target="{{(!deletedData)?'#delPopupDraft':''}}" tooltip="{{(!deletedData)?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"
+                                         ng-click="(!deletedData)?takeDeldata(parentInput.totData,$index):''"><i class="fa fa-trash-o Iclr1"></i></a>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                    
+                            </div> -->
+        </div>
+
+
+        <form role="form" class="simple-form form-horizontal" name="webForm" ng-submit="on_submit(data); webformSubmit=false">
+            <div class="ForAddNewScroll" style='max-height:600px;' ng-if="data">
+                <web-form ng-if="parentInput['Operation'] !== 'View'" input="metaInfo" output="data" config="{editable: (parentInput['Operation'] !== 'View'), submit: webformSubmit, form: webForm, primaryKeys: inputParams['primaryKey']}">
+                </web-form>
+
+                <web-form ng-if="parentInput['Operation'] == 'View'" input="metaInfo" output="data" config="{editable: (parentInput['Operation'] !== 'View'), submit: webformSubmit, form: webForm, primaryKeys: inputParams['primaryKey']}">
+                </web-form>
+            </div>
+            <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid" ng-if="(parentInput['Operation'] !== 'View')">
+                <button type="submit" class="btn btnStyle clr" ng-click="popupWebformSubmit=true;" tooltip="{{'BtnGroup.Submit' | translate}}">
+                    <span translate> BtnGroup.Submit</span>
+                </button>
+                <button type="button" class="btn btnStyle clr" tooltip="{{'BtnGroup.Cancel' | translate}}" ng-click="dataSaveChanges = {}; disableSubmit = false;gotoCancelFn()">
+                    <span translate> BtnGroup.Cancel</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="" ng-if="parentInput['Operation'] == 'View'" style="margin: 5px 0px 20px 0px;border:1px solid #ccc;background: #fff;">
+        <div class="editHead" style="border-bottom: 1px solid #dddddd;">
+            <h5 style="padding: 0px 15px;" translate>ToolTips.EditLog</h5>
+        </div>
+        <div class="editBody" style="max-height: 200px; overflow-y: auto;">
+            <ul style="line-height:35px;display: inline-block;">
+                <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'" style="padding: 0px 15px;float: left;width: 100%;">
+                    <div style="display:block;word-break: break-all;">
+                        <span style="float: left; width: 100%; padding: 0px 15px;"> <i class="fa fa-circle"
+                                aria-hidden="true" style="margin-right: 12px; font-size: 12px;line-height: 12px;"></i>
+                            <u style="cursor:pointer;font-weight: bolder;" ng-click="showaudit(log)"
+                                tooltip="Click to view details">{{log.action}}</u>
+                            on {{log.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss Z'}} by {{log.UserId}}.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" id="auditModel" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="padding: 10px 20px;overflow:auto;max-height:700px">
+                <button style="margin-left: auto;" type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="modal-header" style="padding: 10px 0px;border: 0px !important;text-align: left;">
+                    <b style="word-break: break-all;">{{commentVal ? commentVal[0] : auditLogDetails.action}} on
+                        {{auditLogDetails.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss'}} by
+                        {{auditLogDetails.UserId}}</b>
+                </div>
+                <div class="modal-body table-responsive" style="padding: 0px !important; border: 0px !important">
+                    <table class="table table-bordered">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0" ng-if="commentVal">
+                    <p style="word-break: break-all;"><b  translate>ApprovalDts.Notes: </b>{{commentVal[1]}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Web-form -->
+
+    <!-- Save Changes Modal Box -->
+    <div class="modal fade" id="saveChangesModel" role="dialog" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modalHeaderColor">
+                    <!-- <button type="button" class="close" data-dismiss="modal" ng-click="dataSaveChanges = {};">×</button> -->
+                    <h4 class="modal-title ng-binding">Add Notes</h4>
+                </div>
+                <div class="modal-body" style="overflow: hidden;">
+                    <form role="form" class="simple-form form-horizontal" name="popupWebForm" ng-submit="saveChanges(dataSaveChanges); popupWebformSubmit=false">
+                        <div class="ForAddNewScroll" style='max-height:600px;'>
+                            <web-form input="metaInfoSaveChanges" output="dataSaveChanges" config="{editable: true, submit: popupWebformSubmit, form: popupWebForm}"></web-form>
+                        </div>
+                        <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                            <button type="submit" class="btn btnStyle clr" ng-click="popupWebformSubmit=true;" tooltip="{{'BtnGroup.Submit' | translate}}">
+                                <span translate> BtnGroup.Submit</span>
+                            </button>
+                            <button type="button" class="btn btnStyle clr" tooltip="{{'BtnGroup.Cancel' | translate}}" ng-click="dataSaveChanges = {}; disableSubmit = false" data-toggle="modal" data-target="#saveChangesModel">
+                                <span translate> BtnGroup.Cancel</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Save Changes Modal Box -->
+</div>
+<script>
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>

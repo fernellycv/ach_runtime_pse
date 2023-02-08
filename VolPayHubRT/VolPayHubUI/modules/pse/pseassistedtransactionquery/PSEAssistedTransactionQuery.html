@@ -1,0 +1,239 @@
+<style>
+    .asterisk {
+        color: #e02222;
+        font-size: 0.75rem;
+        padding-left: 0.125rem
+    }
+
+    .cursorPoint {
+        cursor: pointer
+    }
+
+    .ui-datepicker {
+        z-index: 99 !important;
+    }
+
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+
+    .rolesPanel .card-header {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+
+    .datepicker>div {
+        display: block;
+    }
+</style>
+
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-file-o"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PSE</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span class="removeCursor" translate>Sidebar.PSEAssistedTransactionQuery</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="contentContainer mb-2">
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title__container">
+                        <h2 translate>PSEAssistedTransactionQuery.PageTitle</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification -->
+        <div class="animated bounce autoAdjustAlert bold"
+        ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+        ng-repeat="alert in alerts" ng-if="alert.msg != 'Payment not found'">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg | replaceASCII}}
+        </div>
+        <!-- Notification End-->
+
+        <div class="row-fluid">
+            <a href="" id="downloadLinkPSE" style="display:none;"></a>
+            <form class="form-horizontal" id="PSEAssistedTransactionQuery" role="form"
+                name="PSEAssistedTransactionQueryForm"
+                ng-submit="PSEAssistedTransactionQuery(PSEAssistedTransactionQueryData)" style="width: 100%;">
+                <div class="card rolesPanel mb-3">
+                    <div class="card-header">
+                        <span class="bold" translate>PSEAssistedTransactionQuery.SectionTitle</span>
+                    </div>
+
+                    <div class="customClass">
+                        <div style="margin: 15px !important;">
+                            <!-- Time -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                    <span>{{'PSEAssistedTransactionQuery.ClearingDate' | translate}}</span>
+                                    <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px"
+                                        aria-required="true">*</span>
+                                </label>
+
+                                <div class="col-md-3">
+                                    <div class="input-group input-append">
+                                        <input class="form-control" type="text" name="ClearingDate" id="ClearingDate"
+                                            ng-model="PSEAssistedTransactionQueryData.ClearingDate" autocomplete="off"
+                                            placeholder="{{'PSEAssistedTransactionQuery.SelectDate' | translate}}"
+                                            ng-required="true" ng-disabled="false">
+                                        <span class="input-group-text cursorPointer">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Time End-->
+                            <!-- Period -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                    <span>{{'PSEAssistedTransactionQuery.PeriodSettled' | translate}}</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class='input-group input-append date'>
+                                            <input type='text' class="form-control" id='dateYearMonthPicker'
+                                                name='dateYearMonthPicker'
+                                                ng-model="PSEAssistedTransactionQueryData.PeriodSettled"
+                                                placeholder="{{'PSEAssistedTransactionQuery.SelectDate' | translate}}"/>
+                                                
+                                            <span class="input-group-text">
+                                                <span class="fa fa-calendar"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Period End-->
+                            <!-- Information operator -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                    <span>{{'PSEAssistedTransactionQuery.InformationOperator' | translate}}</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select class="form-control select2DropdownInformationOperator"
+                                        name="InformationOperator" id="InformationOperator"
+                                        ng-model="PSEAssistedTransactionQueryData.InformationOperator"
+                                        select2-model-append1>
+                                        <option value="" disabled translate>PSEAssistedTransactionQuery.select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Information operator End-->
+                            <!-- Entity -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                    <span>{{'PSEAssistedTransactionQuery.EntityoftheTransaction' | translate}}</span>
+                                </label>
+                                <div class="col-md-3">
+                                    <select class="form-control select2DropdownEntityoftheTransaction"
+                                        name="EntityoftheTransaction" id="EntityoftheTransaction" select2-model-append1
+                                        ng-model="PSEAssistedTransactionQueryData.EntityOperator">
+                                        <option value="" disabled translate>PSEAssistedTransactionQuery.select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Entity End -->
+                            <!-- Payroll number -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                    <span>{{'PSEAssistedTransactionQuery.PayrollNumber' | translate}}</span>
+                                </label>
+
+                                <div class="col-md-3">
+                                    <input class="form-control input-group-number" type="text"
+                                        placeholder="{{'PSEAssistedTransactionQuery.EnterValue' | translate}}"
+                                        ng-model="PSEAssistedTransactionQueryData.PayrollNumber" allow-only-numbers />
+                                </div>
+                            </div>
+                            <!-- Payroll number End-->
+                            <!-- Format -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                    <span>{{'PSEAssistedTransactionQuery.Format' | translate}}</span>
+                                    <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px"
+                                        aria-required="true">*</span>
+                                </label>
+
+                                <div class="col-md-3">
+                                    <select class="form-control" name="FormatToExporttheFile" select2 ng-required="true"
+                                        ng-model="PSEAssistedTransactionQueryData.FormatToExporttheFile"
+                                        id="FormatToExporttheFile" ng-required="false">
+                                        <option value="" disabled translate>PSEAssistedTransactionQuery.select</option>
+                                        <option
+                                            ng-selected="{{formatVal.actualValue == PSEAssistedTransactionQueryData.FormatToExporttheFile}}"
+                                            ng-repeat="formatVal in formats" value="{{formatVal.actualValue}}">
+                                            {{formatVal.displayValue}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Format End-->
+
+                            <!-- submit -->
+                            <div class="form-group row">
+                                <label class="control-label col-md-2 text-md-right">
+                                </label>
+                                <div class="col-md-8">
+                                    <input class="btnSuccess btnStyle" type="submit"
+                                        value="{{'PSEAssistedTransactionQuery.GenerateReport'| translate}}">
+                                </div>
+                            </div>
+                            <!-- submit End-->
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('.input-group-text').on('click focus', function (e) {
+            $(this).prev().focus().click()
+        });
+
+        $(".VPDisabledCopyPaste").on('input paste', function (e) {
+            e.preventDefault();
+        });
+
+        $('#EndToEndId').bind('DOMAttrModified textInput input keyup paste', function () {
+            var sspace = $(this).val().replace(/ +/g, ' ');
+            if ($(this).val() != sspace)
+                $(this).val(sspace);
+        });
+
+        $('.notallowspecialchar').on('keypress', function (e) {
+            var regex = /^[a-zA-Z0-9 ]$/;
+            var key = String.fromCharCode(e.which);
+            if (regex.test(key) || e.which == 8 || e.which == 13 || e.which == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    });
+</script>

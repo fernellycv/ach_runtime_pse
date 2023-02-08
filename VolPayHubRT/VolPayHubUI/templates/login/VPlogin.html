@@ -1,0 +1,298 @@
+﻿<style>
+  .h400 {
+    height: 25rem;
+  }
+
+  .back {
+    background-color: #fff;
+    border-radius: 10px !important;
+    border: 2px solid #065ea6;
+  }
+
+  .iuser {
+    color: #000;
+  }
+
+  .modal-content {
+    height: 100%;
+    /* width: 500px; */
+  }
+
+  .btnSuccess {
+    min-width: 90px;
+    min-height: 28px;
+    padding: 5px;
+    color: #fff !important;
+    background-color: #065ea6;
+    border: none;
+    font-weight: 550;
+  }
+
+  .btnDefault {
+    min-width: 90px;
+    min-height: 30px;
+    color: #065ea6 !important;
+    background-color: #fff !important;
+    border: 1px solid #065ea6;
+    font-weight: bold;
+    box-shadow: 1.18px 2px 1px 1px rgb(0 0 0 / 20%) !important;
+  }
+</style>
+
+<div ng-if="otpscreen">
+  <div class="d-flex" ng-style="{'background-color':(configData.ThemeName == 'volante')?'#065ea6':'#fff'}">
+    <div class="logo mt-1 ml-3 pt-2 pb-2 col-md-8">
+      <a href="index.html">
+        <img ng-src="themes/{{configData.ThemeName}}/logo.png" alt="" height="70px" />
+      </a>
+    </div>
+    <div class="col-md-4 pr-5" style="padding: 20px 2px; text-align: right" ng-if="multilingualData">
+      <a>
+        <i class="fa fa-language" style="background-color: white" aria-hidden="true"></i>
+        <span><select style="border: none; background-color: #065ea6; color: white" class="dropdown-toggle namecls"
+            ng-model="userselected" name="Multilingual" id="multilingual" ng-change="onChangeDataSelect(userselected)">
+            <!-- <option value="">--Select--</option> -->
+            <option ng-repeat="Data in multilingualData.supported_languages" value="{{Data.lang}}">
+              {{Data.label.replace('EspaÃ±ol', 'Español')}}
+            </option>
+          </select></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-10 mt-3"></div>
+    <div class="col-lg-8 col-md-8 col-sm-12 mt-3">
+      <div class="title__container">
+        <!-- <h2 translate>Sidebar.Forgotpassword</h2> -->
+
+        <div class="accordion row" id="collapseForgot">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="portlet-title cursorPointer"
+              style="border-top: 2px solid #065ea6;border-left: 2px solid #065ea6;border-right: 2px solid #065ea6;">
+              <div class="row" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                aria-controls="collapseOne" ng-click="fwReset = !fwReset">
+                <div class="col-lg-9 col-md-9">
+                  <i class="fa fa-key" aria-hidden="true"></i>
+                  <span class="caption" translate>loginPage.otpinfo</span>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                  <i class="bold fa fa-chevron-circle-right pull-right iconstyle"
+                    ng-class="{'fa-chevron-circle-down': !fwReset, 'fa-chevron-circle-right': fwReset}"></i>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="portlet-body tab-content" ng-style="{'padding':(!fwReset)?'1.25rem':'0rem'}"
+          style="border: 2px solid #065ea6">
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#collapseForgot">
+            <div class="animated bounce bold"
+              ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+              ng-repeat="alert in alerts">
+              <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              {{alert.msg | replaceASCII}}
+            </div>
+
+            <form autocomplete="off" class="form-horizontal" role="form" ng-submit="Otplogin(fgpassword)">
+              <div class="row fade-in-up">
+                <div class="form-group col-lg-6 col-md-6 col-sm-6 row mt-2 mb-4">
+                  <label
+                    class="control-label bold col-lg-4 col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'loginPage.UserId'|
+                    translate}}:<span class="asterisk" aria-required="true">*</span></label>
+
+                  <div class="col-lg-8 col-md-8 col-sm-8">
+                    <input type="text" name="UserId" ng-model="fgpassword.UserID" class="form-control"
+                      placeholder="{{'loginPage.EnterUserId' | translate}}" ng-blur="multipleEmptySpace($event)"
+                      required ng-disabled="true" />
+                  </div>
+                </div>
+
+                <div class="form-group col-lg-6 col-md-6 col-sm-6 row mt-2 mb-4">
+                  <label
+                    class="control-label bold col-lg-4 col-md-4 col-sm-4 text-sm-left text-md-right text-lg-right text-xl-right mt-2">OTP:<span
+                      class="asterisk" aria-required="true">*</span></label>
+                  <div class="col-lg-8 col-md-8 col-sm-8">
+                    <input type="text" name="OTP" ng-model="fgpassword.OTP" class="form-control"
+                      placeholder="{{'loginPage.EnterOTP' | translate}}" required
+                      onkeydown="return spaceNotAllowed(event)" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="fade-in-up form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 m-0">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 txtCenter">
+                  <button type="reset" class="buttonn btnDefault btnStyle" ng-click="pwCancel()">
+                    <span class="cncl" translate>BtnGroup.Cancel</span>
+                  </button>
+                  <button type="submit" class="button btnSuccess btnStyle">
+                    <span class="submt" translate>BtnGroup.Continue</span>
+                  </button>
+                </div>
+              </div>
+              <div class="clear"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ng-show="loginscreen">
+  <div class="container-fluid" style="height: 100vh; padding-left: 10%">
+    <div class="container-fluid d-flex justify-content-around align-items-center" style="height: 100vh">
+      <div class="col-lg-4 col-md-4 col-sm-6 pt-md-4 pl-md-5 pt-lg-4 pl-lg-5 pr-md-5 h400 d-flex align-items-center">
+        <div style="height: 200px;">
+          <img ng-src="themes/{{configData.ThemeName}}/Integralogo.png" width="300px" />
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-6 h400">
+        <div class="col-sm-12 col-md-12 col-lg-12 bold animated fadeIn"
+          ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+          ng-repeat="alert in alerts">
+          <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          {{alert.msg | replaceASCII }}
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="SecurityRecommendations" tabindex="-1" role="dialog"
+          aria-labelledby="SecurityRecommendationsTitle" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="SecurityRecommendationsTitle" translate>
+                  loginPage.Safety
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <ul class="list-group">
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams1
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams2
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams3
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams4
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams5
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams6
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams7
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams8
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams9
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams10
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams11
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams12
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams13
+                  </li>
+                  <li class="list-group-item" translate>
+                    loginPage.SafetyParams14
+                  </li>
+                </ul>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 pt-3 pb-3 back">
+          <div class="container mt-3">
+            <form autocomplete="off" ng-submit="login(loginData, userselected)">
+              <input type="text" class="d-none" name="preventAutoPass" id="NoAuto_User" />
+              <input type="password" class="d-none" name="textPass" id="NoAutoPass" />
+
+              <div class="form-group">
+                <div class="input-group">
+                  <label class="font-weight-bolder" translate>loginPage.Username</label>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa fa-user-o iuser" aria-hidden="true"></i></span>
+                  <input type="text" autocomplete="off" id="username" name="UserId"
+                    class="form-control NotAllowSpecialCharacters ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid"
+                    required="" ng-model="loginData.UserId" placeholder="{{'loginPage.Enterusername' | translate}}"
+                    ng-blur="multipleEmptySpace($event)" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group p-0">
+                  <label class="font-weight-bolder" translate>loginPage.Password&nbsp;</label>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa fa-key" aria-hidden="true"></i></span>
+                  <input type="password" autocomplete="off" id="password" name="Password"
+                    class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid passFields"
+                    required="" ng-model="loginData.Password" placeholder="{{'loginPage.Enterpassword' | translate}}"
+                    onkeydown="return spaceNotAllowed(event)" ng-click="PassClicks($event)" />
+
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i toggle="#password" class="fa fa-eye field-icon toggle-password"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="row">
+                  <div class="col text-right">
+                    <a href="#/forgotpassword" class="font-weight-bolder text-danger m-4"
+                      translate>loginPage.ForgotPassword</a>
+                    <button type="submit" class="btnSuccess btnStyle" style="margin-top: 5px" translate>
+                      loginPage.Login
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <span><select ng-if="multilingualData" style="border: none; float: right" class="dropdown-toggle"
+                    ng-model="userselected" name="Multilingual" id="multilingual"
+                    ng-change="onChangeDataSelect(userselected)">
+                    <!-- <option value="">--Select--</option> -->
+                    <option ng-repeat="Data in multilingualData.supported_languages" value="{{Data.lang}}">
+                      {{Data.label.replace('EspaÃ±ol', 'Español')}}
+                    </option>
+                  </select></span>
+              </div>
+              <a data-toggle="modal" data-target="#SecurityRecommendations" class="font-weight-bolder text-note"
+                translate>loginPage.Safety</a>
+            </form>
+          </div>
+        </div>
+        <div style="
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+          " class="col-lg-12 col-md-12 col-sm-12 pt-3 pb-3 back">
+          <img ng-src="themes/{{configData.ThemeName}}/volante-logo.png" alt="" height="25px" />
+          <img ng-src="themes/{{configData.ThemeName}}/logo2.png" alt="" height="40px" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,382 @@
+<style>
+    .modifiedClass {
+        background-color: #ffffb8;
+    }
+    
+    td>pre {
+        background: transparent;
+        max-height: 7.813rem;
+        overflow: auto
+    }
+    
+    table>tbody>tr>th {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa {{ParentIconName}}"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">{{'Sidebar.'+parentInput.ulName|nospace}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoParent()" translate>{{'Sidebar.'+parentInput.pageTitle|nospace}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <p translate>PaymentModuleDts.View</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<br /><br />
+
+<div class="contentContainer">
+
+    <div class="card panel-default" style="margin:0.313rem 0rem 1.25rem 0rem;">
+        <div class="card-header row m-0 cardheaderAlign" style="background-color:transparent;">
+
+            <div ng-if="(parentInput.parentLink != 'methodofpayments' && parentInput.parentLink != 'vphtrxtypeconstraintscontrols')" class="col-xl-10 col-lg-6 col-md-6 col-sm-12 serviceHeading" ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}">
+                {{parentInput.fieldData[parentInput.pageInfo.Section[1].FieldName]}}{{((parentInput.fieldData[parentInput.pageInfo.Section[1].FieldName])&&(parentInput.fieldData[parentInput.pageInfo.Section[0].FieldName]))?' - ':''}}{{parentInput.fieldData[parentInput.pageInfo.Section[0].FieldName]}}<br>
+            </div>
+            <div ng-if="parentInput.parentLink == 'vphtrxtypeconstraintscontrols'" class="col-xl-10 col-lg-6 col-md-6 col-sm-12 serviceHeading" ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}">
+                 {{parentInput.fieldData[parentInput.pageInfo.Section[1].FieldName]}}<br>
+            </div>
+            <div ng-if="parentInput.parentLink == 'methodofpayments'" class="col-xl-10 col-lg-6 col-md-6 col-sm-12 serviceHeading" ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}">
+                {{parentInput.fieldData[parentInput.pageInfo[1].name]}}{{((parentInput.fieldData[parentInput.pageInfo[1].name])&&(parentInput.fieldData[parentInput.pageInfo[0].name]))?' - ':''}}{{parentInput.fieldData[parentInput.pageInfo[0].name]}}<br>
+            </div>
+
+            <div class="col-xl-2 col-lg-6 col-md-6 col-sm-12 serviceHeading" ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}" ng-if="parentInput.fieldData.Status" style="text-align: right;">
+                <!-- <div class="col-md-2" style="padding: 0;text-align: center;"> -->
+                <!-- <i style="font-size: 20px;line-height:20px;" class="fa fa-circle" ng-if="parentInput.fieldData.Status" tooltip="{{parentInput.fieldData.Status}}" tooltip-placement="bottom"></i> -->
+                <!-- </div> -->
+                <div class="col-md-12" style="color:#666;padding: 0;"><i style="font-size: 1.25rem;line-height:1.25rem;margin-right: 0.625rem" ng-style="{'color':(parentInput.fieldData.Status | chooseStatus)}" class="fa fa-circle" ng-if="parentInput.fieldData.Status" data-toggle-second="tooltip" data-placement="bottom" title="{{parentInput.fieldData.Status}}" ></i>{{parentInput.fieldData.Status}}</div>
+            </div>
+            <div class=" col-xl-2 col-lg-4 col-md-4 col-sm-12 " ng-if="!parentInput.fieldData.Status" ng-init="_permission = parentInput.fieldData['Status'] ? callforPermission(parentInput.Permission,parentInput.fieldData['Status']) : parentInput.Permission">
+                <a style="display:inline-block" class="actionIcons my-tooltip" ng-click="(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL' )? gotoState({'Operation':'Clone','fieldData':parentInput.fieldData}) :''"  data-placement="top"
+                    title="{{(parentInput.Permission.C  && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Clone':'ToolTips.DontPermission' | translate}}" ng-style="(parentInput.Permission.C  && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL' )?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i class="fa fa-clone Iclr1"></i></a>
+                <a style="display:inline-block" class="actionIcons my-tooltip" ng-click="(parentInput.Permission.U && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? gotoState({'Operation':'Edit','fieldData':parentInput.fieldData}) :''"  data-placement="top" title="{{(parentInput.Permission.U && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"
+                    ng-style="(parentInput.Permission.U && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                        class="fa fa-pencil-square-o Iclr1"></i></a>
+                <a style="display:inline-block" class="actionIcons" ng-style="(parentInput.Permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}" data-toggle="modal"
+                    data-target="{{(parentInput.Permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup':''}}" data-toggle-second="tooltip" data-placement="top" title="{{(parentInput.Permission.D)?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}" ng-click="(parentInput.Permission.D && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?takeDeldata(parentInput.fieldData,$index):''"><i class="fa fa-trash-o Iclr1"></i></a>
+
+                <a class="actionIcons my-tooltip" ng-if="(parentInput.Permission.ReActivate && parentInput.fieldData['Status'] == 'DELETED')" ng-click="(parentInput.Permission.ReActivate)?gotoReactivate(parentInput.fieldData):''"  data-placement="top" title="{{(parentInput.Permission.ReActivate)?'ToolTips.ReActivate':'ToolTips.DontPermission' | translate}}"><i class="fa fa-repeat Iclr1"></i></a>
+
+
+
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="card-header row m-0 cardheaderAlign" style="padding:0.563rem 0.938rem;background-color:#f9f9f9" ng-if="parentInput.fieldData.EffectiveFromDate">
+            <div class="col-md-9" style="padding-left:0rem;">
+                <span translate>AddUsers.Effective Date</span> : <span>{{parentInput.fieldData.EffectiveFromDate}}{{((parentInput.fieldData.EffectiveFromDate)&&(parentInput.fieldData.EffectiveTillDate))?'
+					to ':''}}{{parentInput.fieldData.EffectiveTillDate}}</span>
+            </div>
+            <div class="col-md-3" style="text-align: right;" ng-init="_permission = parentInput.fieldData['Status'] ? callforPermission(parentInput.Permission,parentInput.fieldData['Status']) : parentInput.Permission">
+
+                <a ng-if="newPermission.C" style="display:inline-block" class="actionIcons my-tooltip" ng-click="(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? gotoState({'Operation':'Clone','fieldData':parentInput.fieldData}) :''"  data-placement="top"
+                    title="{{(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Clone':'ToolTips.DontPermission' | translate}}" ng-style="(parentInput.Permission.C && parentInput.fieldData['Status'] != 'DELETED' && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i class="fa fa-clone Iclr1"></i></a>
+
+                <!-- <a ng-if="newPermission.U" style="display:inline-block" class="actionIcons my-tooltip" ng-click="(_permission.U  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? goToEditOperation({'Operation':'Edit','fieldData':parentInput.fieldData}) :''"  data-placement="top" title="{{(_permission.U  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"
+                    ng-style="(_permission.U  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                        class="fa fa-pencil-square-o Iclr1"></i></a> -->
+
+                <a ng-if="newPermission.U" style="display:inline-block" class="actionIcons my-tooltip" 
+                    ng-click="(_permission.U  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL' && parentInput.fieldData[parentInput.pageInfo.Section[1].FieldName]!='SYSTEM')? goToEditOperation({'Operation':'Edit','fieldData':parentInput.fieldData}) :''"  data-placement="top" title="{{(_permission.U  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}" 
+                    ng-style="(_permission.U  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL' && parentInput.fieldData[parentInput.pageInfo.Section[1].FieldName]!='SYSTEM' )?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i
+                    class="fa fa-pencil-square-o Iclr1"></i></a>
+
+                <a ng-if="newPermission.D" style="display:inline-block" class="actionIcons" ng-style="(_permission.D  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}" data-toggle="modal" data-target="{{(_permission.D  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup':''}}" data-toggle-second="tooltip" data-placement="top"
+                    title="{{(_permission.D  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}" ng-click="(_permission.D  && parentInput.fieldData['Status'] != 'REACTIVATED-WAITFORAPPROVAL')?takeDeldata(parentInput.fieldData,$index):''"><i class="fa fa-trash-o Iclr1"></i></a>
+
+                <a class="actionIcons my-tooltip" ng-if="((parentInput.Permission.ReActivate) && parentInput.fieldData['Status'] == 'DELETED' )" ng-click="(parentInput.Permission.ReActivate)?gotoReactivate(parentInput.fieldData):''"  data-placement="top" title="{{(parentInput.Permission.ReActivate)?'ToolTips.ReActivate':'ToolTips.DontPermission' | translate}}"><i class="fa fa-repeat Iclr1"></i></a>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="statusBox" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+        ng-if="auditError404">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 12.5rem;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0rem !important; border: 0rem !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0rem !important; border: 0rem !important">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <!-- <h4 translate>BankDataDts.PopupRecoverMsg</h4> -->
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData()">{{"BankDataDts.Confirm" | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+    <div class="panel-group" style="border:0.063rem solid #ccc;">
+
+        <div class="row" style="margin:0;line-height:1.875rem;">
+            
+            <div class="row" style="margin:0;margin-top:0.625rem;margin-bottom:2.125rem;padding-left:0rem;width: 100%;" ng-if="parentInput.parentLink != 'methodofpayments'">
+                <div class="row col-md-12 col-sm-12 col-xs-12" ng-repeat="field in parentInput.pageInfo.Section" style="margin:0;" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}">
+                    <label class="control-label bold col-md-3 col-sm-3 row"  style="margin-left: 0rem;" ng-hide="(parentInput.parentLink == 'businessrules' && field.Label == 'Rule Structure')||field.visible==false"><span
+                            class="col-md-10 col-sm-10 col-xs-10">{{field.Label | translate}}</span> <span
+                            class="float-md-right float-sm-center" style="padding:0">:</span>
+                    </label>
+
+                    <div class="control-label col-md-9 col-sm-9 col-xs-6 ng-binding subserviceInfo" ng-if="((field.InputType =='TextField') || (field.InputType =='TextArea')) && field.property[0].value.toLowerCase() != 'range'" ng-hide="(parentInput.parentLink == 'businessrules' && field.Label == 'Rule Structure')||field.visible==false">
+                        <span ng-if="field.Label == 'Rule'">
+                            <pre>{{fieldData[field.FieldName] | beautify}}</pre>
+                        </span>
+                    
+                        <span ng-if="field.Label != 'Rule' && field.Type != 'BigDecimal' && fieldData[field.FieldName].length>100 && (parentInput.parentLink == 'ACHmailConfig')">{{'Notifications.FileLabel' | translate}}</span>
+                        <span ng-if="field.Label != 'Rule' && field.Type != 'BigDecimal' && fieldData[field.FieldName].length>100 && (parentInput.parentLink != 'ACHmailConfig')">{{fieldData[field.FieldName]}}</span>
+						<span ng-if="field.Label != 'Rule' && field.Type != 'BigDecimal' && fieldData[field.FieldName].length<100 && (field.Label == 'AuditLogs.ID Type')">{{('BankDataDts.' + fieldData[field.FieldName]) | translate}}</span>
+                        <span ng-if="field.Label != 'Rule' && field.Type != 'BigDecimal' && fieldData[field.FieldName].length<100 && (field.Label != 'AuditLogs.ID Type') && field.FieldName!='EVENT' && field.FieldName!='ENTITYTYPE'">{{fieldData[field.FieldName]}}</span>
+                        
+                        <span ng-if="field.Label != 'Rule' && field.Type != 'BigDecimal' && fieldData[field.FieldName].length<100 && (field.Label != 'AuditLogs.ID Type') && field.FieldName=='EVENT'">{{clearAuditLog('AuditLogs.' + fieldData[field.FieldName])}}</span>
+                        <span ng-if="field.Label != 'Rule' && field.Type != 'BigDecimal' && fieldData[field.FieldName].length<100 && (field.Label != 'AuditLogs.ID Type') && field.FieldName=='ENTITYTYPE'">{{('BankDataDts.' + fieldData[field.FieldName]) | translate}}</span>
+
+						<span ng-if="field.Label != 'Rule' && field.Type == 'Integer'">{{fieldData[field.FieldName]}}</span>
+                        <span ng-if="field.Label != 'Rule' && field.Type == 'BigDecimal'">{{fieldData[field.FieldName]}}</span>
+                        <span ng-if="field.Label == 'RegisterAccounts.CredtorClientID' || field.Label == 'RegisterAccounts.DebtorClientID' || field.FieldName == 'RegisterAccounts.DebtorClientID' || field.FieldName == 'DebtorClientID'">
+                            {{fieldData[field.FieldName]}}
+                        </span>
+                    </div>
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="((field.InputType =='TextField') || (field.InputType =='TextArea')) && field.property[0].value.toLowerCase() == 'range'" ng-hide="parentInput.parentLink == 'businessrules' && field.Label == 'Rule Structure'">
+                        <span name="{{field.property[1].value}}" id="{{field.property[1].value}}">{{fieldData[field.property[1].value]}}</span> -
+                        <span name="{{field.property[2].value}}" id="{{field.property[2].value}}">{{fieldData[field.property[2].value]}}</span>
+                    </div>
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="((field.InputType !='TextField') && (field.InputType !='TextArea') && (field.InputType !='password') && (field.FieldName != 'Sanction') && (field.visible!=false))">
+                        <span ng-if="fieldData[field.FieldName].length>500 && (parentInput.parentLink == 'notifront' || parentInput.parentLink == 'ACHmailConfig')"> {{'Notifications.FileLabel' | translate}} </span>
+                        <span ng-if="fieldData[field.FieldName].length>500 && (parentInput.parentLink != 'notifront' && parentInput.parentLink != 'ACHmailConfig')"> {{fieldData[field.FieldName] | translate}} </span>
+                        <span ng-if="fieldData[field.FieldName].length<500 ">{{fieldData[field.FieldName] | translate}}</span>
+						<span ng-if="field.Label != 'Rule' && field.Type == 'Boolean' && parentInput.pageTitle != 'Events'">{{('BankDataDts.'+(fieldData[field.FieldName] ? 'Yes':'No')) | translate}}</span>
+                        <span ng-if="parentInput.pageTitle == 'Events'  &&  field.FieldName != 'Status'">{{ 'UserManagement.' + fieldData[field.FieldName] | translate}}</span>
+                    </div>
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="field.FieldName == 'Sanction' && parentInput.parentLink == 'vphcycleextensionach'">
+                        <span>{{fieldData[field.FieldName]}}</span>
+                    </div>
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="(field.InputType =='password')">
+                        <input type="password" style=" background: transparent;	border: none;" ng-model="fieldData[field.FieldName]" disabled />
+                    </div>
+                </div>
+                
+                <div style="clear:both"></div>
+                <div class="col-md-12" ng-repeat="field in parentInput.pageInfo.Subsection" style="margin:0;padding: 0rem 0.625rem;" ng-style="($index%2 == 0)?{'background-color': '#fff'}:{'background-color': 'rgb(245, 245, 245)'}">
+                    <label class="control-label bold col-md-12 col-sm-12"><span
+                        class="col-md-10">{{field.Label | translate}}</span></label>
+                    <div style="clear:both"></div>
+                    <div style="margin: 0rem 1.563rem; border: 0.313rem solid #9E9E9E" ng-style="(fieldData[field.FieldName])?{'border':'5px solid #9E9E9E'}:{'border':''}">
+                        <div ng-if="isArray(fieldData[field.FieldName]);">
+                            <div ng-repeat="subSectionData in fieldData[field.FieldName]" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}">
+                                <div class="row col-md-12 col-sm-12 col-xs-12" ng-repeat="subfield in field.subSectionData" style="margin:0;">
+                                    <label class="control-label bold col-md-3 col-sm-3 col-xs-6"><span
+                                        class="col-md-10 col-sm-10 col-xs-10">{{subfield.Label | translate}}</span>
+                                        <span class="float-md-right float-sm-cente" style="padding:0">:</span> </label>
+                                    <div ng-if="subfield.property[0].value.toLowerCase() != 'range'"  class="control-label col-md-9 col-sm-9 col-xs-6 ng-binding subserviceInfo">
+                                        <span>{{subSectionData[subfield.FieldName]}}</span>
+                                    </div>
+                                    <div ng-if="subfield.property[0].value.toLowerCase() == 'range'"
+                                        class="control-label col-md-9 col-sm-9 col-xs-6 ng-binding subserviceInfo">
+                                        <span name="{{subfield.property[1].value}}"
+                                            id="{{subfield.property[1].value}}">{{subSectionData[subfield.property[1].value]}}</span>
+                                        <span>-</span>
+                                        <span name="{{subfield.property[2].value}}"
+                                            id="{{subfield.property[2].value}}">{{subSectionData[subfield.property[2].value]}}</span>
+                                    </div>
+                                </div>
+                                <div style="clear:both"></div>
+                            </div>
+                        </div>
+                        <div ng-if="!isArray(fieldData[field.FieldName]);" >
+                            <div class="row col-md-12 col-sm-12 col-xs-12" ng-repeat="subfield in field.subSectionData" style="margin:0;">
+                                <label class="control-label bold col-md-3 col-sm-3 col-xs-6"><span
+                                    class="col-md-10 col-sm-10 col-xs-10">{{subfield.Label | translate}}</span>
+                                    <span class="float-md-right float-sm-cente" style="padding:0">:</span> </label>
+                                <div ng-if="subfield.property[0].value.toLowerCase() != 'range'"  class="control-label col-md-9 col-sm-9 col-xs-6 ng-binding subserviceInfo">
+                                    <span ng-if="fieldData[field.FieldName][subfield.FieldName].length<500">{{fieldData[field.FieldName][subfield.FieldName]}}</span>
+                                    <span ng-if="fieldData[field.FieldName][subfield.FieldName].length>500 && (parentInput.parentLink != 'notifront' && parentInput.parentLink != 'ACHmailConfig')">{{fieldData[field.FieldName][subfield.FieldName]}}</span>
+                                    <span ng-if="fieldData[field.FieldName][subfield.FieldName].length>500 && (parentInput.parentLink == 'notifront' || parentInput.parentLink == 'ACHmailConfig')"> {{'Notifications.FileLabel' | translate}} </span>
+                                </div>
+                                <div ng-if="subfield.property[0].value.toLowerCase() == 'range'"
+                                    class="control-label col-md-9 col-sm-9 col-xs-6 ng-binding subserviceInfo">
+                                    <span name="{{subfield.property[1].value}}"
+                                        id="{{subfield.property[1].value}}">{{subSectionData[subfield.property[1].value]}}</span>
+                                    <span>-</span>
+                                    <span name="{{subfield.property[2].value}}"
+                                        id="{{subfield.property[2].value}}">{{subSectionData[subfield.property[2].value]}}</span>
+                                </div>
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row panel panel-default panel-warning" style="margin:0;margin-top:0.625rem;margin-bottom:2.125rem;padding-left:0rem;border:none" ng-if="parentInput.parentLink == 'methodofpayments'">
+                <div class="row col-md-12 col-sm-12 col-xs-12" ng-if="!field.FieldSet" ng-repeat="field in parentInput.pageInfo" style="margin:0;">
+                    <label class="control-label bold col-md-3 col-sm-4 col-xs-6"><span
+                            class="col-md-10 col-sm-10 col-xs-10">{{field.label}}</span>
+                        <span class="col-md-2 col-sm-2 col-xs-2" style="padding:0">:</span> </label>
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="(field.renderer[field.renderer.type].type == 'TextField') || (field.renderer[field.renderer.type].type == 'TextArea')">
+                        <span>{{fieldData[field.name]}}</span>
+                    </div>
+                    <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="(field.renderer[field.renderer.type].type != 'TextField') && (field.renderer[field.renderer.type].type != 'TextArea')">
+                        <span ng-init="varData = getDisplayValue(field.ChoiceOptions,fieldData[field.name])">{{!varData?fieldData[field.name]:varData}}</span>
+                    </div>
+                </div>
+                <div class="row col-md-12 col-sm-12 col-xs-12 panel panel-default panel-warning" ng-repeat="fields in parentInput.pageInfo" ng-if="fields.FieldSet && fields.cstmcolumnspan != false" ng-init="check=fields.FieldSet.sectionheader; topInd = $index;" style="margin: 0rem;border: none;background-color: rgb(255, 255, 255);padding: 0.625rem 1.25rem;">
+                    <h4 class="panel-heading" data-toggle="collapse" data-target="#{{check|nospace}}slide" class="col-sm-12" style="padding: 0.625rem;margin: 0;cursor:pointer;color: #333;background-color: #f5f5f5;border: 0.063rem solid #ddd;border-bottom: none;" ng-init="expanded = true"
+                        ng-click="expanded = !expanded">{{check}}<i style="padding-top:0.125rem;" class="pull-right  bold fa" ng-class="{'fa-angle-down': expanded, 'fa-angle-right': !expanded}"></i></h4>
+                    <div class="panel-collapse collapse in" id="{{check|nospace}}slide" style="border: 0.063rem solid #ddd;margin-bottom: 5px;">
+
+                        <div ng-repeat="field in parentInput.pageInfo" ng-if="check == field.FieldSet.sectionheader;">
+                            <div class="clearfix" style="background-color: transparent;" ng-if="($index-topInd) % 2 == 0"></div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                <label class="control-label bold col-md-5 col-sm-5 col-xs-6"><span
+                                        class="col-md-10 col-sm-10 col-xs-10">{{field.label}}</span>
+                                    <span class="col-md-2 col-sm-2 col-xs-2" style="padding:0">:</span> </label>
+                                <div class="control-label col-md-7 col-sm-7 col-xs-6 ng-binding subserviceInfo" ng-if="(field.renderer[field.renderer.type].type == 'TextField') || (field.renderer[field.renderer.type].type == 'TextArea')">
+                                    <span>{{fieldData[field.name]}}</span>
+
+                                </div>
+                                <div class="control-label col-md-7 col-sm-7 col-xs-6 ng-binding subserviceInfo" ng-if="(field.renderer[field.renderer.type].type != 'TextField') && (field.renderer[field.renderer.type].type != 'TextArea')">
+                                    <span ng-init="varData = getDisplayValue(field.ChoiceOptions,fieldData[field.name])">{{!varData?fieldData[field.name]:varData}}</span>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+
+        </div>
+
+        <div class="row" style="margin:0;padding:0.625rem" ng-if="AssociatedVal.AssociatedKey.length">
+            <div class="col-md-12" style="padding:0.625rem 0rem">
+                <div class="col-md-6">
+                    <h4 class="pull-left">ASSOCIATED {{AssociatedVal.gotoLink | uppercase}}</h4>
+                </div>
+                <div class="col-md-6">
+                    <!--<button type="button" class="btn btnStyle clr pull-right" ng-click="gotoService({'Operation':'Add','fieldData':''})" tooltip="Add {{AssociatedVal.gotoLink | capitalize}}" ><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;<span translate> Add {{AssociatedVal.gotoLink | capitalize}} </span></button>-->
+                </div>
+            </div>
+            <div class="col-md-12" style="padding: 0.625rem 0.625rem;border: 1px solid #dddddd;" ng-if="!AssociatedVal.Data.length">
+                <h5>There are no {{AssociatedVal.gotoLink | capitalize}} currently associated with this {{AssociatedVal.parentInfo.Label}}.
+                    <!-- Click on the Add {{AssociatedVal.gotoLink | capitalize}} button above to associate {{AssociatedVal.gotoLink | capitalize}}. -->
+                </h5>
+            </div>
+            <div ng-show="AssociatedVal.Data.length" class="listView FixHead dataGroupsScroll" style="max-height: 14.375rem !important;">
+                <table class="table table-bordered floatThead stickyheader">
+                    <thead>
+                        <tr style="border:none">
+                            <th ng-repeat="field in AssociatedVal.AssociatedKey" class="cursorPointer" ng-click="gotoSorting(field);" style="min-width:6.25rem">{{field.Label}}<span id="{{field.FieldName}}_Icon" class=""></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-init="rowIndex = $index;" ng-repeat="AssociatedService in AssociatedVal.Data" ng-click="gotoService({'Operation':'View','fieldData':AssociatedService,'primarykey':setprimarykey})" style="cursor:pointer">
+                            <td ng-repeat="field in AssociatedVal.AssociatedKey" id="{{field.FieldName+'_'+rowIndex}}" ng-style="(field.FieldName === 'Status')?{'text-align':'center'}:''" style="height:2.375rem" ng-click="gotoView({'Operation':'View','fieldData':AssociatedService,'Permission':permission})">
+                                <span ng-if="field.FieldName !== 'Status'" ng-init="varData = getDisplayValue(field,AssociatedService[field.FieldName]);">
+                                    {{AssociatedService[field.FieldName]}}</span>
+                                <span ng-if="field.FieldName === 'Status'" ng-style="{'color':(AssociatedService.Status | chooseStatus)}"><i
+                                        style="font-size: 1.25rem;line-height:1.25rem" class="fa fa-circle" data-toggle-second="tooltip" data-placement="bottom"
+                                        title="{{AssociatedService['Status']}}"></i></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- <div class="row panel-group" style="margin:0;" ng-if="editedLog.length">
+		<div class="panel panel-default">
+		    <div class="col-md-12 bold control-label panel-heading panel-title" style="margin:0;font-size:16px;" data-toggle="collapse" href="#collapse1" translate>ToolTips.EditLog</div>
+			<div id="collapse1" class="panel-collapse collapse">
+			<div class="panel-body">
+		    <ul style="line-height:35px;margin-top:30px">
+		        <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'" style="padding: 0px 15px;">
+					<div style="display:block;word-break: break-all;">
+					<span style="float: left; width: 100%; padding: 0px 15px;"> <i class="fa fa-circle" aria-hidden="true" style="margin-right: 12px; font-size: 12px;line-height: 12px;"></i> <u style="cursor:pointer;font-weight: bolder;" ng-click="showaudit(log)" tooltip="Click to view details">{{log.action}}</u> on {{log.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss Z'}} by {{log.UserId}}.</span>
+					</div>
+				</li>
+		    </ul>
+			</div>
+			</div>
+			</div>
+		</div> -->
+    </div>
+
+    <div class="" style="margin: 0.313rem 0rem 1.25rem 0rem;border:1px solid #ccc;background: #fff;" ng-show="editedLog.length">
+        <div class="editHead" style="border-bottom: 0.063rem solid #dddddd;">
+            <h5 style="padding: 0rem 0.938rem;" translate>ToolTips.EditLog</h5>
+        </div>
+        <div class="editBody" style="max-height: 12.5rem; overflow-y: auto;">
+            <ul style="line-height:2.188rem;display: inline-block;">
+                <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'" style="padding: 0rem 0.938rem;float: left;width: 100%;">
+                    <div style="display:block;word-break: break-all;">
+                        <span style="float: left; width: 100%; padding: 0rem 0.938rem;"> <i class="fa fa-circle"
+                                aria-hidden="true" style="margin-right: 0.75rem; font-size:0.75rem;line-height: 0.75rem;"></i>
+                            <u style="cursor:pointer;font-weight: bolder;" ng-click="showaudit(log)" data-toggle-second="tooltip" data-placement="left"
+                            title="{{'ToolTips.Clicktoviewdetails' | translate}}">{{("BankDataDts."+ log.action) | translate}}</u>
+                            {{'ToolTips.On' | translate}} {{log.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss Z'}} {{'ToolTips.By' | translate}} {{log.UserId}}.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" id="auditModel" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="padding: 0.625rem 1.25rem;overflow:auto;max-height:43.75rem">
+                <button type="button" class="close" data-dismiss="modal" style="margin-left: 46rem;">&times;</button>
+                <div class="modal-header" style="padding: 0.625rem 0rem;border: 0rem !important;text-align: left;">
+                    <b style="word-break: break-all;">{{commentVal ? commentVal[0] :  ("BankDataDts."+ auditLogDetails.action) | translate}} {{'ToolTips.On' | translate}}
+                        {{auditLogDetails.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss'}} {{'ToolTips.By' | translate}}
+                        {{auditLogDetails.UserId}}</b>
+                </div>
+                <div class="modal-body table-responsive" style="padding: 0rem !important; border: 0rem !important">
+                    <table class="table table-bordered">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0" ng-if="commentVal">
+                    <p style="word-break: break-all;"><b  translate>ApprovalDts.Notes: </b>{{commentVal[1]}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    setTimeout(function() {
+        $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+        $('.my-tooltip').tooltip({ trigger: "hover" });
+    }, 1000)
+</script>

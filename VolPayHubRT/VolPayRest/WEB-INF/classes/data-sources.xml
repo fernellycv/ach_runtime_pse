@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<data-sources>
+		
+	<!-- <data-source 
+        connection-driver="org.hsqldb.jdbcDriver"
+        url="jdbc:hsqldb:hsql://localhost"
+        username="sa"
+        password=""
+        class="com.volante.component.server.jdbc.ManagedJDBCDriverConnectionPool"
+        dialect="hsql"
+        location="transformdb"
+        name="hsqldb"
+    />  -->
+	 <transaction-manager class="com.volante.component.server.transaction.GenericTransactionManagerFactory"/>
+
+      <data-source
+        class="com.volante.component.server.jdbc.ManagedDataSourceConnectionPoolTM"
+        name="volpay-db"
+        server-location="java:comp/env/jdbc/VolPayDB"
+        location="transformdb"
+      />
+	  
+	 <transaction-manager class="com.volante.component.server.transaction.GenericTransactionManagerFactory"/>
+
+      <data-source
+        class="com.volante.component.server.jdbc.ManagedDataSourceConnectionPoolTM"
+        name="ach-db"
+        dialect="mssql"
+        server-location="java:comp/env/jdbc/ACHDB"
+        location="transformdb1"
+      />
+	  
+	  	  
+      <data-source
+        name="mongodb-localhost"
+        dbType="mongodb"
+		url="${env.MONGO_HOST}:${env.MONGO_PORT};databaseName=${env.MONGO_DATABASE_NAME}" 
+		username="${env.MONGO_USERNAME}"
+		password="${env.MONGO_PASSWORD}"
+      />
+
+
+   <!-- <data-source 
+        connection-driver="oracle.jdbc.driver.OracleDriver"
+        url="jdbc:oracle:thin:@200.200.200.79:1521:orcl"
+        username="test"
+        password="test"
+        class="com.volante.component.server.jdbc.ManagedJDBCDriverConnectionPool"
+        dialect="oracle"
+        location="transformdb"
+        name="oracledb"
+    /> -->
+
+	<!--
+      <data-source 
+	connection-driver="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+	url="jdbc:sqlserver://sv03;databaseName=vpe"
+	username="sv03"
+	password="sv03"
+	class="com.volante.component.server.jdbc.ManagedJDBCDriverConnectionPool"
+	dialect="mssql"
+	location="transformdb"
+	name="mssqldb"
+    />
+      -->
+
+</data-sources>

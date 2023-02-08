@@ -1,0 +1,588 @@
+<style>
+    .modifiedClass {
+        background-color: #ffffb8;
+    }
+    
+    td>pre {
+        background: transparent;
+        max-height: 7.813rem;
+        overflow: auto
+    }
+    
+    table>tbody>tr>th {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+    
+    .formDataGroup {
+        margin: 0.313rem 0;
+    }
+    
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .input-group-addon {
+        padding: 0rem 0.313rem;
+    }
+    
+    .glyphicon {
+        padding: 0.563 0.625rem;
+    }
+    
+    .addAdditionalFields {
+        /*color: #333;*/
+        background-color: #f5f5f5;
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+    
+    .addBorder {
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+    
+    .close {
+        opacity: 1;
+    }
+    
+    .DatePicker,
+    .TimePicker {
+        z-index: 0 !important
+    }
+
+    .modalAlighn{
+        top: 12.5rem;
+        max-width: 37.5rem;
+    }
+
+    .modalheader{
+        padding: 0rem !important; 
+        border: 0rem !important
+    }
+
+    .modalFooter{
+        padding-right: 4.375rem;
+    }
+
+    .modalindex{
+        z-index: 1150;
+    }
+
+    .modalchnageLost{
+        max-width: 37.5rem;
+    }
+
+    .modalcontent{
+        border:0.125rem solid #243250a6;
+    }
+
+    .primaryFont{
+        font-size:1.063rem;
+    }
+
+    .auditContent{
+        padding: 0.625rem 1.25rem;
+        overflow:auto
+    }
+
+    .auditheader{
+        padding: 0.625rem 0rem;
+        border: 0rem !important;
+        text-align: left;
+    }
+
+    .auditbody{
+        padding: 0rem !important; 
+        border: 0rem !important
+    }
+
+    .auditFtr{
+        text-align: left;
+        padding:0
+    }
+
+    .cardMargin{
+        margin-top:2.5rem;
+    }
+
+    .cardHeader{
+        padding:0.563rem 0.938rem;
+        background-color:#f9f9f9;
+        border-bottom-width: 0rem;
+    }
+
+    .cardStatus{
+        color:#666;
+        padding: 0;
+        text-align: right;
+    }
+
+    .cardUserstatus{
+        font-size: 1.25rem;
+        line-height:1.25rem;
+        margin-right: 0.625rem;
+        color: rgb(65, 85, 195);
+    }
+
+    .statusFont{
+        font-size:1.25rem
+    }
+
+    .iconCircle{
+        font-size: 1.25rem;
+        line-height:1.25rem;
+        margin-right: 0.625rem;
+    }
+    .cardBody{
+        padding:0.563 0.938rem;
+        background-color:transparent;
+    }
+
+    .cardlink{
+        display: inline-block; 
+        cursor: pointer;
+    }
+
+    .cardBorder{
+        border:0.063rem solid #ccc;
+    }
+
+    .cardBodyAlighn{
+        margin:0;
+        margin-top:0.625rem;
+        margin-bottom:2.125rem;
+        padding-left:0rem;
+        line-height:1.875rem;
+    }
+
+    .margin0{
+        margin:0;
+    }
+
+    .editAlighn{
+        margin: 0.313rem 0rem 1.25rem 0rem;
+        border:0.063rem solid #ccc;
+        background: #fff;
+    }
+
+    .editLog{
+        border-bottom: 0.063rem solid #dddddd;
+    }
+
+    .ediLogpadding{
+        padding: 0rem 0.938rem;
+    }
+
+    .editLogli{
+        padding: 0rem 0.938rem;
+        float: left;
+        width: 100%;
+    }
+
+    .editLogDisp{
+        display:block;
+        word-break: break-all;
+    }
+
+    .editBodyAlighn{
+        max-height: 12.5rem; 
+        overflow-y: auto;
+    }
+
+    .editLogul{
+        line-height:2.188rem;
+        display: inline-block;
+    }
+
+    .editLogspan{
+        float: left; 
+        width: 100%; 
+        padding: 0rem 0.938rem;
+    }
+
+    .editLogcircle{
+        margin-right: 0.75rem; 
+        font-size: 0.75rem;
+        line-height: 0.75rem;
+    }
+
+    .editLogcursor{
+        cursor:pointer;
+        font-weight: bolder;
+    }
+
+    .labelid{
+        margin-top: 0.313rem;
+    }
+
+    .lableAlighn{
+        font-weight:bold;
+    }
+
+    .asterisk{
+        color:#e02222;
+        font-size:0.75rem;
+        padding-left:0.125rem
+    }
+
+    .required{
+        display:block;
+        margin:0;
+        color:#EF1C1C !important
+    }
+
+    .formFtr{
+        padding:0.938rem;
+        margin-top:0.938rem;
+        border-top:0.063rem solid
+    }
+</style>
+<div class="breadCrumb row" ng-controller="activeController">
+    <div class="col-md-6">
+        <ul class="page-breadcrumb">
+            <li>
+                <i class="fa fa-users"></i>
+                <a href="javascript:void(0);" translate class="removeCursor">Sidebar.AdminPanel</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate>Sidebar.UnlockUsers</a>
+                <i class="fa fa-angle-right"></i>
+
+            </li>
+            <li>
+                {{data.View ? 'View' : 'Edit'}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6 headerVals">
+        <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+    </div>
+</div>
+<div class="contentContainer">
+
+    <!--<div ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class ="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+                <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{alert.msg}}
+            </div>-->
+            <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}"  -->
+            <div  class="animated autoAdjustAlert bounce  bold" ng-repeat="alert in alerts1" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+                <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+            </div>
+
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md modalAlighn">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header modalheader">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body modalheader">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <!--  <h4 translate>BankDataDts.PopupRecoverMsg</h4> -->
+                </div>
+                <div class="modal-footer modalftr modalFooter">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData();">Yes, delete
+                        it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+    <!-- Draft popup Window Start-->
+    <div class="modal fade modalindex" tabindex="-1" id="delPopupDraft" role="dialog">
+        <div class="modal-dialog modal-md modalAlighn">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header modalheader">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body modalheader">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <h5 translate>BankDataDts.PopupMsgDraft</h5>
+                </div>
+                <div class="modal-footer modalftr modalFooter">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="gotodeleteDraft()">Yes, delete
+                        it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Draft popup Window End-->
+
+    <!--Alert Pop-up Window-->
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1" >
+        <div class="modal-dialog modalchnageLost">
+
+
+            <div class="modal-content modalcontent"  ng-if="madeChanges">
+                <div class="modal-body">
+                    <h5 translate>BankDataDts.PopupMsg</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                </div>
+            </div>
+            <div class="modal-content modalcontent"  ng-if="!madeChanges">
+                <div class="modal-body">
+                    <h5 class="primaryFont">Primary key fields are missing.UUID will be autogenerated.<br>Do you wish to continue?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle clr" ng-click="SaveAsModalDraft()"><span translate>
+                            Yes</span></button>
+
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="draftOverWriteModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content modalcontent">
+                <div class="modal-body">
+                    <h5>Draft Already Exists. Do you want to Overwrite?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="forceSaveDraft();" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" translate>BankDataDts.No</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" tabindex="-1" id="auditModel" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content auditContent">
+                
+                <div class="modal-header auditheader">
+                    <b>{{commentVal ? commentVal[0] : auditLogDetails.action}} on {{auditLogDetails.userAuditTimeStamp|
+                        date:'yyyy-MM-dd HH:mm:ss'}} by {{auditLogDetails.UserId}}</b>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body table-responsive auditbody">
+                    <table class="table table-bordered">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer auditFtr" ng-if="commentVal">
+                    <p><b  translate>ApprovalDts.Notes: </b>{{commentVal[1]}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="data.View">
+
+        <div class="col-md-12">
+            <div class="card cardMargin">
+                <div>
+                    <div class="card-header row m-0 cardHeader">
+                        <div class="col-md-8 serviceHeading pl-0" >
+                            <span ng-style="{'color':(data.UserStatus | chooseStatus)}"><span data-toggle-second="tooltip" data-placement="top"
+                                    title="User ID">{{data.UserId}}</span> 
+                        </div>
+
+                        <div class="col-md-4 serviceHeading cardStatus" ng-if="data.UserStatus == 'Locked'"><i ng-style="{'color':(data.UserStatus | chooseStatus)}" class="fa fa-circle cardUserstatus" ng-if="data.UserStatus" data-toggle-second="tooltip" data-placement="bottom" title="{{( 'UnlockUsers.' + data.UserStatus) | translate}}"></i><span class="statusFont" translate>{{'UnlockUsers.' + data.UserStatus}}</span>
+                        </div>
+                        <div class="col-md-4 serviceHeading cardStatus"  ng-if="data.UserStatus == 'Locked-WAITFORAPPROVAL'"><i  ng-style="{'color':(data.UserStatus | chooseStatus)}" class="fa fa-circle iconCircle" ng-if="data.UserStatus" data-toggle-second="tooltip" data-placement="bottom" title="{{data.UserStatus}}"></i><span class="statusFont" translate>{{'UnlockUsers.' + data.UserStatus}}</span>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="card-body ng-scope row m-0 cardBody">
+                        <div class="col-md-10 pl-0">
+                            <!-- Effective Date :
+                            <span>{{data.EffectiveFromDate}}
+                                {{((data.EffectiveFromDate)&&(data.EffectiveTillDate))?' to ':''}}
+                                {{data.EffectiveTillDate}}</span> -->
+                        </div>
+                        <div class="col-md-2 cardStatus">
+
+                            <a  ng-if="newPermission.U" class="actionIcons cardlink" ng-click="(isSuperAdmin == 'Super Admin' &&  data.UserStatus != 'Locked-WAITFORAPPROVAL')? goToEditOperation(resourceGroup[0].ResourceGroupName,data.RoleID): (permission.U && data.UserStatus != 'Locked-WAITFORAPPROVAL') ? goToEditOperation(resourceGroup[0].ResourceGroupName,data.RoleID) : ''" data-toggle-second="tooltip" data-placement="top"
+                                title="{{(isSuperAdmin == 'Super Admin' && data.UserStatus != 'Locked-WAITFORAPPROVAL') ? 'ToolTips.Edit': (permission.U  && data.UserStatus != 'Locked-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin')? 'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"
+                                ng-style="(isSuperAdmin == 'Super Admin' && data.UserStatus != 'Locked-WAITFORAPPROVAL') ? {'opacity':'','cursor': 'pointer'}: (permission.U  && data.UserStatus != 'Locked-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin') ? {'opacity':'','cursor': 'pointer'} : {'opacity':'0.2','cursor': 'not-allowed'}"><i class="fa fa-pencil-square-o Iclr1"></i></a>                          
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+            <div class="card-body p-0 mt-3 cardBorder">
+                
+                    <div class="cardBodyAlighn" >
+                        <div class="row margin0"  ng-repeat="(key,val) in data" ng-if="key != 'IsForceReset' && key != 'RoleID1' && key != 'Status' && key != 'UserRoleAssociation' && key != 'View' && key != 'DraftTotObj' && key != 'Operation' && key != 'IsAPIUser'"  ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}">
+                            
+
+                            <label class="control-label bold col-md-3 col-sm-3">
+                                <!--span class="col-md-8 ng-binding">{{key
+                                    | camelCaseFormatter}}</span-->   
+                                    <span ng-if="key == 'UserId'" class="col-md-8 ng-binding" translate> UserManagement.User ID</span>
+                                    <span ng-if="key == 'LastLoggedIn'" class="col-md-8 ng-binding" translate> UserManagement.LastLoggedIn</span>
+                                    <span ng-if="key == 'UserStatus'" class="col-md-8 ng-binding" translate> UnlockUsers.Status</span>
+                                    <span ng-if="key == 'NoOfAttempts'" class="col-md-8 ng-binding" translate> UserManagement.Attempts</span>
+                                    <span class="col-md-1 float-md-right float-sm-center">:</span> </label>
+                            <div class="control-label col-md-9 col-sm-9 ng-binding subserviceInfo">
+                                <span ng-if="key != 'UserRoleAssociation' && key != 'EmailAddress' && key != 'UserStatus'">{{val}}</span>
+								<span ng-if="key == 'UserStatus'" translate>{{'UnlockUsers.' + val}}</span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+               
+            </div>
+        </div>
+
+
+        
+    </div>
+
+
+    <div class="row editAlighn" ng-show="data.View && editedLog.length">
+        <div class="editHead editLog">
+            <h4 class="ediLogpadding" translate>ToolTips.EditLog</h4>
+        </div>
+
+        <div class="editBody editBodyAlighn">
+            <ul class="editLogul">
+                <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'" class="editLogli">
+                    <div class="editLogDisp">
+                        <span class="editLogspan"> <i class="fa fa-circle editLogcircle"
+                                aria-hidden="true"></i>
+                            <u class="editLogcursor" ng-click="showaudit(log)" data-toggle-second="tooltip" data-placement="right"
+                                title="{{'ToolTips.Clicktoviewdetails' | translate}}">{{log.action}}</u> on
+                            {{log.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss Z'}} by {{log.UserId}}.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row" ng-show="!data.View">
+        <div class="col-md-12">
+            <div class="pageTitle alertWidthonResize">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title__container">
+                            <h2 translate ng-style="{'color':(data.UserStatus | chooseStatus)}">UserManagement.EditUserDetail</h2>
+                            <p translate> Branch.ForMandatory</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+            <div  class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+                <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+            </div>
+
+            <form role="form" class="simple-form form-horizontal" name="userSessionForm" ng-submit="updateData(data); updatesubmitted=false;">
+                <div class="ForAddNewScroll margin0">
+                    <div class="control-group userid">
+                        <div class="form-group row">
+                            <label for="labelId" class="control-label col-md-2 mt-2 text-sm-left text-md-right text-lg-right text-xl-right lableAlighn"><span translate>UserManagement.User ID</span>
+                                <span class="asterisk" 
+                                    aria-required="true">*</span>
+                            </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userSessionForm.UserId.$invalid]">
+                                <input class="form-control" type="text" name="UserId" ng-model="data.UserId" placeholder="Please Enter User ID" required ng-blur="multipleEmptySpace($event)" ng-disabled="(entityDraft.FromDraft) ? false : true">
+                            </div>
+                            <span class="help-inline required" ng-show="updatesubmitted && userSessionForm.UserId.$error.required">Required</span>
+                        </div>
+                        <div class="form-group row">
+                            <label for="UserId" class="control-label col-md-2 mt-2 text-sm-left text-md-right text-lg-right text-xl-right lableAlighn" > <span translate>UserManagement.LastLoggedIn</span>
+                                <span class="asterisk"
+                                    aria-required="true">*</span>
+                            </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userSessionForm.LastLoggedIn.$invalid]">
+                                <input class="form-control" type="text" name="LastLoggedIn" ng-model="data.LastLoggedIn" placeholder="Please Enter Last Log" required ng-blur="multipleEmptySpace($event)"  ng-disabled="(entityDraft.FromDraft) ? false : true">
+                            </div>
+                            <span class="help-inline required" ng-show="updatesubmitted && userSessionForm.LastLoggedIn.$error.required">Required</span>
+                        </div>                                              
+                        
+                        <div class="form-group row">
+                            <label class="bold control-label col-md-2 mt-2 text-sm-left text-md-right text-lg-right text-xl-right"> <span translate>UnlockUsers.Status</span>  <span
+                                class="asterisk"
+                                    aria-required="true">*</span></label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userSessionForm.UserStatus.$invalid]">
+                                <select class="form-control appendSelect2" select2-model-append ng-model="data.UserStatus" required ng-disabled="(UserId == data.UserId)?true:false">
+                                    <option value="ACTIVE">ACTIVE</option>
+                                    <option value="Locked">select</option> 
+                                </select>
+                            </div>
+                            <span class="help-inline required" ng-show="updatesubmitted && userSessionForm.UserStatus.$error.required">Required</span>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="UserId" class="control-label col-md-2 mt-2 text-sm-left text-md-right text-lg-right text-xl-right lableAlighn"><span translate>UserManagement.Attempts</span>
+                                <span class="asterisk"
+                                    aria-required="true">*</span>
+                            </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userSessionForm.NoOfAttempts.$invalid]">
+                                <input class="form-control" type="text" name="NoOfAttempts" ng-model="data.NoOfAttempts"   placeholder="Please Enter No Of Attempts" required ng-blur="multipleEmptySpace($event)"  ng-disabled="(entityDraft.FromDraft) ? false : true">
+                            </div>
+                            <span class="help-inline required" ng-show="updatesubmitted && userSessionForm.NoOfAttempts.$error.required">Required</span>
+                        </div> 
+
+                    </div>
+                </div>
+
+                <div class="col-xs-12 formFtr">
+                    <button type="submit" class="btn btnStyle clr" ng-click="updatesubmitted=true" title="{{'BtnGroup.Submit' | translate}}"><span translate>BtnGroup.SaveChanges</span></button>                   
+
+                    <button type="button" class="btn btnStyle clr" data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="updatesubmitted=false;gotoCancelFn()"  title="{{'BtnGroup.Cancel' | translate}}"><span translate=""
+                            class="ng-scope" translate>BtnGroup.Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div class="col-md-9">
+</div>
+</div>
+
+</div>
+
+
+
+</div>
+
+<script>
+    //$('.appendSelect2').select2()
+
+    $(document).ready(function() {
+        // $('.DatePicker').datetimepicker({ 
+        // 	 format:"YYYY-MM-DD", 
+        // 	 useCurrent: false, 
+        // 	 showClear: true, 
+
+        //  }) 
+       
+        setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+            
+        setTimeout(function() {
+            $('.input-group-addon').on('click focus', function(e) {
+                $(this).prev().focus().click()
+            });
+        }, 1000)
+    })
+</script>

@@ -1,0 +1,163 @@
+@media print {
+    .fa {
+        color: #fff !important;
+    }
+    .pageTitle {
+        padding-top: 10px !important;
+    }
+    .btn {
+        background-color: #3a9c95 !important;
+        color: #fff !important;
+    }
+    .panel-primary>.panel-heading {
+        color: #D8E3F2 !important;
+        background-color: #428bca !important;
+        border-color: #3595bd !important;
+    }
+    .panel-success>.panel-heading {
+        color: #3c763d !important;
+        background-color: #dff0d8 !important;
+        border-color: #d6e9c6 !important;
+    }
+    .panel-warning>.panel-heading {
+        color: #8a6d3b !important;
+        background-color: #fcf8e3 !important;
+        ;
+        border-color: #faebcc !important;
+        ;
+    }
+    .panel-danger>.panel-heading {
+        color: #a94442 !important;
+        ;
+        background-color: #f2dede !important;
+        border-color: #ebccd1 !important;
+        ;
+    }
+    .panel-info>.panel-heading {
+        color: #31708f !important;
+        background-color: #d9edf7 !important;
+        border-color: #bce8f1 !important;
+    }
+    .badge-total-payment {
+        background-color: #0BA3F7 !important;
+        background-image: none !important;
+    }
+    .badge-success {
+        background-color: #3C763D !important;
+        background-image: none !important;
+    }
+    .badge-danger {
+        background-color: #A94442 !important;
+        background-image: none !important;
+    }
+    .badge-warning {
+        background-color: #8a6d3b !important;
+        background-image: none !important;
+    }
+}
+
+@media print {
+    body {
+        color: #fff !important;
+    }
+    .content-wrapper {
+        margin-left: 0 !important;
+    }
+    .main-sidebar {
+        display: none !important;
+    }
+    .main-header {
+        display: none;
+    }
+    .main-footer {
+        display: none;
+    }
+    .FakeHeader {
+        display: none;
+    }
+    /*** Dashboard  Page***/
+    .pringDrop {
+        width: 50% !important;
+    }
+}
+
+
+/*** All Payments Page***/
+
+@media print {
+    .panelLabel_Primary {
+        border: 3px solid #337ab7 !important;
+        background-color: #337ab7 !important;
+        color: #fff !important;
+    }
+    .panelLabel_Success {
+        border: 3px solid #3c763d !important;
+        background-color: #3c763d !important;
+        color: #fff !important;
+    }
+    .panelLabel_Warning {
+        border: 3px solid #8a6d3b !important;
+        background-color: #8a6d3b !important;
+        color: #fff !important;
+    }
+    .panelLabel_Danger {
+        border: 3px solid #a94442 !important;
+        background-color: #a94442 !important;
+        color: #fff !important;
+    }
+    /*** Table Styles ***/
+    .smallTable td,
+    .smallTable th {
+        font-size: 9px !important;
+        padding: 0 !important;
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+        word-wrap: break-word;
+    }
+    .Iclr {
+        font-size: 10px 1important;
+    }
+    .table-scrollable>.table>thead>tr>th,
+    .table-scrollable>.table>tbody>tr>th,
+    .table-scrollable>.table>tfoot>tr>th,
+    .table-scrollable>.table>tfoot>tr>th,
+    .table-scrollable>.table>tfoot>tr>td {
+        white-space: normal !important;
+    }
+    .smallTable pre {
+        font-size: 9px !important;
+    }
+    .batchHeight {
+        height: 20px;
+        width: 84px;
+        text-align: left;
+        font-size: 9px !important;
+    }
+    .tooltip {
+        visibility: hidden;
+    }
+    .dropdown-menu-excel {
+        visibility: hidden;
+    }
+}
+
+
+/*Printing List View */
+
+@media print {
+    .listView {
+        display: inline;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        overflow-y: visible;
+        overflow-x: visible;
+        _page-break-before: always;
+    }
+}
+
+@media print {
+    @page {
+        overflow: visible;
+    }
+}

@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <!--importing queue configuration file -->
+    <import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+
+    <camelContext id="VOLPAY_INSTRUCTIONPROCESSING" xmlns="http://camel.apache.org/schema/spring"
+                  threadNamePattern="VOLPAY_INSTRUCTION_THREADPOOL-#counter#" useBreadcrumb="false">
+
+        <!-- loading properties file  -->
+        <propertyPlaceholder id="properties"
+                             location="classpath:${env:VOLPAY_DOMAIN}_fileprocessing_config.properties"/>
+        <threadPool id="FileProcessingPool" threadName="FileProcessingThread" poolSize="4" maxPoolSize="8"
+                    maxQueueSize="-1"/>
+
+        <!-- Handling all kind of exceptions occurs during exchage failures-->
+        <onException>
+		<exception>java.lang.Throwable</exception>
+          <exception>javax.jms.JMSException</exception>
+            <exception>org.apache.camel.CamelException</exception>
+            <exception>org.apache.camel.RuntimeCamelException</exception>
+            <exception>java.lang.RuntimeException</exception>
+
+		<retryWhile><method ref="retryRuleset"/></retryWhile>
+		<redeliveryPolicy retryAttemptedLogLevel="WARN"/>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <bean ref="bean:camellogger" method="composeExchangeException"/>
+        </onException>
+
+        <route id="DeadLetterQueue">
+            <from uri="direct-vm:OnExceptionRetry"/>	
+            <removeHeaders pattern="JMS*"/>
+            <!--<convertBodyTo type="byte[]"/> -->
+            <to uri="{{QUEUE_PREFIX}}:{{DEADLETTERQUEUE}}?timeToLive=10000"/>
+        </route>
+
+        <!--      <route id="LogReload" startupOrder="2">
+                 <from uri="timer://StartPro?fixedRate=true&amp;repeatCount=1"/>
+               <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process>
+                 <removeHeaders pattern="JMS*"/>
+                 <setBody>
+                     <simple>ignore</simple>
+                 </setBody>
+                 <to uri="volante:ReloadLoggingServiceFlow"/>
+             </route>  -->
+
+        <!--cache reload -->
+        <route id="ReloadCacheFromVM">
+            <from uri="direct-vm:cachereloadvm"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{TOPIC_PREFIX}}:{{VPECACHERELOAD}}"/>
+        </route>
+
+        <route id="ReloadCache">
+            <from uri="{{TOPIC_PREFIX}}:{{VPECACHERELOAD}}?concurrentConsumers=1"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:RefreshCacheData_Channel"/>
+        </route>
+
+        <!-- Transport reload -->
+        <route id="ReloadCamelRoute">
+            <from uri="{{TOPIC_PREFIX}}:{{CAMELCACHERELOAD}}?concurrentConsumers=1"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ReloadInitatorService"/>
+        </route>
+
+        <!--File Processing - Acquired-->
+        <route id="FileProcessing_Acquired" autoStartup="false">
+            <from uri="direct-vm:FILE.ACQUIRED"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED}}"/>
+        </route>
+
+        <route id="FileProcessing_Acquiredqueue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED}}?concurrentConsumers=1&amp;transacted=true"/>
+            <!--  <removeHeaders pattern="JMS*"/>-->
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks?newInstruction=true"/>
+        </route>
+
+		<!--
+        <route id="FileProcessing_Conf_Acquired" autoStartup="false">
+            <from uri="direct-vm:FILE.CONFACQUIRED"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILECONFACQUIRED}}"/>
+        </route>
+
+        <route id="FileProcessing_Conf_Acquiredqueue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILECONFACQUIRED}}?concurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks"/>
+        </route>
+		-->
+        <!--File Processing - Reject
+        <route id="DebulkProcessing_Reject" autoStartup="false">
+            <from uri="direct-vm:DEBULK.REJECT"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{DEBULKREJECT}}"/>
+        </route>
+        <route id="RejectFile" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEREJECT}}?concurrentConsumers=1&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:RejectDuplicateFile"/>
+        </route>
+        <route id="ProcessHoldFile" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEHOLD}}?concurrentConsumers=2&amp;maxConcurrentConsumers=4&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessHoldFile"/>
+        </route>
+
+        <route id="DebulkProcessing_Rejectqueue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{DEBULKREJECT}}?concurrentConsumers=1&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:RejectFileAndDeletePayments"/>
+        </route>
+		-->
+        <!--File Processing -PAYMENTLIST
+        <route id="FileProcessing_paymentlIST" autoStartup="false">
+            <from uri="direct-vm:PAYMENTLIST.TOBEPROCESSED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED}}"/>
+        </route>
+
+        <route id="FileProcessing_paymentlIST_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED}}?concurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}"/>
+            </split>
+        </route>
+-->
+        <!--File Processing -ATTACHMSGLIST
+        <route id="FileProcessing_AttachMsgLIST" autoStartup="false">
+            <from uri="direct-vm:ATMSGLIST.TOBEPROCESSED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{ATMSGLISTTOBEPROCESSED}}"/>
+        </route>
+
+        <route id="FileProcessing_AttachMsgLIST_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{ATMSGLISTTOBEPROCESSED}}?concurrentConsumers=4&amp;maxConcurrentConsumers=4&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{ATMSGTOBEPROCESSED}}"/>
+            </split>
+        </route>
+		-->
+        <!--File Processing -CONFIRMATIONLIST
+        <route id="FileProcessing_ConfirmationLIST" autoStartup="false">
+            <from uri="direct-vm:CONFLIST.TOBEPROCESSED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{CONFLISTTOBEPROCESSED}}"/>
+        </route>
+
+        <route id="FileProcessing_ConfirmationLIST_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{CONFLISTTOBEPROCESSED}}?concurrentConsumers=4&amp;maxConcurrentConsumers=4&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{CONFTOBEPROCESSED}}"/>
+            </split>
+        </route>
+		-->
+        <!--File Processing -TOBEPROCESSED-->
+        <route id="FileProcessing_ToBeProcessed" autoStartup="false">
+            <from uri="direct-vm:PAYMENT.TOBEPROCESSED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <threads executorServiceRef="FileProcessingPool">
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}"/>
+            </threads>
+        </route>
+
+        <!-- ACK/NAK generation
+        <route id="ACK_NAK_Generate" autoStartup="false">
+            <from uri="direct-vm:ACK.TOBEGENERATED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{GENERATEACK}}"/>
+        </route>
+
+        <route id="ACK_NAK_Generate_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{GENERATEACK}}?concurrentConsumers=1&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:VolPayFileACKGenerator"/>
+        </route>
+		-->
+        <!--NOTIFICATION 
+        <route id="Notigate" autoStartup="false">
+            <from uri="direct-vm:NOTIGATEQUEUEIN"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{NOTIGATE}}"/>
+        </route> -->
+
+        <!-- Mail configurations For file output
+        <route id="Mail" autoStartup="false">
+            <from uri="direct-vm:Volpay.EMAIL"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{MAIL_QUEUE}}"/>
+        </route> -->
+
+        <!-- Populate msgFieldList of ServiceConfig at startup only -->
+        <!-- <route id="StartOfProcess">
+             <from uri="timer://StartPro?fixedRate=true&amp;period=1000000&amp;repeatCount=1&amp;delay=1000"/>
+          <onCompletion>
+         <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+           </onCompletion>
+           <process ref="schedulerProcessor"></process>
+             <removeHeaders pattern="JMS*"/>
+             <setBody>
+                 <simple>ignore</simple>
+             </setBody>
+             <to uri="volante:ChannelStartOfProcess"/>
+         </route>
+
+        <route id="PAYMENTSTATUSToINSTRUCTIONSTATUS">
+            <from uri="{{QUEUE_PREFIX}}:{{PAYMENTSTATUS}}?concurrentConsumers=1&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:PaymentStatusToInstructionStatusFlow"/>
+        </route>
+
+        <route id="PAYMENTSTATUS_FILE">
+            <from uri="direct-vm:PaymentStatus"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{PAYMENTSTATUS}}"/>
+        </route>
+-->
+        <!-- start of day in single instance -->
+        <route id="SingleInstanceStartOfDayProcess" startupOrder="1">
+            <from uri="quartz2://start?cron=0+0+00+*+*+?&amp;trigger.timeZone=UTC"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <setHeader headerName="InvocationFrequency">
+                <constant>1440</constant>
+            </setHeader>
+            <setHeader headerName="identifier">
+                <constant>STARTOFDAY</constant>
+            </setHeader>
+            <setBody>
+                <simple>VolPayChannelStartDayProcess</simple>
+            </setBody>
+            <to uri="volante:ScheduledFlowInvoker"/>
+        </route>
+        <!--PARENT STATEMENT PROCESSING
+        <route id="StatementPagination" autoStartup="false">
+            <from uri="direct-vm:STATEMENT.INSTRPROCESSING"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <threads executorServiceRef="FileProcessingPool">
+                <to uri="volante:VolPayFileProcessor"/>
+            </threads>
+        </route>
+		-->
+        <!-- start of day in all instance of Channel -->
+        <route id="ChannelAllInstanceStartOfDayProcess">
+            <from uri="quartz2://reloadChannelTable?cron=0+0+00+*+*+?&amp;trigger.timeZone=UTC"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <setBody>
+                <simple>ChannelAllInstanceStartOfDayProcess</simple>
+            </setBody>
+            <to uri="volante:ChannelAllInstanceStartOfDayProcess"/>
+        </route>
+		
+		        <!--BatchInterfaceRetryTimeOutScheduler -->
+<!-- 			<route id="BatchInterfaceRetry">
+			  <from uri="quartz2://InterfaceRetry?cron=0/30+*+*+?+*+*+*?&amp;trigger.timeZone=UTC"/>
+			   
+			  <removeHeaders pattern="JMS*"/>
+			  <convertBodyTo type="byte[]"/>
+			  <setBody>
+				<simple>BatchInterfaceRetryTimeOutScheduler</simple>
+			  </setBody>
+			  <setHeader headerName="invocationFrequency">
+				<constant>30</constant>
+			  </setHeader>
+			  <setHeader headerName="identifier">
+				<constant>BatchInterfaceTimeOut</constant>
+			  </setHeader>
+			  <to uri="volante:ScheduledFlowInvoker_Seconds"/>
+			</route> -->
+
+        <route id="VolpayChannelServiceRegistryTimeOutManager" startupOrder="3">
+            <from uri="quartz2://channelServiceRegTimeout?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+            <!--  <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process> -->
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <setBody>
+                <simple>ignore</simple>
+            </setBody>
+            <to uri="volante:ServiceRegistryHealthChecker"/>
+        </route>
+
+        <route id="VolPayChannelRouteRegistryManager">
+            <from uri="quartz2://routeHealthCheck?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+            <!-- <onCompletion>
+            <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+              </onCompletion>
+              <process ref="schedulerProcessor"></process> -->
+            <bean ref="bean:transportMonitor" method="publishStatusAndUpdatedTime"/>
+        </route>
+
+        <route id="ReloadCamelRoutesFromChannel">
+            <from uri="direct-vm:IntializeCamelRoute"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{TOPIC_PREFIX}}:{{CAMELCACHERELOAD}}?concurrentConsumers=1"/>
+        </route>
+
+        <route id="VolpayHubActiveOrDown">
+            <from uri="quartz2://hubActiveOrDown?cron=0/5+*+*+*+*+?&amp;trigger.timeZone=UTC"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <setBody>
+                <simple>ignore</simple>
+            </setBody>
+            <to uri="volante:ScheduledFlowForHubCheck"/>
+        </route>
+
+        <!-- New Routes -->
+        <!-- Splitting of Acquired Queue
+        <route id="FileProcessing_Acquired0" autoStartup="false">
+            <from uri="direct-vm:FILE.ACQUIRED0"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED0}}"/>
+        </route>
+        <route id="FileProcessing_Acquired1" autoStartup="false">
+            <from uri="direct-vm:FILE.ACQUIRED1"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED1}}"/>
+        </route>
+        <route id="FileProcessing_Acquired2" autoStartup="false">
+            <from uri="direct-vm:FILE.ACQUIRED2"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED2}}"/>
+        </route>
+        <route id="FileProcessing_Acquired3" autoStartup="false">
+            <from uri="direct-vm:FILE.ACQUIRED3"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED3}}"/>
+        </route> -->
+
+        <!-- Destributing Messages from Acquired Queue 
+        <route id="FileProcessing_Acquiredqueue0" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED0}}?concurrentConsumers=1&amp;transacted=true"/>
+            
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks?newInstruction=true"/>
+        </route>
+        <route id="FileProcessing_Acquiredqueue1" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED1}}?concurrentConsumers=1&amp;transacted=true"/>
+            
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks?newInstruction=true"/>
+        </route>
+        <route id="FileProcessing_Acquiredqueue2" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED2}}?concurrentConsumers=1&amp;transacted=true"/>
+            
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks?newInstruction=true"/>
+        </route>
+        <route id="FileProcessing_Acquiredqueue3" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED3}}?concurrentConsumers=1&amp;transacted=true"/>
+            
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks?newInstruction=true"/>
+        </route>-->
+        <!--Multiple Instaces of TOBEPROCESSED
+        <route id="FileProcessing_ToBeProcessed0" autoStartup="false">
+            <from uri="direct-vm:PAYMENT.TOBEPROCESSED0"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <threads executorServiceRef="FileProcessingPool">
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED0}}"/>
+            </threads>
+        </route>
+        <route id="FileProcessing_ToBeProcessed1" autoStartup="false">
+            <from uri="direct-vm:PAYMENT.TOBEPROCESSED1"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <threads executorServiceRef="FileProcessingPool">
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED1}}"/>
+            </threads>
+        </route>
+        <route id="FileProcessing_ToBeProcessed2" autoStartup="false">
+            <from uri="direct-vm:PAYMENT.TOBEPROCESSED2"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <threads executorServiceRef="FileProcessingPool">
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED2}}"/>
+            </threads>
+        </route>
+        <route id="FileProcessing_ToBeProcessed3" autoStartup="false">
+            <from uri="direct-vm:PAYMENT.TOBEPROCESSED3"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <threads executorServiceRef="FileProcessingPool">
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED3}}"/>
+            </threads>
+        </route>-->
+        <!--Multiple Instaces of  PAYMENT TOBEPROCESSEDLIST
+        <route id="FileProcessing_paymentlIST0" autoStartup="false">
+            <from uri="direct-vm:PAYMENTLIST.TOBEPROCESSED0"/>
+            <removeHeaders pattern="JMS*"/>
+            <split streaming="true" stopOnException="true">
+                <tokenize token="," group="{{CHUNKSIZE}}"/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED0}}"/>
+            </split>
+        </route>
+        <route id="FileProcessing_paymentlIST1" autoStartup="false">
+            <from uri="direct-vm:PAYMENTLIST.TOBEPROCESSED1"/>
+            <removeHeaders pattern="JMS*"/>
+            <split streaming="true" stopOnException="true">
+                <tokenize token="," group="{{CHUNKSIZE}}"/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED1}}"/>
+            </split>
+        </route>
+        <route id="FileProcessing_paymentlIST2" autoStartup="false">
+            <from uri="direct-vm:PAYMENTLIST.TOBEPROCESSED2"/>
+            <removeHeaders pattern="JMS*"/>
+            <split streaming="true" stopOnException="true">
+                <tokenize token="," group="{{CHUNKSIZE}}"/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED2}}"/>
+            </split>
+        </route>
+        <route id="FileProcessing_paymentlIST3" autoStartup="false">
+            <from uri="direct-vm:PAYMENTLIST.TOBEPROCESSED3"/>
+            <removeHeaders pattern="JMS*"/>
+            <split streaming="true" stopOnException="true">
+                <tokenize token="," group="{{CHUNKSIZE}}"/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED3}}"/>
+            </split>
+        </route>
+-->
+        <!--Multiple Instaces of  PAYMENTLIST TO TOBEPROCESSED
+        <route id="FileProcessing_paymentlIST_queue0" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED0}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED0}}"/>
+            </split>
+        </route>
+        <route id="FileProcessing_paymentlIST_queue1" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED1}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED1}}"/>
+            </split>
+        </route>
+        <route id="FileProcessing_paymentlIST_queue2" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED2}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED2}}"/>
+            </split>
+        </route>
+        <route id="FileProcessing_paymentlIST_queue3" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED3}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <convertBodyTo type="byte[]"/>
+                <to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED3}}"/>
+            </split>
+        </route>
+        <route id="VMArchieveFile" autoStartup="true">
+            <from uri="direct-vm:ArchivePort"/>
+            <to uri="seda:SEDAArchiveQueue"/>
+        </route>
+        <route id="SedaArchieveFile" autoStartup="true">
+            <from uri="seda:SEDAArchiveQueue"/>
+            <to uri="volante:SedaArchieveFile"/>
+        </route>-->
+
+        <route id="FileRestart" autoStartup="false">
+            <from uri="direct-vm:FILE.RESTART"/>
+            <removeHeaders pattern="JMS*"/>
+            <removeHeaders pattern="breadcrumbId"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FILERESTART}}"/>
+        </route>
+        <route id="FileRestart_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILERESTART}}?concurrentConsumers=1&amp;transacted=true"/>
+           <!-- <removeHeaders pattern="JMS*"/>-->
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessInstructionWithTasks"/>
+        </route>
+		<!-- Statement processing
+        <route id="StatementProcessing_Acquiredvm0" autoStartup="false">
+            <from uri="direct-vm:STATEMENT.ACQUIRED?synchronous=false"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <process ref="VolanteInternalEncryptProcessorBean" />
+            <to uri="{{QUEUE_PREFIX}}:{{FILESTATEMENTACQUIRED}}"/>
+        </route>
+
+        <route id="StatementProcessing_Acquiredqueue0" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{FILESTATEMENTACQUIRED}}?maxConcurrentConsumers=10&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <process ref="VolanteInternalDecryptProcessorBean" />
+            <to uri="volante:ProcessInstructionWithTasks"/>
+        </route>
+		-->
+
+        <!--File Processing -BATCH
+        <route id="FileProcessing_batchlIST" autoStartup="false">
+            <from uri="direct-vm:BATCHLIST.TOBEPROCESSED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{BATCHLISTTOBEPROCESSED}}"/>
+        </route>
+
+        <route id="FileProcessing_batchlIST_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{BATCHLISTTOBEPROCESSED}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <to uri="{{QUEUE_PREFIX}}:{{BATCHTOBEPROCESSED}}"/>
+            </split>
+        </route>
+		
+		 <route id="BatchProcessing_ToBeProcessed" autoStartup="false">
+                  <from uri="direct-vm:BATCH.TOBEPROCESSED"/>
+                  <removeHeaders pattern="JMS*"/>
+                  <removeHeaders pattern="Camel*"/>
+                  <removeHeaders pattern="file*"/>
+                  <removeHeaders pattern="camel*"/>
+                  <convertBodyTo type="byte[]"/>
+              <to uri="{{QUEUE_PREFIX}}:{{BATCHTOBEPROCESSED}}"/>
+        </route>
+	
+	<route id="BatchProcessing_Task" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{BATCHTOBEPROCESSED}}"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:VolPayBatchProcessor"/>
+        </route>
+
+        <route id="BatchProcessing_paymentlIST" autoStartup="false">
+            <from uri="direct-vm:BATCHPAYMENTLIST.TOBEPROCESSED"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{BATCHPAYMENTLISTTOBEPROCESSED}}"/>
+        </route>
+
+        <route id="BatchProcessing_paymentlIST_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{BATCHPAYMENTLISTTOBEPROCESSED}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <split stopOnException="true">
+                <tokenize token=","/>
+                <to uri="{{QUEUE_PREFIX}}:{{BATCHPAYMENTTOBEPROCESSED}}"/>
+            </split>
+        </route>
+
+        <route id="BatchProcessing_Acquiredqueue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{BATCHACQUIRED}}?maxConcurrentConsumers=2&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessBatchWithTasks"/>
+        </route>
+
+        <route id="RejectBatch" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{BATCHREJECT}}?concurrentConsumers=1&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:RejectDuplicateBatch"/>
+        </route>
+
+        <route id="BatchRestart_queue" autoStartup="false">
+            <from uri="{{QUEUE_PREFIX}}:{{BATCHRESTART}}?concurrentConsumers=2"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:ProcessBatchWithTasks"/>
+        </route>
+-->
+        <route id="FileSingleInstanceDateChangeAndSequenceReset">
+            <from uri="quartz2://FileSingleInstanceDateChangeAndSequenceReset?cron=0+0/5+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <setBody>
+                <simple>SingleInstanceDateChangeAndSequenceReset</simple>
+            </setBody>
+            <setHeader headerName="invocationFrequency">
+                <constant>5</constant>
+            </setHeader>
+            <setHeader headerName="identifier">
+                <constant>SingleInstanceDateChangeAndSequenceReset</constant>
+            </setHeader>
+            <to uri="volante:ScheduledFlowInvoker"/>
+        </route>
+	
+	<!-- Persist the available audit details to the DB -->
+		<route id="FlushAuditDetails" startupOrder="10">
+			<from uri="quartz2://FlushAuditDetails?cron=0+0+*+*+*+?&amp;trigger.timeZone=UTC"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ignore</simple>
+			</setBody>
+			<to uri="volante:CallFlushInNewThread"/>
+		</route>
+
+	<route id="READINESS_CHECK">
+            <from uri="direct-vm:READINESS"/>
+	<onException>
+            <exception>javax.jms.JMSException</exception>
+            <exception>org.apache.camel.CamelException</exception>
+            <exception>org.apache.camel.RuntimeCamelException</exception>
+            <exception>java.lang.RuntimeException</exception>
+            <handled>
+                <constant>false</constant>
+            </handled>
+        </onException>	
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{READINESSQUEUE}}"/>
+        </route>	
+
+	<route id="READINESS_LOG" autoStartup="false">
+	 <from uri="{{QUEUE_PREFIX}}:{{READINESSQUEUE}}"/>
+	<removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+	<to uri= "log:volante.runtime?level=TRACE&amp;showAll=true&amp;multiline=true"/>
+	</route>
+
+
+		<route id="GenerateRETNForRJCT_To_Queue">
+            <from uri="direct-vm:GenerateRETNForRJCT.device"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{ACHGENRETNFORRJCT}}"/>
+        </route>
+
+        <route id="GenerateRETNForRJCT_From_Queue">
+            <from uri="{{QUEUE_PREFIX}}:{{ACHGENRETNFORRJCT}}?concurrentConsumers=1"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:GenerateNACHAReturnFile"/>
+        </route>
+
+        <route id="ACH_OUTPUT_GENERATION_PER_PARTY">
+            <from uri="{{QUEUE_PREFIX}}:{{ACH_SETTLEMENT_OUTPUT_GENERATION}}?concurrentConsumers=2"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:SettlementOutputProcessingFlow"/>
+        </route>
+		<!--ACH NFT FILE Approver -->
+		<route id="ACHNFTFileApprove_To_Queue">
+            <from uri="direct-vm:ACHNFTFileApprove.device"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{ACHNFTFILEAPPROVE}}"/>
+        </route>
+        <!-- API consum for PSE  -->
+        <route id="ApiCallsCompanyInformation" startupOrder="15">
+            <!-- <from uri="quartz2://start?cron=0+*/5+*+*+*+?&amp;trigger.timeZone=UTC" />-->
+            <from uri="quartz2://pseCompanyInformation?cron=0+0+00+*+*+?&amp;trigger.timeZone=UTC" />
+            <to uri="volante:CompanyInformationClientFlow" />
+        </route>
+        <route id="ApiCallsBankInformation" startupOrder="20">
+            <from uri="quartz2://pseBankInformation?cron=0+0+00+*+*+?&amp;trigger.timeZone=UTC" />
+            <to uri="volante:BankInformationClientFlow" />
+        </route>
+        <route id="PSEApiServiceInformationAsync">
+			<from uri="{{QUEUE_PREFIX}}:INPUT.PSEGETSERVICEINFORMATION?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:ServiceInformationClientFlow" />
+		</route>
+    </camelContext>
+</beans>

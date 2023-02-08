@@ -1,0 +1,255 @@
+<!-- (!(field['minoccurs'] >= -1) && !(field['maxoccurs'] >= -1)) condition for MOP type metainfo because there wont be a minoccurs and maxoccurs key --->
+<!-- (field['minoccurs'] == 1) if max number of section is one then no need of add button --->
+
+<style>
+    .panel-title {
+        overflow: hidden;
+    }
+    
+    .sp-replacer {
+        padding: 6px 4px;
+        border: 1px solid #c1bdbd;
+        width: 8%;
+    }
+    
+    .sp-clear-display {
+        background-image: url(themes/images/picker.png);
+        background-size: 100% 100%;
+    }
+    
+    .sp-clear-enabled .sp-hue {
+        top: 0;
+        height: 100%;
+    }
+    
+    .sp-clear-enabled .sp-clear {
+        display: none;
+    }
+    
+    .palatte_widget {
+        width: 50px;
+        height: 12px;
+        display: inline-block;
+        outline: 1px solid #9c9898;
+        border: 2px solid #ffffff;
+    }
+    
+    label {
+        text-align: right;
+    }
+    
+    .select2-container {
+        width: 100% !important;
+    }
+    
+    .odd_class {
+        background-color: #ededed !important;
+    }
+    
+    .tempLableheader {
+        margin-left: 20px !important;
+        background: rgba(237, 237, 237, 1);
+        background: -moz-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(237, 237, 237, 1)), color-stop(53%, rgba(246, 246, 246, 1)), color-stop(100%, rgba(255, 255, 255, 1)));
+        background: -webkit-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+        background: -o-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+        background: -ms-linear-gradient(top, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+        background: linear-gradient(to bottom, rgba(237, 237, 237, 1) 0%, rgba(246, 246, 246, 1) 53%, rgba(255, 255, 255, 1) 100%);
+        filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff', GradientType=0);
+    }
+</style>
+<div ng-repeat="field in webformdata.field" ng-init="_id=$index" style="padding-bottom: 7px;">
+    <div ng-if="field.type == 'Section';" class="card panel-default "  ng-init="(!(field['minoccurs'] >= -1) && !(field['maxoccurs'] >= -1)) || (field['minoccurs']) ? addSection(field,outputdata) : ''; (!configdata['editable'] && !outputdata[field.name].length) ? addSection(field,outputdata) : '';">
+        <div class="card-header cardColor" style="padding-bottom: 0rem;">
+            <h6 class="panel-title">
+                <a data-toggle="collapse" data-target="#{{field.name}}" style="color: black;">
+                    {{field.sectionheader}}
+                </a>
+                <!-- <button type="button" class="btn btn-info pull-right" ng-if="configdata['editable'] ? ((field['minoccurs'] >= -1 && field['maxoccurs'] >= -1) || (field['maxoccurs'] == 1)) : false" ng-class="( (field['maxoccurs'] <= 1 && field['maxoccurs'] != -1 && (field['maxoccurs'] == field['minoccurs'])) ? 'hidden' : '')" ng-disabled="(field['maxoccurs'] == outputdata[field.name].length)" ng-click="addSection(field,outputdata)">Add</button> -->
+
+                <a tooltip="Add New Section" tooltip-placement="bottom" style="font-size: 24px !important;line-height: 24px; cursor:pointer; text-decoration: none; color:#827f7f" class="fa fa-plus-circle ng-scope  pull-right" class="btn btn-info pull-right" ng-if="configdata['editable'] ? ((field['minoccurs'] >= -1 && field['maxoccurs'] >= -1) || (field['maxoccurs'] == 1)) : false"
+                    ng-class="( (field['maxoccurs'] <= 1 && field['maxoccurs'] != -1 && (field['maxoccurs'] == field['minoccurs'])) ? 'hidden' : '')" ng-disabled="(field['maxoccurs'] == outputdata[field.name].length)" ng-click="addSection(field,outputdata)"></a>
+
+
+            </h6>
+        </div>
+        <div id="{{field.name}}" class="card-collapse collapse show sec-body" style="border:none; overflow-y: auto;" ng-if="!configdata['editable'] || showMinoccures[field.name] || outputdata[field.name].length">
+            <div class="card-body" style="padding: 7px;">
+                <!--No minoccurs and maxoccurs key in field Ex: MOP metainfo type-->
+                <div ng-if="!(field['minoccurs'] >= -1) && !(field['maxoccurs'] >= -1)">
+                    <web-form input="field" output="outputdata" ids="ids?ids+'_'+_id:_id" config="configdata"></web-form>
+                </div>
+                <!-- maxoccurs = 1 -->
+                <div ng-if="field['maxoccurs'] == 1">
+                    <web-form input="field" output="outputdata[field.name]" ids="ids?ids+'_'+_id:_id" config="configdata"></web-form>
+                </div>
+                <!-- Repeatable field -->
+                <div class=" pl-5 row col-lg-12 col-md-12 col-sm-12 col-xs-12 rpSec" style="padding:15px" ng-if="field['maxoccurs'] != 1 && field['minoccurs'] >= -1 && field['maxoccurs'] >= -1" ng-repeat="section in outputdata[field.name]" ng-init="$first ? setSectionHeight(field) : ''" ng-class="{odd_class:($index%2)== 1}">
+                    <div class="col-lg-11 col-md-11 col-sm-8 col-xs-8" style="padding:0">
+                        <web-form input="field" output="section" ids="ids?ids+'_'+$index:$index" config="configdata"></web-form>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-4 col-xs-4" style="padding:0">
+                        <!-- <button type="button" class="btn btn-info pull-right" ng-click="removeSection($index,outputdata,field)" ng-if="configdata['editable'] ? outputdata[field.name].length > field['minoccurs'] : false">Remove</button> -->
+
+                        <a id="RemoveSection_$index" tooltip="Remove Section" tooltip-placement="bottom" style="line-height: 24px; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 10px; font-size: 24px !important;" class="fa fa-minus-circle  pull-right"
+                            aria-hidden="true" ng-click="removeSection($index,outputdata,field)" ng-if="configdata['editable'] ? outputdata[field.name].length > field['minoccurs'] : false"></a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="field.type != 'Section';">
+        <ng-include src="configdata['editable'] ? 'inputfields' : 'viewfields'"></ng-include>
+    </div>
+</div>
+
+<div style="clear:both"></div>
+
+<script type="text/ng-template" id="inputfields">
+    <div class="row" ng-if="field.renderer.type == 'TextField' && (field.type == 'DateOnly' || field.type == 'TimeOnly' || field.type == 'DateTime')" ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5 input-group pull-left" style="padding:15px;margin-top: -1rem;">
+            <!-- dtpicker directive is add to assign the selected value into ng-modal -->
+            <input fieldId="{{pId >= -1 ? pId+'_'+$index : $index}}" type="text" class="form-control" dtpicker="{{field}}" name1="{{field.name}}" placeholder="{{'Please Enter '+field.label}}" ng-model="outputdata[field.name]" ng-required="!field.notnull" ng-readonly="!field.enabled"
+                maxlength="{{field.renderer[field.renderer.type].width == -1 ? 100 : field.renderer[field.renderer.type].width}}">
+            <span class="input-group-text" style="cursor:pointer">
+				<span class="fa" ng-class="(field.type == 'DateOnly') ? 'fa-calendar date-set' :'' || (field.type == 'DateTime') ? 'fa-calendar date-set': '' || (field.type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+            </span>
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+
+    <div class="form-group tempLableheader" ng-if="field.renderer.type == 'Label'" ng-show="field.visible">
+
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold" style="margin-top:5px;"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-9">
+
+        </div>
+    </div>
+
+    <!-- maxlength="{{field['renderer'][field['renderer']['type']]['width']}}" -->
+    <div class=" row" ng-if="field.renderer.type == 'TextField' && (field.type != 'DateOnly' && field.type != 'TimeOnly' && field.type != 'DateTime') && !field.customRenderer" ng-show="field.visible" style="margin-top: 8px;">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+            <input fieldId="{{pId >= -1 ? pId+'_'+$index : $index}}" type="text" class="form-control" name1="{{field.name}}" placeholder="{{'Please Enter '+field.label}}" ng-model="outputdata[field.name]"
+                ng-required="!field.notnull" ng-readonly="!field.enabled">
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+
+    <div class="row" ng-if="field.customRenderer && field.customRenderer == 'ColourPicker'" ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5 input-group" style="padding-right: 15px;padding-left:12px;float:left;">
+            <!-- colorpicker directive is add to set the Color picker with input value -->
+            <input style="width: 92%; border-right: none;" fieldId="{{pId >= -1 ? pId+'_'+$index : $index}}" colorpicker type="text" class="form-control" name1="{{field.name}}" placeholder="{{'Please Enter '+field.label}}" ng-model="outputdata[field.name]" ng-required="!field.notnull"
+                ng-readonly="!field.enabled">
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+
+    <div class="row" ng-if="field.renderer.type == 'TextArea'" ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+            <textarea fieldId="{{pId >= -1 ? pId+'_'+$index : $index}}" class="form-control" name1="{{field.name}}" placeholder="{{'Please Enter '+field.label}}" ng-model="outputdata[field.name]" maxlength="{{field['renderer'][field['renderer']['type']]['width'] * field['renderer'][field['renderer']['type']]['rows']}}"
+                ng-required="!field.notnull" ng-readonly="!field.enabled"></textarea>
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+
+    <div class="row" ng-if="field.type == 'Boolean' && (field.renderer.Choice.choicerenderer == 'ComboChoiceRenderer' || field.renderer.Choice.choicerenderer == 'RadioChoiceRenderer')" ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+
+            <!-- <label class="radio-inline" ng-repeat="options in field.renderer[field.renderer.type].choiceOptions" ng-if="options.actualvalue">
+				<input fieldId="{{pId >= -1 ? pId+'_'+$index : $index}}" type="radio" name="{{pId >= -1 ? pId+'_'+$index : $index}}" class="" ng-model="outputdata[field.name]" ng-value="{{options.actualvalue}}" ng-required="!field.notnull" ng-readonly="!field.enabled">
+				<span style="padding:5px">{{options.displayvalue}}</span>
+			</label> -->
+
+            <!-- ng-init="setVal({fieldName:field.name, pId: pId, index:$index , val:outputdata[field.name]}, )" -->
+
+            <select json-text ng-attr-id="{{field.name+'_'+(pId >= -1 ? pId+'_'+$index : $index)}}" name1="{{field.name}}" class="form-control appendSelect2" select2-model-append ng-model="outputdata[field.name]" ng-required="!field.notnull" ng-readonly="!field.enabled"
+                data-placeholder="Select" ng-init="outputdata[field.name]">
+				<option value="">Select</option>
+                <option ng-repeat="option in field.renderer[field.renderer.type].choiceOptions" value="{{option.actualvalue}}">{{option.displayvalue}}</option> 
+            </select>
+
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+
+    <div class="row" ng-if="field.type == 'Boolean' && field.renderer.Choice.choicerenderer == 'CheckBoxChoiceRenderer'" ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+            <div class="form-check form-check-inline">
+                <input fieldId="{{pId >= -1 ? pId+'_'+$index : $index}}" class="form-check-input" type="checkbox" name1="{{option.actualvalue}}" id="{{option.actualvalue}}" value="{{option.actualvalue}}" ng-model="outputdata[field.name]" ng-required="!field.notnull"
+                    ng-readonly="!field.enabled">
+                <!--  <label class="form-check-label" for="inlineRadio1">{{option.displayvalue}}</label> -->
+            </div>
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+
+     <!-- <div class="row " ng-if="((field.type == 'String') && (field.renderer.type == 'Choice')) " ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+
+            <select ng-attr-id="{{field.name+'_'+(pId >= -1 ? pId+'_'+$index : $index)}}" name1="{{field.name}}" class="form-control appendSelect2" select2-model-append ng-model="outputdata[field.name]" ng-required="!field.notnull" ng-readonly="!field.enabled" data-placeholder="Select">
+				<option value="">Select</option>
+                <option ng-repeat="option in field.renderer[field.renderer.type].choiceOptions" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+            </select>
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div> -->
+
+    <div class="row" ng-if="field.type == 'String' && field.renderer.type == 'Choice'" ng-show="field.visible">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+
+
+            <select ng-attr-id="{{field.name+'_'+(pId >= -1 ? pId+'_'+$index : $index)}}" ng-if="field.renderer.Choice.customattributes" name1="{{field.name}}" class="form-control appendSelect2" select2-model-append ng-model="outputdata[field.name]" ng-required="!field.notnull"
+                ng-readonly="!field.enabled" data-placeholder="Select">
+				<option value="">Select</option>
+                <!-- <option ng-repeat="option in field.renderer[field.renderer.type].choiceOptions" value="{{option.actualvalue}}">{{option.displayvalue}}</option> -->
+            </select>
+            <select ng-attr-id="{{field.name+'_'+(pId >= -1 ? pId+'_'+$index : $index)}}" ng-if="!field.renderer.Choice.customattributes" name1="{{field.namee}}" class="form-control" ng-model="outputdata[field.name]" select2-model-append ng-required="!field.notnull"
+                ng-readonly="!field.enabled" data-placeholder="Select">
+                    <option value="">Select</option>
+                    <option ng-repeat="option in field.renderer[field.renderer.type].choiceOptions" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                </select>
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+    
+
+    <div class="row" ng-if="((field.type == 'Integer') && (field.renderer.type == 'Choice')) " ng-show="field.visible" style="padding-top:1rem">
+        <label for="{{field.name}}" class="col-sm-3 col-form-label bold"><p>{{field.label}}<span ng-show="{{!field.notnull}}" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+        <div class="col-sm-5">
+            <select ng-attr-id="{{field.name+'_'+(pId >= -1 ? pId+'_'+$index : $index)}}" name1="{{field.name}}" class="form-control appendSelect2" select2-model-append ng-model="outputdata[field.name]" ng-required="!field.notnull" ng-readonly="!field.enabled" data-placeholder="Select">
+				<option value="">Select</option>
+                <option ng-repeat="option in field.renderer[field.renderer.type].choiceOptions" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+            </select>
+        </div>
+        <span class="help-inline col-sm-3" ng-show="configdata['submit'] && configdata['form'][field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+    </div>
+</script>
+
+<script type="text/ng-template" id="viewfields">
+    <div class="row col-md-12 col-sm-12 col-xs-12" style="margin:0;" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}">
+        <label class="control-label bold  col-md-3 col-sm-3 row" ng-hide="field['label'] == 'Rule Structure'">
+            <span class="col-md-10 col-sm-10 col-xs-10">{{field['label']}}</span>
+            <span class="col-md-2 col-sm-2 col-xs-2" style="padding:0">:</span>
+        </label>
+
+        <div class=" pl-4 control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="((field['renderer']['type'] =='TextField') || (field['renderer']['type'] =='TextArea'))" ng-hide="field['label'] == 'Rule Structure'" style="text-align: left">
+            <span ng-if="field['label'] == 'Rule'"><pre>{{outputdata[field['name']] | beautify}}</pre></span>
+            <span ng-if="field['label'] != 'Rule' && (field.customRenderer != 'ColourPicker')">{{outputdata[field['name']]}}</span>
+            <span ng-if="field['label'] != 'Rule' && (field.customRenderer && field.customRenderer == 'ColourPicker' && outputdata[field['name']])" class="palatte_widget" ng-style="{'background':outputdata[field['name']]}"> 
+			</span>
+        </div>
+        <div class="pl-4 control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo" ng-if="((field['renderer']['type'] !='TextField') && (field['renderer']['type'] !='TextArea'))" style="text-align: left">
+            <span>{{outputdata[field['name']]}}</span>
+        </div>
+    </div>
+    <div style="clear:both"></div>
+</script>

@@ -1,0 +1,276 @@
+<style>
+    .alertMsg
+   {
+   display:inline-block;
+   }
+   .control-label{
+   color:#333 !important;
+   font-style:bold !important;
+   }
+   .select2-container--default .select2-selection--single .select2-selection__rendered {
+   color: #333;
+   line-height: 34px;
+   font-size: 14px;
+   padding: 0px 15px;
+   }
+   .select2-container .select2-selection--single .select2-selection__rendered {
+   display: block;
+   padding-left: 16px;
+   padding-right: 20px;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   }
+   .select2-container--default .select2-selection--single .select2-selection__placeholder {
+   color: #999;
+   }
+   .select2-container--default .select2-selection--single {
+   background-color: #fff;
+   border: 1px solid #e5e5e5;
+   border-radius: 4px;
+   height: 34px;
+   }
+   .select2-container .select2-selection--single {
+   box-sizing: border-box;
+   cursor: pointer;
+   display: block;
+   height: 34px;
+   user-select: none;
+   -webkit-user-select: none;
+   }
+   .select2-container--default .select2-selection--single .select2-selection__clear {
+   cursor: pointer;
+   float: right;
+   font-weight: bold;
+   padding-right: 12px;
+   line-height: 33px;
+   }
+   .select2-container--default .select2-selection--single .select2-selection__arrow {
+   height: 33px;
+   position: absolute;
+   top: 1px;
+   right: 1px;
+   width: 20px;
+   line-height: 33px;
+   }
+   input:required {
+   box-shadow:none;
+   }
+   /*input:invalid {
+   box-shadow:0 0 3px red;
+   }*/
+   .bootstrap-datetimepicker-widget{
+   display: block;
+   }
+   .bootstrap-datetimepicker-widget .datepicker-days{
+   display: block;
+   }
+   .bootstrap-datetimepicker-widget .datepicker-months{
+		display: block;
+	}
+	.bootstrap-datetimepicker-widget .datepicker-years{
+		display: block;
+	}
+	.bootstrap-datetimepicker-widget .datepicker-decades{
+		display: block;
+	}
+   .control-label{
+   color:#a2a0a0 !important;
+   }
+</style>
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">FEDReportRequest</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="">
+                    <span onclick="sidebarMenuControl('PaymentModule', 'InitiateTransaction')" translate>
+                        Ad hoc FED Report Request</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="title__container">
+                <div class="col-md-7">
+                    <h2 translate>Ad-hoc FED Report Request</h2>
+                    <!--<span translate>InitiateTransaction.PageTitle</span> -->
+                    <span style="font-size:14px;"><small translate></small></span>
+                </div>
+                <div class="col-md-5 pull-right">
+                    <button class="btn btnStyle pull-right" style="margin-right:10px;" ng-click="Reload()"><i class="fa fa-retweet"
+                            aria-hidden="true"></i> &nbsp;<span translate>Refresh</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  <alert ng-repeat="alert in alerts" type="{{alert.type}}" class="bold" close="closeAlert($index)">{{alert.msg}}</alert> -->
+    <div class="animated bounce autoAdjustAlert bold" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}"
+        ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{alert.msg}}
+    </div>
+
+    <!--Alert Pop-up Window-->
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+
+
+            <div class="modal-content" style="border:2px solid #243250a6;">
+                <div class="modal-body">
+                    <h4>Current changes will be lost. Do you wish to continue?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();">Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()">No</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!--  </div> -->
+    <form class="form-horizontal" id="MPIForm" role="form" name="benelistForm" ng-submit="createData(FedReportRequest);">
+        
+        
+                <div class="row" style="margin: 15px !important;">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">MOP Family
+                            <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                        <div class="col-md-4">
+                            <select class="form-control appendselect2" id="mop" name="mop" ng-model="FedReportRequest.MOPFamily"
+                                ng-required="true" ng-change="getReportTypeList(FedReportRequest.MOPFamily)">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="mop in mopFamily" value="{{mop.actualvalue}}">{{mop.displayvalue}} </option>
+                            </select>
+                        </div>
+                        <span ng-show="updatesubmitted && benelistForm.mop.$error.required" style="display:block;margin:0;color:#EF1C1C !important"
+                            aria-required="true">Required</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Report Type
+                            <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                        <div class="col-md-4">
+                            <select class="form-control appendselect2" id="ReportType" name="ReportType" ng-model="FedReportRequest.ReportType"
+                                ng-required="true" ng-change="getAllinputParams(FedReportRequest.MOPFamily,FedReportRequest.ReportType)">
+                                <option value="">--Select--</option>
+                                <option ng-repeat="ReportType in ReportTypes" value="{{ReportType.actualvalue}}">{{ReportType.displayvalue}} </option>
+                            </select>
+                        </div>
+                        <span ng-show="updatesubmitted && benelistForm.ReportType.$error.required" style="display:block;margin:0;color:#EF1C1C !important"
+                            aria-required="true">Required</span>
+                    </div>
+					<div class="form-group" ng-repeat="fields in FedReportRequest.InputParam">
+                        <label class="control-label col-md-2">{{fields['Key']}}
+                                <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true" ng-if="(fields['Key']!='CYCLEDATE' && fields['Key']!='STOP-SEQ')">*</span>
+                        </label>
+                        <div class="col-md-4">
+						
+							
+						  
+							<input type="text" My-Directive1 class="form-control" ng-required="{{((fields['Key'] != 'STOP-SEQ')&&(fields['Key'] != 'CYCLEDATE')) ? true : false}}" ng-if="((!fields['dropdown'])&&(fields['Key']!='ENDPOINT-ID')&&(fields['Key']!='CYCLEDATE')&&((fields['Key'] == 'STOP-SEQ') || (fields['Key'] == 'START-SEQ') ))" name="{{fields['Value']}}" ng-model="fields['Value']" maxlength="{{(fields['Key'] == 'ERROR-CD') ? 4 : (fields['Key'] == 'START-SEQ' || fields['Key'] == 'STOP-SEQ' ) ?  6 : 9 }}" ng-blur="checkInput(fields)"/>
+							
+                            <input type="text" class="form-control" ng-required="{{fields['Key'] != 'STOP-SEQ' ? true : false}}" ng-if="((!fields['dropdown'])&&(fields['Key']!='ENDPOINT-ID')&&(fields['Key']!='CYCLEDATE')&&((fields['Key'] != 'STOP-SEQ') && (fields['Key'] != 'START-SEQ') && (fields['Key'] != 'INQUIRY-ABA')))" name="{{fields['Value']}}" ng-model="fields['Value']" maxlength="{{(fields['Key'] == 'ERROR-CD') ? 4 : (fields['Key'] == 'START-SEQ' || fields['Key'] == 'STOP-SEQ' ) ?  6 : '' }}"/>
+							
+							
+							<select class="form-control" ng-required="{{fields['Key'] != 'STOP-SEQ' ? true : false}}" ng-model="fields['Value']" ng-if="fields['Key']=='ENDPOINT-ID'" ng-click="setRef(FedReportRequest.InputParam)">
+								<option value="" selected>--Select--</option>
+								<option value="{{choice.actualvalue}}" ng-repeat="choice in EndPointIDValue">{{choice.displayvalue}}</option>
+							</select>
+							<select class="form-control" ng-required="{{fields['Key'] != 'STOP-SEQ' ? true : false}}" ng-model="fields['Value']" ng-if="fields['Key']=='INQUIRY-ABA'">
+								<option value="" selected>--Select--</option>
+								<option value="{{choice.actualvalue}}" ng-repeat="choice in InquiryBaValue">{{choice.displayvalue}}</option>
+							</select>
+							
+							<select class="form-control" ng-required="{{((fields['Key'] != 'STOP-SEQ')&&(fields['Key'] != 'CYCLEDATE')) ? true : false}}" ng-model="fields['Value']" ng-if="fields['Key']=='CYCLEDATE'" ng-change="getSEQValue(FedReportRequest.InputParam)" ng-click="setRef(FedReportRequest.InputParam)">
+								<option value="" selected>--Select--</option>
+								<option value="{{choice}}" ng-repeat="choice in CycValueValue">{{choice}}</option>
+							</select>
+							
+							<select class="form-control" ng-required="{{fields['Key'] != 'STOP-SEQ' ? true : false}}" ng-model="fields['Value']" ng-if="fields['dropdown'] && FedReportRequest.ReportType!='OMADGapException'" ng-change="getSEQValue(FedReportRequest.InputParam)">
+								<option value="" selected>--Select--</option>
+								<option value="{{choice}}" ng-repeat="choice in fields['Choice']">{{choice}}</option>
+							</select>
+                            <!-- <input type="text" class="form-control" name="{{fields['Value']}}" ng-model="fields['Value']"/> -->
+							<label ng-if="FedReportRequest.ReportType=='OMADGapException' && fields['Key']=='TRAFFIC-TYPE'">R</label>
+                        </div>                        
+                    </div>
+
+                </div>
+ 
+				<!-- adding table if  TRAFFIC-TYPE is 'R'  -->
+				
+				
+				<style>
+#OMAD_table {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 36%;
+}
+
+#OMAD_table td, #OMAD_table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#OMAD_table tr:nth-child(even){background-color: #f2f2f2;}
+
+#OMAD_table tr:hover {background-color: #ddd;}
+
+#OMAD_table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color:#2D4063;
+  color: white;
+}
+</style>
+				<table border="3" ng-if="TRAFFIC_TYPE=='R' && FedReportRequest.ReportType == 'RetrievalRequest(FTI0051)' && ShowTable==true" style="margin-left:220px;" width="580" height="35" id="OMAD_table">
+					<tr>
+						<th>&nbsp &nbsp # </th>
+						<th>&nbsp &nbsp Cycle Date</th>
+						<th>&nbsp &nbsp LTERM ID </th>
+						<th>&nbsp &nbsp Direction </th>
+						<th>&nbsp &nbsp Range </th>
+					</tr>
+					<tbody ng-repeat="val in gap track by $index">
+					<tr ng-repeat="v in val track by $index" ng-if = "isCycleDateSelected==false  && $index<loop_count">
+						<td>&nbsp &nbsp {{$index+1+$parent.$parent.$index}}</td>
+						<td>&nbsp &nbsp {{CYCLE_DATE}}</td>
+						<td>&nbsp &nbsp {{ENDPOINT_ID}}</td>
+						<td>&nbsp &nbsp IN</td>
+						<td>&nbsp &nbsp {{("00000"+ val[$index*2]).slice(-6)}}-{{("00000"+ val[$index*2+1]).slice(-6)}}</td>
+					</tr>
+					<tr ng-repeat="v in val track by $index" ng-if ="isCycleDateSelected!=false && $index<gap[$parent.$index].length/2">
+						<td ng-if="$parent.$parent.$index==0">&nbsp &nbsp {{$index+1}}</td>
+						<td ng-if="$parent.$parent.$index==1">&nbsp &nbsp {{$index+ 1+ gap[0].length/2}}</td>
+						<td ng-if="$parent.$parent.$index==2">&nbsp &nbsp {{$index+ 1+ gap[0].length/2 +gap[1].length/2}} </td>
+						<td>&nbsp &nbsp {{CYCLE_DATE[$parent.$parent.$index]}}</td>
+						<td>&nbsp &nbsp {{ENDPOINT_ID}}</td>
+						<td>&nbsp &nbsp IN</td>
+						<td>&nbsp &nbsp {{("00000"+ val[$index*2]).slice(-6)}}-{{("00000"+ val[$index*2+1]).slice(-6)}}</td>
+					</tr>
+					<tbody>
+				</table>
+				<h3 ng-if="FedReportRequest.ReportType=='RetrievalRequest(FTI0051)'">{{IfNoGap}}</h3>
+				
+        <input class="btn btnStyle" type="submit" ng-disabled="SubmitButtonTiggered" value="Request Report" ng-if="FedReportRequest.ReportType!='OMADGapException'" >
+		 <input class="btn btnStyle" type="submit" ng-disabled="SubmitButtonTiggered" value="Add Exception" ng-if="FedReportRequest.ReportType=='OMADGapException'" >
+        <input class="btn btnStyle" type="reset" value="Reset" ng-click="Reload();SaveTemplate=false;">
+        <!-- <input class="btn btnStyle" type="submit" value="Submit" ng-click="updatesubmitted = true;SaveTemplate=false;"> -->
+    </form>
+</div>

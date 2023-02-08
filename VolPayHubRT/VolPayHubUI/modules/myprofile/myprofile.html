@@ -1,0 +1,2048 @@
+<style>
+    .label1 {
+        font-weight: 700;
+        border: 0rem !important;
+        background-color: #ffffff !important;
+    }
+
+    .btnSuccess {
+        min-width: 90px;
+        min-height: 28px;
+        padding: 5px;
+        color: #fff !important;
+        background-color: #065ea6;
+        border: none;
+        font-weight: 550;
+    }
+
+    .btnDeny {
+        min-width: 90px;
+        min-height: 28px;
+        padding: 5px;
+        color: #F91534 !important;
+        background-color: #fff !important;
+        border: 1px solid #f91536;
+        font-weight: bold;
+    }
+
+    .btnDefault {
+        min-width: 90px;
+        min-height: 30px;
+        color: #065ea6 !important;
+        background-color: #fff !important;
+        border: 1px solid #065ea6;
+        font-weight: bold;
+        box-shadow: 1.18px 2px 1px 1px rgb(0 0 0 / 20%) !important;
+    }
+
+    .btn-default {
+        background-color: #eee !important;
+        color: #000 !important;
+    }
+
+    .toggle-handle {
+        background-color: #ccc !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #44B6AE !important;
+    }
+
+    .widgetCustom {
+        margin-top: 0.625rem;
+    }
+
+    .popover {
+        white-space: pre-wrap;
+    }
+
+    .dashboardType {
+        border: 0.063rem solid #e5e5e5;
+    }
+
+    .checkAllRow {
+        border-bottom: 0.063rem solid #e5e5e5;
+        height: 1.875rem;
+    }
+
+    .profile-userpic img {
+        float: none;
+        /* text-align: center; */
+        margin: 0 auto;
+        width: 40%;
+        -webkit-border-radius: 50% !important;
+        -moz-border-radius: 50% !important;
+        border-radius: 50% !important;
+    }
+
+    .myprofbtn {
+        box-shadow: 0.074rem 0.125rem 0.063rem 0.063rem rgba(0, 0, 0, 0.2) !important;
+        border-radius: 0.313rem !important;
+    }
+
+    .myprofbtn:hover,
+    .myprofbtn.hover {
+        box-shadow: 0.074rem 0.125rem 0.063rem 0.063rem rgba(0, 0, 0, 0.20) !important;
+    }
+
+    .myprofbtn:active,
+    .myprofbtn.active {
+        box-shadow: 0 0rem #305F5B !important;
+        /*transform: translateY(0.125rem) !important;*/
+    }
+
+    .form-control1 {
+        font-size: 0.875rem;
+        font-weight: normal;
+        color: #333;
+        background-color: #fff;
+        border: 0.063rem solid #e5e5e5;
+        box-shadow: none;
+        padding: 0.313rem 0.625;
+        width: 100%;
+        color: gray;
+    }
+
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+
+    .input-group-addon {
+        padding: 0;
+    }
+
+    .glyphicon {
+        padding: 0.563rem 0.625rem;
+    }
+
+    .addAdditionalFields {
+        /*color: #333;*/
+        background-color: #f5f5f5;
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+
+    .addBorder {
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+
+    .close {
+        opacity: 1;
+    }
+
+    .DatePicker,
+    .TimePicker {
+        z-index: 0 !important
+    }
+
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .modal-lg,
+    .modal-xl {
+        max-width: 67.313rem;
+    }
+
+    div.radio {
+        margin-right: 3.875rem;
+    }
+
+    .flex-container {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+    }
+
+    /* Responsive layout - makes a one column-layout instead of two-column layout */
+    @media (max-width: 47.938rem) {
+        .flex-container {
+            flex-direction: column;
+        }
+
+        .checkbox {
+            padding-bottom: 0.625rem;
+        }
+
+        .lalighn {
+            padding-left: 7.5rem;
+        }
+    }
+
+    .profilealign {
+        padding-bottom: 1.25rem;
+    }
+
+    .collapseicon {
+        font-size: 1.25rem;
+        padding-top: 0.125rem;
+    }
+
+    .profilebreak {
+        word-break: break-all;
+    }
+
+    .collapsemargin {
+        margin: 0
+    }
+
+    .asterisk {
+        color: #e02222;
+        font-size: 0.75rem;
+        padding-left: 0.125rem
+    }
+
+    .profilecursor {
+        cursor: pointer
+    }
+
+    .profileuserrole {
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+
+    .profilemodal {
+        width: 100%
+    }
+
+    .profilemodalBody {
+        overflow-y: auto;
+        height: 6.875rem;
+    }
+
+    .profilemodalform {
+        margin: 0rem;
+        padding-top: 0.625rem
+    }
+
+    .profilemodaltext {
+        text-align: left
+    }
+
+    .profilemodaldate {
+        margin-bottom: 0 !important;
+    }
+
+    .buttonAlighn {
+        text-align: right;
+    }
+
+    .buttonviewProfile {
+        margin-left: 0.438rem;
+    }
+
+    .collapsePadding {
+        padding-bottom: 1.25rem;
+    }
+
+    .changePassbutton {
+        border-radius: 1.25rem !important;
+        height: 2rem;
+        background: #065ea6 !important;
+    }
+
+    .changePassform {
+        margin-left: 0;
+        margin-right: 0.813rem;
+    }
+
+    .settingTheme {
+        padding-left: 0rem;
+    }
+
+    .settingThemepanel {
+        width: 15.625rem;
+        position: static;
+        right: auto;
+        margin-top: 0.625rem;
+        margin-right: 0.813rem;
+        float: none;
+        border: 0.063rem solid #E8E8E8;
+    }
+
+    .settingThemeoptions {
+        display: block !important;
+        right: auto;
+        background: #F7F7F7;
+        position: static
+    }
+
+    .clearBoth {
+        clear: both
+    }
+
+    .settingsLanguage {
+        margin-left: 1.25rem;
+        margin-top: 0.625rem;
+    }
+
+    .settingsDefault {
+        padding: 0.625rem 0.938rem;
+    }
+
+    .dashboardMargin {
+        margin: 0rem 0;
+        width: 100%;
+    }
+
+    .dashboardbody {
+        padding: 0.625rem;
+    }
+
+    .dashboardInnerbox {
+        margin: 0;
+        font-size: 0.813rem;
+    }
+
+    .dashboardText {
+        display: block;
+        margin-top: 0.313rem;
+        margin-left: 1rem;
+    }
+
+    .dashboardcheck {
+        margin: 0;
+        margin-left: 0.938rem;
+    }
+
+    .dashboardtoggle {
+        width: 2.375rem !important;
+        height: 1.125rem !important;
+        border-radius: 1.25rem !important;
+        margin-top: 0.313rem;
+    }
+
+    .dashboardtoggleSmall {
+        width: 1.063rem !important;
+        height: 1.063rem !important;
+    }
+
+    .dashboardCheckbox {
+        opacity: 0;
+        display: none;
+    }
+
+    .dashboardPayments {
+        margin: 0;
+        font-size: 0.813rem;
+    }
+
+    .dashboardPaymentsmargin {
+        margin-left: 0.438rem;
+    }
+
+    .dashboardPaymentstext {
+        margin: 0;
+        padding-top: 0.625rem;
+        background-color: #e5e5e5;
+    }
+
+    .dashboardPaymentsInnermenu {
+        margin: 0;
+        margin-bottom: 1.25rem;
+    }
+
+    .dashboardPaymentshead {
+        margin: 0;
+        font-size: 0.813rem;
+    }
+
+    .dashboardPaymentsSubhead {
+        margin: 0;
+        padding-top: 0.625rem;
+        background-color: #e5e5e5;
+    }
+
+    .dashboardPaymentsInneralighn {
+        margin: 0;
+        margin-bottom: 0.625rem;
+    }
+
+    .mydashboardMargin {
+        margin: 0;
+        font-size: 0.813rem;
+        width: 100%;
+    }
+
+    .mydashboardPortlet {
+        margin: 0;
+        color: #333;
+        background-color: #f5f5f5;
+        width: 100%;
+    }
+
+    .mydashboardbody {
+        margin-left: 0.438rem;
+    }
+
+    .mydashboardText {
+        margin: 0;
+        padding-top: 0.625rem;
+        background-color: #e5e5e5;
+    }
+
+    .mydashboardbutton {
+        padding-top: 0.938rem
+    }
+
+    .savedsearchMargin {
+        margin: 1.125rem 0;
+        width: 100%;
+    }
+
+    .savedsearchAlighn {
+        padding-left: 0.938rem;
+    }
+
+    .savedsearchNavs {
+        margin-left: 0.313rem;
+    }
+
+    .savedsearchCancel {
+        border: 0.063rem solid #DE2F2B;
+        background-color: #D05450;
+        border-radius: 0.625rem;
+        color: #F5E6E6;
+        font-size: 0.813rem;
+    }
+
+    .modaldelpop {
+        top: 12.5rem;
+        max-width: 37.5rem;
+    }
+
+    .modalftr {
+        padding-right: 4.375rem;
+    }
+
+    .modaldelpopAlighn {
+        padding: 0rem !important;
+        border: 0rem !important
+    }
+
+    .modaldelpopupdraft {
+        z-index: 1150;
+    }
+
+    .saveddraftMargin {
+        margin: 0.313rem 0;
+        width: 100%;
+    }
+
+    .saveddraftAlighn {
+        padding-left: 0.938rem;
+    }
+
+    .saveddraftPortletbox {
+        max-height: 318.75rem;
+        overflow: auto;
+    }
+
+    .saveddraftpwreset {
+        padding-top: 0.625rem;
+    }
+
+    .saveddraftbutton {
+        background: #065ea6 !important;
+        border-radius: 1.25rem !important;
+    }
+
+    .saveddraftbuttonAlighn {
+        text-align: right;
+        margin-left: 0;
+        margin-right: 0.813rem;
+    }
+
+    .width100 {
+        width: 100%;
+    }
+</style>
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb" ng-if="!profileSetup">
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate class="removeCursor">Sidebar.MyProfile</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<div class="contentContainer">
+    <div class="pageTitle tab-content alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container" ng-if="!profileSetup">
+                    <h2 translate>MyProfile.PageTitle</h2>
+                    <p translate>MyProfile.SubTitle</p>
+                </div>
+                <div class="title__container" ng-if="profileSetup">
+                    <h2 translate>loginPage.ResetPassword</h2>
+                    <p class="bold" translate>MyProfile.PasswordCriteria</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- BEGIN PAGE CONTENT-->
+    <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+    <div class="autoAdjustAlert animated bounce bold"
+        ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+        ng-repeat="alert in alerts">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> <span>{{alert.msg | replaceASCII}}</span>
+    </div>
+
+    <div ng-show="!profileSetup">
+        <div class="row">
+            <div class="col row">
+                <div class="profilealign w-100">
+                    <div class="col-md-12">
+                        <div class="portlet-title cursorPointer accordion" id="collapseProfile">
+                            <div class="row" ng-init="profileCollapsed = false"
+                                ng-click="profileCollapsed = !profileCollapsed" data-toggle="collapse"
+                                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <div class="col-md-8 col-xs-8 ">
+                                    <i class="fa fa-user"></i>
+                                    <span translate class="caption">MyProfiledetails.ProfileAccount</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="bold fa fa-arrow-circle-right pull-right collapseicon"
+                                        ng-class="{'fa-arrow-circle-down': !profileCollapsed, 'fa-arrow-circle-right': profileCollapsed}"></i>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <!-- collapse="profileCollapsed"    -->
+                        <div class="portlet-body collapse show" aria-labelledby="headingOne" id="collapseOne"
+                            data-parent="#collapseProfile">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="profile-sidebar portlet-inner-box">
+                                        <!-- PORTLET MAIN -->
+                                        <!-- SIDEBAR USERPIC -->
+                                        <div class="profile-userpic text-center">
+                                            <img src="themes/images/user.png" class="img-responsive" alt="">
+                                        </div>
+                                        <!-- END SIDEBAR USERPIC -->
+                                        <!-- SIDEBAR USER TITLE -->
+                                        <div class="profile-usertitle">
+                                            <div class="profile-usertitle-name profilebreak">
+                                                {{profileName}}
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <!-- END SIDEBAR USER TITLE -->
+                                        <!-- END PORTLET MAIN -->
+                                    </div>
+                                    <form role="form" class="form-horizontal portlet-inner-box container-fluid"
+                                        ng-submit="ProfileUpdate(cData)">
+                                        <div class="row collapsemargin">
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right ">{{'MyProfile.UserID'| translate}} <span class="asterisk"
+                                                        aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="text" name="UserID" ng-model="cData.UserID"
+                                                        class="form-control" required ng-disabled="true" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right pr-2">{{'MyProfile.LastName'| translate}} <span class="asterisk"
+                                                        aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="text" name="LastName" ng-model="cData.LastName"
+                                                        class="form-control" ng-disabled="viewProfile" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row collapsemargin">
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right pr-1">{{'MyProfile.FirstName'| translate}} <span class="asterisk" aria-required="true">*</span>
+                                                </label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="text" name="FirstName" ng-model="cData.FirstName"
+                                                        class="form-control" ng-disabled="viewProfile" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.EmailID'| translate}}<span class="asterisk"
+                                                        aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="email" name="EmailAddress"
+                                                        ng-model="cData.EmailAddress" class="form-control"
+                                                        ng-disabled="viewProfile" id="EmailAddress"
+                                                        ng-blur="emailValidate(cData.EmailAddress)" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row collapsemargin">
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.RoleID'| translate}} <span class="asterisk"
+                                                        aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <input type="text" name="RoleID" ng-model="cData.RoleID"
+                                                        class="form-control" required ng-disabled="true"
+                                                        ng-if="cData.RoleID == 'Super Admin'" />
+                                                    <select class="form-control" ng-model="cData.RoleID" name="RoleID"
+                                                        ng-disabled="viewProfile" required
+                                                        ng-if="cData.RoleID != 'Super Admin'">
+                                                        <option>Select</option>
+                                                        <option ng-repeat="option in selectOptions"
+                                                            value="{{option.actualvalue}}">{{option.displayvalue}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.IsForceReset'| translate}}
+                                                    <span class="asterisk" aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <select class="form-control" required name="IsForceReset"
+                                                        ng-model="cData.IsForceReset" ng-disabled="viewProfile">
+                                                        <option value="">Select</option>
+                                                        <option ng-repeat="val in [true,false]" value="{{val}}">{{val}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.Status'| translate}} <span class="asterisk"
+                                                        aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <select class="form-control" required name="Status"
+                                                        ng-model="cData.Status" ng-disabled="true">
+                                                        <option ng-repeat="val in ['ACTIVE','INACTIVE']"
+                                                            value="{{val}}">{{val}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right pr-2">{{'MyProfile.EffectiveFromDate'| translate}}
+                                                    <span class="asterisk" aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <div class="input-group input-append">
+                                                        <input type="text" class="form-control DatePicker"
+                                                            name="EffectiveFromDate" roledateattr="EffectiveFromDate"
+                                                            placeholder="Please Enter Effective From Date"
+                                                            onpaste="return false" onkeypress='return tabOrder(event)'
+                                                            ng-blur="multipleEmptySpace($event)" id="EffectiveFromDate"
+                                                            ng-model="cData.EffectiveFromDate" ng-required="true"
+                                                            ng-focus="activatePicker($event)" ng-disabled="true" />
+                                                        <span class="input-group-text profilecursor"
+                                                            ng-click="triggerPicker($event)"><span
+                                                                class="fa fa-calendar date-set"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.EffectiveTillDate'| translate}}</label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <div class="input-group input-append">
+                                                        <input type="text" class="form-control DatePicker"
+                                                            name="EffectiveTillDate" roledateattr="EffectiveTillDate"
+                                                            placeholder="{{'Placeholder.Select' | translate}}"
+                                                            onpaste="return false" onkeypress='return tabOrder(event)'
+                                                            ng-blur="multipleEmptySpace($event)" id="EffectiveTillDate"
+                                                            ng-model="cData.EffectiveTillDate"
+                                                            ng-focus="activatePicker($event)" ng-disabled="true" />
+                                                        <span class="input-group-text profilecursor"
+                                                            ng-click="triggerPicker($event)"><span
+                                                                class="fa fa-calendar date-set"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right pr-2">{{'MyProfile.TimeZone'| translate}} <span class="asterisk"
+                                                        aria-required="true">*</span></label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <select class="form-control" required select2-model-append
+                                                        name="TimeZone" id="timeZone_0" ng-model="cData.TimeZone"
+                                                        ng-disabled="viewProfile">
+                                                        <option value="" ng-disabled="true">--Select--</option>
+                                                        <option ng-repeat="option in timezoneOptions"
+                                                            value="{{option.TimeZoneId}}">
+                                                            {{option.TimeZoneId}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.Country'| translate}}</label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <select class="form-control" select2-model-append name="Country"
+                                                        id="country" ng-model="cData.Country" ng-disabled="viewProfile">
+                                                        <option value="" ng-disabled="true">--Select--</option>
+                                                        <option ng-repeat="country in countryOption"
+                                                            value="{{country.actualvalue}}">
+                                                            {{country.displayvalue}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <label
+                                                    class="control-label bold col-md-4 col-sm-4 mt-2 text-sm-left text-md-right text-lg-right text-xl-right">{{'MyProfile.Department'| translate}}</label>
+                                                <div class="col-md-8 col-sm-8">
+                                                    <select class="form-control" select2-model-append name="Department"
+                                                        id="Department" ng-model="cData.Department"
+                                                        ng-disabled="viewProfile">
+                                                        <option
+                                                            ng-repeat="department in ['Technology','Draft Operations','OSA Operations']"
+                                                            value="{{department}}">{{department}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row col-md-12 col-sm-12">
+                                                <u class="bold col-md-6 col-sm-4 profileuserrole" data-toggle="modal"
+                                                    data-target="#associationDetails" ng-click="modalboxFn()">
+                                                    {{'MyProfile.UserRoleAssociation' | translate}}
+                                                </u>
+                                            </div>
+                                            <div id="associationDetails" class="modal fade" role="dialog">
+                                                <div class="modal-dialog modal-lg profilemodal">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header modalHeaderColor">
+                                                            <h5 class="modal-title">{{'MyProfile.UserRoleAssociation' | translate}}</h5>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div>
+                                                                <div class=" setDynamicWidth profilemodalBody">
+                                                                    <div class="col-md-12 form-group row profilemodalform"
+                                                                        ng-repeat="val in cData.UserRoleAssociation track by $index"
+                                                                        id="{{$index}}">
+                                                                        <div class="col-md-5 col-sm-12 col-xs-12">
+                                                                            <div class="form-group row">
+                                                                                <div class="col-md-6 col-sm-6">
+                                                                                    <label
+                                                                                        class="control-label bold mt-2 text-sm-left text-md-right text-lg-right profilemodaltext">{{'MyProfile.RoleID'| translate}}</label>
+                                                                                    <span class="asterisk"
+                                                                                        aria-required="true">*</span>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <select
+                                                                                        class="form-control appendRoleId select2drop"
+                                                                                        select2-model-append
+                                                                                        required="true"
+                                                                                        name="Subsec_RoleID{{$index}}"
+                                                                                        id="RoleId{{$index}}"
+                                                                                        ng-model="cData.UserRoleAssociation[$index].RoleID"
+                                                                                        ng-disabled="true"
+                                                                                        ng-if="cData.UserRoleAssociation[$index].RoleID != 'Super Admin'">
+                                                                                        <option value="">--Select--
+                                                                                        </option>
+                                                                                        <option
+                                                                                            ng-repeat="option in selectMultOptions"
+                                                                                            value="{{option.actualvalue}}">
+                                                                                            {{option.displayvalue}}
+                                                                                        </option>
+                                                                                    </select>
+                                                                                    <input class="form-control"
+                                                                                        type="text"
+                                                                                        name="Subsec_RoleID{{$index}}"
+                                                                                        ng-model="cData.UserRoleAssociation[$index].RoleID"
+                                                                                        ng-disabled="true" required
+                                                                                        ng-if="cData.UserRoleAssociation[$index].RoleID == 'Super Admin'">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-5 col-sm-12 col-xs-12">
+                                                                            <div class="form-group row">
+                                                                                <div class="col-md-6">
+                                                                                    <label
+                                                                                        class="control-label bold mt-2 text-sm-left text-md-right text-lg-right profilemodaltext">{{'MyProfile.Status'| translate}}</label>
+                                                                                    <span class="asterisk"
+                                                                                        aria-required="true">*</span>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <select
+                                                                                        class="form-control select2drop"
+                                                                                        select2-model-append required
+                                                                                        name="Subsec_Status"
+                                                                                        id="Subsec_Status{{$index}}"
+                                                                                        ng-model="cData.UserRoleAssociation[$index].Status"
+                                                                                        ng-class="{true : 'error'}[updatesubmitted && userForm.Subsec_Status.$invalid]"
+                                                                                        ng-required="true"
+                                                                                        ng-disabled="true">
+                                                                                        <option value="">--Select--</option>
+                                                                                        <option value="ACTIVE">ACTIVE</option>
+                                                                                        <option value="INACTIVE">INACTIVE</option>
+                                                                                        <option value="SUSPENDED">SUSPENDED</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                        <div class="col-md-5 col-sm-12 col-xs-12">
+                                                                            <div class="form-group row">
+                                                                                <div class="col-md-6">
+                                                                                    <label
+                                                                                        class="control-label bold mt-2 profilemodaltext">{{'MyProfile.EffectiveFromDate'| translate}}</label>
+                                                                                    <span class="asterisk"
+                                                                                        aria-required="true">*</span>
+                                                                                </div>
+                                                                                <div class="col-md-6"
+                                                                                    ng-class="{true: 'error'}[updatesubmitted && userForm.EffectiveFromDate{{$index}}.$invalid]">
+                                                                                    <div
+                                                                                        class="input-group input-append">
+                                                                                        <input type="text"
+                                                                                            class="form-control DatePicker profilemodaldate"
+                                                                                            name="EffectiveFromDate{{$index}}"
+                                                                                            roleattr="EffectiveFromDate"
+                                                                                            placeholder="{{('Placeholder.PleaseEnter' | translate) + ('MyProfile.EffectiveFromDate' | translate)}}"
+                                                                                            onpaste="return false"
+                                                                                            onkeypress='return tabOrder(event)'
+                                                                                            ng-blur="multipleEmptySpace($event)"
+                                                                                            id="Subsec_EffectiveFromDate{{$index}}"
+                                                                                            ng-model="cData.UserRoleAssociation[$index].EffectiveFromDate"
+                                                                                            ng-required="true"
+                                                                                            ng-focus="activatePickerSubsec($event,$index)"
+                                                                                            ng-disabled="true" />
+                                                                                        <span
+                                                                                            class="input-group-append profilecursor"
+                                                                                            ng-click="triggerPicker($event)"><span
+                                                                                                class="fa fa-calendar date-set input-group-text"></span>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-5 col-sm-12 col-xs-12">
+                                                                            <div class="form-group row">
+                                                                                <div class="col-md-6">
+                                                                                    <label
+                                                                                        class="control-label bold mt-2 profilemodaltext">{{'MyProfile.EffectiveTillDate'| translate}}</label>
+                                                                                </div>
+                                                                                <div class="col-md-6">
+                                                                                    <div class="input-group input-append">
+                                                                                        <input type="text"
+                                                                                            class="form-control DatePicker"
+                                                                                            name="EffectiveTillDate{{$index}}"
+                                                                                            roleattr="EffectiveTillDate"
+                                                                                            placeholder="{{('Placeholder.PleaseEnter' | translate) + ('MyProfile.EffectiveTillDate' | translate)}}"
+                                                                                            onpaste="return false"
+                                                                                            onkeypress='return tabOrder(event)'
+                                                                                            ng-blur="multipleEmptySpace($event)"
+                                                                                            id="Subsec_EffectiveTillDate{{$index}}"
+                                                                                            ng-model="cData.UserRoleAssociation[$index].EffectiveTillDate"
+                                                                                            ng-focus="activatePickerSubsec($event,$index)"
+                                                                                            ng-disabled="true" />
+                                                                                        <span class="input-group-append input-group-date profilecursor"
+                                                                                            ng-click="triggerPickerSubSec($event,$index)">
+                                                                                            <span class="fa fa-calendar date-set input-group-text"></span>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="clearfix"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer" ng-if="cData.RoleID != 'Super Admin'">
+                                                            <div class="form-group col-md-12 col-sm-12 buttonAlighn">
+                                                                <button type="button" class="btnDefault btnStyle"
+                                                                    data-dismiss="modal"
+                                                                    translate>BtnGroup.Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-12 col-sm-12 buttonAlighn">
+                                                <button class="btn btnStyle" type="button" ng-if="!viewProfile"
+                                                    ng-click="resetProfileData()" translate>BtnGroup.Clear</button>
+                                                <!--<button class="btn btnStyle buttonviewProfile" type="button" ng-if="viewProfile && newPermission.U" ng-click="toggleView(false)" translate>BtnGroup.Edit
+                                                </button>-->
+                                                <button class="btn btnStyle buttonviewProfile" type="submit"
+                                                    ng-if="!viewProfile" translate>BtnGroup.Save</button>
+                                                <button class="btn btnStyle buttonviewProfile" type="button"
+                                                    ng-if="!viewProfile" ng-click="toggleView(true)" translate>BtnGroup.Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="collapsePadding w-100" ng-if="!showhidechangepassword && newPermission.U">
+                    <div class="col-md-12">
+                        <div class="portlet-title cursorPointer accordion" id="collapseChangePassword">
+                            <div class="row" ng-init="pwReset = false" ng-click="pwReset = !pwReset"
+                                data-toggle="collapse" data-target="#collapsePass" aria-expanded="true"
+                                aria-controls="collapsePass">
+                                <div class="col-md-8 col-xs-8">
+                                    <i class="fa fa-key" aria-hidden="true"></i>
+                                    <span translate class="caption">MyProfiledetails.ChangePassword</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="bold fa fa-arrow-circle-right pull-right collapseicon"
+                                        ng-class="{'fa-arrow-circle-down': !pwReset, 'fa-arrow-circle-right': pwReset}"></i>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <!-- collapse="pwReset" -->
+                        <div class="portlet-body collapse show" id="collapsePass" aria-labelledby="collapsePass"
+                            data-parent="#collapseChangePassword">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="form-horizontal portlet-inner-box" role="form"
+                                        ng-submit="passwordReset(password)">
+                                        <div class="form-group row">
+                                            <label
+                                                class="control-label bold col-md-4 text-sm-left text-md-right text-lg-right text-xl-right"><span
+                                                    translate>loginPage.OldPassword</span><span class="asterisk"
+                                                    aria-required="true">*</span>
+                                            </label>
+                                            <!-- <div class="col-md-6 col-sm-10">
+                                                <input class="key form-control" type="text" autocomplete="off"
+                                                    id="oldPW2" name="OldPassword" ng-model="password.OldPassword"
+                                                    placeholder="Enter Old Password"
+                                                    ng-blur="multipleEmptySpace($event)"
+                                                    ng-keyup="changetoPasswordFormat($event,password.OldPassword)"
+                                                    required />
+                                            </div> -->
+                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <div class="input-group">
+                                                    <input type="password" id="oldPW2" name="OldPassword"
+                                                        ng-model="password.OldPassword" class="form-control passField"
+                                                        placeholder="{{'loginPage.fill' | translate}}"
+                                                        ng-click="hideConfirmPassword1()"
+                                                        ng-focus="ConfirmPasswordFocus1()" required />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text"
+                                                            ng-click="oldpassword_show_hide();">
+                                                            <i class="fa fa-eye" id="oldshow_eye"></i>
+                                                            <i class="fa fa-eye-slash d-none" id="oldhide_eye"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="control-label bold col-md-4 text-sm-left text-md-right text-lg-right text-xl-right">
+                                                <span translate>loginPage.NewPassword</span>
+                                                <span class="asterisk" aria-required="true">*</span>
+                                            </label>
+                                            <!--  <div class="col-md-6 col-sm-10">
+                                                <input class="key form-control" type="text" autocomplete="off" name="newPW" 
+                                                    ng-model="password.newPW" 
+                                                    placeholder="Enter New Password" 
+                                                    onkeydown="return spaceNotAllowed(event)" 
+                                                    ng-blur="multipleEmptySpace($event);validatePassWord(password.newPW, $event)"
+                                                    ng-keyup="changetoPasswordFormat($event,password.newPW)" required>
+                                            </div> -->
+                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <div class="input-group">
+                                                    <input type="password" id="password" name="newPW"
+                                                        ng-model="password.newPW" class="form-control passField"
+                                                        placeholder="{{'loginPage.fill' | translate}}"
+                                                        ng-blur="validatePassWord(password.newPW, $event)"
+                                                        ng-click="hidePassword1()" ng-focus="PasswordFocus1()"
+                                                        required />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text" ng-click="password_show_hide();">
+                                                            <i class="fa fa-eye" id="show_eye"></i>
+                                                            <i class="fa fa-eye-slash d-none" id="hide_eye"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" tabindex="-1" class="btn changePassbutton"
+                                                data-container="body" data-toggle="tooltip" data-placement="right"
+                                                data-content="{{passwordRules}}" data-original-title=""
+                                                title="{{passwordRules}}">
+                                                <span class="questionMark">?</span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label
+                                                class="control-label bold col-md-4 text-sm-left text-md-right text-lg-right text-xl-right"><span
+                                                    translate>loginPage.ConfirmPassword</span><span class="asterisk"
+                                                    aria-required="true">*</span></label>
+                                            <!--  <div class="col-md-6 col-sm-10">
+                                                <input class="key form-control" type="text" autocomplete="off"
+                                                    name="confirmPW" ng-model="password.confirmPW"
+                                                    placeholder="Confirm New Password"
+                                                    ng-blur="multipleEmptySpace($event)"
+                                                    ng-keyup="changetoPasswordFormat($event,password.confirmPW)"
+                                                    required>
+                                            </div> -->
+                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <div class="input-group">
+                                                    <input type="password" id="ConfirmPassword" name="confirmPW"
+                                                        ng-model="password.confirmPW" class="form-control passField"
+                                                        placeholder="{{'loginPage.fill' | translate}}"
+                                                        ng-click="hideConfirmPassword1()"
+                                                        ng-focus="ConfirmPasswordFocus1()" required />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text"
+                                                            ng-click="password_show_hides();">
+                                                            <i class="fa fa-eye" id="show_eyes"></i>
+                                                            <i class="fa fa-eye-slash d-none" id="hide_eyes"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group changePassform">
+                                            <div class="buttonAlighn">
+                                                <button type="reset" class="btnDefault btnStyle" ng-click="resetFn()"
+                                                    translate>BtnGroup.Reset</button>
+                                                <button type="submit" class="btnSuccess btnStyle"
+                                                    translate>BtnGroup.Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col row">
+                <!-- <div class="row"> -->
+                <div class="col-md-12 collapsePadding w-100">
+                    <div class="portlet-title cursorPointer accordion" ng-init="settingCollapsed = false"
+                        ng-click="settingCollapsed = !settingCollapsed" id="collapseSettings">
+                        <div class="row" data-toggle="collapse" data-target="#collapseSet" aria-expanded="true"
+                            aria-controls="collapseSet">
+                            <div class="col-md-9 col-xs-9">
+                                <i class="fa fa-wrench"></i>
+                                <span translate class="caption">MyProfiledetails.Settings</span>
+                            </div>
+                            <div class="col-md-3">
+                                <i class="bold fa fa-arrow-circle-right pull-right collapseicon"
+                                    ng-class="{'fa-arrow-circle-down': !settingCollapsed, 'fa-arrow-circle-right': settingCollapsed}"></i>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <!-- collapse="settingCollapsed" -->
+                    <div class="portlet-body collapse show" id="collapseSet" aria-labelledby="collapseSet"
+                        data-parent="#collapseSettings">
+                        <form ng-submit="saveUserSetting(setting)" class="portlet-inner-box">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label translate class="control-label bold"
+                                            for="Theme">MyProfiledetails.Theme</label>
+                                        <div class="settingTheme">
+                                            <div class="theme-panel settingThemepanel w-auto" style="border: none;">
+                                                <div class="theme-options settingThemeoptions">
+                                                    <div class="theme-option theme-colors">
+                                                        <ul>
+                                                            <li class="color-volanteBlue tooltips"
+                                                                ng-class="{'current':ssColor == 'volante'}"
+                                                                data-placement="top"
+                                                                title="{{'MyProfile.Blue' | translate}}"
+                                                                ng-click="themeSelect('volante')">
+                                                            </li>
+                                                            <!--
+                                                                <li class="color-darkblue tooltips" ng-class="{'current':ssColor == 'default'}" data-placement="top" title="{{'MyProfile.Turquoise' | translate}}" ng-click="themeSelect('default')">
+                                                                </li>
+                                                                <li class="color-bluemixed tooltips" ng-class="{'current':ssColor == 'bluemixed'}" data-placement="top" title="{{'MyProfile.Denim' | translate}}" ng-click="themeSelect('bluemixed')">
+                                                                </li>
+                                                                <li class="color-default tooltips" ng-class="{'current':ssColor == 'brown'}" data-placement="top" title="{{'MyProfile.Maroon' | translate}}" data-original-title="Maroon" ng-click="themeSelect('brown')">
+                                                                </li>
+                                                            -->
+                                                        </ul>
+                                                        <div class="clearBoth"></div>
+                                                    </div>
+                                                    <div class="clearBoth"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label translate class="control-label bold pl-3"
+                                            for="Language">MyProfiledetails.Language</label>
+                                        <div class="settingsLanguage">
+                                            <div class="radio radio-primary p-1 col-md-3">
+                                                <input type="radio" name="optradio" value="en_US"
+                                                    ng-click="language.set('en_US',$event)" id="lang_1" class="lang">
+                                                <label for="lang_1">English/Inglés</label>
+                                            </div>
+                                            <div class="radio radio-primary p-1 col-md-3">
+                                                <input type="radio" name="optradio" value="es_ES"
+                                                    ng-click="language.set('es_ES',$event)" id="lang_2" class="lang">
+                                                <label for="lang_2">Spanish/Español</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-md-5 settingsDefault">
+                                    <div class="form-group">
+                                        <div class="p-0">
+                                            <label translate
+                                                class="control-label bold">MyProfiledetails.DefaultLandingPage</label>
+                                        </div>
+                                        <div class="p-0">
+                                            <select class="form-control appendSelect2" select2-model-append
+                                                name="landingModule" ng-model="setting.nlanding">
+                                                <option ng-repeat="val in uData.myProfileSetting.landingPagesArr"
+                                                    value="{{val.state}}" translate>{{'Sidebar.'+val.name | nospace}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 buttonAlighn" ng-if="newPermission.U">
+                                    <button type="submit" class="btnSuccess btnStyle" translate>BtnGroup.Save</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- </div> -->
+                    </div>
+                    <div class="row dashboardMargin" ng-if="paymentModule.present && false">
+                        <div class="col-md-12">
+                            <div class="portlet-title cursorPointer accordion" ng-init="dBoardSetting = false"
+                                ng-click="dBoardSetting = !dBoardSetting" id="collapseDashboard">
+                                <div class="row" data-toggle="collapse" data-target="#dashbord" aria-expanded="true"
+                                    aria-controls="dashbord">
+                                    <div class="col-md-9 col-xs-9">
+                                        <i class="fa fa-pie-chart"></i>
+                                        <span translate class="caption">MyProfiledetails.DashboardSettings</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <i class="bold fa fa-arrow-circle-right pull-right collapseicon"
+                                            ng-class="{'fa-arrow-circle-down': !dBoardSetting, 'fa-arrow-circle-right': dBoardSetting}"></i>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!-- collapse="dBoardSetting" -->
+                            <div class="portlet-body collapse show dashboardbody" id="dashbord"
+                                aria-labelledby="dashbord" data-parent="#collapseDashboard">
+                                <div class="portlet-inner-box collapsemargin">
+                                    <div class="control-label dashboardInnerbox">
+                                        <div class="col-md-12 collapsemargin">
+                                            <div class="form subTypeHeader">
+                                                <div class="form-group row col-md-12">
+                                                    <div translate class="control-label col-md-4"
+                                                        style="padding:0;font-weight: bold;"><span class="bold"
+                                                            style="display:block;margin-top:5px;">MyProfiledetails.MyDashboard</span>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <div class="checkbox dashboardcheck">
+                                                            <span
+                                                                class="green switch green ng-valid ng-pristine ng-untouched dashboardtoggle"
+                                                                name="{{data.name}}" ng-click="showCustomDboard();"
+                                                                ng-class="{checked:active}" ng-model="active">
+                                                                <small class="dashboardtoggleSmall"></small>
+                                                                <input type="checkbox"
+                                                                    class="ng-pristine ng-untouched ng-valid" />
+                                                                <span class="switch-text"> </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div translate class="col-md-4" style="font-weight: bold;"><span
+                                                        class="control-label bold">{{'MyProfiledetails.CustomizeDashboard'}}</span>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <select class="form-control appendSelect2" select2-model-append
+                                                        id="selVal" ng-model="showingSelectedDboard.defDashboard"
+                                                        name="custDashboard"
+                                                        ng-change="settingForDashboard(showingSelectedDboard.defDashboard)">
+                                                        <option ng-repeat="(x,y) in showingSelectedDboard.selectChart"
+                                                            value="{{y.actual}}" translate>{{'Sidebar.'+y.options | nospace}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row widgetCustom">
+                                                <div
+                                                    ng-show="showingSelectedDboard.defDashboard == 'dashboardPayments' && paymentModule.allpayments">
+                                                    <div
+                                                        class="flex-container control-label dashboardType dashboardPayments">
+                                                        <div ng-repeat="(key,val) in uData.DboardPreferences.paymentDashboard"
+                                                            class="dWidget dashboardPaymentsmargin">
+                                                            <div class="subTypeHeader" ng-show="val.length>0"
+                                                                ng-class="{'col-md-12':(key == 'statusSummary'),'col-md-12':(key == 'widget'),'col-sm-12':(key == 'statusSummary'),'col-sm-12':(key == 'widget')}">
+                                                                <div
+                                                                    class="row pb-3 text-md-left text-sm-center dashboardPaymentstext">
+                                                                    <div ng-class="{'col-md-10':(key == 'statusSummary'),'col-md-4':(key == 'widget'),'col-sm-10':(key == 'statusSummary'),'col-sm-4':(key == 'widget')}">
+                                                                        <span class="control-label bold">{{'MyProfile.PAYMENT'+ key | camelCaseFormatter | nospace | translate}}</span>
+                                                                    </div>
+                                                                    <div class="txtCenter"
+                                                                        ng-class="{'col-md-3':(key == 'statusSummary'),'col-md-3':(key == 'widget'),'col-sm-6':(key == 'statusSummary'),'lalighn':(key == 'statusSummary'),'col-sm-6':(key == 'widget')}">
+                                                                        <div class="checkbox checkbox-primary">
+                                                                            <input type="checkbox"
+                                                                                data-toggle-second="tooltip"
+                                                                                data-placement="top"
+                                                                                data-original-title="Select All"
+                                                                                id="paymentDashboard_{{key}}"
+                                                                                ng-checked="val1.visibility"
+                                                                                ng-click="checkAllFn('paymentDashboard',key)" />
+                                                                            <label for="paymentDashboard_{{key}}"></label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-5" ng-show="(key=='widget')">
+                                                                        <span class="control-label bold" translate>
+                                                                            {{'MyProfile.PAYMENTCHARTTYPE'}}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="innerMenu">
+                                                                    <div id="disableEnable" ng-repeat="val1 in val"
+                                                                        class="row dashboardPaymentsInnermenu">
+                                                                        <div class="control-label dLabels text-md-left text-sm-center" ng-class="{'col-md-10':(key == 'statusSummary'),'col-md-4':(key == 'widget'),'col-sm-10':(key == 'statusSummary'),'col-sm-4':(key == 'widget')}">{{(('MyProfile.')+(val1.label | nospace)) | translate}}</div>
+                                                                        <div class="text-center"
+                                                                            ng-class="{'col-md-3':(key == 'statusSummary'),'col-md-3':(key == 'widget'),'col-sm-3':(key == 'statusSummary'),'lalighn':(key == 'statusSummary'),'col-sm-3':(key == 'widget')}">
+                                                                            <div class="checkbox checkbox-primary">
+                                                                                <input type="checkbox"
+                                                                                    class="paymentDashboard_{{key}}"
+                                                                                    id="paymentDashboard_{{key}}_{{val1.name}}"
+                                                                                    ng-checked="val1.visibility"
+                                                                                    ng-click="checkInidivisualCheckbox('paymentDashboard',key,val1.name)" />
+                                                                                <label for="paymentDashboard_{{key}}_{{val1.name}}"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-5 col-sm-5"
+                                                                            ng-if="key=='widget'">
+                                                                            <select id="drop_{{val1.name}}"
+                                                                                class="form-control appendSelect2"
+                                                                                select2-model-append
+                                                                                ng-if="val1.chartType"
+                                                                                ng-model="dBoardSelectedVal.paymentDashboard[val1.chartId]"
+                                                                                ng-disabled="(val1.chartId == 'sankeyChart') ? true : (!val1.visibility)"
+                                                                                ng-class="{'myClassDis':val1.chartId !='sankeyChart'}">
+                                                                                <option ng-repeat="(x,y) in uData.dropdownDispValue" value="{{y.ActVal}}">{{(('MyProfile.')+(y.DispVal | nospace)) | translate}}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div ng-show="showingSelectedDboard.defDashboard == 'dashboardFile' && paymentModule.allfiles">
+                                                    <div class="flex-container control-label dashboardType dashboardPaymentshead">
+                                                        <div ng-repeat="(key,val) in uData.DboardPreferences.fileDashboard"
+                                                            class="dWidget dashboardPaymentsmargin">
+                                                            <div class="subTypeHeader" ng-show="val.length>0"
+                                                                ng-class="{'col-md-12':(key == 'statusSummary'),'col-md-12':(key == 'widget'),'col-sm-12':(key == 'statusSummary'),'col-sm-12':(key == 'widget')}">
+                                                                <div
+                                                                    class="row text-md-left text-sm-center dashboardPaymentsSubhead">
+                                                                    <div
+                                                                        ng-class="{'col-md-10':(key == 'statusSummary'),'col-md-6':(key == 'widget'),'col-sm-10':(key == 'statusSummary'),'col-sm-4':(key == 'widget')}">
+                                                                        <span class="control-label bold">
+                                                                            {{(('MyProfile.INSTRUCTION') + (key |
+                                                                            camelCaseFormatter) ) | nospace |
+                                                                            translate}}</span>
+                                                                    </div>
+                                                                    <div class="text-center" ng-class="{'col-md-3':(key == 'statusSummary'),'col-md-3':(key == 'widget'),'col-sm-3':(key == 'statusSummary'),'lalighn':(key == 'statusSummary'),'col-sm-3':(key == 'widget')}">
+                                                                        <div class="checkbox checkbox-primary">
+                                                                            <input type="checkbox"
+                                                                                data-toggle-second="tooltip"
+                                                                                data-placement="top"
+                                                                                data-original-title="Select All"
+                                                                                id="fileDashboard_{{key}}"
+                                                                                ng-checked="val1.visibility"
+                                                                                ng-click="checkAllFn('fileDashboard',key)" />
+                                                                            <label for="fileDashboard_{{key}}"></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="innerMenu">
+                                                                    <div ng-repeat="val1 in val"
+                                                                        class="row dashboardPaymentsInneralighn">
+                                                                        <div class="control-label dLabels text-md-left text-sm-center"
+                                                                            ng-class="{'col-md-10':(key == 'statusSummary'),'col-md-6':(key == 'widget'),'col-sm-3':(key == 'statusSummary'),'col-sm-4':(key == 'widget')}">{{(('MyProfile.')+(val1.label | nospace)) | translate}}</div>
+                                                                        <div class="text-center"
+                                                                            ng-class="{'col-md-3':(key == 'statusSummary'),'col-md-3':(key == 'widget'),'col-sm-3':(key == 'statusSummary'),'lalighn':(key == 'statusSummary'),'col-sm-3':(key == 'widget')}">
+                                                                            <div class="checkbox checkbox-primary">
+                                                                                <input type="checkbox"
+                                                                                    class="fileDashboard_{{key}}"
+                                                                                    id="fileDashboard_{{key}}_{{val1.name}}"
+                                                                                    ng-checked="val1.visibility"
+                                                                                    ng-click="checkInidivisualCheckbox('fileDashboard',key,val1.name)" />
+                                                                                <label for="fileDashboard_{{key}}_{{val1.name}}"></label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-5 col-sm-5"
+                                                                            ng-if="key=='widget'">
+                                                                            <select class="form-control appendSelect2"
+                                                                                select2-model-append
+                                                                                ng-if="val1.chartType"
+                                                                                ng-model="dBoardSelectedVal.fileDashboard[val1.chartId]">
+                                                                                <option ng-repeat="(x,y) in uData.dropdownDispValue" value="{{y.ActVal}}">{{y.DispVal}}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 dashboardMargin">
+                                                    <div ng-show="showingSelectedDboard.defDashboard == 'myDashboard' ">
+                                                        <div class="row dbDataWidget dashboardMargin"
+                                                            ng-repeat="(x,y) in customDashboardWidgets">
+                                                            <div class=" row control-label dashboardType mydashboardMargin"
+                                                                ng-if="(x == 'paymentDashboard')?paymentModule.allpayments:(x == 'fileDashboard')?paymentModule.allfiles:false">
+                                                                <div class="row dashboardMargin">
+                                                                    <div class="portlet-title accordion mydashboardPortlet"
+                                                                        ng-init="expanded = false"
+                                                                        ng-click="expanded = !expanded"
+                                                                        id="collapsedrop1" data-toggle="collapse"
+                                                                        data-target="#{{x}}_container"
+                                                                        aria-expanded="true"
+                                                                        aria-controls="{{x}}_container">
+                                                                        <div class="control-label col-12">
+                                                                            <span class="bold">{{(x == 'paymentDashboard')?'MyProfile.PaymentSummary':'MyProfile.InstructionSummary'| translate}}</span>
+                                                                            <div class="pull-right">
+                                                                                <i class="pull-right bold fa" ng-class="{'fa-angle-down': !expanded, 'fa-angle-right': expanded}"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="{{x}}_container"
+                                                                        aria-labelledby="{{x}}_container"
+                                                                        data-parent="#collapsedrop1"
+                                                                        class="collapse show flex-container">
+                                                                        <div ng-repeat="(key,val) in y"
+                                                                            class="mydashboardbody">
+                                                                            <div class="subTypeHeader"
+                                                                                ng-show="val.length>0"
+                                                                                ng-class="{'col-md-12':(key == 'statusSummary'),'col-md-12':(key == 'widget'),'col-sm-8':(key == 'statusSummary'),'col-sm-8':(key == 'widget')}">
+                                                                                <div class="row text-md-left text-sm-center mydashboardText">
+                                                                                    <div ng-class="{'col-md-10':(key == 'statusSummary'),'col-md-4':(key == 'widget'),'col-sm-10':(key == 'statusSummary'),'col-sm-4':(key == 'widget')}">
+                                                                                        <span class="control-label bold">{{('MyProfile.'+((x=='paymentDashboard')?'PAYMENT':'INSTRUCTION') + (key | camelCaseFormatter)) | nospace | translate}}</span>
+                                                                                    </div>
+                                                                                    <div class="txtCenter pb-3"
+                                                                                        ng-class="{'col-md-3':(key == 'statusSummary'),'col-md-3':(key == 'widget'),'col-sm-6':(key == 'statusSummary'),'lalighn':(key == 'statusSummary'),'col-sm-6':(key == 'widget')}">
+                                                                                        <div
+                                                                                            class="checkbox checkbox-primary">
+                                                                                            <input type="checkbox"
+                                                                                                data-toggle-second="tooltip"
+                                                                                                data-placement="top"
+                                                                                                data-original-title="Select All"
+                                                                                                class="checkAll_{{x}}"
+                                                                                                id="{{x}}_{{key}}_custom"
+                                                                                                ng-checked="val1.visibility"
+                                                                                                ng-click="checkAllFn(x,key)" />
+                                                                                            <label for="{{x}}_{{key}}_custom"></label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-md-5" ng-if="((key=='widget')&& (x != 'fileDashboard'))">
+                                                                                        <span class="control-label bold">{{('MyProfile.'+((x== 'paymentDashboard') ? 'PAYMENT' :'INSTRUCTION') +'CHARTTYPE') | translate}}</span>
+                                                                                    </div>
+                                                                                    <div class="clearBoth"></div>
+                                                                                </div>
+                                                                                <div class="innerMenu">
+                                                                                    <div ng-repeat="val1 in val"
+                                                                                        class="row dashboardPaymentsInneralighn">
+                                                                                        <div class="control-label dLabels text-md-left text-sm-center" ng-class="{'col-md-10':(key == 'statusSummary'),'col-md-4':(key == 'widget'),'col-sm-10':(key == 'statusSummary'),'col-sm-4':(key == 'widget')}">{{(('MyProfile.')+(val1.label | nospace)) | translate}}</div>
+                                                                                        <div class="txtCenter" ng-class="{'col-md-3':(key == 'statusSummary'),'col-md-3':(key == 'widget'),'col-sm-3':(key == 'statusSummary'),'lalighn':(key == 'statusSummary'),'col-sm-3':(key == 'widget')}">
+                                                                                            <div
+                                                                                                class="checkbox checkbox-primary">
+                                                                                                <input type="checkbox"
+                                                                                                    class="{{x}}_{{key}}_custom"
+                                                                                                    id="{{x}}_{{key}}_{{val1.name}}_custom"
+                                                                                                    ng-checked="val1.visibility"
+                                                                                                    ng-click="checkInidivisualCheckbox(x,key,val1.name)" />
+                                                                                                <label for="{{x}}_{{key}}_{{val1.name}}_custom"></label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-5 col-sm-5" ng-if="key=='widget'">
+                                                                                            <select
+                                                                                                class="form-control appendSelect2"
+                                                                                                select2-model-append
+                                                                                                ng-if="val1.chartType"
+                                                                                                ng-model="myDboardSelectedVal[val1.chartId]"
+                                                                                                ng-disabled="(val1.chartId == 'sankeyChartCustom') ? true : (!val1.visibility)">
+                                                                                                <option ng-repeat="(x,y) in uData.dropdownDispValue" value="{{y.ActVal}}">{{(('MyProfile.')+(y.DispVal| nospace)) | translate}}</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="clearBoth"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div ng-if="$last" class="clearBoth"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right mydashboardbutton">
+                                        <button type="button" class="btnDefault btnStyle" ng-click="setDefaultValues()" translate>BtnGroup.Defaults</button>
+                                        <button class="btnSuccess btnStyle" ng-click="dbNewSetting()" translate>BtnGroup.Save</button>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row savedsearchMargin" ng-if="false">
+                        <div class="col-md-12 savedsearchAlighn">
+                            <div class="portlet-title cursorPointer accordion" id="collapseSaved">
+                                <div class="row">
+                                    <div class="col-md-5 col-xs-6" ng-init="savedSearchCollapse = false"
+                                        ng-click="savedSearchCollapse = !savedSearchCollapse" data-toggle="collapse"
+                                        data-target="#savedSearchCollapse" aria-expanded="true"
+                                        aria-controls="savedSearchCollapse">
+                                        <i class="fa fa-hdd-o"></i>
+                                        <span translate class="caption">MyProfiledetails.SavedSearch</span>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <i data-toggle="collapse" data-target="#savedSearchCollapse"
+                                            aria-expanded="true" aria-controls="savedSearchCollapse"
+                                            class="bold fa fa-arrow-circle-right pull-right collapseicon"
+                                            ng-click="savedSearchCollapse = !savedSearchCollapse"
+                                            ng-class="{'fa-arrow-circle-down': !savedSearchCollapse, 'fa-arrow-circle-right': savedSearchCollapse}"></i>
+                                        <ul class="nav nav-tabs pull-right" ng-show="!savedSearchCollapse">
+                                            <li class="nav-item active myProfileSaveSearchList"><a
+                                                    class="nav-link active" data-toggle="tab"
+                                                    data-target="#home">{{'Sidebar.ReceivedInstructions' | translate}}</a></li>
+                                            <li class="nav-item myProfileSaveSearchList savedsearchNavs"><a
+                                                    class="nav-link" data-toggle="tab"
+                                                    data-target="#dist">{{'Sidebar.DistributedInstructions' |
+                                                    translate}}</a></li>
+                                            <li class="nav-item myProfileSaveSearchList savedsearchNavs"><a
+                                                    class="nav-link" data-toggle="tab"
+                                                    data-target="#menu1">{{'Sidebar.AllPayments' | translate}}</a></li>
+                                            <li class="nav-item myProfileSaveSearchList savedsearchNavs"><a
+                                                    class="nav-link" data-toggle="tab"
+                                                    data-target="#confir">{{'Sidebar.AllConfirmations' | translate}}</a>
+                                            </li>
+                                            <li class="nav-item myProfileSaveSearchList savedsearchNavs "><a
+                                                    class="nav-link" data-toggle="tab" data-target="#attach"
+                                                    ng-if="allAttachedMessages">All Attached Messages</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!-- collapse="savedSearchCollapse" -->
+                            <div class="portlet-body collapse show" id="savedSearchCollapse"
+                                aria-labelledby="savedSearchCollapse" data-parent="#collapseSaved">
+                                <!--BEGIN TABS-->
+                                <div class="portlet-inner-box">
+                                    <div class="tab-content p-2">
+                                        <div id="home" class="tab-pane fade show active">
+                                            <ul class="feeds" ng-if="!FListSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.FileList"
+                                                    class="cursorPointer">
+                                                    <div class="col1"
+                                                        ng-click="gotoFileListSearch($index,'Flist', $event)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel"><i
+                                                                    class=" fa fa-times savedsearchCancel"
+                                                                    ng-click="confirmationAlert($index,'FList')"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="{{'BtnGroup.Delete' | translate}}"
+                                                                    data-toggle="modal" data-target="#delPopup"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center"
+                                                ng-if="FListSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i>{{'MyProfiledetails.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                        <div id="dist" class="tab-pane fade show">
+                                            <ul class="feeds" ng-if="!distSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.ReceivedInsn"
+                                                    class="cursorPointer">
+                                                    <div class="col1" ng-click="gotoDist(savedSearch,$index)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel">
+                                                                <i ng-click="confirmationAlert($index,'dist')"
+                                                                    class="savedsearchCancel fa fa-times"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-target="#delPopup"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center" ng-if="distSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i> {{'MyProfile.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                        <div id="confir" class="tab-pane fade show">
+                                            <ul class="feeds" ng-if="!confirSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.AllConfirmations"
+                                                    class="cursorPointer">
+                                                    <div class="col1" ng-click="gotoConf(savedSearch,$index)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel">
+                                                                <i ng-click="confirmationAlert($index,'confir')"
+                                                                    class="savedsearchCancel fa fa-times"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-target="#delPopup"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center" ng-if="confirSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i><Span>{{'MyProfile.Nosavedsearchfound' | translate}}</Span>
+                                            </div>
+                                        </div>
+                                        <div id="menu1" class="tab-pane fade show">
+                                            <ul class="feeds" ng-show="!AllPaymentsSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.AllPayments"
+                                                    class="cursorPointer">
+                                                    <div class="col1"
+                                                        ng-click="gotoFileListSearch($index,'AllPayments',$event)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel">
+                                                                <i ng-click="confirmationAlert($index,'allPayments')"
+                                                                    class="savedsearchCancel fa fa-times"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-target="#delPopup"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center"
+                                                ng-show="AllPaymentsSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i> {{'MyProfile.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                        <div id="attach" class="tab-pane fade show">
+                                            <ul class="feeds" ng-if="!allAttachedMessages">
+                                                <li ng-repeat="savedSearch in savedSearches.AllAttachedMessages"
+                                                    class="cursorPointer">
+                                                    <div class="col1" ng-click="gotoAttach(savedSearch,$index)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel">
+                                                                <i ng-click="confirmationAlert($index,'dist')"
+                                                                    class="savedsearchCancel fa fa-times"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-target="#delPopup"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center"
+                                                ng-if="!AllAttachedMessagesSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i> {{'MyProfile.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+                                    <div class="modal-dialog modal-md modaldelpop">
+                                        <div class="modal-content modalbdy animated tada">
+                                            <div class="modal-header modaldelpopAlighn">
+                                                <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body modaldelpopAlighn">
+                                                <h2>{{'BankDataDts.Areyousure' | translate}}</h2>
+                                                <h6 translate>BankDataDts.PopupRecoverMsg</h6>
+                                            </div>
+                                            <div class="modal-footer modalftr">
+                                                <button tabindex="0" type="button" class="buton cancl"
+                                                    data-dismiss="modal" translate>BtnGroup.Cancel</button>
+                                                <button tabindex="0" type="button" class="buton yess"
+                                                    ng-click="deleteSelectedSearch($event)">Yes, delete it!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Delete popup Window Start-->
+                                <div class="modal fade modaldelpopupdraft" tabindex="-1" id="delPopupDraft"
+                                    role="dialog">
+                                    <div class="modal-dialog modal-md modaldelpop">
+                                        <div class="modal-content modalbdy animated tada">
+                                            <div class="modal-header modaldelpopAlighn">
+                                                <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body modaldelpopAlighn">
+                                                <h2>{{'BankDataDts.Areyousure' | translate}}</h2>
+                                                <h6 translate>BankDataDts.PopupMsgDraft</h6>
+                                            </div>
+                                            <div class="modal-footer modalftr">
+                                                <button tabindex="0" type="button" class="buton cancl"
+                                                    data-dismiss="modal" translate>BtnGroup.Cancel</button>
+                                                <button tabindex="0" type="button" class="buton yess"
+                                                    ng-click="gotodeleteDraft()">Yes, delete it!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Delete popup Window End-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row saveddraftMargin" ng-if="false">
+                        <div class="col-md-12 saveddraftAlighn">
+                            <div class="portlet-title cursorPointer accordion" id="collapseDraft">
+                                <div class="row" data-toggle="collapse" data-target="#savedDraftCollapse"
+                                    aria-expanded="true" aria-controls="savedDraftCollapse">
+                                    <div class="col-md-5 col-xs-6" ng-init="savedDraftCollapse = false"
+                                        ng-click="savedDraftCollapse = !savedDraftCollapse">
+                                        <i class="fa fa-hdd-o"></i>
+                                        <span translate class="caption">MyProfiledetails.SavedDrafts</span>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <i class="bold fa fa-arrow-circle-right pull-right collapseicon"
+                                            ng-click="savedDraftCollapse = !savedDraftCollapse"
+                                            ng-class="{'fa-arrow-circle-down': !savedDraftCollapse, 'fa-arrow-circle-right': savedDraftCollapse}"></i>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="portlet-body collapse show" collapse="savedDraftCollapse"
+                                id="savedDraftCollapse" aria-labelledby="savedDraftCollapse"
+                                data-parent="#collapseDraft">
+                                <!--BEGIN TABS-->
+                                <div class="portlet-inner-box UserdraftViewCls saveddraftPortletbox">
+                                    <div class="tab-content">
+                                        <div id="home" class="tab-pane fade show active">
+                                            <ul class="feeds" ng-if="allUserDrafts">
+                                                <li ng-repeat="savedDraft in allUserDrafts" class="cursorPointer">
+                                                    <div class="col1" ng-click="gotoViewDrafts(savedDraft)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bookmark"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">{{savedDraft.BPK}}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel">
+                                                                <i class="savedsearchCancel fa fa-times"
+                                                                    ng-click="takeDeldata(savedDraft,$index)"
+                                                                    data-original-title="{{'BtnGroup.Delete' | translate}}"
+                                                                    data-toggle="modal" data-target="#delPopupDraft"
+                                                                    data-toggle-second="tooltip"
+                                                                    data-placement="top"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center" ng-if="!allUserDrafts">
+                                                <i class="fa fa-warning"></i> No saved drafts found
+                                            </div>
+                                        </div>
+                                        <div id="dist" class="tab-pane fade show">
+                                            <ul class="feeds" ng-if="!distSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.ReceivedInsn"
+                                                    class="cursorPointer">
+                                                    <div class="col1" ng-click="gotoDist(savedSearch,$index)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel">
+                                                                <i class="savedsearchCancel fa fa-times"
+                                                                    ng-click="confirmationAlert($index,'dist')"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-target="#delPopup"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center"
+                                                ng-if="distSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i> {{'MyProfile.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                        <div id="confir" class="tab-pane fade show">
+                                            <ul class="feeds" ng-if="!confirSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.AllConfirmations"
+                                                    class="cursorPointer">
+                                                    <div class="col1" ng-click="gotoConf(savedSearch,$index)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel"><i class="savedsearchCancel fa fa-times"
+                                                                    ng-click="confirmationAlert($index,'confir')"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-target="#delPopup"></i></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center"
+                                                ng-if="confirSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i> {{'MyProfile.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                        <div id="menu1" class="tab-pane fade">
+                                            <ul class="feeds" ng-show="!AllPaymentsSavedSearchNotExist">
+                                                <li ng-repeat="savedSearch in savedSearches.AllPayments"
+                                                    class="cursorPointer">
+                                                    <div class="col1"
+                                                        ng-click="gotoFileListSearch($index,'AllPayments',$event)">
+                                                        <div class="cont">
+                                                            <div class="cont-col1">
+                                                                <div
+                                                                    class="label label-sm label-success collapsemargin">
+                                                                    <i class="fa fa-bolt"></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="cont-col2">
+                                                                <div class="desc cursorPointer">
+                                                                    {{savedSearch.name}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col2">
+                                                        <div class="date">
+                                                            <div class="cancel"><i class="savedsearchCancel fa fa-times"
+                                                                    ng-click="confirmationAlert($index,'allPayments')"
+                                                                    data-toggle-second="tooltip" data-placement="top"
+                                                                    data-original-title="Delete" data-toggle="modal"
+                                                                    data-target="#delPopup"></i></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="alert alert-warning bold text-center"
+                                                ng-show="AllPaymentsSavedSearchNotExist">
+                                                <i class="fa fa-warning"></i> {{'MyProfile.Nosavedsearchfound' | translate}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+                                    <div class="modal-dialog modal-md modaldelpop">
+                                        <div class="modal-content modalbdy animated tada">
+                                            <div class="modal-header modaldelpopAlighn">
+                                                <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body modaldelpopAlighn">
+                                                <h2>{{'BankDataDts.Areyousure' | translate}}</h2>
+                                                <h6 translate>BankDataDts.PopupRecoverMsg</h6>
+                                            </div>
+                                            <div class="modal-footer modalftr">
+                                                <button tabindex="0" type="button" class="buton cancl"
+                                                    data-dismiss="modal" translate>BtnGroup.Cancel</button>
+                                                <button tabindex="0" type="button" class="buton yess"
+                                                    ng-click="deleteSelectedSearch($event)">Yes, delete it!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="profileSetup">
+        <div class="row collapsemargin accordion" id="collapseResetPwd">
+            <div class="portlet-title cursorPointer width100">
+                <div class="row " ng-init="pwReset = false" ng-click="pwReset = !pwReset" data-toggle="collapse"
+                    data-target="#collapseReset">
+                    <div class="col-md-9">
+                        <i class="fa fa-key" aria-hidden="true"></i>
+                        <span class="caption" translate>MyProfiledetails.ChangePassword</span>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="bold fa fa-chevron-circle-right pull-right collapseicon"
+                            ng-class="{'fa-chevron-circle-down': !pwReset, 'fa-chevron-circle-right': pwReset}"></i>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <!-- collapse="pwReset" -->
+            <div class="portlet-body tab-content collapse show width100" id="collapseReset" class="collapse show"
+                aria-labelledby="headingOne" data-parent="#collapseResetPwd">
+                <form class="form-horizontal saveddraftpwreset" role="form" ng-submit="passwordReset(password)">
+                    <div class="form-group row">
+                        <label
+                            class="control-label bold col-md-4 text-sm-left text-md-right text-lg-right text-xl-right mt-2">
+                            <span translate>loginPage.OldPassword </span><span class="asterisk"
+                                aria-required="true">*</span>
+                        </label>
+                        <!-- <div class="col-md-4">
+                      <input class="key form-control" type="text" autocomplete="off" id="oldPW1" name="OldPassword" ng-model="password.OldPassword" placeholder="Enter Old Password" ng-blur="multipleEmptySpace($event)" ng-keyup="changetoPasswordFormat($event,password.OldPassword)" required>
+                      </div> -->
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="password" id="oldPW1" name="OldPassword" ng-model="password.OldPassword"
+                                    class="form-control passField" placeholder="{{'loginPage.fill' | translate}}"
+                                    ng-click="hideConfirmPassword1()" ng-focus="ConfirmPasswordFocus1()" required />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" ng-click="reset_oldpassword_show_hide();">
+                                        <i class="fa fa-eye" id="resetoldshow_eye"></i>
+                                        <i class="fa fa-eye-slash d-none" id="resetoldhide_eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label
+                            class="control-label bold col-md-4 text-sm-left text-md-right text-lg-right text-xl-right mt-2">
+                            <span translate>loginPage.EnterNewPassword </span><span class="asterisk"
+                                aria-required="true">*</span>
+                        </label>
+                        <div class="col-md-4 ">
+                            <!--  <input class="key form-control" type="text" autocomplete="off" name="newPW" ng-model="password.newPW" placeholder="Enter New Password" onkeydown="return spaceNotAllowed(event)" ng-blur="multipleEmptySpace($event);validatePassWord(password.newPW, $event)"
+                            ng-keyup="changetoPasswordFormat($event,password.newPW)" required> -->
+                            <div class="input-group">
+                                <input type="password" id="newPW" name="newPW" ng-model="password.newPW"
+                                    class="form-control passField" placeholder="{{'loginPage.fill' | translate}}"
+                                    ng-blur="validatePassWord(password.newPW, $event)" ng-click="hidePassword1()"
+                                    ng-focus="PasswordFocus1()" required />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" ng-click="reset_password_show_hide();">
+                                        <i class="fa fa-eye" id="show_eye2"></i>
+                                        <i class="fa fa-eye-slash d-none" id="hide_eye2"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-4">
+                            <button type="button" tabindex="-1" class="btn saveddraftbutton popover"
+                                data-container="body" data-toggle="popover" data-content="{{passwordRules}}"
+                                data-original-title="" title=""><span class="questionMark">?</span></button>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label
+                            class="control-label bold col-md-4 text-sm-left text-md-right text-lg-right text-xl-right mt-2">
+                            <span translate>loginPage.ConfirmPassword</span><span class="asterisk"
+                                aria-required="true">*</span>
+                        </label>
+                        <div class="col-md-4 ">
+                            <!-- <input class="key form-control" type="text" autocomplete="off" name="confirmPW" ng-model="password.confirmPW" placeholder="Confirm New Password" ng-blur="multipleEmptySpace($event)" ng-keyup="changetoPasswordFormat($event,password.confirmPW)" required> -->
+                            <div class="input-group">
+                                <input type="password" id="confirmPW" name="confirmPW" ng-model="password.confirmPW"
+                                    class="form-control passField" placeholder="{{'loginPage.fill' | translate}}"
+                                    ng-click="hideConfirmPassword1()" ng-focus="ConfirmPasswordFocus1()" required />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" ng-click="reset_password_show_hides();">
+                                        <i class="fa fa-eye" id="show_eyes1"></i>
+                                        <i class="fa fa-eye-slash d-none" id="hide_eyes1"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group saveddraftbuttonAlighn">
+                        <button type="reset" class="btnDefault myprofbtn" ng-click="resetFn()"
+                            translate>BtnGroup.Reset</button>
+                        <button type="reset" class="btnDeny myprofbtn" ng-click="pwCancel()"
+                            translate>BtnGroup.Cancel</button>
+                        <button type="submit" class="btnSuccess myprofbtn" translate>BtnGroup.Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+<script>
+    $(document).ready(function () {
+
+        // $('select[name=TimeZone]').select2()
+        $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+        // $(function() {
+        //     $('.DatePicker').datetimepicker({
+        //         format: "YYYY-MM-DD",
+        //         useCurrent: false,
+        //         showClear: true,
+        //     })
+        // })
+
+        setTimeout(function () {
+            $('.input-group-text').on('click focus', function (e) {
+                $(this).prev().focus().click()
+            });
+        }, 1000);
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="popover"]').popover();
+    });
+
+    $('body').on('click', function (e) {
+        $('[data-toggle="popover"]').each(function () {
+            //the 'is' for buttons that trigger popups
+            //the 'has' for icons within a button that triggers a popup
+            if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target)
+                .length === 0) {
+                $(this).popover('hide');
+            }
+        });
+    });
+
+</script>

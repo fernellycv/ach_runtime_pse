@@ -1,0 +1,442 @@
+{
+    "Sidebar": {
+        "Forgotpassword": "Se te olvidó tu contraseña",
+        "MyProfile": "Mi perfil",
+        "Home": "Inicio ",
+        "PaymentModule": "Módulo de pago",
+        "AccountsModule": "MÃ³dulo de cuentas",
+        "PaymentsDashboard": "Cuadro de instrumentos de pagos",
+        "InstructionsDashboard": "Instrucciones Dashboard",
+        "ReceivedInstructions": "Instrucciones Recibidas",
+        "AllConfirmations": "Toda la Confirmación",
+        "DistributedInstructions": "Instrucciones distribuidas",
+        "AllBatches": "Todos los lotes",
+        "AllPayments": "Todos los pagos",
+        "AttachedMessages": "Mensajes adjuntos",
+        "BulkPayments": "Bulk Payments",
+        "CreateMOPFile": "Create MOP File",
+        "RegenerateMOPFile": "Regenerate MOP File",
+        "DashboardChamber": "Dashboard by Chamber",
+        "InitiateTransaction": "iniciar Transacción",
+        "FileUpload": "Subir archivo",
+        "AdminPanel": "Panel de administrador",
+        "UserManagement": "Gestión de usuarios",
+        "UserSessionManagement": "Gestión de sesiones de usuario",
+        "AddUser": "Agregar usuario",
+        "RolesPermissions": "Roles y Permisos",
+        "AlertsNotifications": "Alertas y notificaciones",
+        "MyDashboard": "Mi tablero",
+        "SchedularProfiles": "Perfiles programables",
+        "ReceivedAccounts": "Received Accounts",
+        "BankData": "Datos del Banco",
+        "Calendar": "Calendario",
+        "Country": "País",
+        "Region": "Región",
+        "Currency": "Divisa",
+        "Office": "Oficina",
+        "Branch": "Sucursal",
+        "Department": "Departamento",
+        "Membership": "Afiliación",
+        "BusinessRules": "Reglas del negocio",
+        "FXRates": "FX tarifas",
+        "MPITemplate": "MPI Modelo",
+        "OnboardingData": "Incorporación de datos",
+        "ServiceGroup": "Grupo de servicios",
+        "Service": "Servicio",
+        "Product": "Producto",
+        "Party": "Entidad",
+        "Account": "Cuenta",
+        "Transport": "Transporte",
+        "PartyServiceAssociation": "Grupo de servicios asociados",
+        "DistributionData": "Distribución de datos",
+        "BankRouting": "Ruta bancaria",
+        "CountryCorrespondent": "Corresponsal país",
+        "CurrencyCorrespondent": "Corresponsal de divisas",
+        "IndustryDataSWIFT": "Datos de la industria-SWIFT",
+        "MethodOfPayment": "Forma de pago",
+        "MOPPriority": "Prioridad MOP",
+        "CutOff": "Cortar",
+        "BulkProfile": "Perfil masivo",
+        "DailyOperatingWindows": "Windows de funcionamiento diario",
+        "BulkProfileOverride": "Anulación de perfil en bloque",
+        "SystemData": "Datos del sistema",
+        "ApplicationConfig": "Configuraciones de la aplicación ",
+        "BusinessFunction": "Función de negocio",
+        "BusinessProcess": "Procesos de negocio",
+        "VolPayIDConfiguration": "Configuración ID VolPay",
+        "ActionDefinition": "Definición de Acción",
+        "IncidenceDefinition": "Definición de Incidencia",
+        "StatusAction": "Acción de estado",
+        "StatusDefinition": "Definición de estado",
+        "LogConfiguration": "Configuración del registro",
+        "ApprovalCondition": "Condición de aprobación",
+        "SystemMonitoring": "Monitoreo del sistema",
+        "RouteRegistry": "Registro de rutas",
+        "ServiceRegistry": "Registro de servicio",
+        "SystemDiagnosis": "Diagnóstico del sistema",
+        "SodHealthCheck": "SOD Chequeo de salud",
+        "ScheduledRouteLogAudit": "Auditoría de registro de ruta programada",
+        "Security": "Seguridad",
+        "Approvals": "Aprobaciones",
+        "Reports": "Informes",
+        "Report": "Informes",
+        "ReportsLog": "Los informes del Registro",
+        "ReportParams": "Informe Parámetros",
+        "ReportTemplates": "Plantillas de informes",
+        "ReportGenerate": "Generar informe",
+        "ReportsAll": "Todos",
+        "SystemInteraction": "Interacción del sistema"
+    },
+    "Forgotpassword": {
+        "PageTitle": "Se te olvidó tu contraseña",
+        "SubTitle": "Editar Perfil de contraseña."
+    },
+    "BreadCrumb": {
+        "Home": "Inicio",
+        "PaymentModule": "Módulo de pago",
+        "AccountsModule": "Módulo de Cuentas",
+        "AdminPanel": "Panel de administrador",
+        "BankData": "Datos del Banco",
+        "OnboardingData": "Incorporación de datos",
+        "DistributionData": "Distribución de datos",
+        "SystemData": "Datos del sistema",
+        "Reports": "Informes"
+    },
+    "ToolTips": {
+        "Refresh": "Refrescar"
+    },
+    "SelectDates": {
+        "All": "Todas",
+        "Today": "Hoy",
+        "Week": "Semana",
+        "Month": "Mes",
+        "Custom": "Personalizado"
+    },
+    "BtnGroup": {
+        "SavedSearch": "SavedSearch",
+        "ShowAdvancedSearch": "Mostrar búsqueda avanzada",
+        "HideAdvancedSearch": "Ocultar Búsqueda Avanzada",
+        "SaveSearch": "Guardar búsqueda",
+        "ResetFilter": "reajuste del filtro",
+        "AddRemoveFilters": "Añadir / Eliminar Filtros",
+        "Search": "Buscar",
+        "Cancel": "Cancelar",
+        "ClicktoUpload": "Upload",
+        "AddNew": "Agregar nuevo",
+        "Submit": "Enviar",
+        "Save": "Salvar",
+        "Count": "Contar",
+        "Amount": "Cantidad",
+        "Reload": "Recargar"
+    },
+    "MyProfile": {
+        "PageTitle": "Mi perfil",
+        "SubTitle": "Ver Edición de la configuración de perfil y búsqueda guardada"
+    },
+    "AlertNotification": {
+        "PageTitle": "Alertas y notificaciones",
+        "SubTitle": "Ver Alertas y Notificaciones"
+    },
+    "DashboardPayments": {
+        "PageTitle": "Cuadro de instrumentos de pagos",
+        "SubTitle": "Resumen Estadísticas y más",
+        "SubSubTitle": "Pago pendiente"
+    },
+    "MyDashboard": {
+        "PageTitle": "Mi tablero",
+        "SubTitle": "Información general, estadísticas y más"
+    },
+    "AllPayments": {
+        "PageTitle": "Todos los pagos",
+        "SubTitle": "Lista de todos los pagos. Haga clic en el pago para ver los detalles de pago"
+    },
+    "AttachedMessages": {
+        "PageTitle": "Todos los mensajes adjuntos",
+        "SubTitle": "Lista de todos los mensajes adjuntos. Haga clic en el mensaje adjunto para ver sus detalles."
+    },
+    "InterfaceOverride": {
+        "PageTitle": "Anulación de interfaz",
+        "SubTitle": ""
+    },
+    "DashboardFile": {
+        "PageTitle": "Instrucciones Dashboard",
+        "SubTitle": "Resumen Estadísticas y más",
+        "SubSubTitle": "Estado del archivo"
+    },
+    "ReceivedInstructions": {
+        "PageTitle": "Instrucciones Recibidas",
+        "SubTitle": "Lista de todas las instrucciones recibidas. Haga clic en la instrucción recibida para ver sus detalles"
+    },
+    "ReceivedAccounts": {
+        "PageTitle": "Cuentas recibidas",
+        "SubTitle": "Lista de todas las cuentas recibidas. Haga clic en las cuentas recibidas para ver sus detalles."
+    },
+    "AllConfirmations": {
+        "PageTitle": "Toda la Confirmación",
+        "SubTitle": "Lista de todas las instrucciones de confirmación. Haga clic en la instrucción de confirmación para ver sus detalles"
+    },
+    "DistributedInstructions": {
+        "PageTitle": "Instrucciones distribuidas",
+        "SubTitle": "Lista de todas las instrucciones distribuidas. Haga clic en la instrucción distribuida para ver sus detalles"
+    },
+    "AllBatches": {
+        "PageTitle": "Todos los lotes",
+        "SubTitle": "Lista de todos los lotes. Haga clic en todos los lotes para ver sus detalles"
+    },
+    "InitiateTransaction": {
+        "PageTitle": "Iniciar Transacción"
+    },
+    "FileUpload": {
+        "PageTitle": "Subir archivo",
+        "SubTitle": "Cargar los archivos de ayuda que deben procesados"
+    },
+    "UserManagement": {
+        "PageTitle": "Gestión de usuarios",
+        "SubTitle": "Ver los usuarios editar los datos de los usuarios",
+        "AddUser": "Agregar usuario"
+    },
+    "RolesPermissions": {
+        "PageTitle": "Roles y Permisos",
+        "SubTitle": "Ver Roles y Permisos, Editar Roles y Permisos",
+        "AddRole": "Agregar rol"
+    },
+    "UserSessionManagement": {
+        "PageTitle": "Gestión de sesiones de usuario",
+        "SubTitle": "Ver sesión de usuario, editar sesión de usuario"        
+    },
+    "Roles": {
+        "PageTitle": "Roles",
+        "SubTitle": "Agregar nuevo roles"
+    },
+    "Calendar": {
+        "PageTitle": "Calendario",
+        "Edit": "Editar calendario",
+        "SubTitle": "Ver calendario, Editar calendario Detalle"
+    },
+    "Country": {
+        "PageTitle": "País",
+        "Edit": "Editar País",
+        "SubTitle": "Ver detalle del país Edición País"
+    },
+    "Region": {
+        "PageTitle": "Región",
+        "Edit": "Editar Región",
+        "SubTitle": "Vista de detalles Editar Región Región"
+    },
+    "Currency": {
+        "PageTitle": "Moneda",
+        "Edit": "Cambiar la moneda",
+        "SubTitle": "Ver moneda Cambiar la moneda Detalle"
+    },
+    "Office": {
+        "PageTitle": "Oficina",
+        "Edit": "Editar Oficina",
+        "SubTitle": "Vista de detalles de la oficina de edición"
+    },
+    "Branch": {
+        "PageTitle": "Sucursal",
+        "Edit": "Editar Sucursal",
+        "SubTitle": "Vista de detalles Sucursal  Editar Sucursal",
+        "ForMandatory": "- Todos los campos marcados con un asterisco ( <span style='color:#e02222;font-size:12px;padding-left:2px' class='bold'> *&nbsp; </span> ) son obligatorios."
+    },
+    "Department": {
+        "PageTitle": "Departamento",
+        "Edit": "Departamento de Edición",
+        "SubTitle": "Vista de detalles Departamento Departamento de Edición"
+    },
+    "Membership": {
+        "PageTitle": "Afiliación",
+        "Edit": "Editar pertenencia",
+        "SubTitle": "Ver detalles de la membresía Editar pertenencia"
+    },
+    "BusinessRules": {
+        "PageTitle": "Reglas del negocio",
+        "Edit": "Editar Reglas de Negocio",
+        "SubTitle": "Reglas Ver Reglas de Negocio Negocio Editar Detalle"
+    },
+    "FXRates": {
+        "PageTitle": "FX tarifas",
+        "Edit": "Editar FX tarifas",
+        "SubTitle": "Ver tarifas de FX FX tarifas Detalle"
+    },
+    "MPITemplates": {
+        "PageTitle": "MPI Templates",
+        "Edit": "Editar MPI Plantillas",
+        "SubTitle": "Ver MPI Plantillas, Edit MPI Modelo Detalle"
+    },
+    "ServiceGroup": {
+        "PageTitle": "Grupo de Servicio",
+        "Edit": "Editar Grupo de Servicio",
+        "SubTitle": "Detalle Vista Service Group Editar Service Group"
+    },
+    "Service": {
+        "PageTitle": "Servicio",
+        "Edit": "Editar Servicio",
+        "SubTitle": "Ver detalle de Servicio Editar Servicio"
+    },
+    "Product": {
+        "PageTitle": "Producto",
+        "Edit": "Editar Producto",
+        "SubTitle": "Ver Producto Detalle del producto Editar"
+    },
+    "Party": {
+        "PageTitle": "Grupo",
+        "Edit": "Editar Grupo",
+        "SubTitle": "Detalle Grupo Editar Ver Grupo"
+    },
+    "Account": {
+        "PageTitle": "Cuenta",
+        "Edit": "Editar cuenta",
+        "SubTitle": "Ver detalle de cuenta Editar cuenta"
+    },
+    "Transport": {
+        "PageTitle": "Transporte",
+        "Edit": "Editar Transporte",
+        "SubTitle": "Ver detalles de la edición de transporte Transporte"
+    },
+    "PartyServiceAssociation": {
+        "PageTitle": "Asociación de Funcionarios de Grupo",
+        "Edit": "Editar Asociación Servicio Grupo",
+        "SubTitle": "Detalle Asociación Servicio Grupo Editar Asociación Servicio Grupo"
+    },
+    "BankRouting": {
+        "PageTitle": "Ruta bancaria",
+        "Edit": "Editar enrutamiento de banco",
+        "SubTitle": "Ver enrutamiento de banco, Editar detalle de enrutamiento de banco"
+    },
+    "CountryCorrespondent": {
+        "PageTitle": "País Corresponsal ",
+        "Edit": "editar País Corresponsal ",
+        "SubTitle": "Ver País Corresponsal Editar Detalle de País Corresponsal "
+    },
+    "IndustryDataSWIFT": {
+        "PageTitle": "Datos de la industria-SWIFT",
+        "Edit": "Editar datos de la industria-SWIFT",
+        "SubTitle": "Ver datos de la industria-SWIFT, Editar datos de la industria-Detalle de SWIFT"
+    },
+    "CurrencyCorrespondent": {
+        "PageTitle": "Corresponsal de divisas",
+        "Edit": "Editar Corresponsal de Divisas",
+        "SubTitle": "Ver Corresponsal Divisa Cambiar Detalle Corresponsal Divisas"
+    },
+    "MethodOfPayment": {
+        "PageTitle": "Forma de pago",
+        "Edit": "Editar Forma de pago",
+        "SubTitle": "Ver Forma de pago Edición Detalle de Forma de pago"
+    },
+    "MOPPriority": {
+        "PageTitle": "Prioridad MOP",
+        "Edit": "Editar Prioridad MOP",
+        "SubTitle": "Ver Prioridad MOP, Editar Detalle de Prioridad MOP"
+    },
+    "CutOff": {
+        "PageTitle": "Horario Cierre",
+        "Edit": "Editar Horario Cierre",
+        "SubTitle": "Ver Cierre Editar detalle de horario de Cierre"
+    },
+    "BulkProfile": {
+        "PageTitle": "Perfil masivo",
+        "Edit": "Editar el perfil masivo",
+        "SubTitle": "Ver el perfil masivo, Editar detalles del perfil masivo"
+    },
+    "BulkProfileOverride": {
+        "PageTitle": "Anulación de perfil en bloque",
+        "Edit": "Modificación del reemplazo de perfil masivo",
+        "SubTitle": "Ver detalles de sustitución de perfil masivo, modificar detalles de sustitución de perfil masivo"
+    },
+    "AdHocExecution": {
+        "PageTitle": "Ejecución ad hoc",
+        "Edit": "Editar ejecución ad hoc",
+        "SubTitle": "Ver ejecución ad hoc, editar ejecución ad hoc"
+    },
+    "AppConfig": {
+        "PageTitle": "Configuración de la aplicación ",
+        "Edit": "Editar Configuración de la aplicación ",
+        "SubTitle": "Ver Configuración de la aplicación Editar Detalle de Configuración de la aplicación "
+    },
+    "ApplicationConfig": {
+        "PageTitle": "Configuración de la aplicación ",
+        "Edit": "Editar Configuración de la aplicación ",
+        "SubTitle": "Ver Configuración de la aplicación Editar Detalle de Configuración de la aplicación "
+    },
+    "BusinessFunction": {
+        "PageTitle": "Función de negocio",
+        "Edit": "Función de edición de negocios",
+        "SubTitle": "Ver función de negocios comerciales Editar detalles de funciones"
+    },
+    "BusinessProcess": {
+        "PageTitle": "Procesos de negocio",
+        "Edit": "Proceso de edición de negocios",
+        "SubTitle": "Ver Proceso de Negocio Editar Los detalles del proceso de negocio"
+    },
+    "VolPayIDConfiguration": {
+        "PageTitle": "Configuración ID VolPay",
+        "Edit": "Editar Configuración ID VolPay ",
+        "Add": "Añadir Configuración ID VolPay ",
+        "SubTitle": "Ver los detalles de configuración de ID de VolPay Editar ID de VolPay"
+    },
+    "ActionDefinition": {
+        "PageTitle": "Definición de Acción",
+        "Edit": "Editar definición de acción",
+        "SubTitle": "Ver definición de la acción, Editar la definición de la definición de la acción"
+    },
+    "IncidenceDefinition": {
+        "PageTitle": "Definición de Incidencia",
+        "Edit": "Editar definición de incidencia",
+        "SubTitle": "Ver la definición de incidencia, Editar la definición de incidencia"
+    },
+    "StatusAction": {
+        "PageTitle": "Acción de estado",
+        "Edit": "Acción de edición de estado",
+        "SubTitle": "Ver estado Acción, Editar estado Detalles de la acción"
+    },
+    "StatusDefinition": {
+        "PageTitle": "Definición de estado",
+        "Edit": "Editar definición de estado",
+        "SubTitle": "Ver definición de estado, Editar detalles de definición de estado"
+    },
+    "LogConfiguration": {
+        "PageTitle": "Configuración del registro",
+        "Edit": "Editar la configuración del registro",
+        "SubTitle": "Ver configuración de registro, detalles de configuración de registro de edición"
+    },
+    "ApprovalCondition": {
+        "PageTitle": "Condición de aprobaciónn",
+        "Edit": "Editar condición de aprobación",
+        "SubTitle": "Condición de aprobación de vista, Editar aprobación Detalles de la condición"
+    },
+    "RouteRegistry": {
+        "PageTitle": "Registro de rutas",
+        "Edit": "Editar registro de rutas",
+        "SubTitle": "Ver detalles del registro de rutas"
+    },
+    "ServiceRegistryDet": {
+        "PageTitle": "Registro de servicio",
+        "Edit": "Editar registro de servicio",
+        "SubTitle": "Ver detalles del registro de servicio"
+    },
+    "ScheduledRouteLogAuditDet": {
+        "PageTitle": "Auditoría de registro de ruta programada",
+        "Edit": "Editar auditoría de registro de ruta programada",
+        "SubTitle": "Ver detalles de auditoría del registro de ruta programada"
+    },
+    "SystemDiagnosisDet": {
+        "PageTitle": "Diagnóstico del sistema",
+        "Edit": "Editar diagnóstico del sistema",
+        "SubTitle": "Ver detalles de diagnóstico del sistema"
+    },
+    "Approvals": {
+        "PageTitle": "User Action Approvals",
+        "SubTitle": "List of user action approvals waiting for approval."
+    },
+    "ReportParams": {
+        "PageTitle": "Parámetros del informe ",
+        "Edit": "Editar Parámetros de informe ",
+        "SubTitle": "Ver detalles Parámetros a informes  Parámetros Editar Parametros informe "
+    },
+    "ReportTemplates": {
+        "PageTitle": "Plantillas de informes",
+        "Edit": "Editar Plantillas informe",
+        "SubTitle": "Ver detalles de plantillas de informes Editar plantillas de informes"
+    }
+}

@@ -1,0 +1,717 @@
+<style>
+    text {
+      font: 0.75rem sans-serif;
+    }
+  
+    .searchIcons {
+      cursor: pointer;
+      background-color: #fff;
+      border: none;
+    }
+  
+    .testBlock {
+      display: block;
+    }
+  
+    .nvtooltip {
+      z-index: 100000;
+    }
+  
+    .modaltestBlock {
+      display: block;
+      height: 25rem;
+    }
+  
+    .node rect {
+      cursor: move;
+      fill-opacity: 0.9;
+      shape-rendering: crispEdges;
+    }
+  
+    .node text {
+      pointer-events: none;
+      text-shadow: 0 0.063rem 0 #fff;
+    }
+  
+    .link {
+      fill: none;
+      stroke: #000;
+      stroke-opacity: 0.2;
+    }
+  
+    .link:hover {
+      stroke-opacity: 0.5;
+    }
+  
+    .node {
+      cursor: pointer;
+    }
+  
+    .node circle {
+      stroke-width: 0.188rem;
+    }
+  
+    .node text {
+      font: 0.75rem sans-serif;
+    }
+  
+    .link {
+      fill: none;
+      stroke: #ccc;
+      stroke-width: 0.125rem;
+    }
+  
+    .lessOpacityCls {
+      opacity: 0.8;
+      pointer-events: none;
+    }
+  
+    .legendHolderCstm1,
+    .legendHolderCstm2 {
+      max-height: 7.688rem;
+      min-height: 7.688rem;
+      overflow: auto;
+      overflow-x: hidden;
+      border-top: 0.063rem solid #dcdde0;
+      background: #fff;
+    }
+  
+    .nvd3 text {
+      font: normal 0.675rem sans-serif !important;
+    }
+  
+    .breadCrumbIndex {
+      z-index: 2;
+    }
+  
+    .Margin {
+      margin: 0;
+    }
+  
+    .widgetsbackground {
+      color: #fff !important;
+    }
+  
+    .chartIndex {
+      padding-right: 0.5rem !important;
+    }
+  
+    .boxPadding {
+      margin-top: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+  
+    .dropdownMinwidth {
+      min-width: 8.125rem;
+    }
+  
+    .iconDisplay {
+      display: inline-block;
+    }
+  
+    .dropdown-menu li > a {
+      display: inline-block;
+    }
+  
+    .buttonDisp {
+      color: #fff !important;
+      display: none;
+    }
+  
+    .menuMinwidth {
+      min-width: 4.063rem;
+    }
+  
+    .paymentSpacing {
+      height: 18.563rem;
+      background-color: #fff;
+      position: absolute;
+      opacity: 0.5;
+      left: 1.625rem;
+    }
+  
+    .noPaymentsstamp {
+      transform: rotate(-40deg);
+      display: inline-block;
+      font-size: 2.5rem;
+      color: #005fff;
+      position: absolute !important;
+      left: 22%;
+      top: 13.75rem;
+      border-top: 0.125rem solid red;
+      border-bottom: 0.125rem solid red;
+      z-index: 1;
+    }
+  
+    .noPaymentsshow {
+      transform: rotate(-40deg);
+      display: inline-block;
+      font-size: 2.5rem;
+      color: #005fff;
+      position: absolute;
+      left: 32%;
+      top: 40%;
+      border-top: 0.125rem solid red;
+      border-bottom: 0.125rem solid red;
+      z-index: 1;
+    }
+  
+    .chartSpacing {
+      font: bold 1rem Arial;
+      text-align: center;
+      padding-top: 0.938rem;
+      background: #fff;
+    }
+  
+    .chartDisp {
+      background: #fff;
+      height: 16.25rem;
+    }
+  
+    .legendDisp {
+      height: auto;
+      padding: 0rem;
+    }
+  
+    .chartNamedisp {
+      margin-top: 0.313rem;
+    }
+  
+    .nameAlighn {
+      margin-left: 1.25rem;
+    }
+  
+    .clearBoth {
+      clear: both;
+    }
+  
+    .chartcursor {
+      cursor: pointer;
+    }
+  
+    .chartAlighn {
+      padding-right: 0.625rem;
+    }
+  
+    .chartback {
+      color: #fff;
+    }
+  
+    .chartblock {
+      background: #fff;
+    }
+  
+    .chartholder {
+      height: auto;
+      padding: 0rem;
+      min-height: 7.313rem;
+      max-height: 7.313rem;
+    }
+  
+    .chartnotDonut {
+      background-color: #fff;
+      opacity: 0.5;
+      position: absolute;
+      height: 7.25rem;
+      z-index: 1;
+    }
+  
+    .chartifDonut {
+      display: inline-block;
+      margin-left: 0.625rem;
+    }
+  
+    .chartStatusflag {
+      float: left;
+      margin-left: 1.25rem;
+    }
+  
+    .mopColour {
+      color: #6c6c6c !important;
+    }
+  
+    .paymentcurrencyAlighn {
+      height: 19.375rem;
+      background: #fff;
+    }
+  
+    .inboundModalbox {
+      margin-top: 0.75rem;
+      margin-bottom: 0.75rem;
+      width: 100%;
+    }
+  
+    .inboundDrop {
+      left: 0.188rem;
+    }
+  
+    .dropDispnone {
+      display: none;
+    }
+  
+    .inboundBack {
+      color: #777 !important;
+    }
+  
+    .inboundModaldisp {
+      float: left;
+    }
+  
+    .inboundModalAlighn {
+      font: bold 1.313rem Arial;
+      text-align: center;
+      padding-top: 0.938rem;
+      background: #fff;
+    }
+  
+    .inboundModallegend {
+      min-height: 10%;
+      max-height: 25%;
+    }
+  
+    .inboundlegendAlighn {
+      height: auto;
+      padding: 0rem;
+      margin-top: 1.375rem;
+      margin-bottom: 1.375rem;
+    }
+  
+    .inboundModalcurrency {
+      display: inline-block;
+      margin-left: 0.625rem;
+    }
+  
+    .personalizeModal {
+      width: 37.5rem;
+    }
+  
+    .asterisk {
+      color: #e02222;
+      font-size: 0.75rem;
+      padding-left: 0.125rem;
+    }
+  
+    .personalizebutton {
+      text-align: center;
+      margin-top: 1.25rem;
+    }
+  
+    .statusSummary {
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      color: #dcdde0;
+      border-radius: 5px !important;
+      display: flex;
+      justify-content: center;
+      height: 35px;
+      align-items: center;
+  }
+  
+    .title-container {
+      padding: 0.5rem;
+      margin: 0.5rem;
+      background: #fff;
+      border-bottom: 2px solid #39c2d7;
+    }
+    .title-instruction {
+      text-align: center;
+      color: #065489;
+    }
+    .title-payments {
+      text-align: center;
+      color: white;
+    }
+    .BtnExport {
+      background-color: #065ea6;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 5px;
+      font-weight: bold;
+      height: 35px;
+      border-radius: 5px !important;
+      margin-right: 5px;
+  }
+  .select2-container--default .select2-selection--single {
+      height: 35px;
+  }
+  </style>
+  
+  <!-- BEGIN PAGE HEADER-->
+  <div class="ui-wrapper">
+    <div
+      class="page-bar breadCrumb breadCrumbIndex"
+      ng-controller="activeController"
+    >
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="page-breadcrumb">
+            <li>
+              <i class="fa fa-exchange"></i>
+              <a href="javascript:void(0);" translate class="removeCursor"
+                >Sidebar.PaymentModule</a
+              >
+              <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+              <span class="removeCursor" translate
+                >Sidebar.PaymentsDashboard</span
+              >
+            </li>
+          </ul>
+        </div>
+  
+        <div class="col-md-6 headerVals">
+          <div
+            data-ng-include="'templates/header/VPheader.html'"
+            data-ng-controller="headerCtrl"
+          ></div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="contentContainer" id="container">
+      <div class="pageTitle alertWidthonResize">
+        <div class="row">
+          <div class="col-lg-8 col-sm-8 col-xs-8">
+            <div class="title__container">
+              <h2 translate>DashboardPayments.PageTitle</h2>
+              <p translate>DashboardPayments.SubTitle</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-xs-4">
+            <div class="bar__icons pull-right">
+              <button
+                class="btn-transdashbrd"
+                id="rBtn"
+                ng-click="reloadPment()"
+                data-toggle-second="tooltip"
+                data-placement="top"
+                data-original-title="{{'ToolTips.Refresh' | translate}}"
+              >
+                <i class="fa fa-refresh"></i>
+              </button>
+              <button
+                ng-if="newPermission.Export"
+                class="btn-transdashbrd"
+                ng-click="dashboardPrint()"
+              >
+                <i
+                  class="fa fa-print"
+                  data-toggle-second="tooltip"
+                  data-placement="top"
+                  data-original-title="{{'BankDataDts.Print' | translate}}"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- END PAGE HEADER-->
+      <!-- BEGIN MAIN CONTENT -->
+  
+      <div id="allStatus" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+          &lt;!&ndash; Modal content&ndash;&gt;
+          <div class="modal-content">
+            <div class="modal-header modalHeaderColor">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              </button>
+              <h4 class="modal-title">Payments flow</h4>
+            </div>
+            <div class="modal-body">
+              <div class="row Margin">
+                <svg id="treeChart"></svg>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                translate
+              >
+                BtnGroup.Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- BEGIN DASHBOARD STATS -->
+  
+      <div
+        ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}"
+        class="autoAdjustAlert bold"
+        ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+        ng-repeat="alert in alerts"
+      >
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{alert.msg}}
+      </div>
+  
+      <div class="row Margin">
+        <div class="col-md-12 statusbar__wrapper">
+          <div class="title-container">
+            <div class="title-instruction">
+              <h3>{{'PaymentsDashboard.Instruction' | translate}}</h3>
+            </div>
+          </div>
+          <div
+            class="width100_xs width50_sm width25_md statusBox"
+            ng-class="{'width50':count==2,'width25':count==4,'width33':count==3,'width100':count==1,'width20':count==5,'width16':count==6,}"
+            ng-repeat="barVal in instructionBarVal"
+            ng-if="barVal.Visibility"
+          >
+            <div
+              class="dashboard-stat dashboardWidget"
+              ng-style="{'background':barVal.Color}"
+            >
+              <div class="statusbar__widget">
+                <div class="details pull-left">
+                  <div class="number count" ng-style="{color: barVal.ColorText}">
+                    {{barVal.Count}}
+                  </div>
+                  <div
+                    class="desc payStatus"
+                    ng-style="{color: barVal.ColorText}"
+                  >
+                    {{barVal.Status | translate}}
+                  </div>
+                </div>
+                <div class="visual widgetVisual pull-right">
+                  <i
+                    class="DboardFont"
+                    ng-style="{color: barVal.ColorText}"
+                    ng-class="barVal.Icon"
+                  ></i>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="col-md-12 statusbar__wrapper">
+          <div class="title-container">
+            <div class="title-instruction">
+              <h3>{{'PaymentsDashboard.Payment' | translate}}</h3>
+            </div>
+          </div>
+          <div
+            class="width100_xs width50_sm width25_md statusBox"
+            ng-class="{'width50':count==2,'width25':count==4,'width33':count==3,'width100':count==1,'width20':count==5,'width16':count==6,}"
+            ng-repeat="barVal in paymentBarVal"
+            ng-if="barVal.Visibility"
+          >
+            <div
+              class="dashboard-stat dashboardWidget"
+              ng-style="{'background':barVal.Color}"
+            >
+              <div class="statusbar__widget">
+                <div class="details pull-left">
+                  <div class="number count" ng-style="{color: barVal.ColorText}">
+                    {{barVal.Count}}
+                  </div>
+                  <div
+                    class="desc payStatus"
+                    ng-style="{color: barVal.ColorText}"
+                  >
+                    {{barVal.Status | translate}}
+                  </div>
+                </div>
+                <div class="visual widgetVisual pull-right">
+                  <i
+                    class="DboardFont"
+                    ng-style="{color: barVal.ColorText}"
+                    ng-class="barVal.Icon"
+                  ></i>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="searchholder">
+        <form
+          class="ng-invalid ng-invalid-required ng-dirty ng-valid-parse"
+          role="form"
+          ng-submit="getValues()"
+          name="DashboardSearch"
+        >
+          <div class="row" style="flex-direction: row-reverse">
+            <div class="col-md-3" ng-if="banksVisible">
+              <select
+                class="form-control"
+                name="party"
+                ng-model="search['PartyId']"
+                data-placeholder="{{'Placeholder.Select' | translate}}"
+                style="width: 100%"
+              >
+                <option value="">Select</option>
+                <option value="{{val.actualvalue}}" ng-repeat="val in parties">
+                  {{val.displayvalue}}
+                </option>
+              </select>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 showadv-md-7">
+              <div class="form-group">
+                <div class="input-group-prepend">
+                  <select
+                    class="form-control appendSelect2"
+                    select2-model-append
+                    name="CycleId"
+                    ng-model="search['CycleId']"
+                    title="CycleId"
+                  ></select>
+                  <button
+                    type="submit"
+                    class="input-group-text search-addon searchIcons"
+                    data-toggle="tooltip"
+                    data-original-title="{{'BtnGroup.Search'| translate}}"
+                    id="SearchFontIcon"
+                  >
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+  
+            <div
+              class="col-md-1 statusSummary"
+              ng-style="{'background': cycleStatus.background, 'max-width': 'fit-content'}"
+              ng-if="cycleStatus"
+            >
+              {{cycleStatus.text}}
+            </div>
+            <div class="BtnExport" ng-if="newPermission.Export" ng-click="GetReport()">{{'PaymentsDashboard.ExportReport' | translate}}</div>
+          </div>
+        </form>
+      </div>
+      <a id="dwnldLnk" style="display: none"></a>
+      <!-- Table of Data -->
+      <div class="col-md-12">
+        <div
+          class="listView FixHead dataGroupsScroll"
+          id="lflag"
+          ng-if="restVal.length > 0"
+        >
+          <table
+            class="table table-bordered maintable"
+            style="white-space: nowrap"
+            ng-if="restVal.length > 0"
+          >
+            <thead>
+              <tr>
+                <th
+                  class="cursorPointer"
+                  ng-repeat="val in FieldsValues"
+                  ng-style="{'text-align': 'center'}"
+                  colspan="2"
+                  translate
+                >
+                  {{val.label}}
+                  <span id="{{val.value}}_Icon" class=""></span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="userData in restVal"
+                ng-class="{oddClas:($index%2)== 1}"
+                ng-if="(!$first||true)"
+                ng-style="$first?{'background': '#017bb9', 'color': 'white', 'text-align': 'center'}:{'text-align': 'right'}"
+              >
+                <td
+                  ng-repeat="(key, val) in header"
+                  ng-style="(key != 'label')?'':{'text-align': 'left'}"
+                  colspan="1"
+                  ng-attr-colspan="{{(key=='label' || key=='compAmount')?2:1}}"
+                >
+                  <span>{{userData[key] | translate}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Table of differences -->
+      <div class="col-md-12">
+        <div
+          class="listView FixHead dataGroupsScroll"
+          id="lflag"
+          ng-if="restVal.length > 0"
+        >
+          <table
+            class="table table-bordered maintable"
+            style="white-space: nowrap"
+            ng-if="restVal.length > 0"
+          >
+            <thead>
+              <tr>
+                <th
+                  class="cursorPointer"
+                  ng-repeat="(key, val) in differences[0]"
+                  ng-style="{'text-align': 'center'}"
+                  translate
+                >
+                  {{"PaymentsDashboard." + key | translate}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="data in differences"
+                ng-class="{oddClas:($index%2)== 1}"
+                ng-if="(!$first||true)"
+              >
+                <td
+                  ng-repeat="(key, val) in differences[0]"
+                  ng-style="$last?{'text-align': 'right'}:''"
+                >
+                  <span>{{data[key] | translate}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- END MAIN CONTENT -->
+  <!-- BEGIN MAIN JS & CSS -->
+  
+  <script>
+    $(document).ready(function () {
+      $('[data-toggle-second="tooltip"]').tooltip({ trigger: "hover" });
+    });
+  
+    $('[data-toggle="tooltip"]').tooltip();
+  
+    var mq = window.matchMedia("(max-width: 61.938rem)");
+  
+    if (mq.matches) {
+      $("#resizeWindow").resizable({
+        minHeight: 400,
+        minWidth: 500,
+      });
+    } else {
+      $("#resizeWindow").resizable({
+        minHeight: 800,
+        minWidth: 830,
+      });
+    }
+    $('[data-toggle="tooltip"]').click(function () {
+      $(this).trigger("mouseleave");
+    });
+  </script>
+  <!-- BEGIN MAIN JS & CSS -->
+  

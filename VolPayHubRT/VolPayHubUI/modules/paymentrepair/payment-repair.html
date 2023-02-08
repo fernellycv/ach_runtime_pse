@@ -1,0 +1,252 @@
+<style>
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+
+    .cardheaderAlighn{
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+        padding: 0px 20px;
+        border-bottom: 1px solid transparent;
+    }
+
+    .column {
+      float: left;
+      width: 50%;
+      padding: 0 10px;
+      }
+    @media screen and (max-width: 768px) {
+      .column {
+       width: 100%;
+       display: block;
+       margin-bottom: 20px;
+      }
+     }
+
+
+</style>
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb" id="bar2" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb col-md-12">
+                <!--<li>
+            <i class="fa fa-home"></i>
+            <a href="javascript:void(0);" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>-->
+                <li>
+                    <i class="fa fa fa-cog"></i>
+                    <a href="javascript:void(0);" style="cursor:default" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#/app/{{(input.fromPage=='allpayments') ?'allpayments':'filelist'}}">{{(input.fromPage=='allpayments') ?'All Payments':'All Files'}}  </a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li ng-if="input.fromPage !='allpayments'">
+                    <a href="#/app/{{(input.fromPage == 'allpayments')?'paymentdetail':'filedetail'}}" style="cursor:default">{{input.data.InstructionID}}</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoPaymentDetail()">{{input.data.PaymentID}}</a>
+                    <i class="fa fa-angle-right"></i>
+
+                </li>
+                <li>
+                    Repair
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<!--<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>-->
+<div ng-repeat="alert1 in alerts" class="bold" ng-class="{'alert alert-success': alert1.type == 'success','alert alert-danger':alert1.type == 'danger','alert alert-info':alert1.type == 'info'}">
+    <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert1.msg}}
+</div>
+<div class="contentContainer">
+    <div class="card panel-default panel-warning">
+        <div class="card-header cardheaderAlighn col-xs-12" data-toggle="collapse" data-target="#repairWindow" style="cursor:pointer ; height: 35px;" ng-init="expanded = false" ng-click="expanded = !expanded">
+            <h6 class="card-title col-xs-12 mt-2">{{repairPayment.PaymentID}}
+                <i style="padding-top:2px;" class="pull-right  bold fa fa-angle-down" ng-class="{'fa-angle-down': !expanded, 'fa-angle-right': expanded}"></i>
+            </h6>
+            <!-- <i class="col-xs-1 fa fa-chevron-down" aria-hidden="true" style="text-align: right;"></i> -->
+        </div>
+        <div id="repairWindow" class="collapse show">
+            <div class="card-body col-xs-12" >
+                <!-- style="background: #F2F2F2;" -->
+                <form class="form-horizontal" ng-submit="repairSubmit(repairPayment)">
+                    <div  ng-repeat="fields in webformFields" ng-class="fields.Stage==1?'col-xs-6 column':'col-xs-12 '" ng-init="outerIndex = $last ? reachedNow():''">
+                        <div class="form-group">
+
+                            <div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 != 0"></div>
+                            
+                            <div ng-if="fields.Stage == '1'" class="row">
+                                <label class="col-sm-5 control-label bold text-sm-left text-md-right text-lg-right text-xl-right">{{fields.data.label}} : </label>
+                                <div class="col-sm-7" ng-if="fields.data.inputType == 'TextField' && (fields.data.type == 'String' || fields.data.type == 'BigDecimal' || fields.data.type == 'Integer' || fields.data.type == 'Binary')">
+                                    <input class="form-control" type="text" name="{{fields.data.name}}" ng-model="repairPayment[fields.data.name]" placeholder="{{(fields.data.type == 'String')?'Please Enter '+fields.data.label:fields.data.label+' Only Number'}}" maxlength="{{fields.data.maxlength}}"
+                                        ng-keypress="allowData($event,fields.data.type)" ng-blur="multipleEmptySpace($event)">
+                                </div>
+                                <div class="col-sm-7" ng-if="fields.data.inputType == 'TextArea'">
+                                    <textarea style="height: 100px;" class="form-control" name="{{fields.data.name}}" ng-model="repairPayment[fields.data.name]" placeholder="{{'Please Enter '+fields.data.label}}"></textarea>
+                                </div>
+                                <div ng-if="(fields.data.type == 'DateTime') || (fields.data.type == 'DateOnly') || (fields.data.type == 'TimeOnly')" class="input-group col-sm-7 input-append" style="padding-right:15px;padding-left:12px;float:left;">
+                                    <input class="form-control" ng-class="(fields.data.type == 'DateOnly') ? 'DatePicker':(fields.data.type == 'DateTime') ? 'DateTimePicker':(fields.data.type == 'TimeOnly') ? 'TimePicker':''" id="{{fields.data.label}}" type="text" name="{{fields.data.name}}"
+                                        ng-model="repairPayment[fields.data.name]" placeholder="{{'Please Enter '+fields.data.label}}" maxlength="{{fields.data.maxlength}}" ng-blur="multipleEmptySpace($event)" onkeypress='return tabOrder(event)' onpaste="return false"
+                                        ng-focus="activatePicker($event)">
+                                    <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (field.name == parentInput.pageInfo.Section[0].name)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+									<span class="fa" ng-class="(fields.data.type == 'DateOnly') ? 'fa-calendar date-set' :'' || (fields.data.type == 'DateTime') ? 'fa-calendar date-set': '' || (fields.data.type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="card panel-default panel-custom col pl-0 pr-0 pb-2" ng-if="fields.Stage == '2'" ng-init="expanded = false" ng-click="expanded = !expanded">
+                                <h6 class="card-header" data-toggle="collapse" data-target="#{{fields.name}}" class="col-sm-12" style="background: #F2F2F2;">{{fields.header}}<i style="padding-top:2px; " class="pull-right  bold  fa cursorPointer" ng-class="{'fa-angle-down': expanded, 'fa-angle-right': !expanded}"></i></h6>
+
+                                <div id="{{fields.name}}" class="collapse" ng-if="!fields.maxoccurs" style="background: #F2F2F2;">
+                                    <!-- style="background: #F2F2F2;" -->
+                                    <div  ng-repeat="section in fields.data" ng-class="section.data?'col-xs-12 mt-5':'col-xs-6 column mt-1'" style="padding:5px">
+                                        <div ng-if="!section.data" class="row">
+                                            <label class="col-sm-5 control-label bold text-sm-left text-md-right text-lg-right text-xl-right pr-0">{{section.label}} : </label>
+                                            <div class="col-sm-7" ng-if="((section.inputType == 'TextField')&&(section.type == 'String')||(section.type == 'BigDecimal')||(section.type == 'Integer')||(section.type == 'Binary'))">
+                                                <input class="form-control" type="text" name="{{section.name}}" ng-model="repairPayment[fields.name][section.name]" placeholder="{{(section.type == 'String')?'Please Enter '+section.label:section.label+' Only Number'}}" maxlength="{{section.maxlength}}"
+                                                    ng-keypress="allowData($event,section.type)" ng-blur="multipleEmptySpace($event)">
+                                            </div>
+                                            <div class="col-sm-7" ng-if="section.inputType == 'TextArea'">
+                                                <textarea class="form-control" name="{{section.name}}" ng-model="repairPayment[fields.name][section.name]" style="height: 100px;" placeholder="{{'Please Enter '+section.label}}" maxlength="{{section.maxlength}}"></textarea>
+                                            </div>
+                                            <div class="col-sm-7" ng-if="section.inputType == 'Choice'">
+                                                <label class="radio-inline" ng-repeat="x in section.options" ng-if="x.actualvalue">
+											<input type="radio" name="{{section.name}}" class="" ng-model="repairPayment[fields.name][section.name]" ng-value="{{x.actualvalue}}">
+											<span style="padding:5px">{{x.displayvalue}}</span>
+										</label>
+                                            </div>
+                                            <div ng-if="(section.type == 'DateTime') || (section.type == 'DateOnly') || (section.type == 'TimeOnly')" class="input-group col-sm-7 input-append" style="padding-right:15px;padding-left:12px;float:left;">
+                                                <input class="form-control" ng-class="(section.type == 'DateOnly') ? 'DatePicker':(section.type == 'DateTime') ? 'DateTimePicker':(section.type == 'TimeOnly') ? 'TimePicker':''" id="{{section.label}}" type="text" name="{{section.name}}" ng-model="repairPayment[fields.name][section.name]"
+                                                    placeholder="{{'Please Enter '+section.label}}" maxlength="{{section.maxlength}}" ng-blur="multipleEmptySpace($event)" onkeypress='return tabOrder(event)' onpaste="return false" ng-focus="activatePicker($event)">
+                                                <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (field.name == parentInput.pageInfo.Section[0].name)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+											<span class="fa" ng-class="(section.type == 'DateOnly') ? 'fa-calendar date-set' :'' || (section.type == 'DateTime') ? 'fa-calendar date-set': '' || (section.type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                                </span>
+                                            </div>
+                                            <div style="clear:both"></div>
+                                        </div>
+                                        <div ng-if="section.data" style="border: 1px solid #989595;border-left: 0;border-right: 0;background: whitesmoke;margin-bottom: 5px;">
+                                            <!-- border-bottom: 1px solid #989595; -->
+                                            <h5 class="col-sm-12 mt-2" style="padding-bottom: 6px;">{{section.header}}</h5>
+                                            <div  ng-repeat="subSection in section.data" style="padding:5px">
+                                                <label class="col-sm-5 control-label bold">{{subSection.label}} : </label>
+                                                <div class="col-sm-7" ng-if="((subSection.inputType == 'TextField')&&(subSection.type == 'String')||(subSection.type == 'BigDecimal')||(subSection.type == 'Integer')||(subSection.type == 'Binary'))">
+                                                    <input class="form-control" type="text" name="{{subSection.name}}" ng-model="repairPayment[fields.name][section.name][subSection.name]" placeholder="{{(subSection.type == 'String')?'Please Enter '+subSection.label:subSection.label+' Only Number'}}" maxlength="{{subSection.maxlength}}"
+                                                        ng-keypress="allowData($event,subSection.type)" ng-blur="multipleEmptySpace($event)">
+                                                </div>
+                                            </div>
+                                            <div style="clear:both"></div>
+                                        </div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div id="{{fields.name}}" class="panel-collapse collapse" ng-if="fields.maxoccurs" style="overflow-y:auto">
+                                    <div ng-repeat="(subIndex, subData) in repairPayment[fields.name]" id="{{fields.name+'_'+$index}}">
+                                        <div class="col-md-10 col-sm-12">
+                                            <div  ng-repeat="section in fields.data" ng-class="section.data?'col-xs-12':'col-xs-6'" style="padding:5px">
+                                                <div ng-if="!section.data">
+                                                    <label class="col-sm-5 control-label bold pr-0" style="padding: 7px 0px 0px 0px;">{{section.label}} : </label>
+                                                    <div class="col-sm-7" ng-if="((section.inputType == 'TextField')&&(section.type == 'String')||(section.type == 'BigDecimal')||(section.type == 'Integer')||(section.type == 'Binary'))">
+                                                        <input class="form-control" type="text" name="{{section.name}}" ng-model="subData[section.name]" placeholder="{{(section.type == 'String')?'Please Enter '+section.label:section.label+' Only Number'}}" maxlength="{{section.maxlength}}" ng-keypress="allowData($event,section.type)"
+                                                            ng-blur="multipleEmptySpace($event)">
+                                                    </div>
+                                                    <div class="col-sm-7" ng-if="section.inputType == 'TextArea'">
+                                                        <textarea class="form-control" name="{{section.name}}" ng-model="subData[section.name]" style="height: 100px;" placeholder="{{'Please Enter '+section.label}}" maxlength="{{section.maxlength}}"></textarea>
+                                                    </div>
+                                                    <div class="col-sm-7" ng-if="section.inputType == 'Choice'">
+                                                        <label class="radio-inline" ng-repeat="x in section.options" ng-if="x.actualvalue">
+											<input type="radio" name="{{section.name}}" class="" ng-model="subData[section.name]" ng-value="{{x.actualvalue}}">
+											<span style="padding:5px">{{x.displayvalue}}</span>
+										</label>
+                                                    </div>
+                                                    <div ng-if="(section.type == 'DateTime') || (section.type == 'DateOnly') || (section.type == 'TimeOnly')" class="input-group col-sm-7 input-append" style="padding-right:15px;padding-left:12px;float:left;">
+                                                        <input class="form-control" ng-class="(section.type == 'DateOnly') ? 'DatePicker':(section.type == 'DateTime') ? 'DateTimePicker':(section.type == 'TimeOnly') ? 'TimePicker':''" id="{{section.label}}" type="text" name="{{section.name}}" ng-model="subData[section.name]"
+                                                            placeholder="{{'Please Enter '+section.label}}" maxlength="{{section.maxlength}}" ng-blur="multipleEmptySpace($event)" onkeypress='return tabOrder(event)' onpaste="return false" ng-focus="activatePicker($event)">
+                                                        <span class="input-group-text" style="cursor:pointer" ng-style="((parentInput.fieldData) && (field.name == parentInput.pageInfo.Section[0].name)) ? {'pointer-events':'none'} : {'pointer-events':''}" ng-click="triggerPicker($event)">
+											<span class="fa" ng-class="(section.type == 'DateOnly') ? 'fa-calendar date-set' :'' || (section.type == 'DateTime') ? 'fa-calendar date-set': '' || (section.type == 'TimeOnly') ? 'fa-clock-o': ''"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div style="clear:both"></div>
+                                                </div>
+                                                <div style="clear:both"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights(fields.name):''">
+                                            <span style="display: inline-block;padding: 0px 20px; width: 80%;margin: 0;font-size: 0;" class="ng-scope">
+										<a id="AddSection_$index" tooltip="Add New Section" tooltip-placement="bottom" style="font-size: 24px !important;line-height: 24px; cursor:pointer; text-decoration: none; color:#827f7f" class="fa fa-plus-circle ng-scope" aria-hidden="true" ng-click="addsubSection($index, subData, fields)" ng-style="$last ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+										<a id="RemoveSection_$index" tooltip="Remove Section" tooltip-placement="bottom" style="line-height: 24px; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 10px; font-size: 24px !important;" class="fa fa-minus-circle" aria-hidden="true" ng-click="removesubSection($index, repairPayment[fields.name])" ng-style="(repairPayment[fields.name].length > 1) ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
+									</span>
+                                        </div>
+                                        <div style="clear:both"></div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear:both"></div>
+                    <div class="panel-footer" style="background: transparent; border: 0;">
+                        <button type="submit" style="margin-left:10px" class="btn btn-success btnStyle pull-right" translate>BtnGroup.Submit</button>
+                        <button type="button" style="margin-left:10px" class="btn btn-success btnStyle pull-right" ng-click="CancelRepair()" translate>BtnGroup.Cancel</button>
+                        <button type="button" class="btn btn-success btnStyle pull-right" ng-click="resetRepair()" translate>BtnGroup.Reset</button>
+                        <div style="clear:both"></div>
+                    </div>
+                </form>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            // $('.DatePicker').datetimepicker({
+            //     format: "YYYY-MM-DD",
+            //     useCurrent: true,
+            //     showClear: true
+            // })
+            // $('.DateTimePicker').datetimepicker({
+            //     format: "YYYY-MM-DDTHH:mm:ss",
+            //     useCurrent: true,
+            //     showClear: true
+            // });
+            // $('.TimePicker').datetimepicker({
+            //     format: 'HH:mm:ss',
+            //     useCurrent: true
+            // });
+            $('.input-group-text').on('click focus', function(e) {
+                $(this).prev().focus().click()
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+        }, 1000)
+    });
+</script>

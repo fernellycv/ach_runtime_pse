@@ -1,0 +1,302 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="col-md-6">
+        <ul class="page-breadcrumb">
+            <!--<li>
+            <i class="fa fa-home"></i>
+            <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>-->
+            <li>
+                <i class="fa fa-television"></i>
+                <a href="javascript:void(0)" translate class="removeCursor">Sidebar.SystemData</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate>Sidebar.VolPayIDConfiguration</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                {{fromAddNew ? 'Add New' : ViewClicked ? 'View' : 'Edit'}}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6 headerVals">
+        <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div ng-if="ViewClicked && !fromAddNew">
+        <div class="panel panel-default" style="margin-top:40px;">
+
+            <div class="panel-body" style="padding:9px 15px;background-color:#f9f9f9">
+                <div class="col-md-10 serviceHeading" style="padding-left:0px;">
+                    <span class="ng-binding">{{strData[0].value}}</span>
+                </div>
+                <div class="col-md-2">
+                    <a style="display:inline-block;float:right;" class="actionIcons" ng-style="(permission.U)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(permission.U)?gotoEdit():''" tooltip="{{(permission.U)?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-group" style="border:1px solid #ccc;" ng-if="ViewClicked && !fromAddNew">
+
+            <div class="row" style="margin:0;line-height:30px;">
+                <div class="row" style="margin:0;margin-top:10px;margin-bottom:34px;padding-left:0px;">
+                    <!--<div class="row col-md-12 col-sm-12 col-xs-12" style="margin: 0px; background-color: rgb(245, 245, 245);" ng-repeat="field in strData" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}" ng-if="field.label != 'IsParallel'">
+                    <label class="control-label bold col-md-3 col-sm-4 col-xs-6" style="padding-right:0px;"><span class="col-md-10 ng-binding">{{field.label}}</span>
+                        <span class="col-md-2 col-sm-2 col-xs-2">:</span>
+                    </label>
+                    <div class="control-label col-md-9 col-sm-9 col-xs-6 ng-binding subserviceInfo">
+                        <span class="ng-binding">{{field.value}}</span>
+                    </div>
+
+                </div>-->
+
+
+                    <div class="row col-md-12 col-sm-12 col-xs-12 ng-scope" ng-repeat="field in strData" style="margin: 0px; background-color: rgb(245, 245, 245);" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}">
+                        <label class="control-label bold col-md-3 col-sm-4 col-xs-6"><span class="col-md-10 col-sm-10 col-xs-10 ng-binding">{{field.label}}</span> <span class="col-md-2 col-sm-2 col-xs-2" style="padding:0">:</span> </label>
+
+                        <div class="control-label col-md-9 col-sm-8 col-xs-6 ng-binding subserviceInfo ng-scope">
+                            <span class="ng-binding">{{field.value}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <h4 translate>BankDataDts.PopupRecoverMsg</h4>
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData(TaskDetails);" translate >BankDataDts.Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+    <!--Alert Pop-up Window-->
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+
+
+            <div class="modal-content" style="border:2px solid #243250a6;">
+                <div class="modal-body">
+                    <h4 translate>BankDataDts.PopupMsg</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div ng-if="!ViewClicked && !fromAddNew">
+
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12 ng-binding" ng-style="{'color':(parentInput.fieldData | chooseColor)}" style="color: rgb(65, 85, 195);">
+                    <div class="title__container">
+
+                        <h2 translate>VolPayIDConfiguration.Edit</h2>
+                        <p translate>Branch.ForMandatory</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <form role="form" class="simple-form form-horizontal volpayIdFormValid" name="updateTaskDetailsform" ng-submit="updateData(TaskDetails); updatesubmitted=false;">
+                <div class="ForAddNewScroll" style="margin:0; max-height:600px; min-height:600px;">
+                    <div class="control-group">
+                        <div class="form-group ">
+                            <label for="IDCode" class="control-label col-md-2" style='font-weight:bold;'>ID Code
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateTaskDetailsform.IDCode.$invalid]">
+                                <input class="form-control" type="text" name="ID Code" ng-model="TaskDetails.IDCode" placeholder="Please Enter ID Code" required ng-blur="multipleEmptySpace($event)" ng-disabled="true">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateTaskDetailsform.IDCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="Pattern" class="control-label col-md-2" style='font-weight:bold;'>Pattern
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateTaskDetailsform.Pattern.$invalid]">
+                                <input class="form-control" type="text" name="Pattern" ng-model="TaskDetails.Pattern" placeholder="Please Enter Pattern" required ng-blur="multipleEmptySpace($event)">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateTaskDetailsform.Pattern.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="MinLen" class="control-label col-md-2" style='font-weight:bold;'>Minimum Length</label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="MinLen" ng-model="TaskDetails.MinLen" placeholder="Please Enter Minimum Length" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="MaxLen" class="control-label col-md-2" style='font-weight:bold;'>Maximum Length</label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="MaxLen" ng-model="TaskDetails.MaxLen" placeholder="Please Enter Maximum Length" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="FixLen" class="control-label col-md-2" style='font-weight:bold;'>Fix Length</label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="FixLen" ng-model="TaskDetails.FixLen" placeholder="Please Enter Fix Length " ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="FlowName" class="control-label col-md-2" style='font-weight:bold;'>Flow Name </label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="FlowName" ng-model="TaskDetails.FlowName" placeholder="Please Enter Flow Name " ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="IsDefault" class="control-label col-md-2" style='font-weight:bold;'>Is Default
+                        </label>
+                            <div class="col-md-3">
+                                <select class="form-control" name="IsDefault" ng-model="TaskDetails.IsDefault">
+                                <option value="">--Select--</option>
+                                <option value="true" ng-selected="(TaskDetails.IsDefault==true)">true</option>
+                                <option value="false" ng-selected="(TaskDetails.IsDefault==false)">false</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div style="clear:both"></div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                    <button type="submit" class="btn btnStyle clr" ng-click="updatesubmitted=true" tooltip="{{'BtnGroup.Submit' | translate}}"><span class="ng-binding" translate>BtnGroup.SaveChanges</span></button>
+                    <button type="button" class="btn btnStyle clr" data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="updatesubmitted=false;gotoCancelFn(false)" tooltip="{{'BtnGroup.Cancel' | translate}}"><span translate="" class="ng-scope">Cancel</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div ng-if="fromAddNew">
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12 ng-binding" ng-style="{'color':(parentInput.fieldData | chooseColor)}" style="color: rgb(65, 85, 195);">
+                    <!-- <span>Add New VolPay ID Configuration</span>   <small>- All fields marked with an asterisk ( <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true" class="bold"> * </span> ) are mandatory.</small>-->
+                    <div class="title__container">
+
+                        <h2 translate>VolPayIDConfiguration.Add</h2>
+                        <p translate>Branch.ForMandatory</p>
+
+                    </div>
+
+
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <form role="form" class="simple-form form-horizontal volpayIdFormValid" name="updateTaskDetailsform" ng-submit="createData(TaskDetailsCreate); updatesubmitted=false;">
+                <div class="ForAddNewScroll" style="margin:0; max-height:600px; min-height:600px;">
+
+                    <div class="control-group">
+                        <div class="form-group ">
+                            <label for="IDCode" class="control-label col-md-2" style='font-weight:bold;'>ID Code
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateTaskDetailsform.IDCode.$invalid]">
+                                <input class="form-control" type="text" name="IDCode" ng-model="TaskDetailsCreate.IDCode" placeholder="Please Enter ID Code" required ng-blur="multipleEmptySpace($event)">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateTaskDetailsform.IDCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="Pattern" class="control-label col-md-2" style='font-weight:bold;'>Pattern
+                            <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                        </label>
+                            <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && updateTaskDetailsform.Pattern.$invalid]">
+                                <input class="form-control" type="text" name="Pattern" ng-model="TaskDetailsCreate.Pattern" placeholder="Please Enter Pattern" required ng-blur="multipleEmptySpace($event)">
+                            </div>
+                            <span class="help-inline" ng-show="updatesubmitted && updateTaskDetailsform.Pattern.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="MinLen" class="control-label col-md-2" style='font-weight:bold;'>Minimum Length</label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="MinLen" ng-model="TaskDetailsCreate.MinLen" placeholder="Please Enter Minimum Length" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="MaxLen" class="control-label col-md-2" style='font-weight:bold;'>Maximum Length </label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="MaxLen" ng-model="TaskDetailsCreate.MaxLen" placeholder="Please Enter Maximum Length" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="FixLen" class="control-label col-md-2" style='font-weight:bold;'>Fix Length </label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="FixLen" ng-model="TaskDetailsCreate.FixLen" placeholder="Please Enter Fix Length" ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="FlowName" class="control-label col-md-2" style='font-weight:bold;'>Flow Name </label>
+                            <div class="col-md-3">
+                                <input class="form-control" type="text" name="FlowName" ng-model="TaskDetailsCreate.FlowName" placeholder="Please Enter Flow Name " ng-blur="multipleEmptySpace($event)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="IsDefault" class="control-label col-md-2" style='font-weight:bold;'>Is Default
+                        </label>
+                            <div class="col-md-3">
+                                <select class="form-control" name="IsDefault" value="{{TaskDetails.IsDefault}}" ng-model="TaskDetailsCreate.IsDefault">
+                                <option value="">--Select--</option>
+                                <option value="true">true</option>
+                                <option value="false">false</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div style="clear:both"></div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                    <button type="submit" class="btn btnStyle clr" ng-click="updatesubmitted=true" tooltip="{{'BtnGroup.Submit' | translate}}"><span class="ng-binding">Add VolPay ID Configuration</span></button>
+                    <button type="button" class="btn btnStyle clr" data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="updatesubmitted=false;gotoCancelFn(true)" tooltip="{{'BtnGroup.Cancel' | translate}}"><span translate="" class="ng-scope">Cancel</span></button>
+                </div>
+
+
+
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

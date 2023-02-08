@@ -1,0 +1,327 @@
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-building-o"></i>
+                    <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate>Sidebar.BankData</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li translate>
+                    BusinessRules.PageTitle
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .group {
+        background-color: #fff;
+        padding: 15px;
+        border-radius: 5px;
+        border: solid 1px #666;
+    }
+
+    .group-conditions {
+        margin-left: 20px;
+    }
+
+    .alert-group {
+        /*margin-top: 10px;*/
+        margin-bottom: 10px;
+        border-color: rgb(192, 152, 83);
+        border-color: rgb(251, 238, 213);
+        border-color: rgb(220, 200, 150);
+    }
+
+    .condition,
+    .group {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .alert-group1 {
+        /* margin-top: 10px; */
+        margin-bottom: 10px;
+        border-color: rgb(192, 152, 83);
+        border-color: rgb(251, 238, 213);
+        border-color: rgb(220, 200, 150);
+    }
+
+    .alert-warning1 {
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+        color: #8a6d3b;
+    }
+
+    .alert1 {
+        border: 1px;
+    }
+
+    .alert-warning1 {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+
+    .alert1 {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #dcc896;
+        border-radius: 4px;
+    }
+
+    .alert-info1 {
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+        color: #31708f;
+    }
+
+    .alert-info1 {
+        color: #31708f;
+        background-color: #d9edf7;
+        border-color: #bce8f1;
+    }
+</style>
+
+
+
+<div class="contentContainer">
+
+
+
+    <div ng-controller="QueryBuilderCtrl">
+        <h3>Rule Condition</h3>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="alert1 alert-info1">
+                    <strong>Rule Script</strong><br>
+                    <span class="ng-binding" ng-bind-html="output">()</span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <query-builder group="filter.group"></query-builder>
+            </div>
+        </div>
+    </div>
+
+    <div ng-controller="ActionQueryBuilderCtrl">
+        <div class="animated bounce autoAdjustAlert bold" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+        </div>
+
+        <!--Alert Pop-up Window-->
+        <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border:2px solid #243250a6;">
+                    <div class="modal-body">
+                        <h5 translate>BankDataDts.PopupMsg</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <h3>Rule Action </h3>
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="alert1 alert-info1">
+                    <strong>Action Rule Script</strong><br>
+                    <span class="ng-binding" ng-bind-html="output">()</span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <action-builder group="filter.group"></action-builder>
+            </div>
+        </div>
+        <button class="btn btnStyle clr" ng-click="buttonClick()">
+            Submit
+        </button>&nbsp;&nbsp;&nbsp;
+        <!--<button class="btn btnStyle clr" ng-click="confirmRule()" >
+	        Confirm
+	    </button>&nbsp;&nbsp;&nbsp;-->
+        <button type="button" class="btn btnStyle clr" data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="updatesubmitted=false;gotoCancelFn()" tooltip="{{'BtnGroup.Cancel' | translate}}" translate>BtnGroup.Cancel</button>
+
+
+    </div>
+</div>
+
+<script type="text/ng-template" id="/queryBuilderDirective.html">
+    <div class="alert1 alert-warning1 alert-group1">
+        <div class="form-inline">
+            <select ng-options="o.name as o.name for o in operators" ng-model="group.operator" class="form-control input-sm"></select>
+            <button style="margin-left: 5px" ng-click="addCondition()" class="btn btn-sm  initcolorsuc commonclr"><span class="fa fa-plus-circle"></span> Add Condition</button>
+            <button style="margin-left: 5px" ng-click="addGroup()" class="btn btn-sm  initcolorsuc commonclr"><span class="fa fa-plus-circle"></span> Add Group</button>
+            <button style="margin-left: 5px" ng-click="removeGroup()" class="btn btn-sm  initcolordanger commonclr"><span class="fa fa-minus-circle"></span> Remove Group</button>
+        </div>
+        <div class="group-conditions">
+
+            <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition" ng-init="Ppindex = $index">
+                <div ng-switch="rule.hasOwnProperty('group')">
+                    <div ng-switch-when="true">
+                        <query-builder group="rule.group"></query-builder>
+                    </div>
+
+                    <div ng-switch-default="ng-switch-default">
+                        <div class="form-inline">
+                            <select ng-model="rule.field" name="rulefield" select2-model-append class="form-control" ng-change="onselectOperator(rule,rule.field,-1)">	
+							  <option value="">--Select--</option>		
+							  <option ng-repeat="t2 in options" value={{t2}}>{{t2.name}} - {{t2.type}}</option> 
+							</select>
+                            <span ng-repeat="transaction in rule.otherTransactions track by $index" ng-init="pindex = $index">								
+								<select ng-if="transaction.operatorList" ng-model="transaction.condition" name="rulecondition" class="form-control"  ng-required="true" ng-change="onselectOperator(rule,transaction.condition,$index)" data-placeholder="Select">
+									<option value="">--Select--</option>
+									<option ng-repeat="optrs in transaction.operatorList" value={{optrs}} ng-if="optrs!=''">{{optrs.name}}</option> 
+								</select>								
+								<span ng-repeat="para in transaction.parameterCount.count">		
+				<!-- {{rule.parsedField}}{{rule.parsedField.type}} -->
+							<div ng-if="(rule.parsedField.type == 'Date') " class="input-group input-append" id="{{UUID}}" ng-if="inputTypeDate{{$index}}" style="padding-right:15px;padding-left:12px;" >
+                                <input class="form-control DatePicker" type="text" onkeypress='return tabOrder(event)' ng-model="transaction['Value_'+$index]"  ng-blur="multipleEmptySpace($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+
+                        <div ng-if="rule.parsedField.type == 'DateTime'" class="input-group input-append" id="iType{{$index}}" ng-if="inputTypeDate{{$index}}" style="padding-right:15px;padding-left:12px;">
+                            <input class="form-control DateTimePicker" type="text" onkeypress='return tabOrder(event)' ng-model="transaction['Value_'+$index]" ng-blur="multipleEmptySpace($event)">
+                            <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar DateTime"></span></span>
+                        </div>
+
+                        <span ng-if="((rule.parsedField.type != 'DateTime')&&(rule.parsedField.type != 'Date'))">
+									<input ng-if="!transaction.parameterCount.operatorList" name="rulecondition1" class="form-control" ng-model="transaction['Value_'+$index]"/>	
+									
+									<input ng-if="transaction.parameterCount.operatorList" list="{{'Value_'+$index+'_'+pindex+'_'+Ppindex+UUID}}" type="text" ng-model="transaction['Value_'+$index]" class="form-control" ng-required="true" ng-change="onselectOperator(rule,transaction['Value_'+$index],$index,true,transaction.parameterCount.operatorList)"/>
+									  <datalist id="{{'Value_'+$index+'_'+pindex+'_'+Ppindex+UUID}}">							
+										<option ng-repeat="optr in transaction.parameterCount.operatorList" value="{{optr.name}} - {{optr.type}}" ></option> 
+									  </datalist>
+									  </span>
+                        </span>
+                        </span>
+                        <button style="margin-left: 5px;background-color:#F3565D !important" ng-click="removeCondition($index)" class="btn btn-sm btn-danger"><span class="fa fa-minus-circle"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="/actionBuilderDirective.html">
+    <div class="alert1 alert-warning1 alert-group1">
+        <div class="form-inline">
+            <button style="margin-left: 5px" ng-click="addAction()" class="btn btn-sm initcolorsuc"><span class="fa fa-plus-circle"></span> Add Action</button>
+        </div>
+        <div class="group-conditions">
+            <div ng-repeat="rule in group.actions | orderBy:'index'" class="condition" ng-init="Ppindex = $index">
+                <div class="form-inline">
+
+                    <select ng-model="rule.field" name="rulefield" select2-model-append class="form-control" ng-change="onselectActionOperator(rule,rule.field,-1)">	
+							  <option value="">--Select--</option>		
+							  <option ng-repeat="t2 in ACTIONoptions" value={{t2}}>{{t2.name}} - {{t2.type}}</option> 
+							</select>
+
+                    <span ng-repeat="transaction in rule.otherTransactions track by $index" ng-init="pindex = $index">								
+								<select ng-if="transaction.operatorList" ng-model="transaction.condition" name="rulecondition" class="form-control"  ng-required="true" ng-change="onselectActionOperator(rule,transaction.condition,$index)" data-placeholder="Select">
+									<option value="">--Select--</option>
+									<option ng-repeat="optrs in transaction.operatorList" value={{optrs}} ng-if="optrs!=''">{{optrs.name}}</option> 
+								</select>								
+								<span ng-repeat="para in transaction.parameterCount.count">		
+
+							<div ng-if="(rule.parsedField.type == 'Date') " class="input-group input-append" id="{{UUID}}" ng-if="inputTypeDate{{$index}}" style="padding-right:15px;padding-left:12px;" >
+                                <input class="form-control DatePicker" type="text" onkeypress='return tabOrder(event)' ng-model="transaction['Value_'+$index]"  ng-blur="multipleEmptySpace($event)">
+                                <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+
+                <div ng-if="rule.parsedField.type == 'DateTime'" class="input-group input-append" id="iType{{$index}}" ng-if="inputTypeDate{{$index}}" style="padding-right:15px;padding-left:12px;">
+                    <input class="form-control DateTimePicker" type="text" onkeypress='return tabOrder(event)' ng-model="transaction['Value_'+$index]" ng-blur="multipleEmptySpace($event)">
+                    <span class="input-group-addon cursorPointer"><span class="glyphicon glyphicon-calendar DateTime"></span></span>
+                </div>
+                <span ng-if="((rule.parsedField.type != 'DateTime')&&(rule.parsedField.type != 'Date'))">
+									<input ng-if="!transaction.parameterCount.operatorList" name="rulecondition1" class="form-control" ng-model="transaction['Value_'+$index]"/>	<input ng-if="transaction.parameterCount.operatorList" list="{{'_Value_'+$index+'_'+pindex+'_'+Ppindex}}" type="text" ng-model="transaction['Value_'+$index]" class="form-control" ng-required="true" ng-change="onselectActionOperator(rule,transaction['Value_'+$index],$index,true,transaction.parameterCount.operatorList)"/>
+									  <datalist id="{{'_Value_'+$index+'_'+pindex+'_'+Ppindex}}">							
+										<option ng-repeat="optr in transaction.parameterCount.operatorList" value="{{optr.name}} - {{optr.type}}" ></option> 
+									  </datalist>
+								</span>
+                </span>
+                </span>
+                <button style="margin-left: 5px;background-color:#F3565D !important" ng-click="removeAction($index)" class="btn btn-sm btn-danger"><span class="fa fa-minus-circle"></span></button>
+            </div>
+        </div>
+    </div>
+    </div>
+</script>
+<script>
+    $(document).ready(function() {
+
+        setTimeout(function() {
+            /* $('.DatePicker').datetimepicker({
+                 format : 'YYYY-MM-DD',
+                 autoclose : true,
+                 pickTime : false
+             })*/
+
+            $('.DatePicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+            $('.DateTimePicker').datepicker({
+                format: 'yyyy-mm-dd' + ' 00:00:00',
+                autoclose: true
+            });
+
+            /*$('.DateTimePicker').datetimepicker({
+                pickDate : true,
+                pickTime : true,
+                format : "YYYY-MM-DDTHH:mm:ss",
+                useCurrent : false,
+                minuteStepping : 1,
+                useSeconds : true,
+                autoclose : true
+            });*/
+
+            $('.input-group-addon').on('click focus', function(e) {
+                $(this).prev().focus().click()
+            });
+
+        }, 200)
+
+
+    });
+
+
+    function split_1(val) {
+        var fff = val.split(')')
+        var TempArray = {}
+
+        for (i = 0; i <= fff.length; i++) {
+            if ((fff[i] != '') && (fff[i] != undefined)) {
+                TempArray[i] = split_2(fff[i])
+            }
+
+        }
+        return TempArray;
+    }
+
+
+    function split_2(val) {
+        var ggg = val.split('(')
+        return ggg;
+    }
+
+
+    var ff = 'compareToIgnoreCase(br.OfficeCode).gt(56)'
+
+    //split_1(ff)
+</script>
+
+<br><br>

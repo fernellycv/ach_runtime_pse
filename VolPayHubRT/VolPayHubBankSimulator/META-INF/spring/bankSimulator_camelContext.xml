@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <!--importing queue configuration file -->
+    <import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+
+
+    <camelContext id="VOLPAY_BANKSIMULATOR" xmlns="http://camel.apache.org/schema/spring" useBreadcrumb="false">
+
+
+        <!-- loading properties file  -->
+        <propertyPlaceholder id="properties" location="classpath:${env:VOLPAY_DOMAIN}_banksimulator_config.properties"/>
+
+
+        <!-- OFAC -->
+        <route id="Send_response">
+            <from uri="direct-vm:Fircosoft.DomainIn"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{OFACDOMAININ}}"/>
+        </route>
+
+        <route id="Receive_request">
+            <from uri="{{QUEUE_PREFIX}}:{{OFACDOMAINOUT}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <delay>
+                <constant>3000</constant>
+            </delay>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:OSAExternalSystemFlow"/>
+        </route>
+
+        <!-- FUNDS CONTROL -->
+        <route id="Send_FundsControl_response">
+            <from uri="direct-vm:FundsControl.DomainIn"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{FUNDSCONTROLDOMAININ}}"/>
+        </route>
+
+        <route id="Receive_FundsControl_request">
+            <from uri="{{QUEUE_PREFIX}}:{{FUNDSCONTROLDOMAINOUT}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:FundsControlExternalSystemFlow"/>
+        </route>
+
+        <!-- LIQUIDITY CONTROL -->
+        <route id="Send_LiquidityControl_response">
+            <from uri="direct-vm:LiquidityControl.DomainIn"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{LIQUIDITYCONTROLDOMAININ}}"/>
+        </route>
+
+        <route id="Receive_LiquidityControl_request">
+            <from uri="{{QUEUE_PREFIX}}:{{LIQUIDITYCONTROLDOMAINOUT}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:LiquidityControlExternalSystemFlow"/>
+        </route>
+	
+	<!-- LIQUIDITY CONTROL WITH PREDICATE-->
+	<route id="Receive_LiquidityControl_request_condition">
+            <from uri="{{QUEUE_PREFIX}}:{{LIQUIDITYCONTROLDOMAINOUTCOND}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:LiquidityControlExternalSystemFlow"/>
+        </route>
+
+        <!-- ACCOUNT POSTING -->
+        <route id="Send_AccountPosting_response">
+            <from uri="direct-vm:AccountPosting.DomainIn"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{ACCOUNTPOSTINGDOMAININ}}"/>
+        </route>
+
+        <route id="Receive_AccountPosting_request">
+            <from uri="{{QUEUE_PREFIX}}:{{ACCOUNTPOSTINGDOMAINOUT}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:AccountPostingExternalSystemFlow"/>
+        </route>
+
+        <route id="VolpayHubBankSimulatorServiceRegistryTimeOutManager" startupOrder="1">
+            <from uri="quartz2://bankSimServiceRegTimeout?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <setBody>
+                <simple>ignore</simple>
+            </setBody>
+            <to uri="volante:ServiceRegistryHealthChecker"/>
+        </route>
+
+        <route id="Receive_DEMOINSTRIF_request">
+            <from uri="{{QUEUE_PREFIX}}:{{DEMOINSTRDOMAINOUT}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="volante:DemoExternalSystemFlow"/>
+        </route>
+
+        <route id="Send_DEMOINSTRIF_response">
+            <from uri="direct-vm:DemoResponse"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{DEMOINSTRDOMAININ}}"/>
+        </route>
+
+         <!-- Debit Fx Request-->
+	<route id="Receive_DebitFX_request">
+	    <from uri="{{QUEUE_PREFIX}}:{{FXDOMAINOUT}}?concurrentConsumers=4&amp;transacted=true"/>
+	    <removeHeaders pattern="JMS*"/>
+	    <convertBodyTo type="byte[]"/>
+	    <to uri="volante:FxExternalSystemFlow"/>
+	</route>
+
+        <!-- Credit Fx Request-->
+	<route id="Receive_CreditFX_request">
+	    <from uri="{{QUEUE_PREFIX}}:{{FXDOMAINOUT}}?concurrentConsumers=4&amp;transacted=true"/>
+	    <removeHeaders pattern="JMS*"/>
+	    <convertBodyTo type="byte[]"/>
+	    <to uri="volante:FxExternalSystemFlow"/>
+	</route>
+
+       <!-- Good Funds Debit Fx Request-->
+       <route id="Receive_GoodFundsDebitFX_request">
+	    <from uri="{{QUEUE_PREFIX}}:{{FXDOMAINOUT}}?concurrentConsumers=4&amp;transacted=true"/>
+	    <removeHeaders pattern="JMS*"/>
+	    <convertBodyTo type="byte[]"/>
+	    <to uri="volante:FxExternalSystemFlow"/>
+       </route>
+         
+        <!-- Fx Response-->
+        <route id="Receive_Fx_response">
+	    <from uri="direct-vm:Fx.DomainIn"/>
+	    <removeHeaders pattern="JMS*"/>
+	    <convertBodyTo type="byte[]"/>
+	    <to uri="{{QUEUE_PREFIX}}:{{FXDOMAININ}}"/>
+	</route>
+
+    <!-- ACCOUNT POSTINGS REQUEST -->
+        <route id="Receive_AccountPostings_request">
+	     <from uri="{{QUEUE_PREFIX}}:{{ACCOUNTPOSTINGSDOMAINOUT}}?concurrentConsumers=4&amp;transacted=true"/>        
+	     <removeHeaders pattern="JMS*"/>
+	     <convertBodyTo type="byte[]"/>
+	     <to uri="volante:AccountPostingDomainTransformationFlow"/>
+	</route>
+
+        <route id="Receive_AccountPostings_response">
+	      <from uri="direct-vm:AccountPostings.DomainIn"/>
+	      <removeHeaders pattern="JMS*"/>
+	      <convertBodyTo type="byte[]"/>
+	      <to uri="{{QUEUE_PREFIX}}:{{APDOMAININ}}"/>
+	</route>
+    </camelContext>
+</beans>

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<data-sources>
+		
+	<!-- <data-source 
+        connection-driver="org.hsqldb.jdbcDriver"
+        url="jdbc:hsqldb:hsql://localhost"
+        username="sa"
+        password=""
+        class="com.volante.component.server.jdbc.ManagedJDBCDriverConnectionPool"
+        dialect="hsql"
+        location="transformdb"
+        name="hsqldb"
+    />  -->
+	 <data-source
+        class="com.volante.component.server.jdbc.ManagedDataSourceConnectionPoolTM"
+        name="volpay-db"
+        server-location="java:comp/env/jdbc/VolPayDB"
+        location="transformdb"
+      />
+	
+	
+   <!-- <data-source 
+        connection-driver="oracle.jdbc.driver.OracleDriver"
+        url="jdbc:oracle:thin:@200.200.200.79:1521:orcl"
+        username="test"
+        password="test"
+        class="com.volante.component.server.jdbc.ManagedJDBCDriverConnectionPool"
+        dialect="oracle"
+        location="transformdb"
+        name="oracledb"
+    /> -->
+
+	<!--
+      <data-source 
+	connection-driver="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+	url="jdbc:sqlserver://sv03;databaseName=vpe"
+	username="sv03"
+	password="sv03"
+	class="com.volante.component.server.jdbc.ManagedJDBCDriverConnectionPool"
+	dialect="mssql"
+	location="transformdb"
+	name="mssqldb"
+    />
+      -->
+
+</data-sources>
+

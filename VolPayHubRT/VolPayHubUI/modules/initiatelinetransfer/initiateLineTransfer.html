@@ -1,0 +1,87 @@
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="">
+                    <span translate>Sidebar.InitiateLineTransfer</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="title__container">
+                <div class="col-md-7">
+                    <h2 translate>InitiateLineTransfer.PageTitle</h2>
+                    <!--<span translate>InitiateTransaction.PageTitle</span> -->
+                    <span style="font-size:14px;"><small translate></small></span>
+                </div>
+                <!--<div class="col-md-5 pull-right">
+                    <button class="btn btnStyle pull-right" style="margin-right:10px;" ng-click="Reload()"><i class="fa fa-retweet"
+                            aria-hidden="true"></i> &nbsp;<span translate>Refresh</span></button>
+                    <button class="btn btnStyle pull-right" style="margin-right:10px;" ng-click="expandAll()"><i class="fa fa-expand"
+                            aria-hidden="true"></i> &nbsp;<span translate>Expand</span></button>
+                    <button class="btn btnStyle pull-right" style="margin-right:10px;" ng-click="collapseAll()"><i
+                            class="fa fa-compress" aria-hidden="true"></i> &nbsp;<span translate>Collapse</span></button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    
+    <div class="animated bounce autoAdjustAlert bold" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{alert.msg}}
+    </div>
+    
+    <!--Alert Pop-up Window-->
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border:2px solid #243250a6;">
+                <div class="modal-body">
+                    <h4>Current changes will be lost. Do you wish to continue?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();">Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <form role="form" class="simple-form form-horizontal" name="initiateTransaction" ng-submit="onSubmit(data); ">
+            <!--<div class="form-group">
+                <label for="workOrder" class="col-sm-3 bold"><p class="ng-binding">Work Order<span ng-show="true" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+                <div class="col-sm-5">
+                    <select id="workOrder" name="workOrder" class="form-control" ng-model="workorderData['WorkOrder']" ng-required="true" tabindex="-1" aria-hidden="true">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+                <span class="help-inline col-sm-3 ng-hide" ng-show="webformSubmit && webForm[field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+            </div>-->
+            <div ng-if="metaInfo['field']">
+                <web-form input="metaInfo" output="data" config="{editable: true, submit: _submit, form: initiateTransaction}"></web-form>
+            </div>
+            <div class="col-xs-12"style="padding:15px; margin-top:15px; border-top:1px solid">
+                <button type="submit" class="btn btnStyle clr" ng-click="webformSubmit=true;" tooltip="Submit">
+                    <span translate>BtnGroup.Submit</span>
+                </button>
+                <button class="btn btnStyle clr" tooltip="Cancel" type="button" ng-click="reset_data()">
+                    <span>Reset</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    
+</div>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="	  http://www.springframework.org/schema/beans	http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+
+    <camelContext id="PseIBM_camelContext" xmlns="http://camel.apache.org/schema/spring"  threadNamePattern="PseIBM_camelContext_THREADPOOL-#counter#" useBreadcrumb="false">
+
+        <propertyPlaceholder id="properties"  location="classpath:${env:VOLPAY_DOMAIN}_fileprocessing_config.properties"/>
+        <threadPool id="InterfacePool" threadName="InterfaceThread" poolSize="2" maxPoolSize="4" maxQueueSize="-1"/>
+
+
+        <!-- Route de PSEIMB -->
+        <route>
+            <from uri="jms-pseibm:queue:T_COMP.LOCAL.VOLANTE" />
+            <to uri="volante:GetTransactionsFromQueue" />
+        </route>
+    </camelContext>
+</beans>

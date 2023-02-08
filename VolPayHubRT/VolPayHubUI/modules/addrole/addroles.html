@@ -1,0 +1,330 @@
+<style>
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+    
+    .input-group-addon {
+        padding: 0rem 0.313rem;
+    }
+    
+    .glyphicon {
+        padding: 0.563rem 0.625rem;
+    }
+    
+    .addAdditionalFields {
+        /*color: #333;*/
+        background-color: #f5f5f5;
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+    
+    .addBorder {
+        border: 0.063rem solid #ddd;
+        padding: 0.625rem;
+    }
+    
+    .close {
+        opacity: 1;
+    }
+    
+    .DatePicker,
+    .TimePicker {
+        z-index: 0 !important
+    }
+
+    .clearBoth{
+        clear:both
+    }
+
+    .tabAlighn{
+        padding-top:1.875rem;
+        padding-bottom:1.25rem;
+        background-color:#fff;
+    }
+
+    .modalWidth{
+        max-width: 37.5rem;
+    }
+
+    .modalContent{
+        border:0.125rem solid #243250a6;
+    }
+
+    .modalfont{
+        font-size:1.063rem;
+    }
+
+    .formFields{
+        margin-top:0.625rem;
+        margin-bottom:2.125rem;
+    }
+
+    .asterisk{
+        color:#e02222;
+        font-size:0.75rem;
+        padding-left:0.125rem
+    }
+
+    .formDate{
+        margin-bottom:0 !important;
+    }
+
+    .cursorPointer{
+        cursor:pointer
+    }
+
+    .formAlighn{
+        margin-top:1.563rem;
+        margin-right:0.75rem;
+    }
+
+    .formCancel{
+        margin-left:0.063rem;
+    }
+</style>
+
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <!--<li>
+            <i class="fa fa-home"></i>
+            <a id="homeBreadCrumb" href="#/app/dashboard">Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>-->
+                <li>
+                    <i class="fa fa-user"></i>
+                    <a href="javascript:void(0)" translate class="removeCursor">Sidebar.AdminPanel</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate> RolesPermissions.PageTitle</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" translate class="removeCursor">Roles.PageTitle</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span class="removeCursor">
+               <!-- {{(toEdit)?'Edit':'Add'}} -->
+             
+               {{((!getOprtion) || (getOprtion == 'Clone') )?'Add':'Edit'}}
+            </span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="contentContainer">
+
+    <div class="pageTitle">
+        <div class="col-sm-12 p-0">
+            <div class="title__container">
+                <h2 translate> Roles.PageTitle</h2>
+                <p translate>Roles.SubTitle</p>
+            </div>
+        </div>
+        <div class="clearBoth"></div>
+    </div>
+    <div class="tab-content tabAlighn">
+
+        <div ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="autoAdjustAlert bold animated bounce" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+        </div>
+
+        <!--Alert Pop-up Window-->
+        <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog modalWidth">
+
+
+                <div class="modal-content modalContent" ng-if="madeChanges">
+                    <div class="modal-body" >
+                        <h5 translate>BankDataDts.PopupMsg</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    </div>
+                </div>
+                <div class="modal-content modalContent"  ng-if="!madeChanges">
+                    <div class="modal-body">
+                        <h5 class="modalfont">Primary key fields are missing.UUID will be autogenerated.<br>Do you wish to continue?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle clr" ng-click="SaveAsModalDraft()"><span translate> Yes</span></button>
+
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="draftOverWriteModal" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content modalContent"  ng-if="!updateEntity">
+                    <div class="modal-body">
+                        <h4>Draft Already Exists. Do you want to Overwrite?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle" ng-click="forceSaveDraft();" translate>BankDataDts.Yes</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" translate>BankDataDts.No</button>
+
+                    </div>
+                </div>
+                <div class="modal-content modalContent" ng-if="updateEntity">
+                    <div class="modal-body">
+                        <h5>This will update the actual entity. Do you wish to continue?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle" ng-click="addRoleandForseSaveRole(method,takerolebckup);" translate>BankDataDts.Yes</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="resetAllDrafts()" translate>BankDataDts.No</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <form class="form-horizontal" id="AddEditDatas" role="form" ng-submit="(toEdit)?updateRoles(role):addroles(role);backupdataDraft(role)">
+            <div class="row">
+            <div class="form-group col-md-6 row formFields">
+                <label class="control-label bold col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-1">Role ID <span class="asterisk" aria-required="true">*</span></label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" placeholder="Enter Role ID" name="RoleID" ng-model="role.RoleID" ng-blur="multipleEmptySpace($event)" required ng-disabled="(getOprtion != 'Edit')?false : true">
+                </div>
+            </div>
+            <div class="form-group col-md-6 row formFields" >
+                <label class="control-label bold col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-1">Role Name <span class="asterisk" aria-required="true">*</span></label>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" placeholder="Enter Role Name" name="RoleName" ng-model="role.RoleName" ng-blur="multipleEmptySpace($event)" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6 row formFields">
+                <label class="control-label bold col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-1">Role Type <span class="asterisk" aria-required="true">*</span></label>
+                <div class="col-md-9">
+                    <select class="form-control" name="RoleType" ng-required="true" ng-model="role.RoleType" ng-disabled="(getOprtion != 'Edit' && getOprtion != 'Clone')?false : true">
+                    <option value="">--Select--</option>
+                    <option value="Approver">Approver</option>
+                    <option value="Operator">Operator</option>
+
+                </select>
+                </div>
+            </div>
+            <div class="form-group col-md-6 row formFields">
+                <label class="control-label bold col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-1">Status <span class="asterisk" aria-required="true">*</span></label>
+                <div class="col-md-9">
+                    <select class="form-control" name="Status" id="enableFlag" ng-required="true" ng-model="role.Status">
+                    <option value="">--Select--</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
+                    
+                </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6 row formFields">
+                <label class="control-label bold col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-1">Effective From Date <span class="asterisk" aria-required="true">*</span></label>
+                <div class="col-md-9">
+
+                    <div class="input-group input-append">
+
+
+                        <!--  <input type="text" class="form-control DatePicker dateTypeKey" ng-model="startDate" id="startDate" style="width:100%" placeholder="From  ( TimeZone - {{profileName}} )" ng-blur="removeFn()"  onkeypress="return tabOrder(event)" onpaste="return false" required>
+
+
+										<span class="input-group-addon" ng-click="focusInfn('startDate')"><span class="glyphicon glyphicon-calendar"></span></span> -->
+
+
+                        <input type="text" class="form-control DatePicker dateTypeKey formDate" name="EffectiveFromDate" placeholder="Please Enter Effective From Date" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)" ng-model="role.EffectiveFromDate"
+                            id="EffectiveFromDate" ng-required="true" />
+                        <span class="input-group-text cursorPointer" ng-click="triggerPicker($event)"><span class="fa fa-calendar date-set"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6 row formFields">
+                <label class="control-label bold col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-1">Effective Till Date </label>
+                <div class="col-md-9">
+
+                    <div class="input-group input-append">
+                        <input type="text" class="form-control DatePicker dateTypeKey formDate" name="EffectiveTillDate" placeholder="Please Enter Effective Till Date" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)" ng-model="role.EffectiveTillDate"
+                            id="EffectiveTillDate" />
+                        <span class="input-group-text cursorPointer" ng-click="triggerPicker($event)"><span class="fa fa-calendar date-set"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+            <div class="clearBoth"></div>
+
+
+            <div class="form-group formAlighn">
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-12">
+                        <div class="float-right">
+
+                            <button type="submit" class="btn btnStyle">{{((!getOprtion) || (getOprtion == 'Clone') )?'RolesPermissions.AddRole':'BtnGroup.SaveChanges' | translate}}</button>
+
+                            <button type="button" class="btn btnStyle clr" ng-click="SaveAsDraft(role);takeBackupData(role)" tooltip="{{'BtnGroup.SaveasDraft' | translate}}"><span translate> BtnGroup.SaveasDraft</span></button>
+
+                            <button type="button" class="btn btnStyle formCancel" data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="updatesubmitted=false;gotoCancelFn()" translate>BtnGroup.Cancel</button></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        // $('.DatePicker').datepicker({
+        //     format: "YYYY-MM-DD",
+        //     useCurrent: false,
+        //     showClear: true,
+        //     icons: datepickerFaIcons.icons
+
+        // })
+        setTimeout(function() {
+            $('.input-group-text').on('click focus', function(e) {
+
+                $(this).prev().focus().click()
+            });
+        }, 1000)
+    })
+</script>

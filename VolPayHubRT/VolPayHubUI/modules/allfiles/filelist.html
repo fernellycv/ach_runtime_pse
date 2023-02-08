@@ -1,0 +1,1498 @@
+<!-- BEGIN PAGE HEADER-->
+<!--<div class="breadCrumb" ng-controller="activeController">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="javascript:void(0);" translate ng-click="goToHome()">Sidebar.Home</a>
+
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+             <i class="fa fa fa-cog"></i>
+            <a href="javascript:void(0);" translate>Sidebar.PaymentModule</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li translate>
+            Sidebar.AllFiles
+        </li>
+    </ul>
+</div>-->
+<style>
+    .select2-container .select2-search__field {
+        width: 100% !important;
+    }
+    
+    .divide-text {
+        border-left: 0.063rem solid #aaa;
+        border-right: 0.063rem solid #aaa;
+        padding-right: 0.5rem !important;
+    }
+    
+    .input-group .form-control {
+        z-index: 0 !important;
+    }
+    
+    .datepicker-dropdown {
+         z-index: 1054 !important;
+    }
+
+    .dropdowncustm{
+      transform: translate3d(0.313rem, 2.188rem, 0rem)!important;
+    }
+
+    .searchContainer {
+       background-color: #e7e9eb;
+       height: auto;
+    }
+
+    pre{
+        display: block;
+        padding: 0.594rem;
+        margin: 0 0 0.625rem;
+        font-size: 0.813rem;
+        line-height: 1.42857143;
+        color: #333;
+        word-break: break-all;
+        word-wrap: break-word;
+        background-color: #f5f5f5;
+        border: 0.063rem solid #ccc;
+    }
+
+    .modalWidth{
+        width: 37.5rem;
+    }
+
+    .colPadding{
+        padding:0.938rem
+    }
+
+    .width100{
+        width:100%
+    }
+
+    .dateTo{
+        border:none;
+        background-color:transparent;
+    }
+
+    .clearBoth{
+        clear:both
+    }
+
+    .searchIcons{
+        cursor:pointer;
+        background-color:#fff;
+        border:none;
+    }
+
+    .savedsearchAlighn{
+        margin:0;
+        margin-top:0.313rem;
+        margin-bottom:0.313rem;
+    }
+
+    .searchDisp{
+        margin-left:0.625rem;
+        display:inline-block;
+        margin-top:0.188rem;
+    }
+
+    .searchTimes{
+        border:0.063rem solid #DE2F2B;
+        background-color:#D05450;
+        border-radius:0.625rem;
+        cursor:pointer;
+        color:#F5E6E6;
+        font-size:0.813rem;
+    }
+
+    .advsearchAlighn{
+        width:100%;
+        padding-left: 0.188rem;
+    }
+
+    .showhide{
+        color:#fff !important;
+    }
+
+    .advIcon{
+        padding-top:0.125rem;
+    }
+
+    .advsearchBody{
+        margin:0;
+        margin-bottom:0.5rem;
+        padding-bottom:0.625rem;
+    }
+
+    .advFilter{
+        padding: 0.938rem 0.25rem 0.938rem 0.25rem;
+        margin:0;
+        margin-bottom:1.25rem;
+    }
+
+    .advfilterFont{
+        font-size:1.375rem;
+    }
+
+    .addremovefilter{
+        padding:0;
+        border-radius:0.313rem !important;
+    }
+
+    .addremoveDropdwn{
+        text-decoration:none;
+        border-radius: 0.313rem !important;
+    }
+
+    .addremoveUl{
+        margin-left:-0.188rem;
+        min-width:13.313rem !important;
+    }
+
+    .addremoveMenu{
+        margin:0;
+        margin-top:0.313rem;
+    }
+
+    .addremoveSpacing{
+        white-space:normal;
+    }
+
+    .addremoveLabel{
+        margin-left:0rem;
+        display:inline-block;
+        margin-top:0.188rem;
+    }
+
+    .addremoveli{
+        width:2.125rem !important; 
+        height:0.875rem !important; 
+        border-radius:1.25rem !important;
+        margin-top:0.313rem;
+    }
+
+    .addremoveSmall{
+        width:0.75rem !important;
+        height:0.75rem !important;
+    }
+
+    .advSearchbtn{
+        margin-right:0.313rem;
+    }
+
+    .textStart{
+        text-align:start;
+    }
+
+    .advIndex{
+        clear:both;
+        visibility:hidden;
+    }
+
+    .advBorder{
+        border-color:#ccc;
+    }
+
+    .advSearchicon{
+        color:#fff;
+        margin-right:0.625rem;
+    }
+
+    .advTimesbtn{
+        color:#fff;
+    }
+
+    .advopacity{
+        opacity:0;
+        display:none;
+    }
+
+    .countbarDisp{
+        padding: 0.313rem;
+        background: #fff;
+    }
+
+    .countbarAlighn{
+        margin-bottom: 0.625rem; 
+        width: 100%;
+    }
+
+    .viewbtns{
+        float:right;
+        box-sizing: border-box;
+    }
+
+    .listViewIcon{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-right:0rem;
+        margin-left:0.313rem
+    }
+
+    .gridView{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-left:0rem
+    }
+
+    .downloadBtn{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+    }
+
+    .radioBtnAlighn{
+          margin-top: 0.125rem;
+      }
+
+    .dwnIndex{
+        z-index: 10000;
+    }
+
+    .excelIcon{
+        margin-left:2.5rem !important;
+    }
+
+    .refreshBtn{
+        float:right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left: 0.313rem;
+    }
+
+    .btnAlldropdwn{
+        float:right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left:0.625rem;
+    }
+
+    .drpdwnAllFont{
+        font-size:0.938rem;
+    }
+
+    .allDropdwnul{
+        font-size: 0.813rem !important;
+    }
+
+    .pointerNone{
+        pointer-events:none
+    }
+
+    .fromTodate{
+        text-align:center;
+        color:#000;
+    }
+
+    .btnMop{
+        float:right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-left:0rem;
+        padding: 0.125rem 0.625rem !important;
+    }
+
+    .delpopAlighn{
+        top: 12.5rem;
+    }
+
+    .delpopModal{
+        padding: 0rem !important; 
+        border: 0rem !important
+    }
+
+    .modalSearch{
+        padding:0.625rem;
+        margin:0
+    }
+
+    .asterisk{
+        color:#e02222;
+        font-size:0.75rem;
+        padding-left:0.125rem
+    }
+
+    .requiredField{
+        color:red;
+        margin-left:0.625rem;
+    }
+
+    .modalFtr{
+        float:right;
+        padding:0.625rem;
+        margin:0
+    }
+
+    .containerAlert{
+        width:100%;
+        overflow:auto;
+    }
+
+    .selectedNone{
+        float:left;
+        width:100%;
+        height:100%;
+        padding: 0.25rem 0.625rem 0.313rem 0.625rem;
+    }
+
+    .searchByfont{
+        margin:0;
+        font-size:0.813rem;
+        word-wrap:break-word;
+    }
+
+    .selectedValues{
+        margin:0;
+        word-wrap:break-word;
+    }
+
+    .searchNameDisp{
+        word-wrap:break-word;
+    }
+
+    .btnclrSearch{
+        display:block;
+        vertical-align:middle;
+        float:right;
+    }
+
+    .dispnone{
+        display:none;
+    }
+
+    .tableAlighn{
+        border-left:0 !important
+    }
+
+    .tdtrInfo{
+        width:0.625rem;
+        border-right:0 !important
+    }
+
+    .detailInstnId{
+        color:#000;
+    }
+
+    .mopAlighn{
+        padding: 0.313rem 0.625rem 0.313rem 0.625rem;
+    }
+
+    .fileStatus{
+        height: 1.313rem !important; 
+        width:auto;
+        text-align:left
+    }
+
+    .dwnAlighn{
+        cursor:pointer;
+        text-decoration: underline;
+    }
+
+    .detailExpand{
+        border:0 !important;
+    }
+
+    .noRecord{
+        margin:0;
+        text-align:center;
+    }
+
+    .fileWidgetalighn{
+        border-left:0.313rem solid;
+    }
+
+    .listInsId{
+        font-size: 0.938rem;
+        padding-right: 0.438rem;
+    }
+
+    .listLabel{
+        font-size: 0.938rem;
+        border-left: 0.063rem solid;
+        padding-left: 0.625rem;
+    }
+
+    .listFileStatus{
+        font-size: 0.938rem;
+        word-break: break-all;
+    }
+
+    .plusIcon{
+        height: 1.375rem !important;
+        color:#fff !important;
+        background-color: #aaa !important;
+    }
+
+    .listDetailcolor{
+        color: #333
+    }
+
+    .listdwnIcon{
+        cursor:pointer;
+        text-decoration: underline;
+        color: #4d4d4d
+    }
+
+    .viewMop{
+        margin-top: 0.625rem; 
+        float: right;
+    }
+
+    .tableviewDisp{
+        margin:0rem;
+        overflow-x:auto !important;
+        margin-bottom:1.25rem;
+        max-height:32.813rem !important;
+    }
+
+    .colorBrown{
+        background-color: rgb(138, 109, 59);
+    }
+</style>
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-exchange"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span translate class="removeCursor">Sidebar.ReceivedInstructions</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+<!--<div id="loaderContainer" httploader>
+    <img src="themes/images/preloader.gif" class="httpLoader"/>
+</div>-->
+
+<div>
+    <div class="contentContainer mb-2">
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title__container">
+                        <h2 translate>ReceivedInstructions.PageTitle</h2>
+                        <p translate>ReceivedInstructions.SubTitle</p>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="myModal" role="dialog" tabindex="-1" data-backdrop="static" ng-keydown="dummy($event)">
+                    <div class="modal-dialog">
+                        <div class="modal-content modalWidth">
+                            <div class="modal-header modalHeaderColor">
+                                <h5 class="modal-title" translate>ReceivedInstructions.SelectTheDates</h5>
+                                <button type="button" class="close" data-dismiss="modal" ng-click="filterCancel()">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <form ng-submit="FilterByDate1('custom')">
+                                    <div class="col-md-12 colPadding">
+                                        <div class="input-group-prepend date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+
+                                            <input type="text" class="form-control DatePicker dateTypeKey width100" ng-model="startDate" id="startDate" placeholder="{{'BankDataDts.From' | translate}}  ( {{'UserManagement.TimeZone' | translate}} - {{profileName}} )" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" required>
+                                            <span class="input-group-text" ng-click="focusInfn('startDate')"><span class="fa fa-calendar"></span></span>
+                                            <span class="input-group-text dateTo">{{'BankDataDts.To' | translate}}</span>
+
+                                            <input type="text" class="form-control DatePicker dateTypeKey width100" ng-model="endDate" id="endDate" placeholder="{{'BankDataDts.To' | translate}}  ( {{'UserManagement.TimeZone' | translate}} - {{profileName}} )" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" required>
+
+                                            <span class="input-group-text" ng-click="focusInfn('endDate')"><span class="fa fa-calendar"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 txtCenter colPadding">
+                                        <button type="button" class="btnDeny btnStyle" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                                        <button type="reset" id="CustomDateReset" class="btnDefault btnStyle" ng-click="CustomDatesReset()" translate>BtnGroup.Reset</button>
+                                        <button type="submit" id="okBtn" class="btnSuccess btnStyle" translate>BtnGroup.Continue</button>
+                                    </div>
+                                    <div class="clearBoth"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div id="ViewFXDetails" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
+                    <div class="modal-dialog" style="width:40%">
+                        <div class="modal-content">
+                            <div class="modal-header modalHeaderColor">
+                                <button type="button" class="close" data-dismiss="modal" ng-click="Reset()">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="portlet-body" >
+                                    <div class="row">
+                                        <div class="col-md-12">               
+                                            <div ng-show="individualselect" >
+                                                <h5 translate>ReceivedInstructions.Deletewaring</h5>
+                                                <div style="overflow-y: auto !important;max-height: 105px;/* margin-top:100px; *//* text-align: -webkit-center;float: center;text-align: -webkit-right;">
+                                                    <table class="table  col-md-4 center" style="font-size: small;max-height: 50px;max-width: none;" ng-show="uniqPaymentsarray.length">
+                                                        <thead>
+                                                            <tr >
+                                                                <th translate>
+                                                                    ReceivedInstructions.File
+                                                                </th>
+                                                                <th translate>
+                                                                    ReceivedInstructions.Entity
+                                                                </th>
+                                                            
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="payments in uniqPaymentsarray" >
+                                                            
+                                                                <td>
+                                                                    {{payments.File}}
+                                                                </td>
+                                                                <td>
+                                                                    {{payments.Entity}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        
+                                            <div ng-show="paymentall.Selected==true">
+                                                <h3><span translate>ReceivedInstructions.Confirmation</span> <span style="color: red">{{totaltoDelete}}</span>&nbsp<span translate>ReceivedInstructions.Confirmationone</span></h3>
+                                            </div>
+                                        
+                                            <!-- <div class="modal-footer modalftr">
+                                                <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                                                <button tabindex="0" type="button" class="buton yess" ng-click="deleteData()" translate>BankDataDts.Confirm</button>
+                                            </div> -->
+                                            <div class="form-group modalBtnalighn" style="text-align: center;">
+                                                <button type="submit" class="btnSuccess btnStyle btn-sm" ng-click="deleteData()" translate>BankDataDts.Yes</button>
+                                                <button type="button" class="btnDefault btnStyle btn-sm" data-dismiss="modal" translate >BankDataDts.No</button>
+                                            </div>
+                                        </div>
+                                    
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+
+        <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+        <div  class="animated bounce autoAdjustAlert bold" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts" ng-if="alert.msg != 'Instruction not found'" style="font-size: large;">
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+        </div>
+
+        <div class=" searchholder">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12 showadv-md-7">
+                    <div class="form-group ">
+                        <div class="input-group-prepend">
+                            <input type="text" ng-model="esearch" placeholder="{{'PaymentModuleDts.InstructionID' | translate}}" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' ng-keyup="checkinfo($event)" ng-mouseup="checkinfo($event)" id="searchBox" />
+                            <span class="input-group-text search-addon searchIcons" ng-click="FileListSearch()" data-toggle="tooltip" data-original-title="{{'BtnGroup.Search'| translate}}" id="SearchFontIcon">
+                                <i class="fa fa-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 showadv-md-2 btnAlighnment">
+                    <div class="dropdown width100">
+                        <button class="btnDefault btn-block btnStyle dropdown-toggle mega-dropdown1" type="button" id="DropId" data-toggle="dropdown" translate>BtnGroup.SavedSearch
+                        </button>
+
+                        <ul class="dropdown-menu mega-dropdown-menu1 customDropDown1 savedScroll" role="menu" aria-labelledby="menu1">
+                            <li class="dropdown-item" ng-repeat="jjjj in lskey">
+                                <div class="row savedsearchAlighn">
+                                    <div class="col-md-10" ng-click="selectSearch($index)">
+                                        <span class="searchDisp" translate>{{jjjj=="New Search" ? "ReceivedInstructions.NewSearch" : jjjj}}</span>
+                                    </div>
+                                    <div class="col-md-2" ng-if="jjjj != 'New Search'">
+                                        <div class="cancel"><i class="fa fa-times searchTimes" ng-click="confirmationAlert($index)" data-toggle="modal" data-target="#alertBox"></i></div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 showadv-md-3 btnAlighnment">
+                    <button type="button" class="btnSuccess btn-block btnStyle advsearchAlighn" ng-init="advancedSearch=true;" data-toggle="collapse" data-target="#advancedSearch" ng-click="showSearchWarning = false;advanceSearchCollaspe();">
+                        <!-- ng-click="advancedSearch=!advancedSearch;showSearchWarning = false;" -->
+                            <span ng-if="advancedSearch" class="showhide"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i class="bold fa fa-angle-right circle-o advIcon"></i></span>
+                            <span ng-if="!advancedSearch" class="showhide"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i class="bold fa fa-angle-down circle-o advIcon"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- collapse="advancedSearch" -->
+        <div  class="searchContainer collapse advsearchBody" id="advancedSearch">
+            <div class="row advFilter">
+                <div class="col-md-5 advfilterFont" translate>PaymentModuleDts.SearchFilters</div>
+
+                <div class="col-md-7 col-sm-6 col-xs-12 float-right">
+                    <button style="margin-left: 5px;" value="SaveSearch" class="btnSuccess btnStyle float-right advSearchbtn" id="saveSearchBtn" data-keyboard="true" data-toggle="modal" data-target="#myModal1" ng-click="ClearAlert()"><i class="fa fa-floppy-o"></i> <span translate>BtnGroup.SaveSearch</span>  </button>
+
+                    <ul  class="btn pull-right addremovefilter">
+                        <li class="dropdown mega-dropdown" data-toggle="dropdown">
+                            <a class="btnDefaultColor btn-block btnStyle" tabindex="0">
+                                <i class="fa fa-filter"></i>
+                            </a>
+                            <ul class="dropdown-menu mega-dropdown-menu customDropDown dropdowncustm addremoveUl" ng-click="$event.stopPropagation()">
+                                <li ng-repeat="data in FieldsValues">
+
+                                    <div class="row addremoveMenu">
+                                        <div class="col-md-9 addremoveSpacing">
+                                            <span class="addremoveLabel" translate>{{data.label}}</span>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="checkbox m-0">
+                                                <span class="green switch green ng-valid ng-pristine ng-untouched addremoveli" ng-init="active = data.visible" ng-click="active=!active;SelectValue($index)" ng-class="{checked:active}"
+                                                    ng-model="active" ng-keydown="toggleFocus($event, $index, true)">
+				                                    <small class="addremoveSmall" tabindex="0" ></small>
+				                                    <input type="checkbox" class="ng-pristine ng-untouched ng-valid advopacity"/>
+				                                    <span class="switch-text"> </span>
+                                                </span>
+                                            </div>
+
+                                            <div class="clearBoth"></div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <button class="btnDefaultColor btnStyle float-right advSearchbtn" value="Reset Filter" ng-click="resetFilter()"  ng-focus="focusOutfn()"><i class="fa fa-refresh"></i></button>
+
+                </div>
+            </div>
+
+
+            <div class="row m-0" ng-show="showSearchWarning">
+                <div class="col-md-2"></div>
+
+                <div class="col-md-8">
+                    <div class="alert alert-info alert-block bold text-center" id="showWarning">
+                        <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+                    </div>
+                </div>
+
+                <div class="col-md-2"></div>
+
+            </div>
+
+
+            <div class="row m-0">
+
+
+                <form class="form-horizontal" role="form">
+
+                    <div class="row m-0">
+
+                        <div class="col-md-6 mt-2" ng-repeat="fields in FieldsValues" ng-if="fields.visible">
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-4 text-left" translate>{{fields.label}}</label>
+
+                            <div class="col-md-6" ng-if="fields.type == 'text'">
+                                <input type="text" class="form-control" ng-model="search[fields.value]" placeholder="{{fields.label | translate}}" ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event) : ''" />
+                            </div>
+
+                            <div class="col-md-6" ng-show="fields.type == 'dropdown'">
+                                <select class="form-control" style="width: 100%;" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple"  data-placeholder="Seleccionar">
+                                    <option ng-if="fields.value=='FileStatus'" ng-repeat="option in uniqueNames" value="{{option}}">{{option}}</option>
+                                    <option ng-if="fields.value=='InputReferenceCode'" ng-repeat="option in psaCodeDrop" value="{{option.PartyServiceAssociationCode}}">{{option.PartyServiceAssociationCode}}</option>
+									 <!-- <option ng-if="fields.value=='InstructionType'" ng-repeat="option in InstructionTypes" value="{{option.actualvalue}}">{{option.displayvalue}}</option> -->
+									<option ng-if="fields.value=='FileMatchingStatus'" ng-repeat="option in FileMatchingStatus" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-8 p-0"  ng-if="fields.type=='dateRange'">
+                                <div class="col-md-12 col-sm-9">
+                                    <div class="input-group-prepend date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                        <input type="text" class="form-control DatePicker dateTypeKey" placeholder="{{'Placeholder.format' | translate}}" id="{{fields.value+'Start'}}" ng-model="search.InstructionData[fields.value].Start" onpaste="return false">
+                                        <span class="input-group-text" ng-click="focusInfn(fields.value+'Start')"><span class="fa fa-calendar"></span></span>
+
+                                        <span class="input-group-text dateTo">{{'BankDataDts.To' | translate}}</span>
+                                        <input type="text" class="form-control DatePicker dateTypeKey textStart" placeholder="{{'Placeholder.format' | translate}}" id="{{fields.value+'End'}}" ng-model="search.InstructionData[fields.value].End" onpaste="return false">
+                                        <span class="input-group-text" ng-click="focusInfn(fields.value+'End')"><span class="fa fa-calendar"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="advIndex" ng-if="($index % 2) == 1"> {{$index % 2}}</div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="clearBoth"></div>
+                    <hr/ class="advBorder">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="float-right">
+                                    <button type="button" class="btnDefault btnStyle advTimesbtn" ng-click="rstAdvancedSearchFlag();showSearchWarning = false;"><i class="fa fa-times"></i> <span translate>BtnGroup.Cancel</span> </button>
+                                    <button type="button" value="Search" id="AdSearchBtn" class="btnSuccess btnStyle advSearchicon" ng-click="buildSearch()"> <i class="fa fa-search"></i> <span translate> BtnGroup.Search</span> </button>
+                                </div>
+                            </div>
+                        </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="countbarDisp">
+            <div class="tobeFixed">
+                <div class="row m-0">
+                    <div class="countbar-title row m-0 countbarAlighn">
+                        <div class="col-md-6 col-sm-4 col-xs-4 ng-binding caption">
+                            <span ng-if="items.length"><span class="highlight" ng-if="items.length && totalData">{{(totalData && items.length)? items.length +  ('BankDataDts.Outof' | translate ) +totalData : (items.length)?items.length:'' }} </span>&nbsp;
+                            <span class="highlight">{{(!totalData && items.length)? items.length:'' }}</span>
+
+                            <span translate>BankDataDts.recordsshown</span></span>
+                            <span ng-if="!items.length"> <span  class="highlight">0 </span> <span translate>BankDataDts.recordsshown</span></span>
+                        </div>
+
+                        <div class="col-md-6 col-sm-8 col-xs-8 p-0">
+                            <div class="btn-group viewbtns">
+
+                                <button class="btn-trans listViewIcon" id="btn_1" ng-class="changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.ListView' | translate}}"><i class="fa fa-list fa-fs14"></i></button>
+
+                                <button class="btn-trans gridView" id="btn_2" ng-class="!changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.GridView' | translate}}"><i class="fa fa-table fa-fs14"></i></button>
+                            </div>
+                            <div class="dwnBtn float-right">
+
+                                <!-- <button style="border: 1px solid #fff;box-sizing: border-box;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" ng-click="setHeight($event)" aria-expanded="true" tooltip="{{'Export'}}"> <i class="fa fa-download" aria-hidden="true"></i></button> -->
+
+                                <button ng-if="newPermission.Export" class="btn-trans downloadBtn" type="button" data-toggle="{{(items.length)?'dropdown':''}}" ng-click="setHeight($event)" data-toggle-second="tooltip" data-placement="top" data-original-title="{{(items.length)?'ToolTips.Export':'ToolTips.Norecordstoexport' | translate}}" ng-style="{'opacity':(items.length)?'1':'0.5'}"> <i class="fa fa-download" aria-hidden="true"></i></button>
+                                <a id='dwnldLnk' style="display:none;"></a>
+                                <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
+                                    <li>
+                                        <!-- <span><input type="radio" name="excelVal" value="Current" checked class="radiobtns mt-1">{{'BankDataDts.CurrentScreen' | translate}} </span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="All" class="radiobtns radioBtnAlighn" >{{'BankDataDts.AllMatchingFilter' | translate}}</span> -->
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="txt" class="radiobtns radioBtnAlighn" >{{'SanctionModule.Reporttxt' | translate}}</span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="csv" class="radiobtns radioBtnAlighn" >{{'SanctionModule.ExportCSV' | translate}}</span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="pdf" class="radiobtns radioBtnAlighn" >{{'commissions.PDF' | translate}}</span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="xls" class="radiobtns radioBtnAlighn" >{{'commissions.XLS' | translate}}</span>
+                                        
+                                    </li>
+
+                                    <li data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ReportGenerate.TableDownload' | translate}}"  class="excelprint excelIcon" ng-click="exportToExcelFlist($event)"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                                    </li>
+                                    <!-- <li data-toggle="tooltip" data-placement="top" data-original-title="{{'BankDataDts.Print' | translate}}" class="excelprint" ng-click="printFLpage()"><i class="fa fa-print fa-fs14" aria-hidden="true"></i>
+                                    </li> -->
+
+
+                                </ul>
+                            </div>
+
+                            <!--   <div class="btn-group" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left: 5px;">
+			                        <button class="btn-trans" ng-click="printFLpage()"><i class="fa fa-print fa-fs14" tooltip="Print" data-toggle="tooltip"></i></button>
+			                    </div>
+
+			                    <div class="btn-group" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left: 5px;" tooltip="Export to Excel">
+			                        <button class="btn-trans"  ng-click="exportToExcelFlist($event)"><i class="fa fa-file-excel-o fa-fs14"></i></button>
+			                    </div> 
+							-->
+                            <div class="btn-group refreshBtn" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'ToolTips.Refresh' |translate}}">
+                                <button class="btn-trans" ng-click="loadData1($event)"><i class="fa fa-refresh fa-fs14"></i></button>
+                            </div>
+
+                            <div class="btn-group btnAlldropdwn">
+                                <div class="dropdown customDropdown float-right">
+
+                                    <button ng-if="newPermission.DeleteFile" class="btnDefault btn-sm" data-toggle="modal" data-target="#ViewFXDetails"  ng-disabled="!uniqPayments.length" translate>ToolTips.DeleteFile</button>
+                                    <button class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'SelectDates.SelectDates' | translate}}"><span id="dropdownBtnTxt"  class="drpdwnAllFont">{{'SelectDates.Today' | translate}}</span>
+                            			<span class="caret"></span>
+									</button>
+                                    <ul class="dropdown-menu dropdown-menu-default float-right dropdown-menu-right allDropdwnul">
+                                        <li class="menuClass" id="menulist_1" dateSelect="false" ng-click="FilterByDate('all',$event)"><a translate>SelectDates.All</a></li>
+                                        <li class="menuClass" id="menulist_2" dateSelect="false" ng-click="FilterByDate('today',$event)"><a translate>SelectDates.Today</a></li>
+                                        <li class="menuClass" id="menulist_3" dateSelect="false" ng-click="FilterByDate('week',$event)"><a translate>SelectDates.Week</a></li>
+                                        <li class="menuClass" id="menulist_4" dateSelect="false" ng-click="FilterByDate('month',$event)"><a translate>SelectDates.Month</a></li>
+                                        <li class="menuClass" id="menulist_5" dateSelect="false" ng-click="FilterByDate('custom',$event)" data-toggle="modal" data-target="#myModal" data-keyboard="true"><a translate>SelectDates.Custom</a>
+                                        </li>
+                                        <li class="pointerNone" ng-if="(startDate!='')&&(endDate!='')">
+                                            <P class="fromTodate">From - <b>{{ShowStartDate}}</b> <br/>to - <b>{{ShowEndDate}}</b></P>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                           <!-- <button style="float:right;border: 1px solid #fff;box-sizing: border-box;border-left:0px;padding: 2px 10px !important;" class="btn btnStyle" id="btn_3" ng-click="viewMOPStatus = !viewMOPStatus;" tooltip="{{viewMOPStatus ? 'Hide ' : 'View '}}MOP Based Distribution of Processed Transactions (Completed)"
+                                ng-show="configData.InstructionMOPStatus">
+                                {{viewMOPStatus ? 'Hide MOP Based Distribution' : 'View MOP Based
+                                Distribution'}}</button>-->
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete popup Window Start-->
+            <div class="modal fade" tabindex="-1" id="alertBox" role="dialog">
+                <div class="modal-dialog modal-md delpopAlighn">
+                    <div class="modal-content modalbdy animated tada">
+                        <div class="modal-header delpopModal">
+                            <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                        </div>
+                        <div class="modal-body delpopModal">
+                             <h1 translate>BankDataDts.Areyousure</h1>
+                            <h4 translate>BankDataDts.PopupRecoverMsg</h4>
+                        </div>
+                        <div class="modal-footer modalftr">
+                            <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                            <button tabindex="0" type="button" class="buton yess" ng-click="deleteSelectedSearch($event)" translate >BankDataDts.Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete popup Window End-->
+
+            <div id="myModal1" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog">
+                    <div class="modal-content modalWidth">
+                        <div class="modal-header modalHeaderColor">
+                            <h5 class="modal-title" translate>ReceivedInstructions.SaveSearch</h5>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form ng-submit="saveSearch()">
+                                <div class="form-group modalSearch">
+                                    <label> <span translate>ReceivedInstructions.SearchName </span> <span ng-hide="false" class="asterisk" aria-required="true">*</span></label>
+                                    <input class="form-control" type="text" name="searchname" ng-model="searchname" placeholder="{{'ReceivedInstructions.EnterTheSearchName' | translate}}" required/>
+
+                                </div>
+
+                                <p ng-show="isSearchNameFilled" class="requiredField">*Please enter the search name</p>
+
+                                <div ng-show="searchNameDuplicated" class="alert alert-warning form-group fade-in-up text-center">
+                                    <b>Search name already exists. Do you want to overwrite?</b><br/><br/>
+
+                                    <button type="button" class="btn btn-warning btn-sm" ng-click="saveSearch1()" translate>BankDataDts.Yes</button>
+                                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" translate>BankDataDts.No</button>
+                                </div>
+
+                                <div ng-show="isAnyFieldFilled" class="alert alert-warning form-group fade-in-up text-center">
+                                    <b>Please select any of the fields to save the search</b><br/><br/>
+                                    <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">OK</button>
+                                </div>
+                                <div class="form-group modalFtr">
+
+                                    <button type="submit" class="btnSuccess btnStyle btn-sm"translate>BtnGroup.Save</button>
+                                    <button type="button" class="btnDefault btnStyle btn-sm" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                                </div>
+                                <div class="clearBoth"></div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="alert alert-info infoContainer containerAlert" ng-if="!nothingSelected || isAdvacedSearchClicked">
+
+                <div class="selectedNone" ng-if="!nothingSelected">
+                    <p ng-if="UIR" class="searchByfont"><b>Search By Instruction ID </b>&nbsp;&nbsp; - &nbsp;&nbsp;{{globalEsearch}}</p>
+                    <p ng-if="today" class="selectedValues"><b translate>ReceivedInstructions.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign" translate>SelectDates.Today</span><span class="leftAlign">({{todayDate}})</b></span></p>
+                    <p ng-if="week" class="selectedValues"><b translate>ReceivedInstructions.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign" translate>SelectDates.Week</span><span class="leftAlign">({{weekStart}})</span><span class="leftAlign">{{'BankDataDts.To' | translate}}</span><span class="leftAlign">({{weekEnd}})</span> </p>
+                    <p ng-if="month" class="selectedValues"><b translate>ReceivedInstructions.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign" translate>SelectDates.Month</span><span class="leftAlign">({{monthStart}})</span><span class="leftAlign">{{'BankDataDts.To' | translate}}</span><span class="leftAlign">({{monthEnd}})</span> </p>
+                    <p ng-if="custom" class="selectedValues"><b translate>ReceivedInstructions.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign" translate>SelectDates.Custom</span><span class="leftAlign">({{ShowStartDate}})</span><span class="leftAlign">{{'BankDataDts.To' | translate}}</span><span class="leftAlign">({{ShowEndDate}})</span> </p>
+                </div>
+
+                <div ng-if="isAdvacedSearchClicked" class="selectedNone">
+
+                    <p class="bold" class="searchByfont" translate>ReceivedInstructions.AdvancedSearchParameters</p>
+                    <p ng-if="SelectSearchVisible" class="searchNameDisp"><b>Search Name</b> - {{searchName}}</p>
+
+                    <span class="searchByfont" ng-repeat="(key, value) in AdsearchParams" ng-if="value">
+
+                        <span ng-if="key=='InstructionData'">
+                            <span class="searchValContainer" ng-repeat="(k,v) in value" ng-if="(v.Start!='')&&(v.End!='')" ng-init="traduccion = 'ReceivedInstructions.' + k">
+                                <span ng-if="k=='EntryDate'"><b translate>{{traduccion}}</b> &nbsp;&nbsp; -  &nbsp;&nbsp; {{v.Start}} &nbsp;&nbsp; {{'BankDataDts.To' | translate}} &nbsp;&nbsp; {{v.End}}</span>
+                                <span class="bold closeIcon cursorPointer" ng-click="spliceSearchArr(key)">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                            </span>
+                        </span>
+                        <span class="searchValContainer" ng-if="(key !='InstructionData')">
+                            <b >
+                                <span>
+                                    {{('ReceivedInstructions.'+(key | camelCaseFormatter) | nospace) | translate}}
+                                </span>
+                            
+                                </b>
+                            &nbsp;&nbsp; - &nbsp;&nbsp;
+                            {{value | cleanItem}}
+
+                            <span class="bold closeIcon cursorPointer" ng-click="spliceSearchArr(key)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </span>
+
+                        </span>
+                    </span>
+
+                </div>
+
+                <div class='button-wrapper'>
+                    <input type="button" id="searchBtn" class="btnSuccess btnStyle btn-sm btnclrSearch" value="{{'BtnGroup.Clear' | translate}}" ng-click="clearSearch()" />
+                </div>
+            </div>
+
+            <div id="dummyExportContent" class="dispnone">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="cursorPointer tableAlighn" ng-click="Sorting('InstructionID');">
+                                Instruction
+                                <span ng-show="orderByField == 'InstructionID' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'InstructionID' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('EntryDate');">
+                                Entry Date & Time
+                                <span ng-show="orderByField == 'EntryDate' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'EntryDate' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('InputReferenceCode');">
+                               Source
+                                <span ng-show="orderByField == 'InputReferenceCode' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'InputReferenceCode' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer">
+                                Payment Value
+                            </th>
+                            <th>
+                                Transaction Status
+                            </th>
+                            <th>
+                                Completed MOP Status
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('FileStatus');">
+                                Instruction Status
+                                <span ng-show="orderByField == 'FileStatus' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'FileStatus' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th>
+                                Source Message
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat-start="detail in items">
+                            <td class="trInfo tdtrInfo">
+                                <i ng-show="detail.TransportInfo" data-toggle-second="tooltip" data-placement="top" title="Transport Info" class="fa fa-plus-circle cursorPointer" ng-class="{'fa fa-minus-circle': detail.expanded, 'fa fa-plus-circle': !detail.expanded}" ng-click="detail.expanded = !detail.expanded"></i>
+                            </td>
+                            <td  class="bold cursorPointer tableAlighn" data-ng-click="clickRefId(detail,$index)">
+                                <a data-toggle-second="tooltip" data-placement="top" title="Instruction ID"  class="detailInstnId">{{detail.InstructionID}}</a></td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <span data-toggle-second="tooltip" data-placement="top" title="Entry Date & Time">{{detail.EntryDate | dateFormat}}</span>
+                            </td>
+                            <td>
+                                {{detail.InputReferenceCode}}
+                            </td>
+
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <span ng-repeat="CW in detail.CurrencyWiseSum">
+                                <span data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'BtnGroup.Amount' | translate}}">{{CW.TotalAmount|isoCurrency:CW.Currency:'Symbolfalse'}}
+                                {{$last ?'':'|'}}</span>
+                                </span>
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <div ng-if="detail['Total Number of Payments']">
+                                    <span class="bold" data-toggle-second="tooltip" data-placement="top" title="Total Number of Payments">({{detail["Total Number of Payments"]}})</span>
+                                    <span class="badge badge-success badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top"  title="Payments Completed">{{detail.PaymentsCompleted}}</span>
+                                    <span class="badge badge-danger badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Rejected">{{detail.PaymentsRejected}}</span>
+                                    <span class="badge badge-warning badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Pending">{{detail.PaymentsPending}}</span>
+                                    <span class="badge badge-total-payment badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Hold">0</span>
+                                </div>
+
+                                <div ng-if="!detail['Total Number of Payments']">
+                                    <span class="bold" data-toggle-second="tooltip" data-placement="top" title="Total Number of Payments">(0)</span>
+
+                                    <!--<span class="badge badge-success badge-roundless minwidth40" tooltip="Payments Completed">0</span>-->
+                                    <span class="badge badge-danger badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Rejected">0</span>
+                                    <span class="badge badge-warning badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Pending">0</span>
+                                    <!--<span class="badge badge-total-payment badge-roundless minwidth40" tooltip="Payments Hold" >0</span>-->
+                                </div>
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <div ng-if="detail['MOPCount']">
+                                    <span class="bold" data-toggle-second="tooltip" data-placement="top" title="Total Number of Payments">({{detail["Total Number of Payments"]}})</span>
+                                    <span class="badge badge-success badge-roundless minwidth40 mopAlighn" ng-repeat="MOP in detail['MOPCount']" ng-if="MOP.Name">{{MOP.Name|underscoreRemove}} : {{MOP.Completed}}</span>
+                                </div>
+
+                                <!-- <div ng-if="!detail['MOPCount']">
+                                    <span class="bold" tooltip="Total Number of Payments">(0)</span>
+
+                                    <span class="badge badge-success badge-roundless minwidth40" tooltip="Payments Completed">0</span>
+                                    <span class="badge badge-danger badge-roundless minwidth40" tooltip="Payments Rejected">0</span>
+                                    <span class="badge badge-warning badge-roundless minwidth40" tooltip="Payments Pending">0</span>
+                                    <span class="badge badge-total-payment badge-roundless minwidth40" tooltip="Payments Hold" >0</span>
+                                </div> -->
+                            </td>
+
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <span class="cursorPointer fileStatus" ng-class="{'badge badge-primary': detail.FileStatus == 'DUPLICATE','badge badge-success': detail.FileStatus == 'DEBULKED','badge badge-danger':detail.FileStatus == 'REJECTED','badge badge-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','badge badge-default':detail.FileStatus == 'Warehoused'}">
+                                <i ng-class="{'fa fa-copy': detail.FileStatus == 'DUPLICATE','fa fa-check-circle-o': detail.FileStatus == 'DEBULKED','fa fa-times-circle':detail.FileStatus == 'REJECTED','fa fa-hand-paper-o':detail.FileStatus == 'HOLD','fa fa-exclamation-circle':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE' && detail.FileStatus != 'HOLD','fa fa-question-circle':detail.FileStatus == 'Warehoused'}" ></i> <span class="colorWhite">{{detail.FileStatus}}</span></span>
+                            </td>
+
+                            <td>
+                                <span class="colorBlueHover bold dwnAlighn" ng-class="{'text-primary': detail.FileStatus == 'DUPLICATE','text-success': detail.FileStatus == 'DEBULKED','text-danger':detail.FileStatus == 'REJECTED','text-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','text-muted':detail.FileStatus == 'Warehoused'}"
+                                    ng-click="exportToTextDoc(detail.TransportName, detail.InstructionID)"><i class="fa fa-download" aria-hidden="true"></i> Download</span>
+                            </td>
+                        </tr>
+                        <tr ng-if="detail.expanded" ng-repeat-end="">
+                            <td colspan="10"><pre class="detailExpand" ng-class="{'pre_primary_color': detail.FileStatus == 'DUPLICATE','pre_success_color': detail.FileStatus == 'DEBULKED','pre_dancer_color':detail.FileStatus == 'REJECTED','pre_waring_color':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECT' && detail.FileStatus != 'DUPLICATE','panel panel-default':detail.FileStatus == 'Warehoused'}">{{detail.TransportInfo}}</pre></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-warning mt-2" ng-show="!items.length">
+                <strong><h5 class="noRecord"> <i class="fa fa-warning"></i> {{'BankDataDts.NoRecordsFound'|translate}}</h5></strong>
+            </div>
+            <div class="row listView mt-2" ng-show="changeViewFlag">
+                <div class="col-md-12 ">
+                    <div class="badge plusIcon" style="font-size: initial;margin-bottom: 5px;padding-bottom: 20px;" ng-hide=!items.length>
+                    <span class="bold" translate>DistributedInstructions.SelectAll</span>
+                    <span style="margin-left: 13px;">
+                        <input type="checkbox" name="action" ng-model="paymentall.Selected" ng-disabled="totaltoDelete=='0'" class="checkBoxClass txtCenter listViewselectall cursorPointer" uir="{{paymentall.PaymentID}}" ng-click="checkStatusForBulk1(datas,payments,$index)">
+                    </span>
+                </div>
+                </div>
+                <div class="col-md-12"  ng-repeat="detail in items" ng-init="selectedClr = getClr(detail.FileStatus);">
+                 
+
+                    <div    class="file-detail-widget fileWidgetalighn" ng-style="{'border-color':selectedClr.ColourA}">
+              
+                        <div  class="checkbox checkbox-primary"  ng-if="validationCheckDelete(detail)">
+                            <input type="checkbox" name="action" ng-model="payments.Selected" class="checkBoxClass listViewselectall_ cursorPointer" ng-click="checkStatusForBulk($event,items,detail,$index)" id="check_{{$index}}" uir="{{payments.PaymentID}}">
+                            <label for="check_{{$index}}" style="margin-left:25px;"></label>
+                        </div>  
+
+
+                        <div class="filelist-style cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <ul class="list-inline row m-0" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}">
+
+                                        <li  class="bold cursorPointer listInsId my-tooltip" title="{{'ReceivedInstructions.InstructionID' | translate}}"   tooltip-placement="{{($index == 0)?'bottom':'top'}}">{{detail.InstructionID}}</li>
+                                        <li class="bold cursorPointer listLabel my-tooltip"   title="{{'ReceivedInstructions.TransportName' | translate}}"  ng-if="detail.TransportName" tooltip-placement="{{($index == 0)?'bottom':'top'}}">{{detail.TransportName}} </li>
+
+                                        <li class="bold cursorPointer ml-2 listLabel my-tooltip mr-2" title="{{'ReceivedInstructions.InstructionType' | translate}}" tooltip-placement="{{($index == 0)?'bottom':'top'}}">{{("ReceivedInstructions."+detail.InstructionType | translate)}}</li>
+
+                                        <li class="bold cursorPointer listLabel my-tooltip" title="Original Instruction ID"  tooltip-placement="{{($index == 0)?'bottom':'top'}}">{{detail.OrigInstrID}}</li>
+
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="pull-right pull-left-xs" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}">
+                                        <span ng-repeat="CW in detail.CurrencyWiseSum">
+	                                		<span data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'BtnGroup.Amount' | translate}}">{{CW.TotalAmount|isoCurrency:CW.Currency:'Symbolfalse'}}</span>
+	                                        <span ng-if="CW.Currency&&CW.TotalAmount">|</span>
+                                        </span>
+                                        <span class="listFileStatus my-tooltip" title="{{'ReceivedInstructions.InstructionStatus' | translate}}"   tooltip-placement="{{($index == 0)?'bottom':'top'}}"><i ng-class="{'fa fa-copy': detail.FileStatus == 'DUPLICATE','fa fa-check-circle-o': detail.FileStatus == 'DEBULKED','fa fa-times-circle':detail.FileStatus == 'REJECTED','fa fa-hand-paper-o':detail.FileStatus == 'HOLD','fa fa-exclamation-circle':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE' && detail.FileStatus != 'HOLD','fa fa-question-circle':detail.FileStatus == 'WAREHOUSED'}" ></i> <span class="caption-subject bold"> {{detail.FileStatus}} </span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<span style="font-size: 16px;padding-right: 7px;" class="bold cursorPointer" data-original-title="Instruction ID" data-container="body" data-toggle="tooltip" ng-class="{'text-primary': detail.FileStatus == 'DUPLICATE','text-success': ((detail.FileStatus == 'DEBULKED')|| (detail.FileStatus == 'DEBULKED')),'text-danger':detail.FileStatus == 'REJECTED','text-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','text-default':detail.FileStatus == 'WAREHOUSED'}">{{detail.InstructionID}}</span>
+                            
+                            <span class="bold cursorPointer"  ng-class="{'text-primary': detail.FileStatus == 'DUPLICATE','text-success': ((detail.FileStatus == 'DEBULKED')|| (detail.FileStatus == 'DEBULKED')),'text-danger':detail.FileStatus == 'REJECTED','text-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','text-default':detail.FileStatus == 'WAREHOUSED'}" style="font-size: 16px;border-left: 1px solid;padding-left: 10px;" data-original-title="Transport Name" data-container="body" data-toggle="tooltip" ng-if="detail.TransportName">{{detail.TransportName}}</span>
+                            <span class="bold cursorPointer" data-original-title="PSA Code" data-container="body" data-toggle="tooltip" ng-if="detail.PSACode"> | {{detail.PSACode}}</span>-->
+
+                            <!--<div class="pull-right bold">
+                                <span ng-repeat="CW in detail.CurrencyWiseSum">
+                                <span tooltip="Amount">{{CW.TotalAmount|isoCurrency:CW.Currency}}</span>
+                                <span ng-if="CW.Currency&&CW.TotalAmount">|</span>
+                                </span>
+                                <span style="font-size: 16px;" data-original-title="File Status" data-container="body" data-toggle="tooltip" ng-class="{'text-primary': detail.FileStatus == 'DUPLICATE','text-success': ((detail.FileStatus == 'DEBULKED')|| (detail.FileStatus == 'DEBULKED')),'text-danger':detail.FileStatus == 'REJECTED','text-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','text-default':detail.FileStatus == 'WAREHOUSED'}"><i ng-class="{'fa fa-copy': detail.FileStatus == 'DUPLICATE','fa fa-check-circle-o': detail.FileStatus == 'DEBULKED','fa fa-times-circle':detail.FileStatus == 'REJECTED','fa fa-hand-paper-o':detail.FileStatus == 'HOLD','fa fa-exclamation-circle':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE' && detail.FileStatus != 'HOLD','fa fa-question-circle':detail.FileStatus == 'WAREHOUSED'}" ></i> <span class="caption-subject bold"> {{detail.FileStatus}} </span></span>
+                            </div>-->
+
+                        </div>
+                        <div class="row detailed-row">
+                            <div class="col-md-7">
+                                <ul class="list-inline row m-0 p-0">
+                                    <li class="pl-0"><span ng-show="detail.TransportInfo" class="cursorPointer badge plusIcon" ng-click="isCollapsed = !isCollapsed" data-toggle="collapse" data-target="#isCollapsed{{$index}}" translate>
+                                <i class="fa fa-plus-circle" ng-class="{'fa fa-minus-circle': !isCollapsed, 'fa fa-plus-circle': isCollapsed}"></i>
+                                ReceivedInstructions.TransportInfo </span></li>
+                                <li class=""><span style="color: #333; padding-left: 5px; padding-right: 5px;"> <span translate>ReceivedInstructions.Cycle</span>: 
+                                    {{detail.Cycle}}
+                                </span></li>
+                                <li class="divide-text"><span style="color: #333; padding-left: 5px; padding-right: 5px;"> <span translate>ReceivedInstructions.DebitValue</span>: 
+                                    {{detail.Debit_Value|isoCurrency:'COP':'Symboltrue'}}
+                                        </span></li>
+                                        <li class=""><span style="color: #333; padding-left: 5px; padding-right: 5px;"> <span translate>ReceivedInstructions.CreditValue</span>: 
+                                            {{detail.Credit_Value|isoCurrency:'COP':'Symboltrue'}}
+                                        </span></li>
+                                        <li class="divide-text"><span style="color: #333; padding-left: 5px; padding-right: 5px;"> <span translate>ReceivedInstructions.OriginalFinancialEntityName</span>: 
+                                            {{detail.Original_Financial_Entity_Name}}
+                                        </span></li>
+									
+                                        <li class="divide-text"><span class="ml-2 listDetailcolor"> <span translate>ReceivedInstructions.Timestamp</span>: 
+		                                    {{detail.EntryDate | dateFormat}} 
+		                            </span></li>
+                                    <!--<li><span ng-show="detail.TransportInfo" class="divider"></span></li>-->
+                                    <li><span if="newPermission.Download" class="colorBlueHover bold ml-2 listdwnIcon" ng-click="exportToTextDoc(detail.TransportName, detail.InstructionID)"><i class="fa fa-download" aria-hidden="true" data-toggle-second="tooltip" data-placement="top" title="{{'ToolTips.Download' | translate}}"></i></span> </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="pull-right pull-left-xs" ng-if="detail['Total Number of Payments']"><span translate>ReceivedInstructions.TransactionStatus</span><span class="bold" data-toggle-second="tooltip" data-placement="top" title="Total Number of Payments">({{detail["Total Number of Payments"]}})</span> :
+                                    <span class="badge badge-success badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="{{'ReceivedInstructions.PaymentsCompleted' | translate}}">{{detail.PaymentsCompleted}}</span>
+                                    <span class="badge badge-danger badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="{{'ReceivedInstructions.PaymentsRejected' | translate}}">{{detail.PaymentsRejected}}</span>
+                                    <span class="badge badge-warning badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="{{'ReceivedInstructions.PaymentsPending' | translate}}">{{detail.PaymentsPending}}</span>
+                                    <span class="badge badge-total-payment badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top"  title="{{'ReceivedInstructions.PaymentsHold' | translate}}">0</span>
+                                </div>
+                                <div class="pull-right pull-left-xs" ng-if="detail['BatchesReceived']">Batch Status <span class="bold" data-toggle-second="tooltip" data-placement="top" title="Total Number of Batches">({{detail["BatchesReceived"]}})</span> :
+                                    <span class="badge badge-success badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Completed">{{detail.BatchesCompleted?0:0}}</span>
+                                    <span class="badge badge-danger badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Rejected">{{detail.BatchesRejected?0:0}}</span>
+                                    <span class="badge badge-warning badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Pending">{{detail.BatchesPending?0:0}}</span>
+                                    <span class="badge badge-total-payment badge-roundless minwidth40" data-toggle-second="tooltip" data-placement="top" title="Payments Hold">0</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 viewMop" ng-if="viewMOPStatus">
+                                <div ng-if="detail['MOPCount']">
+                                    <div class="pull-right pull-left-xs">MOP Based Distribution (Completed) :
+                                        <!-- <span class="bold" tooltip="Total Number of Payments">({{detail["Total Number of Payments"]}})</span> -->
+                                        <span class="badge badge-success badge-roundless minwidth40 mopAlighn" ng-repeat="MOP in detail['MOPCount']" ng-if="MOP.Name">{{MOP.Name|underscoreRemove}} : {{MOP.Completed}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <!--<span ng-show="detail.TransportInfo" style="height: 21px !important;color:#fff !important;background-color: #aaa !important;" class="cursorPointer badge" ng-click="isCollapsed = !isCollapsed">
+                                <i class="fa fa-plus-circle" ng-class="{'fa fa-minus-circle': !isCollapsed, 'fa fa-plus-circle': isCollapsed}"></i>
+
+                                Transport Info </span>
+                            
+                            <span ng-show="detail.TransportInfo" class="divider"> | </span>
+                            <span tooltip="Entry Date & Time" style="color: #818181">Entry Date &amp; Time:
+                            {{detail.EntryDate | dateFormat}} 
+                            </span>
+                            <span ng-show="detail.TransportInfo" class="divider"> | </span>
+                            <span style="cursor:pointer;text-decoration: underline;color: #4d4d4d" class="colorBlueHover bold"  ng-click="exportToTextDoc(detail.TransportName, detail.InstructionID)" ><i class="fa fa-download" aria-hidden="true" tooltip="Download"></i></span> 
+
+                            <div ng-if="detail['Total Number of Payments']">Payment Status  <span class="bold" tooltip="Total Number of Payments">({{detail["Total Number of Payments"]}})</span> :
+                                <span class="badge badge-success badge-roundless minwidth40" tooltip="Payments Completed">{{detail.PaymentsCompleted}}</span>
+                                <span class="badge badge-danger badge-roundless minwidth40" tooltip="Payments Rejected" tooltip-placement="bottom">{{detail.PaymentsRejected}}</span>
+                                <span class="badge badge-warning badge-roundless minwidth40" tooltip="Payments Pending" tooltip-placement="bottom">{{detail.PaymentsPending}}</span>
+                                <span class="badge badge-total-payment badge-roundless minwidth40" tooltip="Payments Hold">0</span>
+                            </div>-->
+
+
+                            <!-- collapse="isCollapsed" -->
+                        <div  class="collapse" id="isCollapsed{{$index}}">
+                            <div>
+                                <pre>{{detail.TransportInfo}}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--<div  class="col-md-12" ng-repeat="detail in items" style="padding: 0px 0px 0px 2px;">
+
+                <div ng-class="{'panel panel-primary': detail.FileStatus == 'DUPLICATE','panel panel-success': ((detail.FileStatus == 'DEBULKED')|| (detail.FileStatus == 'DEBULKED')),'panel panel-danger':detail.FileStatus == 'REJECTED','panel panel-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','panel panel-default':detail.FileStatus == 'WAREHOUSED'}">
+
+                    <div class="panel-heading fileListStyle" data-ng-click="clickRefId(detail,$index)">
+                        <div>
+                            <span class="bold cursorPointer" data-original-title="Instruction ID" data-container="body" data-toggle="tooltip">{{detail.InstructionID}}</span>
+                            <span class="bold cursorPointer" data-original-title="Transport Name" data-container="body" data-toggle="tooltip" ng-if="detail.TransportName"> | {{detail.TransportName}}</span>
+                            <span class="bold cursorPointer" tooltip="PSA Code" ng-if="detail.PSACode"> | {{detail.PSACode}}</span>
+
+                            <div class="pull-right bold">
+                                <span ng-repeat="CW in detail.CurrencyWiseSum">
+                                <span tooltip="Amount">{{CW.TotalAmount|isoCurrency:CW.Currency}}</span>
+                                <span ng-if="CW.Currency&&CW.TotalAmount">|</span>
+                                </span>
+                                <span data-original-title="File Status" data-container="body" data-toggle="tooltip"><i ng-class="{'fa fa-copy': detail.FileStatus == 'DUPLICATE','fa fa-check-circle-o': detail.FileStatus == 'DEBULKED','fa fa-times-circle':detail.FileStatus == 'REJECTED','fa fa-hand-paper-o':detail.FileStatus == 'HOLD','fa fa-exclamation-circle':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE' && detail.FileStatus != 'HOLD','fa fa-question-circle':detail.FileStatus == 'WAREHOUSED'}" ></i> <span class="caption-subject bold"> {{detail.FileStatus}} </span></span>
+                            </div>
+                                <div class="clearBoth"></div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <span ng-show="detail.TransportInfo" style="height: 21px !important;color:#fff !important;" class="cursorPointer" tooltip="Transport Info"  ng-click="isCollapsed = !isCollapsed" ng-class="{'badge badge-primary': detail.FileStatus == 'DUPLICATE','badge badge-success': detail.FileStatus == 'DEBULKED','badge badge-danger':detail.FileStatus == 'REJECTED','badge badge-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','badge badge-default':detail.FileStatus == 'Warehoused'}">
+                                <i class="fa fa-plus-circle" ng-class="{'fa fa-minus-circle': !isCollapsed, 'fa fa-plus-circle': isCollapsed}"></i>
+
+                                Transport Info </span> <span ng-show="detail.TransportInfo"> | </span>
+                            <span tooltip="Entry Date & Time">Entry Date &amp; Time:
+                            {{detail.EntryDate | dateFormat}} |
+                            </span>
+    
+                            <span style="cursor:pointer;text-decoration: underline;" class="colorBlueHover bold" ng-class="{'text-primary': detail.FileStatus == 'DUPLICATE','text-success': detail.FileStatus == 'DEBULKED','text-danger':detail.FileStatus == 'REJECTED','text-warning':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE','text-muted':detail.FileStatus == 'Warehoused'}"  ng-click="exportToTextDoc(detail.TransportName, detail.InstructionID)" ><i class="fa fa-download" aria-hidden="true"></i> Download</span>                          
+                            <div class="pull-right" ng-if="detail['Total Number of Payments']">Payment Status  <span class="bold" tooltip="Total Number of Payments">({{detail["Total Number of Payments"]}})</span> :
+                                <span class="badge badge-success badge-roundless minwidth40" tooltip="Payments Completed">{{detail.PaymentsCompleted}}</span>
+                                <span class="badge badge-danger badge-roundless minwidth40" tooltip="Payments Rejected" tooltip-placement="bottom">{{detail.PaymentsRejected}}</span>
+                                <span class="badge badge-warning badge-roundless minwidth40" tooltip="Payments Pending" tooltip-placement="bottom">{{detail.PaymentsPending}}</span>
+                                <span class="badge badge-total-payment badge-roundless minwidth40" tooltip="Payments Hold">0</span>
+                            </div>
+
+                            
+
+                            <div class="pull-right" ng-if="!detail['Total Number of Payments']">Payment Status <span class="bold" tooltip="Total Number of Payments">(0)</span> :
+
+                                <span class="badge badge-success badge-roundless minwidth40" tooltip="Payments Completed">0</span>
+                                <span class="badge badge-danger badge-roundless minwidth40" tooltip="Payments Rejected" tooltip-placement="bottom">0</span>
+                                <span class="badge badge-warning badge-roundless minwidth40" tooltip="Payments Pending" tooltip-placement="bottom">0</span>
+                                <span class="badge badge-total-payment badge-roundless minwidth40" tooltip="Payments Hold">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div collapse="isCollapsed">
+                            <div style="margin-left:20px;margin-bottom:20px">
+                                <pre style="margin-right:20px;" ng-class="{'pre_primary_color': detail.FileStatus == 'DUPLICATE','pre_success_color': detail.FileStatus == 'DEBULKED','pre_dancer_color':detail.FileStatus == 'REJECTED','pre_waring_color':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECT' && detail.FileStatus != 'DUPLICATE','panel panel-default':detail.FileStatus == 'Warehoused'}">{{detail.TransportInfo}}</pre>
+                            </div>
+                    </div>
+                </div>
+            </div>-->
+
+
+            </div>
+
+            <div class="listView FixHead dataGroupsScroll mt-2 tableviewDisp" ng-show="!changeViewFlag">
+                <table class="table table-striped table-bordered table-hover floatThead stickyheader" ng-show="!alertMsg && items.length">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="cursorPointer" style="border-left:0 !important;" ng-click="Sorting('InstructionID');" nowrap >
+                                <span translate>ReceivedInstructions.InstructionID</span>
+                                <span ng-show="orderByField == 'InstructionID' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'InstructionID' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-if="InstructionType!='Matched'" ng-click="Sorting('InstructionType');" nowrap >
+                                <span translate>ReceivedInstructions.InstructionType</span>
+                                <span ng-show="orderByField == 'InstructionType' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'InstructionType' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('EntryDate');" nowrap >
+                               <span translate> ReceivedInstructions.EntryDate</span>
+                                <span ng-show="orderByField == 'EntryDate' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'EntryDate' && !sortReverse" class="fa fa-caret-down"></span>
+
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('Cycle');" nowrap >
+                                <span translate>ReceivedInstructions.Cycle</span>
+                                <span ng-show="orderByField == 'Cycle' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'Cycle' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('Debit_Value');" nowrap >
+                                <span translate>ReceivedInstructions.DebitValue</span>
+                                <span ng-show="orderByField == 'Debit_Value' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'Debit_Value' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('Credit_Value');" nowrap >
+                                <span translate>ReceivedInstructions.CreditValue</span>
+                                <span ng-show="orderByField == 'Credit_Value' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'Credit_Value' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('Original_Financial_Entity_Name');" nowrap >
+                                <span translate>ReceivedInstructions.OriginalFinancialEntityName </span>
+                                <span ng-show="orderByField == 'Original_Financial_Entity_Name' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'Original_Financial_Entity_Name' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('User');" nowrap >
+                                <span translate>ReceivedInstructions.User </span>
+                                <span ng-show="orderByField == 'User' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'User' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer"  nowrap >
+                                <span translate>ReceivedInstructions.FileName</span>
+                             
+                            </th>
+                            <th nowrap translate>
+                                ReceivedInstructions.TransactionStatus
+                            </th>
+                            
+                            <th ng-if="viewMOPStatus">
+                                MOP Based Distribution (Completed)
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('FileStatus');" >
+                                <span translate>ReceivedInstructions.FileStatus</span>
+                                <span ng-show="orderByField == 'FileStatus' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'FileStatus' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <!-- <th class="cursorPointer" ng-click="Sorting('OrigInstrID');" nowrap >
+                                <span translate>ReceivedInstructions.OrigInstrID</span> 
+                                <span ng-show="orderByField == 'OrigInstrID' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'OrigInstrID' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                            <th class="cursorPointer" ng-click="Sorting('Relationship');" >
+                                <span translate>ReceivedInstructions.Relationship</span> 
+                                <span ng-show="orderByField == 'Relationship' && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == 'Relationship' && !sortReverse" class="fa fa-caret-down"></span>
+                            </th> -->
+                          
+                            <th translate>
+                                ReceivedInstructions.SourceMessage
+                            </th>
+                            <th nowrap>
+                                
+                                <span class="bold" translate>DistributedInstructions.SelectAll</span>
+                 
+                               <input type="checkbox" name="action" ng-model="paymentall.Selected"  ng-disabled="totaltoDelete=='0'"  class="checkBoxClass txtCenter gridviewselectall cursorPointer" uir="{{paymentall.PaymentID}}" ng-click="checkStatusForBulk2(datas,payments,$index)">
+                
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat-start="detail in items" ng-init="selectedClr = getClr(detail.FileStatus);">
+                            <td class="trInfo" style="width:10px;border-right:0 !important">
+                                <i ng-show="detail.TransportInfo" tooltip="Transport Info" class="fa fa-plus-circle cursorPointer" ng-class="{'fa fa-minus-circle': detail.expanded, 'fa fa-plus-circle': !detail.expanded}" ng-click="detail.expanded = !detail.expanded"></i>
+                            </td>
+                            <td style="border-left:0 !important;" class="bold cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <a style="color:#000;">{{detail.InstructionID}}</a>
+                            </td>
+
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                <b ng-if="detail.InstructionType=='Payment Instruction' || detail.InstructionType=='INSTRUCTION'">{{('ReceivedInstructions.'+detail.InstructionType) | translate}}</b>
+                            </td>
+
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)" nowrap><span>
+                                    {{detail.EntryDate | dateFormat}}
+
+
+                                </span></td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                {{detail.Cycle}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)"  style="text-align: right;">
+                                {{detail.Debit_Value|isoCurrency:'COP':'Symboltrue'}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)"  style="text-align: right;" nowrap>
+                                {{detail.Credit_Value|isoCurrency:'COP':'Symboltrue'}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)" nowrap>
+                                {{detail.Original_Financial_Entity_Name}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)" nowrap>
+                                {{getUserTable(detail)}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)" nowrap>
+                                {{detail.FileName}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)" nowrap>
+                                <div ng-if="detail['Total Number of Payments']">
+                                    <span class="bold" tooltip="Total Number of Payments">({{detail["Total Number of
+                                        Payments"]}})</span>
+                                    <span class="badge badge-success badge-roundless minwidth40" tooltip="Payments Completed">{{detail.PaymentsCompleted}}</span>
+                                    <span class="badge badge-danger badge-roundless minwidth40" tooltip="Payments Rejected">{{detail.PaymentsRejected}}</span>
+                                    <span class="badge badge-warning badge-roundless minwidth40" tooltip="Payments Pending">{{detail.PaymentsPending}}</span>
+                                    <span class="badge badge-total-payment badge-roundless minwidth40" tooltip="Payments Hold">0</span>
+                                </div>
+                            </td>
+                       
+
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)" ng-if="viewMOPStatus">
+                                <div ng-if="detail['MOPCount']">
+                                    <!-- <span class="bold" tooltip="Total Number of Payments">({{detail["Total Number of Payments"]}})</span> -->
+                                    <span class="badge badge-success badge-roundless minwidth40" style="padding: 5px 10px 5px 10px;" ng-repeat="MOP in detail['MOPCount']" ng-if="MOP.Name">{{MOP.Name|underscoreRemove}} : {{MOP.Completed}}</span>
+                                </div>
+
+                            </td>
+
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+
+                                <span style="height: 21px !important; width:auto;text-align:left" class="cursorPointer colorBrown badge" ng-style="{'background-color':selectedClr.ColourA,'opacity':selectedClr.Opacity}">
+                                    <i
+                                        ng-class="{'fa fa-copy': detail.FileStatus == 'DUPLICATE','fa fa-check-circle-o': detail.FileStatus == 'DEBULKED','fa fa-times-circle':detail.FileStatus == 'REJECTED','fa fa-hand-paper-o':detail.FileStatus == 'HOLD','fa fa-exclamation-circle':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECTED' && detail.FileStatus != 'DUPLICATE' && detail.FileStatus != 'HOLD','fa fa-question-circle':detail.FileStatus == 'Warehoused'}"></i>
+                                    <span class="colorWhite">{{detail.FileStatus}}</span></span>
+                            </td>
+                            <!-- <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                {{detail.OrigInstrID}}
+                            </td>
+                            <td class="cursorPointer" data-ng-click="clickRefId(detail,$index)">
+                                {{detail.Relationship}}
+                            </td> -->
+                           
+
+                            <td nowrap>
+                                <span style="cursor:pointer;text-decoration: underline;" class="colorBlueHover bold" ng-click="exportToTextDoc(detail.TransportName, detail.InstructionID)"><i
+                                    class="fa fa-download" aria-hidden="true"></i><span translate>ReceivedInstructions.Download</span></span>
+
+                            </td>
+                            <td>
+       
+                                <div class="checkbox checkbox-primary"  ng-if="validationCheckDelete(detail)">
+                                <input type="checkbox" name="action" ng-model="payments.Selected" class="checkBoxClass gridviewselectall_ cursorPointer" ng-click="checkStatusForBulk_($event,items,detail,$index)" id="check1_{{$index}}" uir="{{payments.PaymentID}}">
+                                <label for="check1_{{$index}}" style="margin-left:25px;"></label>
+                            </div> 
+                        </td> 
+                        </tr>
+                        <tr ng-if="detail.expanded" ng-repeat-end="">
+                            <td colspan="10">
+                                <pre style="border:0 !important;" ng-class="{'pre_primary_color': detail.FileStatus == 'DUPLICATE','pre_success_color': detail.FileStatus == 'DEBULKED','pre_dancer_color':detail.FileStatus == 'REJECTED','pre_waring_color':detail.FileStatus != 'DEBULKED' && detail.FileStatus != 'REJECT' && detail.FileStatus != 'DUPLICATE','panel panel-default':detail.FileStatus == 'Warehoused'}">
+                                    {{detail.TransportInfo}}</pre>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="clearBoth"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var showFlag = false;
+
+    $(document).ready(function() {
+        // $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
+
+        setTimeout(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        }, 100);
+
+        setTimeout(function() {
+            $('[data-toggle-second=tooltip]').tooltip({trigger: "hover"});
+            $('.my-tooltip').tooltip({ trigger: "hover" });
+        }, 1000);
+
+        $('.input-group-text').on('click focus', function(e) {
+            $(this).prev().focus().click()
+        });
+    });
+
+    $('li.dropdown.mega-dropdown a').on('click', function(event) {
+        $(this).parent().addClass("open");
+    });
+
+    $('li.dropdown.mega-dropdown1 a').on('click', function(event) {
+        $(this).parent().toggleClass("open");
+    });
+
+    $('li.dropdown.mega-dropdown a').focus(function(event) {
+        $(this).parent().addClass("open");
+    });
+
+    $('button').focus(function(event) {
+        if (($(this).val() == 'Reset Filter') || ($(this).val() == 'Search')) {
+            $('li.dropdown.mega-dropdown').removeClass('open')
+        }
+    });
+
+    $('body').on('click', function(e) {
+        // if ($(e.target).attr('id') == 'DropId') {
+        //     if (!showFlag) {
+        //         $('.customDropDown1').show()
+        //     } else {
+        //         $('.customDropDown1').hide()
+        //     }
+        // } else {
+        //     if ($(e.target).parent().hasClass('cancel')) {
+        //         $('.customDropDown1').show()
+        //     } else {
+        //         $('.customDropDown1').hide()
+        //     }
+        // }
+
+        if (!$('li.dropdown.mega-dropdown').is(e.target) && $('li.dropdown.mega-dropdown').has(e.target).length === 0 && $('.open').has(e.target).length === 0) {
+            $('li.dropdown.mega-dropdown').removeClass('open');
+        }
+    })
+</script>

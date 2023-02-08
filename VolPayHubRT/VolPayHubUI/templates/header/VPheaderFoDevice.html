@@ -1,0 +1,38 @@
+<header>
+    <div class="cont-header">
+        <div class="logo-header">
+            <img ng-src="themes/{{configData.ThemeName}}/logo.png" alt="logo" class="logo-default" width="100%" float="left">
+        </div>
+        <div class="sidebar-toggle headerSideToggle menu-header">
+            <a data-toggle="offcanvas" role="button" data-ng-click="sideBar(1)">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </div>
+</header>
+
+<script>
+    $(function() {
+        $('.scrollDiv').slimScroll({
+            color: '#ddd',
+            size: '7px',
+            height: '300px',
+            alwaysVisible: true
+        });
+    });
+    /*if (document.documentElement.clientWidth < 767 && document.documentElement.clientWidth >= 360) {
+		$(".dropdownPosition1").css("left","-75px");
+		$(".dropdownPosition2").css("left","-110px");
+		$(".dropdownPosition3").css("left","-145px");
+	}
+	else if(document.documentElement.clientWidth < 360){
+		$(".dropdownPosition1").css("left","-38px");
+		$(".dropdownPosition2").css("left","-88px");
+		$(".dropdownPosition3").css("left","-135px");
+	}
+	else if(document.documentElement.clientWidth > 767 && document.documentElement.clientWidth <= 1200){
+		$(".dropdownPosition1").css("left","-140px");
+		$(".dropdownPosition2").css("left","-125px");
+		$(".dropdownPosition3").css("left","-150px");
+	}*/
+</script>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+INSTRUCTIONS FOR SPRING CONTEXT FILES
+
+FOLLOW NAMING CONVENTIONS(ONLY LOWER CASE LETTERS ARE ACCEPTED) FOR BEAN IDs OF BELOW MENTIONED CLASSES.
+
+1.	JmsComponent 		-> ANY USER DEFINED NAME ACCEPTED BY SPRING CONTEXT. EXAMPLE "jms".
+2.	JmsConfiguration	-> BEAN ID OF JmsComponent FOLLOWED BY SUFFIX "-configuration". EXAMPLE "jms-configuration".
+3.	ConnectionFactory   -> BEAN ID OF JmsComponent FOLLOWED BY SUFFIX "-connection-factory". EXAMPLE "jms-connection-factory
+
+NOTE: 
+1.	IF THERE IS  MULTIPLE ConnectionFactory CLASSES PRESENT, FOLLOW THE ConnectionFactory 
+NAMING CONVENTION FOR THE BEAN ID WHICH IS REFERRED IN JmsConfiguration BEAN.
+
+2. IMPORT A RESOURCE IN <VOLPAY_DOMAIN>_beanconfig.xml, IF ADDITIONAL SPRING CONFIGURATION IS CONFIGURED FOR
+MULTIPLE MQs. EXAMPLE <import resources="multiplemq_config.xml"/> WHERE multiplemq_config.xml CONTAINS
+OTHER MQ CONNECTION FACTORY CONFIGURATIONS.
+-->
+
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	
+	
+	<!-- MQ bean configuration -->
+	<!-- <bean id="jms-connection-factory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616"/>	
+	</bean> -->
+	
+	<jee:jndi-lookup id="jms-connection-factory" jndi-name="java:comp/env/jms/ConnectionFactory"
+    	cache="true" resource-ref="true" lookup-on-startup="true"
+    	></jee:jndi-lookup>	
+	
+	<bean id="jms-configuration" class="org.apache.camel.component.jms.JmsConfiguration"> 
+	    <property name ="connectionFactory" ref = "jms-connection-factory"/>
+	    <property name = "cacheLevelName" value ="CACHE_CONSUMER"/>
+	    <property name = "concurrentConsumers" value ="1"/>
+	    <property name = "transacted" value = "true"/>
+	    <property name = "maxMessagesPerTask" value ="10"/>
+      </bean>
+
+	<!-- Camel JMS component bean configuration -->
+	<bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+		<property name="configuration" ref="jms-configuration"/>
+	</bean>
+	
+	<bean id="jdataSource" class = "org.springframework.jndi.JndiObjectFactoryBean">
+	  <property name="jndiName" value ="java:comp/env/jdbc/VolPayDB"/>
+	</bean>
+	<bean id="JdbcMessageIdRepository" class="org.apache.camel.processor.idempotent.jdbc.JdbcMessageIdRepository">
+		<!-- <constructor-arg name="processorName" value="fileConsumerRepo"/>
+		<constructor-arg name="dataSource" ref="jdataSource" /> -->
+	   <constructor-arg ref="jdataSource" />
+	   <constructor-arg value="VolPay Transaction Processor" />
+	</bean>
+	<!-- <bean id="JdbcMessageIdRepository" class="org.apache.camel.spi.IdempotentRepository">
+		<property name="processorName" value="fileConsumerRepo"/>
+		<property name="dataSource" ref="jdataSource" />
+		
+	</bean> -->
+	
+	<!--<bean id="jmsConnectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory" ref="jms-connection-factory" />
+		<property name="sessionCacheSize" value="40" />
+		<property name="cacheConsumers" value="true" />
+		<property name="cacheProducers" value="false" />
+    </bean>-->
+	
+	<!--      Camel Exchange Logger bean configuration.   -->
+	<!-- 		DON'T REMOVE / EDIT camellogger BEAN.     -->
+	<bean id="camellogger" class="com.volantetech.volante.services.camel.logger.ComposeLogMessageOnExchange"/>
+	
+	<!--      transportMonitor bean is for publishing route status.  -->
+	
+	<bean id="transportMonitor" class="com.volantetech.volante.services.camel.logger.RouteRegistryMonitoringService"/>
+	
+	<!--     schedulerProcessor and schedulerMonitor is used for logging and auditing scheduler routes.  -->
+	
+	<bean id="schedulerProcessor" class="com.volantetech.volante.services.camel.processors.SchedulerProcessor"/>
+	
+	<bean id="schedulerMonitor" class="com.volantetech.volante.services.camel.logger.SchedulerRouteMonitoringService"/>
+	<bean id="VolanteInternalEncryptProcessorBean" class="com.volantetech.volante.services.camel.processors.VolanteInternalEncryptProcessor"/>
+	<bean id="VolanteInternalDecryptProcessorBean" class="com.volantetech.volante.services.camel.processors.VolanteInternalDecryptProcessor"/>
+	
+</beans>

@@ -1,0 +1,388 @@
+<style>
+    .margin0{
+        margin:0;
+    }
+
+    .alertFont{
+        font-size: 0.875rem;
+    }
+
+    .fieldAlighn{
+        margin-top:0.938rem
+    }
+
+    .uploadBtnalighn{
+        margin-top:0.625rem;
+        word-wrap:break-word;
+    }
+
+    .Btnalighn{
+        padding-left: 1.875rem;
+    }
+
+    .uploadalighn{
+        font-size:0.938rem;
+        margin-top:1.313rem;
+    }
+
+    .iconChevron{
+        font-size: 1.25rem;
+        padding-top:0.125rem;
+    }
+
+    .fileNamealighn{
+        font-size:0.938rem;
+        float:left
+    }
+
+    .labletxt{
+        text-align:left
+    }
+
+    .clearBoth{
+        clear:both
+    }
+
+    .instnIDalighn{
+        cursor:pointer;
+        color:#2d4063;
+    }
+	
+    .select2-container.select2-container--open .select2-dropdown{
+        z-index: auto;
+    }
+
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<!--<div class="breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <ul class="page-breadcrumb">
+        <li>
+           <i class="fa fa-home"></i>
+           <a href="javascript:void(0);" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i> 
+        </li>
+        <li>
+            <i class="fa fa fa-cog"></i>
+            <a href="javascript:void(0);" translate="">Sidebar.PaymentModule</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a translate>Sidebar.FileUpload</a>
+
+        </li>
+    </ul>
+</div>-->
+<div class="page-bar breadCrumb" set-class-when-at-top="fix-to-top" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-exchange"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="">
+                    <span class="removeCursor" translate>Sidebar.FileUpload</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<!--<div id="loaderContainer" httploader>
+    <img src="themes/images/preloader.gif" class="httpLoader"/>
+</div>-->
+<div class="contentContainer">
+    <div class="pageTitle">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2 translate>FileUpload.PageTitle</h2>
+                    <p translate>FileUpload.SubTitle</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content margin0">
+        
+        <div ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="autoAdjustAlert bold animated bounce alertFont" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg| replaceASCII}}
+        </div>
+
+       <div class="row">
+            <div class="col-md-6 fieldAlighn">
+            <form class="form-horizontal" role="form" ng-submit="uploadFile()" enctype="multipart/form-data">
+
+                <div class="form-group row">
+                    <label class="control-label col-md-4 mt-1 text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.Party</span>
+                        <span class="requiredClass" aria-required="true">*</span>
+                    </label>
+                    <div class="col-md-6">
+                        <select class="form-control select2Dropdown" select2-model-append name="party" id="party" ng-model="qParam.party" required>
+                            <option value="">--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4 mt-1 text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.Service</span>
+                        <span class="requiredClass" aria-required="true">*</span>
+                    </label>
+                    <div class="col-md-6">
+                        <select class="form-control select2Dropdown" select2-model-append name="service" id="service" ng-model="qParam.service" required>
+                            <option value="">--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4 mt-1 text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.InputFormat</span>
+                        <span class="requiredClass" aria-required="true">*</span>
+                    </label>
+                    <div class="col-md-6">
+                        <select class="form-control select2Dropdown" select2-model-append name="inputformat" id="inputformat" ng-model="qParam.inputformat" required>
+                            <option value="">--Select--</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="control-label col-md-4 mt-1 text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.PartyServiceAssociation</span>
+                        <span class="requiredClass" aria-required="true">*</span>
+                    </label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" disabled="disabled" name="psa" id="Filechannel" ng-model="qParam.psa" placeholder="Party Service Association" />
+                    </div>
+                </div>
+
+                <!-- <div class="form-group">
+            <label class="control-label col-sm-4">Party Service Association Code
+                <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+            </label>
+            <div class="col-sm-6">
+                <select class="form-control" id="Filechannel" required>
+                    <option value="">--Select--</option>
+                </select>
+            </div>
+        </div> -->
+                <div class="form-group row">
+                    <label class="control-label col-sm-4"></label>
+
+                    <div class="col-md-4 uploadBtnalighn">
+
+                        <input type="file" id="uploadBtn" file-model="myFile" class="fileNamealighn" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this);" required/>
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="control-label col-sm-4"></label>
+                    <div class="col-md-2 pr-0 Btnalighn">
+                        <button style="display: flex !important;justify-content: center;" type="submit" class="btnSuccess btnStyle d-flex uploadalighn" id="uploadHere"  ng-disabled="UploadBtnTrigg" ng-if="newPermission.FileUpload"><i class="fa fa-upload mt-1" aria-hidden="true"></i> &nbsp;<span translate>BtnGroup.ClicktoUpload</span></button>
+                    </div>
+                </div>
+
+            </form>
+            </div>
+
+        
+
+            <!-- <div class="row pr-0"> -->
+           
+            <div class="col-md-6  ">
+                <div class="portlet-title cursorPointer accordion" id="collapseFileDetails"  >
+                    <div class="row" ng-init="fileInformation = false" ng-click="fileInformation = !fileInformation" data-toggle="collapse" data-target="#collapsefile" aria-expanded="true" aria-controls="collapsefile">
+
+                        <div class="col-md-9">
+                            <i class="fa fa-file" aria-hidden="true"></i>
+                            <span class="caption" translate>FileUpload.FileDetails</span>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="bold fa fa-chevron-circle-right float-right iconChevron" ng-class="{'fa-chevron-circle-down': !fileInformation, 'fa-chevron-circle-right': fileInformation}"></i>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <!--<div class="portlet-title cursorPointer fa-fs14" style="border: 1px solid #ccc;width:100%;margin-bottom:0;padding:0px 3px 0px 5px;" ng-init="fileInformation = false" ng-click="fileInformation = !fileInformation">
+
+                    <div class="caption caption-md ProfileHeaderStyles">
+                        <i class="fa fa-file" aria-hidden="true"></i>
+                        <span class="caption-subject bold uppercase">File Details</span>
+
+                    </div>
+
+                    <div class="pull-right">
+                        &nbsp;&nbsp;&nbsp;<i style="padding: 5px 0;font-size: 20px;" class="pull-right bold fa fa-chevron-circle-right" ng-class="{'fa-chevron-circle-down': !fileInformation, 'fa-chevron-circle-right': fileInformation}"></i>
+                    </div>
+                </div>-->
+                <!-- collapse="fileInformation" -->
+                <div class="portlet-body collapse show"  id="collapsefile" data-parent="#collapseFileDetails">
+                    <div class="portlet-inner-box">
+                        <form class="form-horizontal">
+                            <div class="form-group d-flex">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.FileName</span> : </label>
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt">{{file.name || '**********' | underscoreRemove}}</label>
+                            </div>
+
+                            <div class="form-group d-flex">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.FileSize</span> : </label>
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt"  ng-if="UploadedFileSize">
+                                    <span ng-switch="file.size > 1024*1024" class="fileSize">
+                                        <span ng-switch-when="true"> {{UploadedFileSize | number:2}} MB</span>
+                                        <span ng-switch-default> {{UploadedFileSize | number:2}} kB</span>
+                                    </span>
+                                </label>
+                            
+                                <lable class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt"  ng-if="!UploadedFileSize&&file.size !='0'">****</lable>
+                                <lable class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt"  ng-if="file.size=='0'">{{file.size}}.00 kB</lable>
+                            </div>
+                            <div class="form-group d-flex" >
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.FileFormat</span> : </label>
+                                <label ng-if="!SwiftFileType" class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt" > {{file.type || '**********'}}</label>
+                                <label ng-if="SwiftFileType" class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt">{{SwiftFileType || '**********'}}</label>
+                            </div>
+
+                            <div class="form-group d-flex">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold text-sm-left text-md-right text-lg-right text-xl-right"><span translate>FileUpload.FileStatus</span> : </label>
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 bold labletxt"  ng-if="file" ng-class="{'text-primary':fileStatus == 'File selected', 'text-success': fileStatus == 'Uploaded','text-warning':fileStatus == 'Upload in progress', 'text-danger':fileStatus != 'File selected'&& fileStatus != 'Uploaded' && fileStatus != 'Upload in progress'&&fileStatus!='','text-default':fileStatus =='File selected'&& fileStatus != 'Uploaded' && fileStatus != 'Upload in progress' && fileStatus==''}">
+                                    <span ng-if="fileStatus">{{'FileUpload.' + fileStatus | removeSpace | translate}}</span>
+                                    <span ng-if="!fileStatus">*****</span>
+
+
+                                    <span ng-if="fileStatus == 'Upload in progress'"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span ng-if="fileStatus == 'Uploaded'"><i class="fa fa-check-circle"></i></span>
+                                    <span ng-if="fileStatus != 'File selected'&& fileStatus != 'Uploaded' && fileStatus != 'Upload in progress'&& fileStatus!=''"><i
+                                            class="fa fa-times" aria-hidden="true"></i></span>
+
+                                </label>
+
+                                <label class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt"  ng-if="!file">******</label>
+                            </div>
+
+
+                            <div class="form-group d-flex" ng-show="uploaded">
+                                <label class="control-label col-lg-3 col-md-4 col-sm-4 col-xs-6 bold text-sm-left text-md-right text-lg-right text-xl-right">{{"FileUpload.Progress" | translate}} : </label>
+                                <div class="control-label col-lg-9 col-md-8 col-sm-8 col-xs-6 labletxt">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped active" ng-class="{'progress-bar-warning':progress<90,'progress-bar-success':progress>90}" role="progressbar" ng-style="{width: progress+'%'}">
+                                            {{progress+'%'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="clearBoth"></div>
+                </div>
+               </div>
+            
+            <!-- </div> -->
+        </div>
+
+   
+    </div>
+
+
+    <!-- <div style=" font-size: 14px;"  ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="autoAdjustAlert bold animated bounce" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        {{alert.msg}}
+    </div>
+
+    <div class="progress" ng-show="uploaded">
+        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+             ng-style="{width: progress+'%'}">
+            {{progress+'%'}}
+        </div>
+    </div>-->
+
+    <br /><br /><br />
+
+
+    <div class="col pr-0 pl-0 margin0" ng-show="showUploadedfileDetails">
+
+
+        <div class="portlet-title cursorPointer accordion" id="collapseuploaded">
+            <div class="row" ng-init="settingCollapsed = false" ng-click="settingCollapsed = !settingCollapsed" data-toggle="collapse" data-target="#collapseuploaddetails" aria-expanded="true" aria-controls="collapseuploaddetails">
+
+                <div class="col-md-9">
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                    <span class="caption">{{"FileUpload.Uploadedfiledetails" | translate}}</span>
+                </div>
+                <div class="col-md-3">
+                    <i class="bold fa fa-chevron-circle-right float-right iconChevron" ng-class="{'fa-chevron-circle-down': !settingCollapsed, 'fa-chevron-circle-right': settingCollapsed}"></i>
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!--<div class="portlet-title cursorPointer fa-fs14" style="width:100%;margin-bottom:0;border:1px solid #ccc;" ng-init="settingCollapsed = false" ng-click="settingCollapsed = !settingCollapsed">
+
+            <div class="caption caption-md ProfileHeaderStyles">
+                <i class="fa fa-file" aria-hidden="true"></i>
+                <span class="caption-subject bold uppercase">Uploaded file details</span>
+
+            </div>
+
+            <div class="pull-right">
+                &nbsp;&nbsp;&nbsp;<i style="padding: 2px 0;font-size: 20px;" class="pull-right bold fa fa-chevron-circle-right" ng-class="{'fa-chevron-circle-down': !settingCollapsed, 'fa-chevron-circle-right': settingCollapsed}"></i>
+            </div>
+        </div>-->
+        <!-- collapse="settingCollapsed" -->
+        <div class="portlet-body collapse show"  id="collapseuploaddetails" data-parent="#collapseuploaded">
+            <div class="portlet-inner-box pt-0" style="overflow-x: auto !important;" >
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th translate>FileUpload.SNo</th>
+                                    <th translate>FileUpload.InstructionID</th>
+                                    <th translate>FileUpload.FileName</th>
+                                    <th translate>FileUpload.PartyServiceAssociationCode</th>
+                                    <th translate>FileUpload.FileSize</th>
+                                    <th translate>FileUpload.TimeTaken</th>
+                                    <th translate>FileUpload.TimeStamp</th>
+                                    <th translate>FileUpload.FileFormat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="uploadedFileDetail in cloneUploadedFileDetails">
+                                    <th>{{$index+1}}</th>
+                                    <td class="bold instnIDalighn" data-ng-click="clickRefId(uploadedFileDetail.InstructionID)">
+                                        {{uploadedFileDetail.InstructionID}}</td>
+                                    <td>{{uploadedFileDetail.FileName}}</td>
+                                    <td>{{uploadedFileDetail.PsaCode}}</td>
+                                    <td>
+                                        {{uploadedFileDetail.FileSize }}
+                                        <!-- <span ng-switch="file.size > 1024*1024" class="fileSize">
+                                        <span ng-switch-when="true"> {{uploadedFileDetail.FileSize | number:2}} MB</span>
+                                        <span ng-switch-default> {{uploadedFileDetail.FileSize | number:2}} kB</span>
+                                        </span> -->
+                                    </td>
+
+                                    <td>{{uploadedFileDetail.TimeTaken}}</td>
+                                    <!-- <td>{{uploadedFileDetail.UploadTime | date:"dd-mm-yyyy | hh:mm:ss'"}}</td>-->
+                                    <td>{{uploadedFileDetail.UploadTime}}</td>
+                                    <td>{{uploadedFileDetail.FileType}}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div style="clear:both"></div>-->
+
+
+    </div>
+</div>

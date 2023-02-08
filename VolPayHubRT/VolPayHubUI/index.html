@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="VolpayApp" class="no-js" ng-controller="volpayAppController">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+
+    <title ng-if="!configData">VolPay</title>
+    <title ng-if="configData">{{configData.Application_Title}}</title>
+
+    <link rel="shortcut icon" ng-href="themes/{{configData.ThemeName}}/favicon.png" ng-if="configData.ThemeName">
+    <link rel="shortcut icon" href="themes/volante/favicon.png" ng-if="!configData.ThemeName">
+    <link rel="stylesheet" href="lib/angular-ui-switch/angular-ui-switch.min.css">
+
+    <!-- <link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="lib/bootstrap/bootstrap-v3.4.0.min.css"> -->
+    <link rel="stylesheet" href="lib/bootstrap-4.6.0/css/bootstrap.min.css"> 
+
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap-combined.min.css">
+    <link rel="stylesheet" href="lib/bootstrap-toggle-master/css/bootstrap-toggle.min.css">
+
+    <link rel="stylesheet" href="lib/bootstrap-datepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" href="lib/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link rel="stylesheet" href="lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+
+    <link rel="stylesheet" href="lib/uniform/css/uniform.default.css">
+
+    <!-- <link rel="stylesheet" href="lib/jquery-ui/jquery-ui.css"> -->
+    <!-- latest jquery UI css-->
+    <link rel="stylesheet" href="lib/jquery-ui-1.13.1/jquery-ui.css">
+    
+    <link rel="stylesheet" href="lib/d3charts/nv.d3.css">
+
+    <link rel="stylesheet" href="templates/volpay/css/VPlayoutcss.css">
+    <link rel="stylesheet" href="templates/volpay/css/custom.css">
+    <link rel="stylesheet" href="" id="themeColor">
+    <link rel="stylesheet" href="" id="footerCss">
+
+    <link rel="stylesheet" href="templates/volpay/css/animateClass.css">
+    <link rel="stylesheet" href="templates/volpay/css/printStyles.css">
+    <link rel="stylesheet" href="templates/volpay/css/dashboardStyles.css">
+
+    <link rel="stylesheet" href="lib/js-beautify/web/third-party/codemirror/lib/codemirror.css">
+
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lib/ionicons-2.0.1/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="lib/select2_angular/select2.min.css">
+    <!--<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">-->
+    <style>
+        #loaderDiv {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1100;
+            background-color: white;
+            opacity: .2;
+            
+        }
+        
+        .ajax-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -32px;
+            /* -1 * image width / 2 */
+            margin-top: -32px;
+            /* -1 * image height / 2 */
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div pre-loader-circle class="pre-loader-circle">
+        <!-- <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div> -->
+    </div>
+    <!-- For BNYM data loading issue implementaion -->
+    <div id="loaderDiv" loader>
+        <img src="themes/icons/bnym/Loading.svg" class="ajax-loader" />
+    </div>
+    <div ui-view></div>
+
+    <div ng-if="Log_Footer == 'visible'">
+        <div ng-include="footerPath" ng-if="((configData.HomePagefooter==true)&&((configData.Authorization=='Internal')||(configData.Authorization=='External')))||(searchParam=='All')" class="page-footer ManualFooter fadeUp" ng-controller="footerCtrl" style="display:block !important;height:auto;position:fixed;bottom:0;width:100%;z-index: 999;">
+        </div>
+    </div>
+
+    <div ng-controller="RefreshController" style="display:block !important;height:auto;position:fixed;bottom:0;width:100%;"> </div>
+
+    <!-- Script injection -->
+    <script src="lib/jquery/jquery-3.6.0.min.js"></script>
+    <!-- <script src="lib/jquery-ui/jquery-ui.min.js"></script> -->
+
+    <!-- Latest version -->
+    <!-- jQuery UI-->
+    <script src="lib/jquery-ui-1.13.1/jquery-ui.min.js"></script>
+
+
+    <!-- <script src="lib/bootstrap/bootstrap-v3.4.0.min.js"></script> -->
+    <script src="lib/bootstrap-4.6.0/popper.min.js"></script>
+    <script src="lib/bootstrap-4.6.0/js/bootstrap.min.js"></script>
+    
+    <script src="lib/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <script src="lib/bootstrap-datetimepicker/js/moment.js"></script>
+    <script src="lib/bootstrap-datetimepicker/js/locale/es.js" charset="UTF-8"></script>
+
+    <script src="lib/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="lib/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
+    <script src="lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+
+     <script src="lib/angular/angular-1.8.2.min.js"></script>
+    <!-- <script src="lib/angular/angular.min.js"></script> -->
+    <script src="lib/angular/angular-sanitize.min.js"></script>
+    <script src="lib/angular/angular-touch.min.js"></script>
+    <script src="lib/angular/angular-idle.min.js"></script>
+
+
+    <script src="lib/angular/angular-ui-router-min.js"></script>
+    <script src="lib/angular/ui-bootstrap-tpls.min.js"></script>
+    <script src="lib/angular/ocLazyLoad.min.js"></script>
+
+    <script src="lib/d3charts/d3.min.js"></script>
+    <script src="lib/d3charts/nv.d3.js"></script>
+    <script src="lib/d3charts/stream_layers.js"></script>
+
+    <script src="lib/iso-currency/dist/isoCurrency.js"></script>
+
+    <script src="lib/angulartranslate/angular-cookies.js"></script>
+    <script src="lib/angulartranslate/angular-translate.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-storage-cookie.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-loader-url.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-interpolation-messageformat.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-loader-partial.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-handler-log.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-storage-local.min.js"></script>
+    <script src="lib/angulartranslate/angular-translate-loader-static-files.min.js"></script>
+
+    <script src="lib/export-files/angular-file-saver.bundle.js"></script>
+
+    <script src="lib/CryptoJS_v3_1_2/pbkdf2.js" type="text/javascript"></script>
+    <script src="lib/CryptoJS_v3_1_2/sha256.js" type="text/javascript"></script>
+    <script src="lib/CryptoJS_v3_1_2/aes.js" type="text/javascript"></script>
+    <script src="lib/CryptoJS_v3_1_2/hmac-sha256.js" type="text/javascript"></script>
+
+    <script src="lib/js-beautify/web/third-party/codemirror/lib/codemirror.js"></script>
+    <script src="lib/js-beautify/web/third-party/codemirror/mode/javascript/javascript.js"></script>
+    <script src="lib/js-beautify/js/lib/beautify-css.js"></script>
+
+    <script src="lib/js-beautify/js/lib/beautify.js"></script>
+    <script src="lib/js-beautify/js/lib/beautify-css.js"></script>
+    <script src="lib/js-beautify/js/lib/beautify-html.js"></script>
+    <script src="lib/js-beautify/js/test/sanitytest.js"></script>
+
+    <script src="lib/volante-sankey.js"></script>
+    <script src="lib/underscore-min.js"></script>
+
+    <script src="lib/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="lib/ng-infinite-scroll/ng-infinite-scroll.js"></script>
+
+    <script src="lib/floatThead/jquery.floatThead.min.js"></script>
+
+    <script src="lib/select2_angular/select2.min.js"></script>
+    <script src="lib/xmltojson/xml2json.min.js"></script>
+
+    <script src="lib/moment/moment.min.js"></script>
+    <script src="lib/moment/moment-with-locales.min.js"></script>
+    <script src="lib/moment/moment-timezone-with-data.js"></script>
+    <script>
+        window.TextEncoder = window.TextDecoder = null;
+    </script>
+    <script src="lib/text-encoding-master/lib/encoding-indexes.js"></script>
+    <script src="lib/text-encoding-master/lib/encoding.js"></script>
+    <!-- <script src="lib/moment/moment-timezone-with-data.js"></script>  Need to check and remove -->
+
+    <script src="templates/volpay/VPapp.js"></script>
+    <script src="templates/volpay/services/VPservice.js"></script>
+    <script src="templates/volpay/services/dashboardService.js"></script>
+    <script src="templates/volpay/services/customDirectories.js"></script>
+    <script src="templates/volpay/js/VPstatejs.js"></script>
+    <script src="templates/volpay/js/VPlayoutjs.js"></script>
+    <script src="templates/footer/VPfooterCtrl.js"></script>
+    <script src="templates/volpay/services/jsPDF/jspdf.js"></script>
+    <script src="templates/volpay/services/jsPDF/jspdf.plugin.autotable.js"></script>
+</body>
+
+</html>

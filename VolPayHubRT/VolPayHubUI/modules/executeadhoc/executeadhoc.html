@@ -1,0 +1,64 @@
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-building-o"></i>
+                    <a href="javascript:void(0);" class="removeCursor" translate>Sidebar.MatchingModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span class="removeCursor" translate>Sidebar.ExecuteAdhoc</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title__container">
+                    <h2 translate>ExecuteAdhoc.PageTitle</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div class="row">
+        <form role="form" class="simple-form form-horizontal" name="webForm" ng-submit="onSubmit(workorderData); webformSubmit=false" style="width: 100%;">
+            <div class="form-group row">
+
+                <label for="workOrder" class="col-sm-3 bold text-sm-left text-md-right text-lg-right text-xl-right"><p class="ng-binding">{{'BankDataDts.WorkOrder' | translate}}<span ng-show="true" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></p></label>
+                <div class="col-sm-5">
+                    <select id="workOrder" name="workOrder" class="form-control" select2-model-append ng-model="workorderData['WorkOrder']" ng-required="true" tabindex="-1" aria-hidden="true">
+							<option value="">Select</option>
+						</select> 
+                </div>
+                <!-- <span class="help-inline col-sm-3 ng-hide" ng-show="webformSubmit && webForm[field['name']]['$error']['required']" style="display:block;margin:0;color:#EF1C1C !important">Required</span> -->
+            </div>
+            <div ng-if="metaInfo['field']">
+                <web-form input="metaInfo" output="workorderData" config="{editable: true, submit: webformSubmit}"></web-form>
+            </div>
+
+            <div class="col-xs-12" style="padding:15px;margin-top:15px;border-top:1px solid">
+                <button type="submit" class="btn btnStyle clr" ng-click="webformSubmit=true;" tooltip="Submit">
+						<span translate> BtnGroup.Submit</span>
+					</button>
+                <button class="btn btnStyle clr" tooltip="Cancel" type="button" ng-click="reset_data()">
+						<span translate>BtnGroup.Reset</span>
+					</button>
+            </div>
+        </form>
+    </div>
+</div>

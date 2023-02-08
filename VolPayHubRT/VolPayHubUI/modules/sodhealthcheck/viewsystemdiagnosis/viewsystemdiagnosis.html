@@ -1,0 +1,124 @@
+<!-- BEGIN PAGE HEADER-->
+<style>
+    .customPretag {
+        white-space: pre-wrap;
+        /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;
+        /* Mozilla, since 1999 */
+        white-space: -pre-wrap;
+        /* Opera 4-6 */
+        white-space: -o-pre-wrap;
+        /* Opera 7 */
+        word-wrap: break-word;
+        /* Internet Explorer 5.5+ */
+        max-height: 700px;
+        background-color: #fff;
+        overflow: auto;
+    }
+</style>
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="col-md-6">
+        <ul class="page-breadcrumb">
+            <!--<li>
+                <i class="fa fa-home"></i>
+                <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+                <i class="fa fa-angle-right"></i>
+            </li>-->
+            <li>
+                <i class="fa fa-laptop"></i>
+                <a href="javascript:void(0)" translate class="removeCursor"> Sidebar.SystemMonitoring</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate>Sidebar.SystemDiagnosis</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                View
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6 headerVals">
+        <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+    </div>
+</div>
+
+<div class="contentContainer">
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11">
+                <div class="title__container">
+                    <h2 translate>SystemDiagnosisDet.PageTitle</h2>
+                    <p translate>SystemDiagnosisDet.SubTitle</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="alert alert-warning" ng-show="!getDta">
+        <strong>
+            <h4 style="margin:0;text-align:center;" translate>BankDataDts.NoRecordsFound</h4>
+        </strong>
+    </div>
+
+    <div class="row">
+        <div style="position:relative;margin:0;overflow:visible;margin-top: 40px;">
+            <div class="col-md-12" ng-show="getDta">
+                <pre class="customPretag">{{getDta}}</pre>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <h4 translate>BankDataDts.PopupRecoverMsg</h4>
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData(TaskDetails);">Yes,
+                        delete it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+    <!--Alert Pop-up Window-->
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+
+
+            <div class="modal-content" style="border:2px solid #243250a6;">
+                <div class="modal-body">
+                    <h4 translate>BankDataDts.PopupMsg</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+</div>
+</div>
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

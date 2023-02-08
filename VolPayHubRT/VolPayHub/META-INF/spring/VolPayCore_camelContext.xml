@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<!--Importing queue configuration file-->
+	<import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+
+	<!--Mail configuration -->
+	<!-- <bean id="RouteBuilder_core" class="com.volantetech.volante.services.VolpayMailRoute"/> -->
+
+	<camelContext id="VOLPAY_CORE" xmlns="http://camel.apache.org/schema/spring"
+				  threadNamePattern="VOLPAY_CORE_THREADPOOL-#counter#" useBreadcrumb="false">
+
+		<!-- loading properties file  -->
+		<propertyPlaceholder id="properties" location="classpath:${env:VOLPAY_DOMAIN}_core_config.properties"/>
+		<!-- <routeBuilder ref="RouteBuilder_core"/> -->
+		<threadPool id="FileProcessingPool" threadName="FileProcessingThread" poolSize="4" maxPoolSize="8" maxQueueSize="-1"/>
+
+		<!-- Handling all kind of exception occurs during exchage failures-->
+		<onException>
+			<exception>javax.jms.JMSException</exception>
+			<exception>org.apache.camel.CamelException</exception>
+			<exception>org.apache.camel.RuntimeCamelException</exception>
+			<exception>java.lang.RuntimeException</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<bean ref="bean:camellogger" method="composeExchangeException"/>
+		</onException>
+
+		<!--mop configuration -->
+		<route id="MOPBulking">
+			<from uri="quartz2://schmain?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>FlowSchedulerMain</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>MOPBULKER</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!--waiting for response -->
+		<!--No longer used since it is now split up in VolPayResponseChoice route -->
+		<!--<route id="VolPayWaitingForResponseHandler" autoStartup="false">
+          <from uri="direct-vm:PAYMENT.WAITINGFORRESPONSE"/>
+          <removeHeaders pattern="JMS*"/>
+          <convertBodyTo type="byte[]"/>
+          <to uri="{{QUEUE_PREFIX}}:{{PAYMENTWAITINGFORRESPONSE}}"/>
+        </route>-->
+
+		<route id = "VolPayResponseChoice">
+			<from uri="direct-vm:PAYMENT.WAITINGFORRESPONSE"/>
+			<removeHeaders pattern="breadcrumbId"/>
+			<convertBodyTo type="byte[]"/>
+			<choice>
+				<when>
+					<xpath>/PaymentMetaData/InvocationPoint[.='OFAC']</xpath>
+					<to uri="{{QUEUE_PREFIX}}:{{OFACRESPONSEIN}}"/>
+				</when>
+				<when>
+					<xpath>/PaymentMetaData/InvocationPoint[.='FUNDSCONTROL']</xpath>
+					<to uri="{{QUEUE_PREFIX}}:{{FUNDSCONTROLRESPONSEIN}}"/>
+				</when>
+				<when>
+					<xpath>/PaymentMetaData/InvocationPoint[.='ACCOUNTPOSTING']</xpath>
+					<to uri="{{QUEUE_PREFIX}}:{{ACCOUNTPOSTINGRESPONSEIN}}"/>
+				</when>
+				<when>
+					<xpath>/PaymentMetaData/InvocationPoint[.='LIQUIDITYCONTROL']</xpath>
+					<to uri="{{QUEUE_PREFIX}}:{{LIQUIDITYCONTROLRESPONSEIN}}"/>
+				</when>
+				<otherwise>
+					<to uri="{{QUEUE_PREFIX}}:{{PAYMENTWAITINGFORRESPONSE}}"/>
+				</otherwise>
+			</choice>
+		</route>
+
+		<route id="VolPayWaitingForResponseHandler_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTWAITINGFORRESPONSE}}?concurrentConsumers=8&amp;maxConcurrentConsumers=16&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<!--  <removeHeaders pattern="JMS*"/>-->
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="VolPayWaitingForOFACResponseHandler_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{OFACRESPONSEIN}}?concurrentConsumers=1&amp;maxConcurrentConsumers=16&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<!--  <removeHeaders pattern="JMS*"/>-->
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="VolPayWaitingForFUNDSCONTROLResponseHandler_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{FUNDSCONTROLRESPONSEIN}}?concurrentConsumers=1&amp;maxConcurrentConsumers=16&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<!--<removeHeaders pattern="JMS*"/>-->
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="VolPayWaitingForACCOUNTPOSTINGResponseHandler_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{ACCOUNTPOSTINGRESPONSEIN}}?concurrentConsumers=1&amp;maxConcurrentConsumers=16&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<!-- <removeHeaders pattern="JMS*"/>-->
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+
+		<route id="VolPayWaitingForLIQUIDITYCONTROLResponseHandler_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{LIQUIDITYCONTROLRESPONSEIN}}?concurrentConsumers=1&amp;maxConcurrentConsumers=16&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<!-- <removeHeaders pattern="JMS*"/>-->
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<!--repaired payment -->
+
+
+		<route id="VolPayRepairedPaymentHandler_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTREPAIRED}}?concurrentConsumers=2&amp;maxConcurrentConsumers=16&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+
+		<!--To be Processed -->
+		<route id="PaymentProcessing_paymentlIST">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSED"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}"/>
+		</route>
+		<route id="FileProcessing_ToBeProcessed0" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSED0"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<threads executorServiceRef="FileProcessingPool">
+				<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED0}}"/>
+			</threads>
+		</route>
+		<route id="FileProcessing_ToBeProcessed1" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSED1"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<threads executorServiceRef="FileProcessingPool">
+				<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED1}}"/>
+			</threads>
+		</route>
+		<route id="FileProcessing_ToBeProcessed2" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSED2"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<threads executorServiceRef="FileProcessingPool">
+				<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED2}}"/>
+			</threads>
+		</route>
+		<route id="FileProcessing_ToBeProcessed3" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSED3"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<threads executorServiceRef="FileProcessingPool">
+				<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED3}}"/>
+			</threads>
+		</route>
+
+		<route id="PaymentProcessing_paymentlISTNOHEADER">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSEDNOHEADER"/>
+			<removeHeaders pattern="*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}"/>
+		</route>
+
+		<route id="PaymentProcessing_ToBeProcessed_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}?concurrentConsumers=8&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<!-- <removeHeaders pattern="JMS*"/>-->
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor?newPayment=true"/>
+		</route>
+
+		<route id="PaymentProcessing_ToBeProcessed_queue0" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED0}}?maxConcurrentConsumers=10&amp;transacted=true"/>
+			<!-- <removeHeaders pattern="JMS*"/>-->
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor?newPayment=true"/>
+		</route>
+		<route id="PaymentProcessing_ToBeProcessed_queue1" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED1}}?maxConcurrentConsumers=10&amp;transacted=true"/>
+			<!--<removeHeaders pattern="JMS*"/>-->
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor?newPayment=true"/>
+		</route>
+		<route id="PaymentProcessing_ToBeProcessed_queue2" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED2}}?maxConcurrentConsumers=10&amp;transacted=true"/>
+			<!-- <removeHeaders pattern="JMS*"/>-->
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor?newPayment=true"/>
+		</route>
+		<route id="PaymentProcessing_ToBeProcessed_queue3" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED3}}?maxConcurrentConsumers=10&amp;transacted=true"/>
+			<!-- <removeHeaders pattern="JMS*"/>-->
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor?newPayment=true"/>
+		</route>
+
+		<route id="AttachedMessage_ToBeProcessed_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{ATMSGTOBEPROCESSED}}?concurrentConsumers=8&amp;maxConcurrentConsumers=64&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="Confirmation_ToBeProcessed_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{CONFTOBEPROCESSED}}?concurrentConsumers=8&amp;maxConcurrentConsumers=64&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+
+		<route id="PaymentRestart" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.RESTART"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTRESTART}}"/>
+		</route>
+
+		<route id="PaymentRestart_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTRESTART}}?concurrentConsumers=8&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<!--<removeHeaders pattern="JMS*"/>-->
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<!--NOTIFICATION
+
+        <route id="Notigate" autoStartup="false">
+          <from uri="direct-vm:NOTIGATEQUEUEIN"/>
+          <removeHeaders pattern="JMS*"/>
+          <convertBodyTo type="byte[]"/>
+          <to uri="{{QUEUE_PREFIX}}:{{NOTIGATE}}"/>
+        </route>  -->
+
+		<!--BULK HANDLER -->
+
+		<!--<route id="BulkRestart" autoStartup="false">
+          <from uri="direct-vm:BULK.RESTART"/>
+          <removeHeaders pattern="JMS*"/>
+          <convertBodyTo type="byte[]"/>
+          <to uri="{{QUEUE_PREFIX}}:{{BULKRESTART}}"/>
+        </route>
+
+        <route id="BulkRestart_queue" autoStartup="false">
+          <from uri="{{QUEUE_PREFIX}}:{{BULKRESTART}}?concurrentConsumers=8&amp;maxConcurrentConsumers=64&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+          <removeHeaders pattern="JMS*"/>
+          <removeHeaders pattern="Camel*"/>
+          <removeHeaders pattern="file*"/>
+          <removeHeaders pattern="camel*"/>
+          <convertBodyTo type="byte[]"/>
+          <to uri="volante:VolPayPaymentProcessor"/>
+        </route>-->
+
+		<route id="PaymentToBeCompleted0" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBECOMPLETED0"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED0}}"/>
+		</route>
+		<route id="PaymentToBeCompleted1" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBECOMPLETED1"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED1}}"/>
+		</route>
+		<route id="PaymentToBeCompleted2" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBECOMPLETED2"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED2}}"/>
+		</route>
+		<route id="PaymentToBeCompleted3" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBECOMPLETED3"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED3}}"/>
+		</route>
+
+		<route id="PaymentToBeCompleted0_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED0}}?concurrentConsumers=8&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="PaymentToBeCompleted1_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED1}}?concurrentConsumers=8&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="PaymentToBeCompleted2_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED2}}?concurrentConsumers=8&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="PaymentToBeCompleted3_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBECOMPLETED3}}?concurrentConsumers=8&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="BulkHandler" autoStartup="false">
+			<from uri="direct-vm:bulk-handler"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{BULKHANDLER}}"/>
+		</route>
+
+		<route id="BulkHandler_Queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{BULKHANDLER}}?concurrentConsumers=4&amp;maxConcurrentConsumers=8&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:PerformBulkingWithRecovery"/>
+		</route>
+
+		<route id="GroupedBulkHandlerListToQueue" autoStartup="false">
+			<from uri="direct-vm:grouped-bulk-handler-list"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{GROUPEDBULKHANDLERLIST}}"/>
+		</route>
+
+		<route id="GroupedBulkHandlerListSplitter" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{GROUPEDBULKHANDLERLIST}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<split stopOnException="true">
+				<tokenize token="-"/>
+				<convertBodyTo type="byte[]"/>
+				<to uri="{{QUEUE_PREFIX}}:{{GROUPEDBULKHANDLER}}"/>
+			</split>
+		</route>
+
+		<route id="GroupedBulkHandler_FromQueue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{GROUPEDBULKHANDLER}}?concurrentConsumers=4&amp;maxConcurrentConsumers=32&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:HandleGroupedPmntsForBulking"/>
+		</route>
+
+
+		<!--start of process config -->
+
+		<!--<route id="StartOfProcess" startupOrder="1">
+          <from uri="timer://StartPro?fixedRate=true&amp;period=1000000&amp;repeatCount=1&amp;delay=1000"/>
+           <onCompletion>
+            <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+              </onCompletion>
+              <process ref="schedulerProcessor"></process>
+          <removeHeaders pattern="JMS*"/>
+          <convertBodyTo type="byte[]"/>
+          <setBody>
+            <simple>ignore</simple>
+          </setBody>
+          <to uri="volante:VolantePaymentEngineStartOfProcess"/>
+        </route>-->
+
+		<!-- start of day in single instance -->
+		<route id="SingleInstanceStartOfDayProcess" startupOrder="2">
+			<from uri="quartz2://start?cron=0+0+00+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setHeader headerName="invocationFrequency">
+				<constant>1440</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>STARTOFDAY</constant>
+			</setHeader>
+			<setBody>
+				<simple>VolantePaymentEngineStartOfDayProcess</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!-- start of day in all instance of hub -->
+		<route id="StartOfDayProcess" startupOrder="6">
+			<from uri="quartz2://startinAll?cron=0+0+00+*+*+?&amp;trigger.timeZone=UTC"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>StartOfDayProcess</simple>
+			</setBody>
+			<to uri="volante:VolPayPaymentEngineStartOfDayInAllHub"/>
+		</route>
+
+		<route id="dewarehouse" startupOrder="3">
+			<from uri="quartz2://dewarehouse?cron=0+0/5+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<setHeader headerName="invocationFrequency">
+				<constant>5</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>DEWAREHOUSING</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>VolantePaymentEngineWarehouse</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+		<!--cache reload -->
+
+		<route id="ReloadCacheFromVM">
+			<from uri="direct-vm:cachereloadvm"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{TOPIC_PREFIX}}:{{VPECACHERELOAD}}"/>
+		</route>
+
+		<route id="ReloadCache">
+			<from uri="{{TOPIC_PREFIX}}:{{VPECACHERELOAD}}?concurrentConsumers=1"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:RefreshCacheData"/>
+		</route>
+
+		<route id="ReloadCamelRoute">
+			<from uri="{{TOPIC_PREFIX}}:{{CAMELCACHERELOAD}}?concurrentConsumers=1"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:ReloadInitatorService"/>
+		</route>
+
+		<!-- Mail configurations For file output
+
+        <route id="Mail_File_Queue" autoStartup="false">
+          <from uri="{{QUEUE_PREFIX}}:{{MAIL_QUEUE}}?concurrentConsumers=1&amp;transacted=true"/>
+          <removeHeaders pattern="JMS*"/>
+          <convertBodyTo type="byte[]"/>
+          <choice>
+            <when>
+              <simple>${properties:MAIL_PORT} == 'FILE'</simple>
+              <to uri="{{MAIL_FOLDER}}?fileName=${date:now:yyMMddHHmmssSSS}_${header.subject}.html"/>
+            </when>
+            <when>
+              <simple>${properties:MAIL_PORT} == 'SMTP'</simple>
+              <to uri="seda:MAIL_PORT_QUEUE"/>
+            </when>
+          </choice>
+        </route> -->
+
+		<!-- Reload routes on start of day-->
+		<route id="ReloadCamelRoutes">
+			<from uri="direct-vm:IntializeCamelRoute"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{TOPIC_PREFIX}}:{{CAMELCACHERELOAD}}?concurrentConsumers=1"/>
+		</route>
+
+		<!-- RFP start of the day process-->
+		<!--		<route id="RFPStartOfDayProcess" startupOrder="4">
+			<from uri="quartz2://RFPstart?cron=0+0+08+*+*+?&amp;trigger.timeZone=UTC"/>
+			
+			<removeHeaders pattern="JMS*"/>
+		
+			<setHeader headerName="invocationFrequency">
+				<constant>1440</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>RFP_EXPIRY</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>VolanteRFPStartOfDayProcess</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>-->
+
+		<!-- AttachedMessage start of the day process-->
+
+		<route id="AttchMsgStartOfDayProcess" startupOrder="5">
+			<from uri="quartz2://AttchMsgstart?cron=0+0+08+*+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<!--configure sleep for CONCURRENCYMGR table for a particular time period-->
+			<setHeader headerName="invocationFrequency">
+				<constant>1440</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>ATTCHMSG_EXPIRY</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>VolanteAttchMsgStartOfDayProcess</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<route id="VolPayHubRouteRegistryManager">
+			<from uri="quartz2://routeHealthCheck?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+			<!--  <onCompletion>
+              <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+                </onCompletion>
+                <process ref="schedulerProcessor"></process> -->
+			<bean ref="bean:transportMonitor" method="publishStatusAndUpdatedTime"/>
+		</route>
+		<!-- RouteRegistry Health Check-->
+		<route id="RouteRegistryHealthCheck">
+			<from uri="quartz2://RouteReg?cron=0+0/30+*+1/1+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<!--configure sleep for CONCURRENCYMGR table for a particular time period-->
+			<setHeader headerName="invocationFrequency">
+				<constant>30</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>ROUTEREGISTRY_HEALTHCHECK</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>RouteRegistryHealthCheck</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!-- BDP populator routes -->
+		<route id="BDPPopulator_FullRefresh">
+			<from uri="{{BDP_FULLREFRESH}}"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setHeader headerName="fullRefresh">
+				<constant>true</constant>
+			</setHeader>
+			<to uri="volante:BDPPopulator"/>
+		</route>
+
+		<route id="BDPPopulator_DeltaInsert">
+			<from uri="{{BDP_DELTAINSERT}}"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setHeader headerName="fullRefresh">
+				<constant>false</constant>
+			</setHeader>
+			<to uri="volante:BDPPopulator"/>
+		</route>
+
+		<!-- Membership Upload routes -->
+		<!-- 	<route id="Membership_FullUpload">
+                <from uri="{{MEMBERSHIP_FULLUPLOAD}}?readLock=idempotent&amp;idempotentKey=${file:absolute.path}&amp;idempotentRepository=#JdbcMessageIdRepository&amp;readLockRemoveOnCommit=true"/>
+                <removeHeaders pattern="JMS*"/>
+                <convertBodyTo type="byte[]"/>
+                <setHeader headerName="isFullUpload">
+                    <constant>true</constant>
+                </setHeader>
+                <to uri="volante:VPH_PersistMembershipUtilityFlow"/>
+            </route>
+
+            <route id="Membership_DeltaUpload">
+                <from uri="{{MEMBERSHIP_DELTAUPLOAD}}?readLock=idempotent&amp;idempotentKey=${file:absolute.path}&amp;idempotentRepository=#JdbcMessageIdRepository&amp;readLockRemoveOnCommit=true"/>
+                <removeHeaders pattern="JMS*"/>
+                <convertBodyTo type="byte[]"/>
+                <setHeader headerName="isFullUpload">
+                    <constant>false</constant>
+                </setHeader>
+                <to uri="volante:VPH_PersistMembershipUtilityFlow"/>
+            </route> -->
+
+		<route id="CleanIdempotentRegistry">
+			<from uri="quartz2://CleanIdempotentRegistry?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>IdempotentSchedularFlow</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>IdempotentSchedular</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		
+
+		<route id="BatchProcessing_ToBeProcessed" autoStartup="false">
+			<from uri="direct-vm:BATCH.TOBEPROCESSED"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{BATCHTOBEPROCESSED}}"/>
+		</route>
+
+		<route id="BatchPaymentProcessing_ToBeProcessed" autoStartup="false">
+			<from uri="direct-vm:BATCHPAYMENT.TOBEPROCESSED"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<process ref="VolanteInternalDecryptProcessorBean" />
+			<to uri="{{QUEUE_PREFIX}}:{{BATCHPAYMENTTOBEPROCESSED}}"/>
+		</route>
+
+		<route id="BatchPaymentProcessing_ToBeProcessed_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{BATCHPAYMENTTOBEPROCESSED}}?maxConcurrentConsumers=8&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<process ref="VolanteInternalDecryptProcessorBean" />
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+
+		<!-- <route id="BatchProcessing_ToBeProcessed_queue" autoStartup="false">
+	              <from uri="{{QUEUE_PREFIX}}:{{BATCHTOBEPROCESSED}}"/>
+	              <removeHeaders pattern="JMS*"/>
+	              <removeHeaders pattern="Camel*"/>
+	              <removeHeaders pattern="file*"/>
+	              <removeHeaders pattern="camel*"/>
+	              <convertBodyTo type="byte[]"/>
+		      <to uri="volante:VolPayBatchProcessor"/>
+		</route>  -->
+
+		<route id="ProcessingBatchBulking">
+			<from uri="quartz2://processingbatch?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ProcessingBatchBulkScheduler</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>ProcessingBatchBulkScheduler</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<route id="SingleInstanceDateChangeAndSequenceReset">
+			<from uri="quartz2://SingleInstanceDateChangeAndSequenceReset?cron=0+0/5+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>SingleInstanceDateChangeAndSequenceReset</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>5</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>SingleInstanceDateChangeAndSequenceReset</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!-- To Auto generate ROF for RFP-Expiry -->
+		<route id="ROFAutoGeneartionForRFPExpiry" autoStartup="false">
+			<from uri="quartz2://ROFAutoGeneartionForRFPExpiry?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<!-- <onCompletion>
+             <bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+               </onCompletion>
+               <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*"/>
+			<!--configure sleep for CONCURRENCYMGR table for a particular time period-->
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>ROF_RFP_EXPIRY</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>AutoGenerateROFForRFPFlow</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!-- To Auto generate RRFP for INbound RFP-Expiry -->
+		<route id="RRFPFAutoGeneartionForRFPExpiry" startupOrder="8" autoStartup="false">
+			<from uri="quartz2://RRFPAutoGeneartionForRFPExpiry?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>RRFP_RFP_EXPIRY</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>AutoGenerateRRFPorRFPFlow</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+
+		<!-- Handle Bulk Interface Reject case -->
+		<route id="InterfaceBulkReject" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.BULKREJECT"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTBULKREJECT}}"/>
+		</route>
+
+		<route id="InterfaceBulkReject_queue" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTBULKREJECT}}?concurrentConsumers=8&amp;maxConcurrentConsumers=64&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:HandleFailurePaymentsForBulkInterface"/>
+		</route>
+
+		<!-- Handle Interface Bulk Request -->
+		<route id="InterfaceFunctionalBulkinRequestProcessor">
+			<from uri="direct-vm:INTERFACEBULK.REQUEST"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{IBREQUEST}}"/>
+		</route>
+
+		<route id="InterfaceFunctionalBulkinRequestProcessor_queue">
+			<from uri="{{QUEUE_PREFIX}}:{{IBREQUEST}}?concurrentConsumers=2&amp;maxConcurrentConsumers=8&amp;maxMessagesPerTask=20&amp;transacted=true"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:InterfaceFunctionalBulkingRequestProcessor"/>
+		</route>
+
+		<!-- Reprocess Strucked Interface Bulking Payments -->
+		<!-- 		<route id="Payment_Reprocess">
+			<from uri="{{PAYMENT_REPROCESS}}"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:PaymentReprocessFlow"/>
+		</route> -->
+
+		<!-- Handle Interface Bulking Status/Scheduler Based Sweep -->
+		<route id="InterfaceSweepProcessor">
+			<from uri="direct-vm:INTERFACESWEEP.TOBEPROCESSED"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{INTERFACESWEEPTOBEPROCESSED}}"/>
+		</route>
+
+		<route id="InterfaceSweepProcessor_queue">
+			<from uri="{{QUEUE_PREFIX}}:{{INTERFACESWEEPTOBEPROCESSED}}?concurrentConsumers=2&amp;maxConcurrentConsumers=8&amp;maxMessagesPerTask=20"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:SweepPaymentsFromQueue"/>
+		</route>
+
+		<!-- Handle Payment Incidence from External sources such as Interface Bulking -->
+		<route id="PaymentIncidence">
+			<from uri="direct-vm:PAYMENT.INCIDENCE"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTINCIDENCE}}"/>
+		</route>
+
+		<route id="PaymentIncidence_queue">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTINCIDENCE}}?concurrentConsumers=2&amp;maxConcurrentConsumers=8&amp;maxMessagesPerTask=20"/>
+			<removeHeaders pattern="JMS*"/>
+			<removeHeaders pattern="Camel*"/>
+			<removeHeaders pattern="file*"/>
+			<removeHeaders pattern="camel*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="volante:VolPayPaymentProcessor"/>
+		</route>
+
+		<route id="UpdateMOPDateTask">
+			<from uri="quartz2://updatemopdatetask?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>UpdateMOPDateTask</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>UPDATEMOPDATETASK</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+	</camelContext>
+</beans>
+

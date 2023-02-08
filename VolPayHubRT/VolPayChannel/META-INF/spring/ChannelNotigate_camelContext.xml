@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+  
+    <!--importing queue configuration file -->
+    <import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+    
+    <camelContext id="VOLPAY_CHANNEL_NOTIGATE" xmlns="http://camel.apache.org/schema/spring"
+                  threadNamePattern="VOLPAY_INSTRUCTION_THREADPOOL-#counter#" useBreadcrumb="false">
+
+        <!-- loading properties file  -->
+        <propertyPlaceholder id="properties"
+                             location="classpath:${env:VOLPAY_DOMAIN}_fileprocessing_config.properties"/>
+
+        <!-- Handling all kind of exceptions occurs during exchage failures-->
+        <onException>
+		<exception>java.lang.Throwable</exception>
+            <exception>javax.jms.JMSException</exception>
+            <exception>org.apache.camel.CamelException</exception>
+            <exception>org.apache.camel.RuntimeCamelException</exception>
+            <exception>java.lang.RuntimeException</exception>
+		<retryWhile><method ref="retryRuleset"/></retryWhile>
+		<redeliveryPolicy retryAttemptedLogLevel="WARN"/>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <bean ref="bean:camellogger" method="composeExchangeException"/>
+        </onException>
+      <!--NOTIFICATION-->
+       <route id="Notigate" autoStartup="false">
+            <from uri="direct-vm:NOTIGATEQUEUEIN"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{NOTIGATE}}"/>
+        </route>
+
+        <!-- Mail configurations For file output-->
+        <route id="Mail" autoStartup="false">
+            <from uri="direct-vm:Volpay.EMAIL"/>
+            <removeHeaders pattern="JMS*"/>
+            <convertBodyTo type="byte[]"/>
+            <to uri="{{QUEUE_PREFIX}}:{{MAIL_QUEUE}}"/>
+        </route>
+		
+		<!--ACH NOTIFICATION FRM CHNL -->
+		<route id="CHNL_ACHNotigate" autoStartup="false">
+			<from uri="direct-vm:NOTIGATE.EVENT"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{NOTIGATE_EVENT}}"/>
+		</route>
+    </camelContext>
+</beans>

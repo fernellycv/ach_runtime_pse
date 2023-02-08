@@ -1,0 +1,770 @@
+<style>
+    .bootstrap-datetimepicker-widget {
+        display: block;
+        background: #9E9E9E;
+        color: #000
+    }
+    
+    .bootstrap-datetimepicker-widget:hover {
+        background: #9E9E9E;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days,
+    .datepicker-months,
+    .datepicker-years:hover {
+        background: #9E9E9E;
+    }
+    
+    #keywordSearchbtn:focus,
+    #keywordSearchbtn:active {
+        outline: none;
+    }
+    
+    #searchBox:focus,
+    #searchBox:active {
+        box-shadow: none;
+    }
+    
+    .select2-container {
+        width: 90% !important;
+        height: 1.75rem;
+    }
+    
+    #Filter .select2-container {
+        width: 100% !important;
+    }
+    
+    #Filter .select2-container .select2-selection--single {
+        height: 2.125rem;
+    }
+    
+    .nonbtndisable {
+        cursor: not-allowed !important;
+        filter: alpha(opacity=65);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        opacity: .65;
+        pointer-events: none;
+    }
+
+    .cardAlighn{
+        margin-left: 1rem;
+        margin-top: 0.625rem;
+        /* margin-bottom: 1.25rem; */
+        
+    }
+
+   .column {
+      float: left;
+      width: 25%;
+      padding: 0 0.625rem;
+      }
+    @media screen and (max-width: 768px) {
+      .column {
+       width: 100%;
+       display: block;
+       margin-bottom: 1.25rem;
+      }
+     }
+
+     .countbarAlighn{
+        padding: 0.313rem;
+     }
+
+     .width100{
+        width: 100%;
+     }
+
+     .clearBoth{
+        clear:both
+     }
+
+     .BtnAlighn{
+        float:right;
+        box-sizing: border-box;
+     }
+
+     .BtnList{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-right:0rem;
+        margin-left:0.313rem
+     }
+
+     .BtnTable{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-left:0rem
+     }
+
+     .Btndownload{
+        float:right; 
+        margin-right:0.313rem;
+     }
+
+     
+
+     .BtndwnAlighn{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+     }
+
+     .dwnindex{
+        z-index: 10000; 
+        right: 1.313rem;
+     }
+
+     .excelIcon{
+        margin-left:2.5rem !important;
+     }
+
+     .filtericon{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left: 0.313rem;
+     }
+
+     .filterUl{
+        min-width: 37.5rem;
+        padding:0.625rem 0rem;
+     }
+
+     .filterAlighn{
+        padding: 0.5rem 0.875rem 0.125rem 0.875rem;
+        margin: 0;
+     }
+
+     .filterInput{
+        padding: 0.5rem 0rem 0.125rem 0.875rem;
+        margin: 0;
+        display: inline-block;
+        width: 50%;
+        float: left;
+     }
+
+     .cursorPointer{
+        cursor:pointer
+     }
+
+     .filtersearch{
+        padding: 0.5rem 0.875rem 0.125rem 0rem;
+        margin: 0;
+        display: inline-block;
+        width: 50%;
+     }
+
+     .filtercstdrp{
+        display:inline-block;
+        color:#000;
+        cursor: pointer;
+        position: relative;
+        box-sizing: border-box; 
+        width: 90%;
+     }
+
+     .filterkeyword{
+        color: #000;
+     }
+
+     .filterinputgrp{
+        cursor:pointer;
+        float: left;
+        width: 10%;
+        height: 100%;
+        padding: 0.563rem;
+     }
+
+     .filterBy{
+        padding: 0.5rem 0.625rem 0.125rem 0.625rem;
+     }
+
+     .BackgroundTransp{
+        background-color: transparent;
+     }
+
+     .filterwrapper{
+        padding: 0rem 0.313rem;
+        float: left;
+     }
+
+     .filterDisp{
+        display: inline-block;
+        font-size: 0.625rem;
+        width: auto;
+        text-align: left;
+        line-height: 0.625rem;
+        padding: 0.125rem;
+     }
+
+     .filtershowCstm{
+        padding: 0.625rem 20rem 0rem 0rem;
+     }
+
+     .filterdate{
+        padding: 0rem 0rem 0rem 1.25rem; 
+        width: 46%; 
+        float: left;
+     }
+
+     .filterCalander{
+        border: 0.063rem solid #eee;
+        height: 35px;
+     }
+
+     .filterTo{
+        border:none; 
+        background-color:transparent; 
+        width: 6%; 
+        float: left; 
+        padding: 0.625rem;
+     }
+
+     .width46{
+        width: 46%
+     }
+
+     .filtertimes{
+        margin-right: 0.625rem;
+     }
+
+     .sortAlighn{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left: 0.625rem;
+     }
+
+     .sortUl{
+        min-width: 18.75rem;
+        padding:0.625rem 0rem;
+     }
+
+     .sortReset{
+        float: right; 
+        cursor: pointer; 
+        color: #9e9e9e; 
+        font-weight: bolder;
+     }
+
+     .sortDisp{
+        padding: 0rem 0.938rem;
+        margin:0;
+        width:100%;
+        float: left;
+        max-height: 18.75rem;
+        overflow: auto;
+     }
+
+     .sortBody{
+        color:#fff;
+        display: table;
+        width: 100%;
+        margin-bottom: 0.125rem;
+     }
+
+     .sortFields{
+        margin-bottom: 0.125rem;
+        display: table-row;
+        width: 100%;
+     }
+
+     .sortLabel{
+        display: table-cell;
+        background: #9e9e9e;
+        padding: 0.313rem 0.5rem;
+        border-right: 0.063rem solid #fff;
+        width: 90%;
+     }
+
+     .sorticonAlighn{
+        display: table-cell;
+        background: #9e9e9e;
+        padding: 0.375rem;
+        text-align: center;
+        vertical-align: middle;
+        width: 10%;
+     }
+
+     .sortMinus{
+        color:#2b3643 !important
+     }
+
+     .BtnRefresh{
+        float:right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left:0.625rem;
+     }
+
+     .modaldelpop{
+        top: 12.5rem;
+     }
+
+     .modalContent{
+        padding: 0rem !important; 
+        border: 0rem !important
+     }
+
+     .modalNorecords{
+        margin:0;
+        text-align:center;
+     }
+
+     .listviewAlighn{
+        position:relative;
+        margin:0;
+        overflow:visible;
+     }
+
+     .viewAlighnment{
+        max-height: 37.5rem; 
+        padding:0rem 0.625rem 0rem 0rem; 
+        overflow-x: auto !important; 
+        width: 100%;
+     }
+
+     .tableHeight{
+        height:2.375rem;
+     }
+
+     .facircleAlighn{
+        font-size: 1.25rem;
+        line-height:1.25rem
+     }
+
+     .cardHeader{
+        padding-bottom:0rem; 
+        padding-right: 1rem;
+     }
+
+     .listData{
+        min-height:10.625rem;
+        max-height:10.625rem;
+     }
+
+     .listLabel{
+        padding:0.313rem 0.813rem;
+        position: relative;
+     }
+
+     .listRulehead{
+        font-size: 1.188rem; 
+        word-break: break-all;
+     }
+
+     .listStatus{
+        margin:0;
+        padding:0.313rem;
+        text-align: center;
+        float:left;
+        width:15%;
+     }
+
+     .listDisp{
+        padding:0.313rem 0.938rem
+     }
+
+     .listlabelAlighn{
+        margin:0;
+        padding: 0rem 0.125rem 0rem 0rem;
+        word-wrap: break-word;
+        float: left;
+     }
+
+     .listField{
+        margin:0;
+        padding: 0rem 0rem 0rem 0.125rem;
+        word-wrap: break-word;
+        float: left;
+     }
+</style>
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb row" ng-controller="activeController">
+    <div class="col-md-6">
+        <ul class="page-breadcrumb">
+            <!--<li>
+	            <i class="fa fa-home"></i>
+	            <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+	            <i class="fa fa-angle-right"></i>
+	        </li>-->
+            <li>
+                <i class="fa fa-laptop"></i>
+                <a href="javascript:void(0)" translate class="removeCursor"> Sidebar.SystemMonitoring</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li translate>
+                Sidebar.ServiceRegistry
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-6 headerVals">
+        <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+    </div>
+</div>
+
+
+<div class="contentContainer mb-2">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+
+                    <h2 translate>ServiceRegistryDet.PageTitle</h2>
+                    <p translate>ServiceRegistryDet.SubTitle</p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- <div id="loaderContainer" httploader>
+	    <img src="themes/images/preloader.gif" class="httpLoader"/>
+	</div>-->
+
+
+    <div class="animated bounce autoAdjustAlert bold" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <!--<div class="row CountBar" style="margin:0px 0px 20px 0px;padding: 5px;box-sizing: border-box;background-color: #44b6ae;color: white;">
+    <div class="col-md-6 col-sm-8 col-xs-12 ng-binding" style="padding: 5px; font-size: 17px; padding-left: 25px;">
+        {{loadedCnt-1}}{{'BankDataDts.recordsshown' | translate}}
+    </div>-->
+    <div class="countbarAlighn">
+        <div class="row m-0">
+            <div class="countbar-title row m-0 width100">
+                <div class="col-md-4 col-sm-4 col-xs-4  ng-binding p-0">
+                    <div class="caption">
+                        <!--<span class="highlight">{{loadedCnt-1}} out of {{totalForCountbar}}</span>{{'BankDataDts.recordsshown' | translate}}-->
+
+                        <!--<span class="highlight">{{(totalForCountBar && restVal.length)? restVal.length +  ('BankDataDts.Outof' | translate ) +totalForCountBar : (restVal.length)?restVal.length:'' }} </span> <span ng-if="restVal.length>1" translate>BankDataDts.recordsshown</span>-->
+
+                        <span class="highlight">{{(restVal.length >= 0 && totalForCountBar >= 0) ? restVal.length +  ('BankDataDts.Outof' | translate ) + totalForCountBar : (restVal.length && !totalForCountBar) ? restVal.length : '' }}</span>&nbsp;{{(restVal.length >= 0 && totalForCountBar
+                        >= 0) || (restVal.length && !totalForCountBar) ?'BankDataDts.recordsshown' : (!restVal.length && !totalForCountBar) ? 'BankDataDts.FetchingData' : '0 out of 0' | translate}}
+
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-sm-8 col-xs-8">
+                    <div class="btn-group BtnAlighn">
+
+                        <button class="btn-trans BtnList" id="btn_1" ng-class="changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.ListView' | translate}}"><i class="fa fa-list fa-fs14"></i></button>
+                        <button class="btn-trans BtnTable" id="btn_2" ng-class="!changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.GridView' | translate}}"><i class="fa fa-table fa-fs14"></i></button>
+
+                    </div>
+                    <!--  <div class="btn-group" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left:5px;margin-right:5px;">
+			            <button class="btn-trans" ng-click="printFn()"><i class="fa fa-print fa-fs14"></i></button>
+			        </div>
+			        <div class="btn-group" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left:5px;">
+			            <button class="btn-trans"  ng-click="exportToExcel()"><i class="fa fa-file-excel-o fa-fs14"></i></button>
+			        </div> -->
+                    <div class="dwnBtn Btndownload" ng-if="configData.exportAsExcel.enable">
+                        <!-- <button style="border: 1px solid #fff;box-sizing: border-box;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" ng-click="setHeight($event)" aria-expanded="true" tooltip="{{'Export'}}"> <i class="fa fa-download" aria-hidden="true"></i></button> -->
+
+                        <button class="btn-trans BtndwnAlighn" type="button" data-toggle="{{(restVal.length)?'dropdown':''}}" data-toggle-second="tooltip" data-placement="top" data-original-title="{{(restVal.length)?'ToolTips.Export':'ToolTips.Norecordstoexport' | translate}}" ng-style="{'opacity':(restVal.length)?'1':'0.5'}"> <i class="fa fa-download" aria-hidden="true"></i></button>
+                        <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnindex">
+                            <li>
+                                <span><input type="radio" name="excelVal" value="Current" checked class="radiobtns">{{'BankDataDts.CurrentScreen' | translate}} </span>
+
+                                <span ng-if="configData.exportAsExcel.enable && !configData.exportAsExcel.disableAllFiltersMatching"><input type="radio" name="excelVal" value="All" class="radiobtns">{{'BankDataDts.AllMatchingFilter' | translate}}</span>
+                            </li>
+
+                            <li data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BankDataDts.Excel' | translate}}"  class="excelprint excelIcon" ng-click="exportAsExcel($event)"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                            </li>
+                            <li data-toggle="tooltip" data-placement="top" data-original-title="{{'BankDataDts.Print' | translate}}" class="excelprint" ng-click="printFn()"><i class="fa fa-print fa-fs14" aria-hidden="true"></i>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="Filter" class="dropdown customDropdown float-right">
+                        <button class="btn-trans filtericon" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Filter' | translate}}">
+						<i class="fa fa-filter fa-fs14"></i>
+					</button>
+
+                        <ul class="dropdown-menu dropdown-menu-default float-right xyz dropdown-menu-right filterUl">
+                            <form ng-submit="searchFilter(filterParams)" ng-init="parsed = filterParams.SearchSelect">
+                                <li id="Filter" class="dropdown-header filterAlighn">{{'BankDataDts.ApplyFilter' | translate}}:</li>
+                                <div id="Filter" class="row input-group parent filterInput">
+                                    <select id="SearchSelect" name="SearchSelect" class="form-control cursorPointer" style="width: 100%;" ng-model="filterParams.SearchSelect">
+									<option value="">Select</option>
+									<option ng-repeat="(key, value) in fields" value="{{key}}" ng-if="value.type == 'string'" translate>{{value.label}}</option>
+								</select>
+                                </div>
+                                <div id="Filter" class="row input-group filtersearch">
+                                    <span class="cstmDrop filtercstdrp">
+									<input name="keywordSearch"  type="text" class="form-control ng-pristine ng-untouched ng-valid filterkeyword" ng-model="filterParams.keywordSearch" placeholder="{{filterParams.SearchSelect ? 'Search '+ (filterParams.SearchSelect | camelCaseFormatter): 'BankDataDts.KeywordSearch' | translate}}" ng-required="showCustom || filterParams.keywordSearch || filterParams.Status.length ? false : true">
+								</span>
+                                    <span class="input-group-addon filterinputgrp" ng-click="searchFilter(filterParams)" ng-class="filterParams.keywordSearch ? '' : 'nonbtndisable'"><i class="fa fa-search"></i></span>
+                                </div>
+                                <div ng-repeat="y in fields" ng-if="status = (y.label === 'Status') ? y.value : ''">
+                                    <li id="Filter" class="dropdown-header">FILTER BY {{y.label | uppercase }}</li>
+                                    <div id="Filter" class="filterBy">
+                                        <button type="button" class="filterBystatus" ng-repeat="x in status" ng-click="setStatusvalue(x.displayvalue,filterParams)" id="{{x.displayvalue}}" ng-class="x.TotalCount == 0 ? 'nonbtndisable' : ''">
+										<div class="clearfix BackgroundTransp" ng-if="$index % 2 == 0"></div>
+										<div class="clearBoth" ng-if="$index % 2 == 0"></div>
+										<div class="filterwrapper">
+											<span class="fa-wrapper">
+											<i class="fa fa-circle" ng-style="{'color':(x.displayvalue | chooseStatus)}"></i></span>
+											<span class="filterDisp"> {{x.displayvalue  +' ('+x.TotalCount+') '}}</span>
+										</div>
+										<div class="clearBoth"></div>
+									</button>
+                                        <div class="clearBoth"></div>
+                                    </div>
+                                </div>
+                                <div class="clearBoth"></div>
+                                <li id="Filter" class="dropdown-header">{{'BankDataDts.FilterByDateservice' | translate}}</li>
+                                
+                                <div id="Filter" class="filterBy">
+                                    <button type="button" class="filterBydate" ng-repeat="x in filterBydate" ng-click="setEffectivedate(x,filterParams)" id="{{x.displayvalue|removeSpace}}">
+									<div class="clearfix BackgroundTransp" ng-if="$index % 2 == 0"></div>
+									<div class="clearBoth" ng-if="$index % 2 == 0"></div>
+									<div class="filterwrapper">
+										<span class="filterDisp"> {{x.displayvalue}}</span>
+										<i class="fa fa-calendar"></i>
+									</div>
+								</button>
+                                    <div class="clearBoth"></div>
+                                    <div id="customPicker" class="row fade-in-up filtershowCstm" ng-show="showCustom">
+
+                                        <div class="input-group-prepend date width100" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                            <div class="input-group col-md-12 filterdate">
+                                                <input type="text" class="form-control DatePicker width100" ng-model="filterParams.startDate" id="startDate" name="startDate"   placeholder="{{'BankDataDts.From' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" ng-required="showCustom">
+                                                <span class="input-group-text filterCalander" ng-click="focusInfn('startDate')"><span class="fa fa-calendar"></span></span>
+                                            </div>
+                                            <span class="input-group-addon filterTo">{{'BankDataDts.To' | translate}}</span>
+                                            <div class="input-group col-md-12 width46">
+                                                <input type="text" class="form-control DatePicker width100" ng-model="filterParams.endDate" id="endDate"  placeholder="{{'BankDataDts.To' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" ng-required="showCustom">
+                                                <span class="input-group-text filterCalander" ng-click="focusInfn('endDate')"><span class="fa fa-calendar"></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearBoth"></div>
+                                <div class="row input-group float-right justify-content-end filterAlighn">
+                                    <button type="Button" class="btn-trans btnStyle filtertimes" data-toggle-second="tooltip" data-placement="top"   data-original-title="{{'BtnGroup.Cancel' | translate}}"  ng-click="clearFilter()"><i class="fa fa-times"></i></button>
+                                    <button type="Submit" class="btn-trans btnStyle cursorPointer" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BtnGroup.Search'| translate}}"  ng-class="(filterParams.ExpiryTime.displayvalue == 'Custom' ? filterParams.startDate && filterParams.endDate && showCustom : showCustom)|| filterParams.keywordSearch || filterParams.Status.length ? 'cmmonBtnColors' : 'disabledBtnColor'">
+									<i class="fa fa-search"></i>
+								</button>
+                                </div>
+                            </form>
+                        </ul>
+                    </div>
+
+                    <div id="sortBy" ng-show="changeViewFlag" class="dropdown customDropdown float-right">
+                        <button class="btn-trans sortAlighn" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Sort' | translate}}" ng-click="setHeight($event)">
+						<i class="fa fa-sort-amount-desc fa-fs14"></i>
+					</button>
+
+                        <ul class="dropdown-menu dropdown-menu-default float-right dropdown-menu-right sortUl" >
+                            <form ng-submit="searchFilter(filterParams)">
+                                <li id="sortBy" class="dropdown-header">{{'BankDataDts.SortBy' | translate}}<i> ({{'BankDataDts.ClicktoSort' | translate}}) </i> <i class="sortReset" ng-click="clearSort('#sort')"><u>{{'BankDataDts.ResetAll' | translate}}</u></i></li>
+                                <div id="sort" class="dataGroups sortDisp">
+                                    <div ng-repeat="x in sortMenu" class="sortBody">
+                                        <div ng-if="x.label != 'Rule'" id="sort_{{$index}}" class="sortFields" >
+                                            <span class="sortLabel" translate>{{x.label}}</span>
+                                            <a tooltip-placement="top" ng-click="gotoSorting(x)" class="sorticonAlighn"><i id="{{x.FieldName}}_icon" class='fa fa-minus fa-sm sortMinus'></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ul>
+                    </div>
+
+                    <div class="btn-group BtnRefresh">
+                        <button class="btn-trans" ng-click="loadData()" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'ToolTips.Refresh' |translate}}"><i class="fa fa-refresh fa-fs14"></i></button>
+                    </div>
+
+                    <!--<div class="btn-group" ng-if="!changeViewFlag" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left:10px;">
+			            <button style="box-sizing: border-box;" ng-if="!changeViewFlag" class="btn-trans viewbtn ng-scope" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" tooltip="{{(permission.C)?'ToolTips.AddNew':'ToolTips.DontPermission' | translate}}" ng-click="(permission.C)?addFxRate():''"><i class="fa fa-plus-square fa-fs14"></i></button>
+			        </div>-->
+					
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!-- Delete popup Window Start-->
+        <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+            <div class="modal-dialog modal-md modaldelpop">
+                <div class="modal-content modalbdy animated tada">
+                    <div class="modal-header modalContent">
+                        <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                    </div>
+                    <div class="modal-body">
+                         <h1 translate>BankDataDts.Areyousure</h1>
+                        <h5 translate>BankDataDts.PopupRecoverMsg</h5>
+                    </div>
+                    <div class="modal-footer modalftr">
+                        <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                        <button tabindex="0" type="button" class="buton yess" ng-click="deleteData(serviceregval);" translate >BankDataDts.Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Delete popup Window End-->
+
+        <div class="alert alert-warning mt-2" ng-show="!restVal.length">
+            <strong><h5 class="modalNorecords" translate>BankDataDts.NoRecordsFound</h5></strong>
+        </div>
+
+        <div id="DummyExportContent" ng-show="false">
+            <table class="table table-bordered smallTable" id="sample_2">
+                <thead>
+                    <tr>
+                        <th ng-repeat="val in sortMenu">
+                            {{val.label}}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="serviceregval in restVal">
+                        <td ng-repeat="val in sortMenu" ng-if="serviceregval[val.FieldName]">{{serviceregval[val.FieldName]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+
+            <div class="listviewAlighn">
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="listView FixHead dataGroupsScroll viewAlighnment mt-2" ng-show="!changeViewFlag">
+                        <table class="table table-bordered smallTable floatThead stickyheader" id="sample_2" ng-if="restVal.length">
+                            <thead>
+                                <tr>
+                                    <th ng-repeat="val in sortMenu" ng-click="gotoSorting(val,$index,$event)" class="cursorPointer tableHeight" ng-if="val.visible" translate>
+                                        {{val.label}}
+                                        <span id="{{val.FieldName}}_Icon" class=""></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id={ { 'displayingWindow_'+$index}} class="displayWindow collapse show " ng-repeat="values in restVal" ng-class="{oddClas:($index%2)== 1}">
+                                    <td ng-repeat="val in sortMenu" ng-if="val.visible" class="tableHeight" ng-style="(val.label == 'Status')?{'text-align':'center'}:''">
+
+                                        <span> {{values[val.FieldName]}} </span>
+                                        <!-- <span ng-if="val.label === 'Status'" ng-style="{'color':(values['Status'] | chooseStatus)}"><i class="fa fa-circle facircleAlighn" data-toggle-second="tooltip" data-placement="bottom" title="{{values['Status']}}"></i></span> -->
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+               </div>
+                
+                <div ng-show="changeViewFlag" class="listView width100">
+
+                    <div class="row mr-0" id="accordion">
+
+                        <!--<div class="col-md-12" style="margin-top:10px;margin-bottom: 15px;">-->
+                        <!--<pre> {{restVal | json}} </pre>-->
+                        <div class="column" ng-repeat="serviceregval in restVal" ng-init="colIndexx = $index">
+
+
+                            <div class="clearfix BackgroundTransp" ng-if="$index % 4 == 0"> </div>
+                            <div class="clearBoth" ng-if="$index%4 == 0"></div>
+
+                            <!--<div ng-if="$first" class="panel col-md-3 paneltrans addToolTip ng-scope" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" title="{{(permission.C)?'':'You don&lsquo;t have permission'}}">
+		                        <div style="background: rgb(158, 158, 158); text-align: center; min-height: 140px; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; cursor: pointer; height: 190px;" ng-style="{'height':callStyle()}" ng-click="(permission.C)?addFxRate():''">
+		                            <div style="display: inline-block;font-size: 20px;color: #fff;">
+		                                <i class="fa fa-plus-square" style="font-size: 70px; line-height: 70px;"></i><br>
+		                                <span class="ng-binding">Add VolPay ID Configuration</span>
+		                            </div>
+		                        </div>
+		                    </div>-->
+							
+                            <div class="card cardAlighn paneltrans ml-1">
+                                <div class="card-header listViewPanelHeading cardHeader" id="listViewPanelHeading_{{$index}}">
+                                    <!--padding-right:20px;-->
+                                    <div class="row dataGroups listData" id="dataGroup_{{$index}}">
+
+                                        <div class="col-md-12 listLabel">
+                                            <div class="panel-wrapper-inside">
+                                                <div class="ruleHead float-left listRulehead" ng-style="{'color':( serviceregval['Status'] | chooseStatus)}">
+                                                    {{serviceregval['Name']}}
+                                                </div>
+
+                                                <!-- <div class="float-right" ng-repeat="val in sortMenu" ng-if="val.label == 'Status'">
+                                                    <div class="listStatus" title="{{serviceregval['Status']}}"  data-toggle-second="tooltip" data-placement="bottom" ng-style="{'color':( serviceregval['Status'] | chooseStatus)}">
+                                                        <i class="fa fa-circle facircleAlighn" ng-if="serviceregval['Status']"></i>
+                                                    </div>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+  
+                                        <div class="col-md-12 col-sm-12 col-xs-12 d-flex listDisp" ng-repeat="val in sortMenu" ng-if="val.visible  && val.label != 'Name'" >
+
+
+                                            <!--<div class="clearfix"></div>-->
+                                            <div class="bold col-md-4 listlabelAlighn" translate>
+                                                {{val.label}} :</div>
+                                            <div class="listViewValue col-md-8 mt-1 listField">{{serviceregval[val.FieldName]}}</div>
+                                        </div>
+                                   
+
+                                        <div class="clearBoth"></div>
+                                    </div>
+
+                                    <!--<div class="row">
+                            <div class="actionRow">
+                                <a ng-init="showEditWin = true" class="actionIcons separateicon" ng-style="(permission.U)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(permission.U)?viewData(serviceregval,false):''" tooltip="{{(permission.U)?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"><i class="fa fa-pencil-square-o Iclr1"></i></a><a class="actionIcons separateicon" data-toggle="modal" data-target="{{(permission.D)?'#delPopup':''}}" ng-style="(permission.D)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(permission.D)?takeDeldata(serviceregval,$index):''" tooltip="{{(permission.D)?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"><i class="fa fa-trash-o Iclr1"></i></a>
+                            </div>
+                            </div>-->
+
+                                    <div class="clearBoth"></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--</div>-->
+
+                        <div class="clearBoth"></div>
+                    </div>
+                    <div class="clearBoth"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
+    var isIE = /*@cc_on!@*/ false || !!document.documentMode;
+
+    setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+
+    if (isIE) {
+        var _placeholder;
+        $('input[name=keywordSearch]').mouseenter(function(e) {
+            _placeholder = $(this).attr('placeholder');
+            $(this).attr('placeholder', '')
+        }).mouseleave(function() {
+            $(this).attr('placeholder', _placeholder)
+        })
+    }
+</script>

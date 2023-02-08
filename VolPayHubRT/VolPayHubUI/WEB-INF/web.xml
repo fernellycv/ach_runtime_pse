@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  <!--<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+    <web-app>
+    -->
+  <display-name>Volante Payment Engine - UI</display-name>
+  <description>Volante Payment Engine - UI</description>
+  <!-- location of spring xml files -->
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>VolantePaymentEngineUI</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+<!--   <servlet>
+    <servlet-name>refresh.html</servlet-name>
+    <servlet-class>RefreshMock</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>refresh.html</servlet-name>
+    <url-pattern>/modules/paymentdashboard/refresh.html</url-pattern>
+  </servlet-mapping> -->
+  <servlet>
+    <servlet-name>config.json</servlet-name>
+    <servlet-class>com.volantetech.volante.services.ConfigInjector</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>config.json</servlet-name>
+    <url-pattern>/config/config.json</url-pattern>
+  </servlet-mapping>
+  <mime-mapping>
+        <extension>htm</extension>
+        <mime-type>text/html;charset=UTF-8</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>html</extension>
+        <mime-type>text/html;charset=UTF-8</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>properties</extension>
+        <mime-type>text/plain;charset=UTF-8</mime-type>
+    </mime-mapping>
+	<filter>
+		<filter-name>SetResponseHeader</filter-name>
+		<filter-class>com.volantetech.volante.services.ResponseHeaderSetter</filter-class>
+		<init-param>
+			 <param-name>Expires</param-name>
+			 <param-value>1</param-value>
+		 </init-param>
+		<init-param>
+			 <param-name>Cache-Control</param-name>
+			 <param-value>no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0</param-value>
+		 </init-param>
+		<init-param>
+			 <param-name>pragma</param-name>
+			 <param-value>no-cache</param-value>
+		 </init-param>
+                <init-param>
+ 			<param-name>X-XSS-Protection</param-name>
+			<param-value>1; mode=block</param-value>
+		 </init-param>
+ 		<init-param>
+ 			<param-name>Strict-Transport-Security</param-name>
+			<param-value>max-age=31536000; includeSubDomains</param-value>
+		 </init-param>
+		<init-param>
+			 <param-name>Content-Security-Policy</param-name>
+			 <param-value>script-src 'self' 'unsafe-inline';font-src 'self' data:</param-value>
+		 </init-param>
+		<init-param>
+			 <param-name>ignoreURLs</param-name>
+			 <param-value>eot,svg,ttf,woff,woff2</param-value>
+		 </init-param>
+         <init-param>
+			 <param-name>X-Content-Type-Options</param-name>
+			 <param-value>nosniff</param-value>
+		 </init-param>
+		 <init-param>
+			 <param-name>X-Frame-Options</param-name>
+			 <param-value>SAMEORIGIN</param-value>
+		 </init-param>		 
+	</filter>                       
+	<filter-mapping>
+		<filter-name>SetResponseHeader</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+</web-app>

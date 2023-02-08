@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<!--Importing queue configuration file-->
+	<import resource="${VOLPAY_DOMAIN}_beanconfig.xml" />
+
+	<!--Mail configuration -->
+	<!-- <bean id="RouteBuilder_core" class=" com.volantetech.volante.services.VolpayMailRoute"/> -->
+
+	<camelContext id="VOLPAY_REST" xmlns="http://camel.apache.org/schema/spring"
+		threadNamePattern="VOLPAY_REST_THREADPOOL-#counter#" useBreadcrumb="false">
+
+		<!-- loading properties file  -->
+		<propertyPlaceholder id="properties" location="classpath:${env:VOLPAY_DOMAIN}_rest_config.properties" />
+		<!-- <routeBuilder ref="RouteBuilder_core"/> -->
+
+		<onException>
+			<exception>java.lang.Throwable</exception>
+			<exception>javax.jms.JMSException</exception>
+			<exception>org.apache.camel.CamelException</exception>
+			<exception>org.apache.camel.RuntimeCamelException</exception>
+			<exception>java.lang.RuntimeException</exception>
+			<retryWhile>
+				<method ref="retryRuleset" />
+			</retryWhile>
+			<redeliveryPolicy retryAttemptedLogLevel="WARN" />
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<bean ref="bean:camellogger" method="composeExchangeException" />
+		</onException>
+
+		<route id="DeadLetterQueue">
+			<from uri="direct-vm:OnExceptionRetry" />
+			<removeHeaders pattern="JMS*" />
+			<!--<convertBodyTo type="byte[]"/> -->
+			<to uri="{{QUEUE_PREFIX}}:{{DEADLETTERQUEUE}}?timeToLive=10000" />
+		</route>
+
+		<route id="LogReload" startupOrder="1">
+			<from uri="timer://StartPro?fixedRate=true&amp;repeatCount=1" />
+			<!-- <onCompletion>
+				<bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+			</onCompletion> 
+			<process ref="schedulerProcessor"/> -->
+			<removeHeaders pattern="JMS*" />
+			<setBody>
+				<simple>ignore</simple>
+			</setBody>
+			<to uri="volante:RestReloadLoggingServiceFlow" />
+		</route>
+		<route id="ReloadCache">
+			<from uri="{{TOPIC_PREFIX}}:{{VPECACHERELOAD}}?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:RefreshCacheData" />
+		</route>
+		<!--repaired payment -->
+		<route id="VolPayRepairedPaymentHandler">
+			<from uri="direct-vm:PAYMENT.REPAIRED" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTREPAIRED}}" />
+		</route>
+
+		<route id="ProcessDuplicatedFile">
+			<from uri="direct-vm:FILE.ACQUIRED" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{FILEACQUIRED}}" />
+		</route>
+
+		<route id="Rejectile">
+			<from uri="direct-vm:FILE.REJECT" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{FILEREJECT}}" />
+		</route>
+
+		<route id="ProcessHoldFile">
+			<from uri="direct-vm:FILE.HOLD" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{FILEHOLD}}" />
+		</route>
+
+		<!--cache reload -->
+		<route id="TriggerCacheData">
+			<!-- TableName would be MOP, TASKDETAILS etc. -->
+			<from uri="direct-vm:TABLEName" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{TOPIC_PREFIX}}:{{VPECACHERELOAD}}" />
+		</route>
+
+		<route id="ReloadCamelRoutes">
+			<from uri="direct-vm:IntializeCamelRoute" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<delay>
+				<constant>2000</constant>
+			</delay>
+			<to uri="{{TOPIC_PREFIX}}:{{CAMELCACHERELOAD}}?concurrentConsumers=1" />
+		</route>
+
+		<route id="ReloadCamelRoute">
+			<from uri="{{TOPIC_PREFIX}}:{{CAMELCACHERELOAD}}?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:ReloadInitatorService" />
+		</route>
+
+		<!-- Mail configurations For file output
+		<route id="Mail">
+			<from uri="direct-vm:Volpay.EMAIL"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{MAIL_QUEUE}}"/>
+		</route>-->
+
+		<route id="FileProcessing_paymentlIST">
+			<from uri="direct-vm:PAYMENTLIST.TOBEPROCESSED" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED}}" />
+		</route>
+
+		<route id="FileProcessing_paymentlIST_queue">
+			<from uri="{{QUEUE_PREFIX}}:{{PAYMENTLISTTOBEPROCESSED}}?concurrentConsumers=2&amp;transacted=true" />
+			<removeHeaders pattern="JMS*" />
+			<split stopOnException="true">
+				<tokenize token="," />
+				<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}" />
+			</split>
+		</route>
+
+		<route id="FileProcessing_ToBeProcessed" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.TOBEPROCESSED" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTTOBEPROCESSED}}" />
+		</route>
+
+		<route id="PaymentRestart" autoStartup="false">
+			<from uri="direct-vm:PAYMENT.RESTART" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTRESTART}}" />
+		</route>
+
+
+		<!--NOTIFICATION 
+		<route id="Notigate" autoStartup="false">
+			<from uri="direct-vm:NOTIGATEQUEUEIN"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{NOTIGATE}}"/>
+		</route>-->
+
+		<route id="VolPayRestRouteRegistryManager">
+			<from uri="quartz2://start?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC" />
+			<!-- <onCompletion>
+				<bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+			</onCompletion> 
+			<process ref="schedulerProcessor"/> -->
+			<bean ref="bean:transportMonitor" method="publishStatusAndUpdatedTime" />
+		</route>
+		<route id="TotalApprovalCountForUser" autoStartup="false">
+			<from uri="quartz2://approvalcount?cron=0+0/05+*+1/1+*+?&amp;trigger.timeZone=UTC" />
+			<!-- <onCompletion>
+		<bean ref="bean:schedulerMonitor" method="publishCompletedSchedulerRoute"/>
+	      </onCompletion> 
+	      <process ref="schedulerProcessor"></process> -->
+			<removeHeaders pattern="JMS*" />
+			<!--configure sleep for CONCURRENCYMGR table for a particular time period-->
+			<setHeader headerName="invocationFrequency">
+				<constant>05</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>APPROVAL_COUNT</constant>
+			</setHeader>
+			<convertBodyTo type="byte[]" />
+			<setBody>
+				<simple>PersistApprovalCount</simple>
+			</setBody>
+			<to uri="volante:ScheduledFlowInvoker" />
+		</route>
+
+		<route id="FileRestart" autoStartup="false">
+			<from uri="direct-vm:FILE.RESTART" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{FILERESTART}}" />
+		</route>
+
+		<route id="ProcessDuplicatedBatch">
+			<from uri="direct-vm:BATCH.ACQUIRED" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{BATCHACQUIRED}}" />
+		</route>
+
+		<route id="RejectBatch">
+			<from uri="direct-vm:BATCH.REJECT" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{BATCHREJECT}}" />
+		</route>
+
+		<route id="BatchRestart" autoStartup="false">
+			<from uri="direct-vm:BATCH.RESTART" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{BATCHRESTART}}" />
+		</route>
+
+		<!--To unlock the repair  button action after sometime in case wrong action done by user 
+		<route id="RepairDataUnlock">
+			<from uri="quartz2://RepairDataUnlock?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ResetPaymentRepairDetails</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>REPAIR_DATA_UNLOCK</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>
+		<route id="EntityLockCheck">
+			<from uri="quartz2://EntityLockCheck?cron=0+0/1+0-23+*+*+?&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ResetEntityLock</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>ENTITY_LOCK_CHECK</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>-->
+
+		<route id="PaymentIncidence_Rest">
+			<from uri="direct-vm:PAYMENT.INCIDENCE" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{PAYMENTINCIDENCE}}" />
+		</route>
+
+		<route id="READINESS_CHECK">
+			<from uri="direct-vm:READINESS" />
+			<onException>
+				<exception>javax.jms.JMSException</exception>
+				<exception>org.apache.camel.CamelException</exception>
+				<exception>org.apache.camel.RuntimeCamelException</exception>
+				<exception>java.lang.RuntimeException</exception>
+				<handled>
+					<constant>false</constant>
+				</handled>
+			</onException>
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{READINESSQUEUE}}" />
+		</route>
+
+		<route id="READINESS_LOG" autoStartup="false">
+			<from uri="{{QUEUE_PREFIX}}:{{READINESSQUEUE}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="log:volante.runtime?level=TRACE&amp;showAll=true&amp;multiline=true" />
+		</route>
+
+
+		<route id="ChangeStatusOnInactive">
+			<from uri="quartz2://ChangeStatusOnInactive?cron=0+1+*+*+*+?" />
+			<to uri="volante:ChangeStatusOnInactive" />
+		</route>
+		<route id="activeOnTime">
+			<from uri="quartz2://activeOnTime?cron=0+0/1+*+*+*+?" />
+			<to uri="volante:activeOnTime" />
+		</route>
+
+		<route id="minuteOTPException">
+			<from uri="quartz2://minuteOTPException?cron=0+0/1+*+*+*+?" />
+			<to uri="volante:minuteOTPFlow" />
+		</route>
+
+		<route id="GenerateRETNForRJCT_To_Queue">
+			<from uri="direct-vm:GenerateRETNForRJCT.device" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{ACHGENRETNFORRJCT}}" />
+		</route>
+		<!-- Notigate-->
+
+		<route id="NotigateEvents">
+			<from uri="jms:queue:NOTIGATE.EVENT" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:NotificationProcessorFlow" />
+		</route>
+
+		<!-- AWS SES route Config -->
+
+		<route id="NotigateAWSSESEmailIntegration">
+			<from uri="direct-vm:NOTIGATE.AWSSES" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<!-- <toD uri="{{QUEUE_PREFIX}}:TESTTIMERESTRICTION"/> -->
+			<toD uri="aws-ses://${header.CamelAwsSesFrom}?accessKey=${header.CamelAwsSesAccessKey}&amp;secretKey=${header.CamelAwsSesSecretKey}&amp;subject=${header.CamelAwsSesSubject}&amp;region=${header.CamelAwsSesRegion}&amp;to=${header.CamelAwsSesTo}" />
+		</route>
+
+		<route id="AWSSESEmailNotification">
+			<from uri="direct-vm:AWS.START" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="aws-ses://${header.CamelAwsSesFrom}?accessKey=${header.CamelAwsSesAccessKey}&amp;secretKey=${header.CamelAwsSesSecretKey}&amp;subject=Creación de usuario en Volpay&amp;region=${header.CamelAwsSesRegion}&amp;to=${header.CamelAwsSesTo}" />
+		</route>
+
+		<route id="AWSOTPEmailNotification">
+			<from uri="direct-vm:AWSOTP.START" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="aws-ses://${header.CamelAwsSesFrom}?accessKey=${header.CamelAwsSesAccessKey}&amp;secretKey=${header.CamelAwsSesSecretKey}&amp;subject=OTP creación de contraseña Volpay&amp;region=${header.CamelAwsSesRegion}&amp;to=${header.CamelAwsSesTo}" />
+		</route>
+
+		<route id="AWSOTPAuthEmailNotification">
+			<from uri="direct-vm:AWSOTPAUTH.START" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="aws-ses://${header.CamelAwsSesFrom}?accessKey=${header.CamelAwsSesAccessKey}&amp;secretKey=${header.CamelAwsSesSecretKey}&amp;subject=OTP segundo factor de autenticación&amp;region=${header.CamelAwsSesRegion}&amp;to=${header.CamelAwsSesTo}" />
+		</route>
+
+		<route id="FORGOTAWSOTPEmailNotification">
+			<from uri="direct-vm:FORGOTAWSOTP.START" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="aws-ses://${header.CamelAwsSesFrom}?accessKey=${header.CamelAwsSesAccessKey}&amp;secretKey=${header.CamelAwsSesSecretKey}&amp;subject=OTP configuración de contraseña Volpay&amp;region=${header.CamelAwsSesRegion}&amp;to=${header.CamelAwsSesTo}" />
+		</route>
+
+		<route id="ChangeStatusForRegisterAccounts">
+			<from uri="quartz2://ChangeStatusForRegisterAccounts?cron=0+1+*+*+*+?" />
+			<to uri="volante:ChangeStatusForRegisterAccounts" />
+		</route>
+
+		<route id="ACHTRIGGEROUTPUT">
+			<from uri="direct-vm:SETTLEMENT.OUTPUT.GENERATION" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:{{ACH_SETTLEMENT_OUTPUT_GENERATION}}" />
+		</route>
+		<!--
+		<route id="ACH_Creation_Quartz">
+			<from uri="quartz2://ACH_Creation_Quartz?cron=0+0+0+?+*+SUN+*&amp;trigger.timeZone=UTC"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<setBody>
+				<simple>ACHCycleCreationFlow</simple>
+			</setBody>
+			<setHeader headerName="invocationFrequency">
+				<constant>1</constant>
+			</setHeader>
+			<setHeader headerName="identifier">
+				<constant>ACH_CYCLE_CREATION</constant>
+			</setHeader>
+			<to uri="volante:ScheduledFlowInvoker"/>
+		</route>	
+       -->
+		<route id="ACHPRETRIGGEROUTPUT">
+			<from uri="direct-vm:CycleOpeningMetaData.device" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:{{ACH_CYCLE_METADATA_FOR_OUTPUT_GENERATION}}" />
+		</route>
+		<route id="ACHPRETRIGGEROUTPUTFLOW">
+			<from uri="{{QUEUE_PREFIX}}:{{ACH_CYCLE_METADATA_FOR_OUTPUT_GENERATION}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:ACHPODInitAndTrigger" />
+		</route>
+
+		<route id="SANCTIONGENERATIONIMPL">
+			<from uri="direct-vm:SANCTION.GENERATION" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:{{SANCTION_GENERATION_IMPLEMENTATION}}" />
+		</route>
+		<route id="SANCTIONGENERATIONIMPLFLOW">
+			<from uri="{{QUEUE_PREFIX}}:{{SANCTION_GENERATION_IMPLEMENTATION}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:SanctionGenerationImpl" />
+		</route>
+
+		<route id="SETTLEMENTUPDATEIMPL">
+			<from uri="direct-vm:SETTLEMENT.UPDATE" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:{{SETTLEMENT_UPDATE_IMPLEMENTATION}}" />
+		</route>
+		<route id="SETTLEMENTUPDATEIMPLFLOW">
+			<from uri="{{QUEUE_PREFIX}}:{{SETTLEMENT_UPDATE_IMPLEMENTATION}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:UpdateSettlementCtrlDataImpl" />
+		</route>
+
+		<!--  <route id="ACH_Extension_Check">
+			<from uri="quartz2://ACH_Extension_Quartz?cron=0+0/1+0+?+*+*+*&amp;trigger.timeZone=COT"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<toD uri="volante:ACH_FromRouteToCheckEndExtensionTimeOneCycle"/>
+		</route> -->
+
+
+		<route id="ACH_INTERNATIONALIZATION_TOPIC">
+			<from uri="direct-vm:ReloadInternationalizationDef" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{TOPIC_PREFIX}}:{{ACH_INTERNATIONALIZATION}}?concurrentConsumers=1" />
+		</route>
+
+		<route id="ACH_INTERNATIONALIZATION_TOPIC_RELOAD">
+			<from uri="{{TOPIC_PREFIX}}:{{ACH_INTERNATIONALIZATION}}?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:ACHSetCacheInternationalizationDefinition" />
+		</route>
+
+		<!-- Bridge To Queues-->
+		<route id="SendToBULKLOAD.METADATA">
+			<from uri="direct-vm:SendToBULKLOAD.METADATA" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:BULKLOAD.METADATA.TRANSACTED" />
+		</route>
+
+		<route id="SendToADFLOAD.METADATA">
+			<from uri="direct-vm:SendToADFLOAD.METADATA" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:ADFLOAD.METADATA.TRANSACTED" />
+		</route>
+
+		<route id="RefundReportGenerationRequest">
+			<from uri="direct-vm:RefundReportGeneration" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:INPUT.REFUNDREPORT" />
+		</route>
+
+		<route id="RefundReportGenerationAsync">
+			<from uri="{{QUEUE_PREFIX}}:INPUT.REFUNDREPORT?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:RefundReportGenerationAsync" />
+		</route>
+		<!-- 
+
+		<route id="GenerateOutputNachamPaymentResetFileIdentifier">
+			<from uri="quartz2://start?cron=0+0+0+*+*+?&amp;trigger.timeZone=UTC"/>
+			<setBody>
+				<simple></simple>
+			</setBody>
+			<toD uri="volante:ACH_DropSequence"/>
+		</route> -->
+
+
+		<route id="ACH_RELOAD_TOPIC">
+			<from uri="direct-vm:ACHReloadDirectVM" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{TOPIC_PREFIX}}:{{ACH_RELOAD_TOPIC}}" />
+		</route>
+
+		<route id="ACH_RELOAD_TOPIC_FLOW">
+			<from uri="{{TOPIC_PREFIX}}:{{ACH_RELOAD_TOPIC}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:ACHReloadCacheFrmTopic" />
+		</route>
+
+		<route id="ACH_PUT_REQ_QUEUE">
+			<from uri="direct-vm:ACHPutReqDirectVM" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:{{ACH_PUT_REQ_QUEUE}}" />
+		</route>
+
+		<route id="ACH_PUT_REQ_QUEUE_FLOW">
+			<from uri="{{QUEUE_PREFIX}}:{{ACH_PUT_REQ_QUEUE}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:ACH_AuditLogPUTReq" />
+		</route>
+
+		<route id="ACH_PUT_RESP_QUEUE">
+			<from uri="direct-vm:ACHPutRespDirectVM" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:{{ACH_PUT_RESP_QUEUE}}" />
+		</route>
+
+		<route id="ACH_PUT_RESP_QUEUE_FLOW">
+			<from uri="{{QUEUE_PREFIX}}:{{ACH_PUT_RESP_QUEUE}}" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:ACH_AuditLogPUTResp" />
+		</route>
+
+		<route id="ACH_MAS_LOAD" autoStartup="false">
+			<from uri="file:ACH_MAS_LOAD" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:Read" />
+		</route>
+
+		<!--ACH NFT FILE Approver -->
+
+		<route id="ACHNFTFileApprove_To_Queue">
+			<from uri="direct-vm:ACHNFTFileApprove" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:{{ACHNFTFILEAPPROVE}}" />
+		</route>
+
+		<route id="ACHNFTFileApprove_From_Queue">
+			<from uri="{{QUEUE_PREFIX}}:{{ACHNFTFILEAPPROVE}}?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:ACH_NFT_FileApproverFlow" />
+		</route>
+
+		<!--ACH NFT CYCLE CLOSINF TIMER 0 0 * ? * *    every hour-->
+
+		<route id="ACHNFTCYCLECLOSINFTIMER">
+			<from uri="quartz2://ACHNFTCYCLECLOSINFTIMER?cron=0+0+*+?+*+*&amp;trigger.timeZone=UTC" />
+			<toD uri="volante:ACHNFT_CloseCycleFlow" />
+		</route>
+
+
+		<!-- route Config for Time Restriction-->
+		<route id="ACHSMTPTimeRestriction">
+			<from uri="direct-vm:SMTPTimeRestriction.device" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="{{QUEUE_PREFIX}}:SMTPTIMERESTRICTION" />
+		</route>
+
+
+		<!-- route Config for Time Restriction to Flow-->
+		<route id="ACHSMTPTimeRestrictionFLow">
+			<from uri="{{QUEUE_PREFIX}}:SMTPTIMERESTRICTION" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<toD uri="volante:SMTPTimeRestriction" />
+		</route>
+
+		<!-- PSE Process in closing cycle -->
+		<route id="PSESendTransactions">
+			<from uri="direct-vm:PSESendTransactions" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:INPUT.PSETRANSACTIONSSEND" />
+		</route>
+		<route id="PSESendTransactionsAsync">
+			<from uri="{{QUEUE_PREFIX}}:INPUT.PSETRANSACTIONSSEND?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:PseProcessFlowMaster" />
+		</route>
+		<route id="PSEApiServiceInformation">
+			<from uri="direct-vm:PSEApiServiceInformation" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:INPUT.PSEGETSERVICEINFORMATION" />
+		</route>
+		<route id="GenerateReportsPSE">
+			<from uri="direct-vm:GenerateReportsPSE" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:INPUT.PSEGENERATEREPORT" />
+		</route>
+		<route id="GenerateReportsPSEFlow">
+			<from uri="{{QUEUE_PREFIX}}:INPUT.PSEGENERATEREPORT?concurrentConsumers=1" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:CreateMsgVsNachaHIS" />
+		</route>
+		<route id="SendReportAsync">
+			<from uri="direct-vm:SendReportAsync" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="{{QUEUE_PREFIX}}:SendReportAsync" />
+		</route>
+		<route id="SendReportAsyncFrmQueue">
+			<from uri="{{QUEUE_PREFIX}}:SendReportAsync?concurrentConsumers=20&amp;transacted=true" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:PCDQueryExtractor" />
+		</route>
+		<route id="DeleteDownloadedACHReport">
+			<from uri="quartz2://DeleteDownloadedACHReport?cron=0+0+0+*+*+?&amp;trigger.timeZone=UTC" />
+			<removeHeaders pattern="JMS*" />
+			<convertBodyTo type="byte[]" />
+			<to uri="volante:ACHRprtDeleteDwnld" />
+		</route>
+		<!-- 
+<route id="GetFilesAdfOfAWS" startupOrder="15">
+			<from uri="quartz2://ACHGetADFFiles?cron=0+*/5+*+*+*+?&amp;trigger.timeZone=UTC"/>
+            <to uri="volante:ACHGetADFFiles" />
+        </route>
+		-->
+	</camelContext>
+</beans>

@@ -1,0 +1,49 @@
+<html lang="en">
+	<head>
+		<title>Logged out</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="lib/css/bootstrap.min.css">
+		
+		<script src="lib/js/jquery.min.js"></script>
+		<script src="lib/js/bootstrap.min.js"></script>
+
+		<link rel="stylesheet" href="errorpages.css">
+	</head>
+
+	<body>
+		<div class="maindiv">
+			<div class="jumbotron main" style="width: 100%;">
+				<p class="text-center" style="font-size:30px; padding:20px; display:inline-block; font-family: comic sans-serif;">Su usuario ha sido desconectado. Por favor haga <a id="cstmLoginUrl" style="cursor: pointer">clic aquí</a> para iniciar sesión.</p>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		$(document).ready(function(){
+			/*** Loading Configuration setting ***/
+			const ORIGIN = window.location.origin;
+			const CONFIG_JSON = {
+				"config": ORIGIN + "/VolPayRest/rest/v2/uiconfig/config.json"
+			}
+			var retrieveData = function () {
+				return $.ajax({
+					// url: '../config/config.json',
+					url: CONFIG_JSON.config,
+					async: false,
+					cache: false,
+					type: 'GET',
+					dataType: 'json'
+				}).responseJSON;
+			}
+			var configData = retrieveData();
+			if(configData && configData['customLoginURL']){
+				let dynamicURLPathName = new URL(configData['customLoginURL']);
+				let dynamicUrl = ORIGIN.concat(dynamicURLPathName.href.substring(dynamicURLPathName.origin.length));
+				$('#cstmLoginUrl').attr('href', dynamicUrl);
+			}
+		})
+	</script>
+
+</html>

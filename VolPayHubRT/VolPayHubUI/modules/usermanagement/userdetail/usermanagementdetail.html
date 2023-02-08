@@ -1,0 +1,861 @@
+<style>
+    .modifiedClass {
+        background-color: #ffffb8;
+    }
+    
+    td>pre {
+        background: transparent;
+        max-height: 125px;
+        overflow: auto
+    }
+    
+    table>tbody>tr>th {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+    
+    .formDataGroup {
+        margin: 5px 0;
+    }
+    
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .input-group-addon {
+        padding: 0px 5px;
+    }
+    
+    .glyphicon {
+        padding: 9px 10px;
+    }
+    
+    .addAdditionalFields {
+        /*color: #333;*/
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+    
+    .addBorder {
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+    
+    .close {
+        opacity: 1;
+    }
+    
+    .DatePicker,
+    .TimePicker {
+        z-index: 0 !important
+    }
+    
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 45px;
+        height: 24px;
+        top: 0px !important;
+    }
+    
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 21px;
+        width: 23px;
+        left: 0px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+    
+    input:checked+.slider {
+        background-color: rgb(0, 91, 127) !important;
+    }
+    
+    input:focus+.slider {
+        box-shadow: 0 0 1px rgb(0, 91, 127) !important;
+    }
+    
+    input:checked+.slider:before {
+        -webkit-transform: translateX(20px);
+        -ms-transform: translateX(20px);
+        transform: translateX(20px);
+    }
+    /* Rounded sliders */
+    
+    .slider.round {
+        border-radius: 34px !important;
+    }
+    
+    .slider.round:before {
+        border-radius: 50%;
+    }
+    
+    .bootstrap-datetimepicker-widget.dropdown-menu,
+    th {
+        padding: 5px !important;
+    }
+    /*  .select2-container--default .select2-selection--multiple .select2-selection__rendered {    
+        padding: 0 10px;  
+    } */
+</style>
+
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-users"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.UsersandRoles</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="javascript:void(0);" ng-click="gotoShowAlert()" translate>UserManagement.User Administration</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    {{viewData ? 'securityRolesPermissions.View' : 'securityRolesPermissions.EditUser' | translate}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="contentContainer">
+
+
+
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                    <h1>Are you sure?</h1>
+                    <!--  <h4>You will not be able to recover this Data!</h4> -->
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal">Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData();">Yes, delete it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+    <!-- Draft popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopupDraft" role="dialog" style="z-index: 1150;">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                    <h1>Are you sure?</h1>
+                    <h4>You will not be able to recover this Draft!</h4>
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal">Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="gotodeleteDraft()">Yes, delete it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Draft popup Window End-->
+
+    <!--Alert Pop-up Window-->
+    <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+
+
+            <div class="modal-content" style="border:2px solid #243250a6;" ng-if="madeChanges">
+                <div class="modal-body">
+                    <h5>{{'UserManagement.ModalMadeChangesMsg' | translate}}</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="gotoClickedPage();">{{'UserManagement.ModalMadeChangesYes' | translate}}</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()">{{'UserManagement.ModalMadeChangesNo' | translate}}</button>
+                </div>
+            </div>
+            <div class="modal-content" style="border:2px solid #243250a6;" ng-if="!madeChanges">
+                <div class="modal-body">
+                    <h4 style="font-size:17px;">{{'UserManagement.ModalNotMadeChangesMsg' | translate}} </h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle clr" ng-click="SaveAsModalDraft()"><span>{{'UserManagement.ModalMadeChangesYes' | translate}}</span></button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()">{{'UserManagement.ModalMadeChangesNo' | translate}}</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="draftOverWriteModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border:2px solid #243250a6;">
+                <div class="modal-body">
+                    <h4>Draft Already Exists. Do you want to Overwrite?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btnStyle" ng-click="forceSaveDraft();">Yes</button>
+                    <button type="button" class="btn btnStyle" data-dismiss="modal">No</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" tabindex="-1" id="auditModel" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="padding: 10px 20px;overflow:auto">
+                <button type="button" class="close" style="text-align: right;" data-dismiss="modal">&times;</button>
+                <div class="modal-header" style="padding: 10px 0px;border: 0px !important;text-align: left;">
+                    <b>{{commentVal ? commentVal[0] : auditLogDetails.action}} on {{auditLogDetails.userAuditTimeStamp|
+                            date:'yyyy-MM-dd HH:mm:ss'}} by {{auditLogDetails.UserId}}</b>
+                </div>
+                <div class="modal-body table-responsive" style="padding: 0px !important; border: 0px !important">
+                    <table class="table table-bordered">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer" style="text-align: left;padding:0" ng-if="commentVal">
+                    <p><b>Notes: </b>{{commentVal[1]}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="viewData">
+
+        <div class="col-md-12">
+            <div class="card panel-default" style="margin-top:40px;">
+                <div ng-if="!entityDraft.draftdata.BPK">
+                    <div class="card-header row ml-0 mr-0" style="padding:9px 15px;background-color:#f9f9f9">
+                        <div class="col-md-8 serviceHeading" style="padding-left:0px;">
+                            <span ng-style="{'color':(data.Status | chooseStatus)}"><span data-toggle-second="tooltip" data-placement="top" title="First Name">{{data.FirstName}}</span> - <span data-toggle-second="tooltip" data-placement="top" title="Last Name">{{data.LastName}}</span></span>
+                        </div>
+
+                        <div class="col-md-4 serviceHeading" style="color:#666;padding: 0;text-align: right;" ng-if="data.Status"><i style="font-size: 20px;line-height:20px;margin-right: 10px;" ng-style="{'color':(data.Status | chooseStatus)}" class="fa fa-circle" ng-if="data.Status" data-toggle-second="tooltip" data-placement="bottom" title="{{('selectOption.' + data.Status) | translate}}" ></i><span style="font-size:20px">{{('selectOption.' + data.Status) | translate}}</span>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="card-body ng-scope row" style="padding:9px 15px;background-color:transparent;">
+                        <div class="col-md-10 pl-3" style="padding-left:0px;">
+                            {{'AddUsers.Effective Date' | translate}} :
+                            <span>{{data.EffectiveFromDate}}
+                                    {{((data.EffectiveFromDate)&&(data.EffectiveTillDate))?' to ':''}}
+                                    {{data.EffectiveTillDate}}</span>
+                        </div>
+                        <div class="col-md-2 pr-3" style="color:#666;padding: 0;text-align: right;">
+
+                           
+                            <a  ng-if="data.IsUserEditable==true && permission.U" style="display: inline-block; cursor: pointer;" class="actionIcons my-tooltip" ng-click="(isSuperAdmin == 'Super Admin' && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL' )? gotoEdit(resourceGroup[0].ResourceGroupName,data.RoleID): (permission.U && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin' && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? gotoEdit(resourceGroup[0].ResourceGroupName,data.RoleID) : ''"
+                                title="{{(isSuperAdmin == 'Super Admin' && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? 'ToolTips.Edit': (permission.U && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin' && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? 'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"
+                                ng-style="(isSuperAdmin == 'Super Admin' && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? {'opacity':'','cursor': 'pointer'}: (permission.U && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin' && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? {'opacity':'','cursor': 'pointer'} : {'opacity':'0.2','cursor': 'not-allowed'}"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+
+                            <!--     <a class="actionIcons" data-toggle="modal" data-target="{{(permission.D && data.Status != 'ACTIVE-WAITFORAPPROVAL' && data.Status != 'DELETED' && data.RoleID != 'Super Admin' && userId != data.UserID && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup':''}}"
+                                ng-style=" (permission.D && data.Status != 'ACTIVE-WAITFORAPPROVAL' && data.Status != 'DELETED' && data.RoleID != 'Super Admin' && userId != data.UserID && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"
+                                ng-click="isSuperAdmin == 'Super Admin' ? gotoDeleteFn(resourceGroup[0].ResourceGroupName,data.RoleID): (permission.D && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin' && userId != data.UserID && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? gotoDeleteFn(resourceGroup[0].ResourceGroupName,data.RoleID) : ''"
+                                tooltip=" {{(permission.D && data.Status != 'DELETED' && data.Status != 'ACTIVE-WAITFORAPPROVAL' &&  data.RoleID != 'Super Admin' && userId != data.UserID && data.Status != 'INACTIVE-WAITFORAPPROVAL' && data.Status != 'SUSPENDED-WAITFORAPPROVAL' && data.Status != 'REACTIVATED-WAITFORAPPROVAL') ? 'Delete' : 'You don&lsquo;t have permission'}}"
+                                style="cursor: pointer;"><i class="fa fa-trash-o Iclr1"></i></a> -->
+
+
+                            <a class="actionIcons my-tooltip" ng-if="((permission.ReActivate) && data.Status == 'DELETED' )" ng-click="(permission.ReActivate)?gotoReactivate(data):''" title="{{(permission.ReActivate)?'Re Activate':'You don&lsquo;t have permission'}}"><i
+                                        class="fa fa-repeat Iclr1"></i></a>
+
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div ng-if="entityDraft.draftdata.BPK">
+
+                    <div class="panel-heading col-xl-12 col-lg-12  col-md-12 col-sm-12" style="background-color:#fff;">
+                        <div class="col-xl-10 col-lg-11 col-md-6 col-sm-12 serviceHeading">
+                            <span data-toggle-second="tooltip" data-placement="top" title="Business Primary Key">{{entityDraft.draftdata.BPK}}</span>
+                            <br>
+                        </div>
+                        <div class=" col-xl-2 col-lg-1 col-md-4 col-sm-12 pull-right">
+                            <a style="display: inline-block; cursor: pointer;" class="actionIcons" ng-click="(!deletedData)? gotoEdit(resourceGroup[0].ResourceGroupName,data.RoleID) : ''" data-toggle-second="tooltip" data-placement="top" title="{{(!deletedData) ? 'Edit':  'You don&lsquo;t have permission' }}" ng-style="(!deletedData) ? {'opacity':'','cursor': 'pointer'}: {'opacity':'0.2','cursor': 'not-allowed'}"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+
+                            <a class="actionIcons" data-toggle="modal" data-target="{{(!deletedData)?'#delPopupDraft':''}}" ng-style=" (!deletedData)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ng-click="(!deletedData) ? takeDeldata(entityDraft.draftdata,$index) : '' "
+                            data-toggle-second="tooltip" data-placement="top" title=" {{(!deletedData) ? 'Delete' : 'You don&lsquo;t have permission'}}" style="cursor: pointer;"><i class="fa fa-trash-o Iclr1"></i></a>
+
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12">
+            <div class="panel-group" style="border:1px solid #ccc;">
+                <div class="row" style="margin:0;line-height:30px;">
+                    <div class="" style="margin:0;margin-top:10px;margin-bottom:34px;padding-left:0px;width: 100%;">
+                        <div class="row" ng-repeat="(key,val) in tempdata" style="margin:0;" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}" ng-if="key != 'View' && key != 'RoleID1' ">
+                            <label class="control-label bold col-md-3 col-sm-3 text-sm-left text-md-right text-lg-right text-xl-right">
+                                <!--span class="col-md-8 ng-binding">{{key}}</span--> 
+                                <span ng-if="key == 'UserID'" class="col-md-8 ng-binding" translate> UserManagement.User ID</span>
+                                <span ng-if="key == 'IDType'" class="col-md-8 ng-binding" translate> UserManagement.IDType</span>
+                                <span ng-if="key == 'IDNumber'" translate> UserManagement.IDNumber</span>
+                                <span ng-if="key == 'FirstName'" class="col-md-8 ng-binding" translate> UserManagement.First Name</span>
+                                <span ng-if="key == 'LastName'" class="col-md-8 ng-binding" translate> UserManagement.Last Name</span>
+                                <span ng-if="key == 'PhoneNumber'" class="col-md-8 ng-binding" translate> UserManagement.Phone Number</span>
+                                <span ng-if="key == 'PartyCode'" class="col-md-8 ng-binding" translate> UserManagement.PartyCode</span>
+                                <span ng-if="key == 'PartyName'" class="col-md-8 ng-binding" translate> UserManagement.PartyName</span>
+                                <span ng-if="key == 'PartyType'" class="col-md-8 ng-binding" translate> UserManagement.Party Type</span>
+                                <span ng-if="key == 'RoleID'" class="col-md-8 ng-binding" translate> UserManagement.Role ID</span>
+                                <span ng-if="key == 'UserRoleAssociation'" class="col-md-8 ng-binding" translate> AddUsers.User Role Association</span>
+                                <span ng-if="key == 'Status'" class="col-md-8 ng-binding" translate> UserManagement.Status</span>
+                                <span ng-if="key == 'EffectiveFromDate'" class="col-md-8 ng-binding" translate> UserManagement.Effective From Date</span>
+                                <span ng-if="key == 'EffectiveTillDate'" class="col-md-8 ng-binding" translate> UserManagement.Effective Till Date</span>
+                                <span ng-if="key == 'TimeZone'" class="col-md-8 ng-binding" translate> UserManagement.Time Zone</span>
+                                <span ng-if="key == 'EmailAddress'" class="col-md-8 ng-binding" translate> UserManagement.Email</span>
+                                <span ng-if="key == 'PhoneExtensionNumber'" class="col-md-8 ng-binding" translate> UserManagement.PhoneExtensionNumber</span>
+                                <span ng-if="key == 'Mobile'" class="col-md-8 ng-binding" translate> UserManagement.Mobile</span>
+                                <span ng-if="key == 'Position'" class="col-md-8 ng-binding" translate> UserManagement.Position</span>
+                                <span ng-if="key == 'Observations'" class="col-md-8 ng-binding" translate> UserManagement.Observations</span>
+                                <span ng-if="key == 'CreatedDate'" class="col-md-8 ng-binding" translate> UserManagement.CreatedDate</span>
+                                <span ng-if="key == 'LastLoggedIn'" class="col-md-8 ng-binding" translate> UserManagement.LastLoggedIn</span>
+                                <span ng-if="key == 'IsUserEditable'" class="col-md-8 ng-binding" translate> UserManagement.IsUserEditable</span>
+
+
+                                <span class="col-md-1">:</span> 
+                            </label>
+                            <div class="control-label col-md-9 col-sm-9 ng-binding subserviceInfo">
+                                <span ng-if="key != 'UserRoleAssociation' && key != 'RoleID' && key != 'IDType'">{{val}}</span>
+                                <span ng-if="key == 'RoleID'">{{val|splitunderscore}}</span>
+                                <span ng-if="key == 'IDType'">{{val}}</span>
+                                <span ng-if="key == 'UserRoleAssociation'">
+                               
+                                    <table border="1" cellpadding="5" cellspacing="1" width="100%"
+                                        class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="font-weight:bold;" translate>ApprovalDts.Field</th>
+                                                    <th style="font-weight:bold;" translate>ApprovalDts.Data</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody  ng-repeat="x in val">
+                                            <tr>
+                                                <td translate>AddUsers.Role Name</td>
+                                                <td>{{x.RoleID|splitunderscore}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td translate>AddUsers.Status</td>
+                                                <td>{{x.Status}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td translate>AddUsers.Effective From Date</td>
+                                                <td>{{x.EffectiveFromDate}}</td>
+                                                </tr>
+                                            <tr ng-if = 'x.EffectiveTillDate'>
+                                                <td translate>AddUsers.Effective Till Date</td>
+                                                <td>{{x.EffectiveTillDate}}</td>
+                                            </tr>
+                                </tbody>
+                                </table>
+
+
+                                </span>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin: 5px 0px 20px 0px;border:1px solid #ccc;background: #fff;" ng-show="viewData && editedLog.length">
+        <div class="editHead" style="border-bottom: 1px solid #dddddd;">
+            <h5 style="padding: 0px 15px;" translate>ToolTips.EditLog</h5>
+        </div>
+
+        <div class="editBody" style="max-height: 200px; overflow-y: auto;">
+            <ul style="line-height:35px;display: inline-block;">
+                <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'" style="padding: 0px 15px;float: left;width: 100%;">
+                    <div style="display:block;word-break: break-all;">
+                        <span style="float: left; width: 100%; padding: 0px 15px;"> <i class="fa fa-circle" aria-hidden="true"
+                                    style="margin-right: 12px; font-size: 12px;line-height: 12px;"></i> <u style="cursor:pointer;font-weight: bolder;"
+                                    ng-click="showaudit(log)" data-toggle-second="tooltip" data-placement="right" title="{{'ToolTips.Clicktoviewdetails' | translate}}">{{("BankDataDts."+ log.action) | translate}}</u>  {{'ToolTips.On' | translate}}
+                                    {{log.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss Z'}} {{'ToolTips.By' | translate}} {{log.UserId}}.</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row" ng-show="!viewData">
+        <div class="col-md-12">
+            <div class="pageTitle alertWidthonResize">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="title__container">
+                            <h2 ng-style="{'color':(data.Status | chooseStatus)}" translate>securityRolesPermissions.EditUser</h2>
+                            <p translate> Branch.ForMandatory</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+                <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+            </div>
+
+            <form role="form" class="simple-form form-horizontal" name="userForm" ng-submit="updateData(data); updatesubmitted=false;">
+
+                <div class="control-group" style="margin-top: 5px;">
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;'>{{'UserManagement.User ID' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.UserID.$invalid]">
+                            <input class="form-control" type="text" name="UserID" ng-model="data.UserID" placeholder="{{'Placeholder.Please Enter User ID' | translate}}" required ng-blur="multipleEmptySpace($event)" ng-disabled="setEnableDisable_.UserID=='UserID'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.UserID.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;'>{{'UserManagement.ID Type' | translate}} 
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.IDType.$invalid]">
+                            <select class="form-control" required="true" name="IDType" id="IDType" ng-model="data.IDType" ng-class="{true : 'error'}[updatesubmitted && userForm.IDType.$invalid]" required data-width="100%" ng-disabled="setEnableDisable_.IDType=='IDType'?false:true">
+                                <option value="" >--Select an option--</option>
+                                <option value="Identitycard" translate>selectOption.Identity Card</option>
+                                <option value="identitycardforminors" translate>selectOption.Identity Card For Minors</option>
+                                <option value="passport" translate>selectOption.Passport</option>
+                                <option value="foreignidentificationcard" translate>selectOption.Foreign Identification Card</option>
+                                <option value="foreigncard" translate>selectOption.Foreign Card</option>
+                                <option value="foreignidentitydocument" translate>selectOption.Foreign Identity Document</option>
+                            </select>
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.IDType.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.First Name' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.FirstName.$invalid]">
+                            <input class="form-control" type="text" name="FirstName" ng-model="data.FirstName" placeholder="{{'Placeholder.Please Enter First Name' | translate}}" required ng-blur="multipleEmptySpace($event)" ng-disabled="setEnableDisable_.FirstName=='FirstName'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.FirstName.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Last Name' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.LastName.$invalid]">
+                            <input class="form-control" type="text" name="LastName" ng-model="data.LastName" placeholder="{{'Placeholder.Please Enter Last Name' | translate}}" required ng-blur="multipleEmptySpace($event)" ng-disabled="setEnableDisable_.LastName=='LastName'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.LastName.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+                    <!-- <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2" style='font-weight:bold;'>RoleID
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.RoleID.$invalid]">
+                            <input class="form-control" type="text" name="RoleID" ng-model="data.RoleID" autocomplete="off" placeholder="{{'Placeholder.Please Enter RoleID' | translate}}" required ng-blur="multipleEmptySpace($event)" ng-disabled="setEnableDisable_.RoleID=='RoleID'?false:true">
+
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.RoleID.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div> -->
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;'>{{'UserManagement.ID Number' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.IDNumber.$invalid]">
+                            <input class="form-control" type="text" name="IDNumber" ng-model="data.IDNumber" autocomplete="off" placeholder="{{'Placeholder.Please Enter ID Number' | translate}}" required ng-blur="multipleEmptySpace($event)" ng-disabled="setEnableDisable_.IDNumber=='IDNumber'?false:true"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                            maxlength = "20">
+
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.IDNumber.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Phone Number' | translate}} 
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.PhoneNumber.$invalid]">
+                            <input class="form-control" type="text" name="PhoneNumber" ng-model="data.PhoneNumber" maxlength='8' autocomplete="off" onkeydown='return allowOnlyNumbersAlone(event)' placeholder="{{'Placeholder.Please Enter Phone Number' | translate}}" required ng-blur="multipleEmptySpace($event)"
+                                ng-disabled="setEnableDisable_.PhoneNumber=='PhoneNumber'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.PhoneNumber.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right"  style='font-weight:bold;'>{{'UserManagement.PhoneExtensionNumber' | translate}} 
+                                    <!-- <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span> -->
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.PhoneExtensionNumber.$invalid]">
+                            <input class="form-control" type="text" name="PhoneExtensionNumber" ng-model="data.PhoneExtensionNumber" maxlength='5' onkeydown='return allowOnlyNumbersAlone(event)' placeholder="{{'Placeholder.Please Enter PhoneExtensionNumber' | translate}}"  ng-blur="multipleEmptySpace($event)"
+                                ng-disabled="setEnableDisable_.PhoneExtensionNumber=='PhoneExtensionNumber'?false:true">
+                        </div>
+                        <!-- <span class="help-inline" ng-show="updatesubmitted && userForm.PhoneExtensionNumber.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span> -->
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Mobile' | translate}}
+                                    <!-- <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span> -->
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.Mobile.$invalid]">
+                            <input class="form-control" type="text" name="Mobile" ng-model="data.Mobile" maxlength='10' autocomplete="off" onkeydown='return allowOnlyNumbersAlone(event)' placeholder="{{'Placeholder.Please Enter Mobile' | translate}}"  ng-blur="multipleEmptySpace($event)"
+                                ng-disabled="setEnableDisable_.Mobile=='Mobile'?false:true">
+                        </div>
+                        <!-- <span class="help-inline" ng-show="updatesubmitted && userForm.Mobile.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span> -->
+                    </div>
+                    <div class="form-group row">
+                        <label class="bold control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right"> <span translate>securityRolesPermissions.Status </span> <span style="color:#e02222;font-size:12px;padding-left:2px"
+                                        aria-required="true">*</span></label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.Status.$invalid]">
+                            <select class="form-control appendSelect2" ng-model="data.Status" required ng-disabled="(userId == data.UserID)?true:false" data-width="100%">
+                                        <option value="ACTIVE" translate>ACTIVE</option>
+    
+                                        <option value="ACTIVE-WAITFORAPPROVAL" ng-if="data.Status == 'ACTIVE-WAITFORAPPROVAL'" translate>ACTIVE-WAITFORAPPROVAL</option>
+                                        <option value="INACTIVE-WAITFORAPPROVAL" ng-if="data.Status == 'INACTIVE-WAITFORAPPROVAL'" translate>INACTIVE-WAITFORAPPROVAL</option>
+    
+                                        <option value="DELETED"  translate>DELETED</option>
+                                        <option value="INACTIVE" translate>INACTIVE</option>
+                                        <option value="SUSPENDED" translate>SUSPENDED</option>
+                                        <option value="BLOCKED" translate disabled>BLOCKED</option>
+    
+                                    </select>
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.Status.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Position' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.Position.$invalid]">
+
+
+                            <input class="form-control" type="text" name="Position" ng-model="data.Position" autocomplete="off" placeholder="{{'Placeholder.Please Enter Position' | translate}}" required id="Position" ng-disabled="setEnableDisable_.Position=='Position'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.Position.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Observations' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.Observations.$invalid]">
+
+
+                            <input class="form-control" type="text" name="Observations" ng-model="data.Observations" autocomplete="off" placeholder="{{'Placeholder.Please Enter Observations' | translate}}"  id="Observations" ng-disabled="setEnableDisable_.Observations=='Observations'?false:true"  maxlength = "200" required>
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.Observations.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.PartyCode' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.PartyCode.$invalid]">
+                            <select ng-disabled="(entityDraft.FromDraft) ? false : true" class="form-control partiesOrganization" name="PartyCode" id="PartyCode" ng-model="data.PartyCode" ng-change="clearPartycode(data)" ng-class="{true : 'error'}[updatesubmitted && userForm.PartyCode.$invalid]"
+                                required data-width="100%"> 
+                                        <option value="">--Select--</option>
+                                        <option ng-repeat=" val in partyOptions.PartyCode" value="{{val.Value}}">{{val.Value}}</option>
+                                    </select>
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.PartyCode.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Party Name' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.PartyName.$invalid]">
+                            <input class="form-control" type="text" name="PartyName" ng-model="data.PartyName" maxlength='14' onkeydown='return allowOnlyNumbersAlone(event)' placeholder="{{'Placeholder.Please Enter PartyName' | translate}}" required ng-blur="multipleEmptySpace($event)" ng-disabled="true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.PartyName.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Email' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.EmailAddress.$invalid]">
+
+                            <input class="form-control" type="email" name="EmailAddress" ng-model="data.EmailAddress" placeholder="{{'Placeholder.Please Enter First Name' | translate}}" required ng-blur="multipleEmptySpace($event);emailValidate(data.EmailAddress)" id="EmailAddress_UMPage" ng-disabled="setEnableDisable_.EmailAddress=='EmailAddress'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.EmailAddress.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+                     <!--<div class="form-group row">
+                        <label for="UserID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Password' | translate}}
+                                    <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.Password.$invalid]">
+
+                            <input class="form-control" type="password" name="Password" ng-model="data.Password" placeholder="{{'Placeholder.Please Enter Password' | translate}}" required id="Password" ng-disabled="setEnableDisable_.Password=='Password'?false:true">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.Password.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>-->
+
+
+
+                    <div class="form-group row">
+                        <label for="RoleID" class="control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" style='font-weight:bold;' >{{'UserManagement.Role Name' | translate}}
+                            <span style="color:#e02222;font-size:12px;padding-left:2px"
+                                aria-required="true">*</span>
+                        </label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.RoleID.$invalid]">
+                            <select class="form-control appendRoleId js-select2-multiple" select2-model-append ng-model="data.RoleID1" name="RoleID"  ng-required="true" ng-if="data.RoleID1 != 'Super Admin'"  ng-change="createDynamicSubsection(data.RoleID1)" id="myRoleId" style="width: 100%;">
+                                <option ng-repeat="option in selectOptions" value="{{option.RoleID}}">
+                                    {{option.RoleName ? option.RoleName : option.RoleID}}
+                                </option>
+                            </select>
+
+                            <input class="form-control" type="text" name="RoleID" ng-model="data.RoleID" ng-disabled="true" required ng-if="data.RoleID == 'Super Admin'">
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.RoleID.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="bold control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" >{{'UserManagement.Is Force Reset' | translate}} <span style="color:#e02222;font-size:12px;padding-left:2px"
+                                        aria-required="true">*</span></label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.IsForceReset.$invalid]">
+
+                            <input class="form-control" type="text" name="IsForceReset" ng-model="data.IsForceReset" disabled ng-class="{true: 'error'}[updatesubmitted && userForm.IsForceReset.$invalid]">
+
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.IsForceReset.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="bold control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" >{{'UserManagement.Time Zone' | translate}} <span style="color:#e02222;font-size:12px;padding-left:2px"
+                                        aria-required="true">*</span></label>
+                        <div class="col-md-3" ng-class="{true: 'error'}[updatesubmitted && userForm.TimeZone.$invalid]">
+                    
+                                    <select class="form-control" ng-model="data.TimeZone" name='TimeZone' select2-model-append required data-width="100%"  id="userFormTimeZone" ng-disabled="setEnableDisable_.TimeZone=='TimeZone'?false:true">
+                                        <option value="">--Select--</option>
+                                        <option ng-repeat="option in timezoneOptions" value="{{option.TimeZoneId}}">
+                                            {{option.TimeZoneId}}</option>
+                                    </select>
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.TimeZone.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="bold control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" >{{'UserManagement.Effective From Date' | translate}}<span style="color:#e02222;font-size:12px;padding-left:2px"
+                                        aria-required="true">*</span></label>
+                        <div class="col-md-3 " ng-class="{true: 'error'}[updatesubmitted && userForm.EffectiveFromDate.$invalid]">
+                            <div class="input-group input-append">
+                                <input type="text" class="form-control DatePicker dateTypeKey" roledateattr="EffectiveFromDate" name="EffectiveFromDate" placeholder="{{'Placeholder.Please Enter Effective From Date' | translate}}" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)"
+                                    id="EffectiveFromDate" autocomplete="off" ng-model="data.EffectiveFromDate" ng-required="true" style="margin-bottom:0 !important;" ng-disabled="(data.RoleID == 'Super Admin' || userId == data.UserID)?true:viewMe" />
+                                <span class="input-group-text" style="cursor:pointer" ng-click="triggerPicker($event)"><span
+                                                class="fa fa-calendar date-set"></span>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.EffectiveFromDate.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+                    <div class="form-group row">
+                        <label class="bold control-label col-md-2 text-sm-left text-md-right text-lg-right text-xl-right" >{{'UserManagement.Effective Till Date' | translate}}</label>
+                        <div class="col-md-3 " ng-class="{true: 'error'}[updatesubmitted && userForm.EffectiveTillDate.$invalid]">
+                            <div class="input-group input-append">
+                                <input type="text" class="form-control DatePicker dateTypeKey" roledateattr="EffectiveTillDate" name="EffectiveTillDate" placeholder="{{'Placeholder.Please Enter Effective Till Date' | translate}}" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)"
+                                    id="EffectiveTillDate" autocomplete="off" ng-model="data.EffectiveTillDate" style="margin-bottom:0 !important;" ng-disabled="(data.RoleID == 'Super Admin' || userId == data.UserID)?true:viewMe" />
+                                <span class="input-group-text" style="cursor:pointer" ng-click="triggerPicker($event)"><span
+                                                class="fa fa-calendar date-set"></span>
+                                </span>
+                            </div>
+
+                        </div>
+                        <span class="help-inline" ng-show="updatesubmitted && userForm.EffectiveTillDate.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
+                    </div>
+
+
+                    <div>
+                        <h5 class="bold col-md-12">{{'AddUsers.User Role Association' | translate}}
+                            <span>({{'AddUsers.Rows will be displayed based on Role Name selection' | translate}}) <span style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span></span>
+                        </h5>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <!--<form>-->
+                        <table class="table table-bordered" ng-if="data.UserRoleAssociation.length > 0" style="table-layout:fixed;">
+                            <tr>
+                                <th>{{'AddUsers.Primary Role' | translate}}</th>
+                                <th>{{'AddUsers.Role Name' | translate}}</th>
+                                <th>{{'AddUsers.Status' | translate}}</th>
+                                <th>{{'AddUsers.Effective From Date' | translate}}</th>
+                                <th>{{'AddUsers.Effective Till Date' | translate}}</th>
+                            </tr>
+
+
+
+
+                            <tr ng-repeat="val in data.UserRoleAssociation track by $index" id="{{$index}}">
+                                <td class="radioGroups" style="text-align:center">
+                                    <input type="radio" name="SubSec_Action" id="SubSec_Action_ID{{$index}}" value="{{data.UserRoleAssociation[$index].RoleID}}" ng-checked="(data.RoleID == data.UserRoleAssociation[$index].RoleID)" class="radiobtns" ng-required="true">
+                                </td>
+                             
+                                <td>
+                                    <select class="form-control appendRoleId" required="true" select2-model-append name="Subsec_RoleID{{$index}}" id="RoleId{{$index}}" ng-model="data.UserRoleAssociation[$index].RoleID" ng-class="{true : 'error'}[updatesubmitted && userForm.Subsec_RoleID{{$index}}.$invalid]"
+                                        ng-required="true" required ng-if="data.UserRoleAssociation[$index].RoleID != 'Super Admin'" ng-disabled="(data.UserID != cUser)?false : true">
+                                        <option value="">--Select--</option>
+                                        <option ng-repeat="option in selectMultOptions" value="{{option.RoleID}}">{{option.RoleName
+                                            ? option.RoleName : option.RoleID}}</option>
+                                    </select>
+
+                                    <input class="form-control" type="text" name="Subsec_RoleID{{$index}}" ng-model="data.UserRoleAssociation[$index].RoleID" ng-disabled="true" required ng-if="data.UserRoleAssociation[$index].RoleID == 'Super Admin'">
+
+                                    <span class="help-inline" ng-show="updatesubmitted && userForm.Subsec_RoleID{{$index}}.$error.required && !data.UserRoleAssociation[$index].RoleID" style="margin:0;color:#EF1C1C !important; padding: 8px;right: 15px;">Required</span>
+                                </td>
+                                <td>
+                                    <select class="form-control select2drop" required name="Subsec_Status" id="Subsec_Status{{$index}}" ng-model="data.UserRoleAssociation[$index].Status" ng-required="true" ng-disabled="(data.UserID != cUser)?false : true" data-width="100%">
+                                                <option value="">--Select--</option>
+                                                <option value="ACTIVE" translate>selectOption.ACTIVE</option>
+                                                <option value="INACTIVE" translate>selectOption.INACTIVE</option>
+                                                <option value="SUSPENDED" translate>selectOption.SUSPENDED</option>
+                                                <option value="DELETED" translate>selectOption.DELETED</option>
+                                                <option value="BLOCKED" translate>selectOption.BLOCKED</option>
+                                            </select>
+
+                                    <span class="help-inline" ng-show="updatesubmitted && userForm.Subsec_Status.$error.required && !data.UserRoleAssociation[$index].Status " style="display:block;margin:0;color:#EF1C1C !important; padding: 8px;right: 15px;">Required</span>
+                                </td>
+                                <td>
+                                    <div class="input-group input-append">
+                                        <input type="text" class="form-control DatePicker dateTypeKey" name="EffectiveFromDate{{$index}}" autocomplete="off" roleattr="EffectiveFromDate" placeholder="{{'Placeholder.Please Enter Effective From Date' | translate}}" onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)"
+                                            id="Subsec_EffectiveFromDate{{$index}}" ng-model="data.UserRoleAssociation[$index].EffectiveFromDate" ng-required="true" ng-focus="activatePickerSubsec($event,$index)" style="margin-bottom:0 !important;" ng-disabled="(data.UserID != cUser)?false : true"
+                                        />
+                                                <span class="input-group-text" style="cursor:pointer" ng-click="triggerPickerSubSec($event,$index)"><span
+                                                            class="fa fa-calendar date-set"></span>
+                                        </span>
+                                    </div>
+
+                                    <span class="help-inline" ng-show="updatesubmitted && userForm.EffectiveFromDate{{$index}}.$error.required && !data.UserRoleAssociation[$index].EffectiveFromDate" style="display:block;margin:0;color:#EF1C1C !important; padding: 8px;right: 15px;">Required</span>
+                                </td>
+                                <td>
+                                    <div class="input-group input-append">
+
+
+                                        <input type="text" class="form-control DatePicker dateTypeKey" name="EffectiveTillDate{{$index}}" autocomplete="off" roleattr="EffectiveTillDate" placeholder="{{'Placeholder.Please Enter Effective Till Date' | translate}}"  onpaste="return false" onkeypress='return tabOrder(event)' ng-blur="multipleEmptySpace($event)"
+                                            id="Subsec_EffectiveTillDate{{$index}}" ng-model="data.UserRoleAssociation[$index].EffectiveTillDate" ng-focus="activatePickerSubsec($event,$index)" ng-disabled="(data.UserID != cUser)?false : true" />
+                                    
+                                        <span class="input-group-text" style="cursor:pointer" ng-click="triggerPickerSubSec($event,$index)"><span
+                                            class="fa fa-calendar date-set"></span>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+
+
+                        </table>
+
+                        <div class="alert-warning" style="padding: 15px;margin-bottom: 5px;background-color: #c2c1bb75 !important" ng-if="data.UserRoleAssociation.length <= 0 || !data.UserRoleAssociation.length">
+                            <strong>
+                                        <h4 style="margin:0;text-align:center;"> <i class="fa fa-warning"></i> No
+                                            associated roles found</h4>
+                                    </strong>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+                <div class="col-xs-12 " style="padding:15px;margin-top:15px;border-top:1px solid">
+                    <button type="button" class="btnDefault btnStyle clr my-tooltip" data-toggle="modal" data-target="{{madeChanges ?'#changesLostModal':''}}" ng-click="updatesubmitted=false;gotoCancelFn()" title="{{'BtnGroup.Cancel' | translate}}"><span translate class="ng-scope" >BtnGroup.Cancel</span></button>
+                    <!-- <button type="button" class="btn btnStyle green" ng-click="SaveAsDraft(data);takeBackupData(data)" tooltip="Save as Draft" ng-if="(data.RoleID != 'Super Admin')">Save as Draft </button> -->
+                    
+                    <button type="submit" class="btnSuccess btnStyle clr my-tooltip" ng-click="updatesubmitted=true" title="{{'BtnGroup.SaveChanges' | translate}}"><span translate>BtnGroup.SaveChanges</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div class="col-md-9">
+</div>
+</div>
+
+</div>
+
+
+
+</div>
+
+<script>
+    //$('.appendSelect2').select2()
+
+    $(document).ready(function() {
+        // $('.DatePicker').datetimepicker({ 
+        // 	 format:"YYYY-MM-DD", 
+        // 	 useCurrent: false, 
+        // 	 showClear: true, 
+
+        //  }) 
+        setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+				$('.my-tooltip').tooltip({ trigger: "hover" });
+            }, 1000)
+        setTimeout(function() {
+            $('.input-group-text').on('click focus', function(e) {
+                $(this).prev().focus().click()
+            });
+        }, 1000)
+    })
+</script>

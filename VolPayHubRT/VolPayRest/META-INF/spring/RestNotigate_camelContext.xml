@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<!--Importing queue configuration file-->
+	<import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+
+	<!--Mail configuration -->
+	<bean id="RouteBuilder_core" class=" com.volantetech.volante.services.VolpayMailRoute"/>
+
+	<camelContext id="VOLPAY_REST_NOTIGATE" xmlns="http://camel.apache.org/schema/spring"
+                  threadNamePattern="VOLPAY_REST_THREADPOOL-#counter#" useBreadcrumb="false">
+
+		<!-- loading properties file  -->
+		<propertyPlaceholder id="properties" location="classpath:${env:VOLPAY_DOMAIN}_rest_config.properties"/>
+		<routeBuilder ref="RouteBuilder_core"/>
+
+		<onException>
+			<exception>java.lang.Throwable</exception>
+			<exception>javax.jms.JMSException</exception>
+			<exception>org.apache.camel.CamelException</exception>
+			<exception>org.apache.camel.RuntimeCamelException</exception>
+			<exception>java.lang.RuntimeException</exception>
+			<retryWhile><method ref="retryRuleset"/></retryWhile>
+			<redeliveryPolicy retryAttemptedLogLevel="WARN"/>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<bean ref="bean:camellogger" method="composeExchangeException"/>
+		</onException>
+		<!-- Mail configurations For file output-->
+		<route id="Mail">
+			<from uri="direct-vm:Volpay.EMAIL"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{MAIL_QUEUE}}"/>
+		</route>
+
+		<!--NOTIFICATION -->
+		<route id="Notigate" autoStartup="false">
+			<from uri="direct-vm:NOTIGATEQUEUEIN"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{NOTIGATE}}"/>
+		</route>		
+		
+		<!--ACH NOTIFICATION REST -->
+		<route id="REST_ACHNotigate" autoStartup="false">
+			<from uri="direct-vm:NOTIGATE.EVENT"/>
+			<removeHeaders pattern="JMS*"/>
+			<convertBodyTo type="byte[]"/>
+			<to uri="{{QUEUE_PREFIX}}:{{NOTIGATE_EVENT}}"/>
+		</route>
+	</camelContext>
+</beans>

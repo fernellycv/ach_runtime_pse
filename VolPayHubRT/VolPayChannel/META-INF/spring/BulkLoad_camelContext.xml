@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="   http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd   http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+  
+    <!--importing queue configuration file -->
+    <import resource="${VOLPAY_DOMAIN}_beanconfig.xml"/>
+    
+    <camelContext id="VOLPAY_BULK_LOAD" xmlns="http://camel.apache.org/schema/spring"
+                  threadNamePattern="VOLPAY_INSTRUCTION_THREADPOOL-#counter#" useBreadcrumb="false">
+
+        <!-- loading properties file  -->
+        <propertyPlaceholder id="properties"
+                             location="classpath:${env:VOLPAY_DOMAIN}_fileprocessing_config.properties"/>
+
+        <!-- Handling all kind of exceptions occurs during exchage failures-->
+        <onException>
+            <exception>javax.jms.JMSException</exception>
+            <exception>org.apache.camel.CamelException</exception>
+            <exception>org.apache.camel.RuntimeCamelException</exception>
+            <exception>java.lang.RuntimeException</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <bean ref="bean:camellogger" method="composeExchangeException"/>
+        </onException>
+      <!--S3 Integration for Bulk Load of PSE and SSS Files-->
+	  
+	<!-- <route id="PSEControlFilesPollingRoute">
+		<from uri="quartz2://fileloadPSE?cron=0+0/1+*+*+*+?&amp;trigger.timeZone=UTC"/>
+		
+  		<setHeader headerName="Module">
+			<constant>BULK_LOAD_S3_BUCKETS</constant>
+  	  	</setHeader>
+		<to uri="volante:GetAWSParameters"/>
+		<pollEnrich timeout="5000">
+		    <simple>aws-s3://${headers.PSEBUCKET}?region=${headers.REGION}&amp;accessKey=RAW(${headers.ACCESSKEY})&amp;secretKey=RAW(${headers.SECRETKEY})&amp;deleteAfterRead=true&amp;prefix=${headers.PSECTRLPREFIX}</simple>
+		</pollEnrich>
+	  <removeHeaders pattern="JMS*"/>
+	  <convertBodyTo type="byte[]"/>
+	  <choice>
+		  <when>
+			 <simple>${body} != null</simple>
+   		  	<setHeader headerName="CamelAwsS3Key">
+   				<simple>${headers.CamelAwsS3Key}</simple>
+   		  	</setHeader>
+	 		 <to uri="volante:BulkLoad_ControlFile_Processor"/>
+		 </when>
+		 <otherwise>
+			 <stop id="Stop1"/>
+		 </otherwise>
+	 </choice>
+	</route>
+	
+	<route id="SSSControlFilesPollingRoute">
+		<from uri="quartz2://fileloadSSS?cron=0+0/1+*+*+*+?&amp;trigger.timeZone=UTC"/>
+		
+  		<setHeader headerName="Module">
+			<constant>BULK_LOAD_S3_BUCKETS</constant>
+  	  	</setHeader>
+		<to uri="volante:GetAWSParameters"/>
+		<pollEnrich timeout="5000">
+		    <simple>aws-s3://${headers.SSSBUCKET}?region=${headers.REGION}&amp;accessKey=RAW(${headers.ACCESSKEY})&amp;secretKey=RAW(${headers.SECRETKEY})&amp;deleteAfterRead=true&amp;prefix=${headers.SSSCTRLPREFIX}</simple>
+		</pollEnrich>
+	  <removeHeaders pattern="JMS*"/>
+	  <convertBodyTo type="byte[]"/>
+	  <choice>
+		  <when>
+			 <simple>${body} != null</simple>
+   		  	<setHeader headerName="CamelAwsS3Key">
+   				<simple>${headers.CamelAwsS3Key}</simple>
+   		  	</setHeader>
+	 		 <to uri="volante:BulkLoad_ControlFile_Processor"/>
+		 </when>
+		 <otherwise>
+			 <stop id="StopSSSControlFilesPollingRoute"/>
+		 </otherwise>
+	 </choice>
+	</route> -->
+    
+	<route id="ACHBulkLoadProcessSingleFile">
+		<from uri="{{QUEUE_PREFIX}}:BULKLOAD.METADATA?concurrentConsumers=1"/>
+		<removeHeaders pattern="JMS*"/>
+		<convertBodyTo type="byte[]"/>
+		<!--><to uri="volante:ACHBulkLoadProcessSingleFile"/>-->
+		<to uri="{{QUEUE_PREFIX}}:BULKLOAD.METADATA.TRANSACTED"/>
+	</route>
+	
+	<!--><route id="PSEFilesPollingRoute">
+		<from uri="{{QUEUE_PREFIX}}:BULKLOAD.PULLTRIGGER?concurrentConsumers=1"/>
+		<setHeader headerName="Module">
+			<constant>BULK_LOAD_S3_BUCKETS</constant>
+  	  	</setHeader>
+		<to uri="volante:GetAWSParameters"/>
+		<pollEnrich timeout="5000">
+		    <simple>aws-s3://${headers.BUCKET}?region=${headers.REGION}&amp;accessKey=${headers.ACCESSKEY}&amp;secretKey=${headers.SECRETKEY}&amp;deleteAfterRead=true&amp;prefix=${headers.PSEPREFIX}</simple>
+		</pollEnrich>
+	  <removeHeaders pattern="JMS*"/>
+	  <convertBodyTo type="byte[]"/>
+	  <choice>
+		  <when>
+			 <simple>${body} != null</simple>
+   		  	<setHeader headerName="CamelFileName">
+   				<simple>${headers.CamelAwsS3Key}</simple>
+   		  	</setHeader>
+	 		 <to uri="direct-vm:PSE_BULKLOAD_NACHAM"/>
+			 <to uri="volante:ACHBulkLoadIncreaseControlCounters"/>
+		 </when>
+		 <otherwise>
+			 <stop id="Stop2"/>
+		 </otherwise>
+	 </choice>
+	</route>
+	-->
+	
+	<route id="ACHBulkLoadProcessSingleFileTransacted">
+		<from uri="{{QUEUE_PREFIX}}:BULKLOAD.METADATA.TRANSACTED?concurrentConsumers=1"/>
+		<removeHeaders pattern="JMS*"/>
+		<convertBodyTo type="byte[]"/>
+		<to uri="volante:ACHBulkLoadPreProcessMetaData"/><!-- Here we read the metadata and extract the filename and bucket to retreive from S3 -->
+		<pollEnrich timeout="5000">
+		    <simple>aws-s3://${headers.BUCKET}?region=${headers.REGION}&amp;accessKey=RAW(${headers.ACCESSKEY})&amp;secretKey=RAW(${headers.SECRETKEY})&amp;deleteAfterRead=true&amp;fileName=${headers.PATH}</simple>
+		</pollEnrich>
+	  <removeHeaders pattern="JMS*"/>
+	  <convertBodyTo type="byte[]"/>
+	  <choice>
+		  <when>
+			 <simple>${body} != null</simple>
+			 <to uri="volante:ACHBulkLoadPostProcessMetaData"/><!-- Flatten the FileName and set correct header for the FileProcessor  -->
+ 	 		 <to uri="direct-vm:PSE_BULKLOAD_NACHAM"/>
+		 </when>
+		 <otherwise>
+			<to uri="{{QUEUE_PREFIX}}:BULKLOAD.METADATA.TRANSACTED.ERROR"/>
+		 </otherwise>
+	 </choice>
+	</route>
+
+	<route id="ACHADFLoadProcessSingleFileTransacted">
+		<from uri="{{QUEUE_PREFIX}}:ADFLOAD.METADATA.TRANSACTED?concurrentConsumers=1"/>
+		<removeHeaders pattern="JMS*"/>
+		<convertBodyTo type="byte[]"/>
+		<to uri="volante:ACHBulkLoadPreProcessMetaData"/><!-- Here we read the metadata and extract the filename and bucket to retreive from S3 -->
+		<pollEnrich timeout="5000">
+		    <simple>aws-s3://${headers.BUCKET}?region=${headers.REGION}&amp;accessKey=RAW(${headers.ACCESSKEY})&amp;secretKey=RAW(${headers.SECRETKEY})&amp;deleteAfterRead=true&amp;fileName=${headers.PATH}</simple>
+		</pollEnrich>
+	  <removeHeaders pattern="JMS*"/>
+	  <convertBodyTo type="byte[]"/>
+	  <choice>
+		  <when>
+			 <simple>${body} != null</simple>
+			 <to uri="volante:ACHBulkLoadPostProcessMetaData"/><!-- Flatten the FileName and set correct header for the FileProcessor  -->
+ 	 		 <to uri="direct-vm:ADF_BULKLOAD_NACHAM"/>
+		 </when>
+		 <otherwise>
+			<to uri="{{QUEUE_PREFIX}}:ADFLOAD.METADATA.TRANSACTED.ERROR"/>
+		 </otherwise>
+	 </choice>
+	</route>
+    </camelContext>
+</beans>

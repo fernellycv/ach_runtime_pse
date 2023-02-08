@@ -1,0 +1,135 @@
+<style>
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+</style>
+
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-building-o"></i>
+                    <a href="javascript:void(0);" class="removeCursor">Payment Module</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span class="removeCursor">Statement</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title__container">
+                    <h2>Statement</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div>
+        <form class="form-horizontal" role="form" ng-submit="generateStatement(data)">
+            <div class="row" style="margin:0;">
+                <div class="col-md-4">
+                    <div class="form-group searchRow fade-in-up">
+                        <label class="control-label col-sm-4" style="text-align:left;">Account Number
+							<span ng-hide="false" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+						</label>
+                        <div class="col-sm-8">
+                            <select name="AccountNumber" class="form-control" ng-model="data.STMTACCOUNTNO" ng-required="true">
+								<option value="">&#45;&#45;Select&#45;&#45;</option>
+								<option ng-repeat="val in STMTACCOUNTNO" value="{{val.STMTACCOUNTNO}}">{{val.STMTACCOUNTNO}}</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row" style="margin:0;">
+                <div class="form-group" style="padding:10px;margin:0">
+                    <button type="submit" class="btn btnStyle btn-sm" translate>BtnGroup.Search &nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+        </form>
+    </div>
+    <br/><br/>
+    <div class="portlet-title" style="width:100%;margin-bottom:0">
+        <div class="caption caption-md ProfileHeaderStyles">
+            <i class="fa fa-file-text-o"></i>
+            <span class="caption-subject bold">Statements are:</span>
+        </div>
+    </div>
+
+
+    <div class="portlet-body">
+        <div class="portlet-inner-box">
+            <div class="alert alert-warning" ng-if="!statements.length">
+                <strong><h4 style="margin:0;text-align:center;" >{{'BankDataDts.NoRecordsFound' | translate}}</h4></strong>
+            </div>
+
+            <div class="row scrollableDiv table-responsivve" style="margin:0;overflow:auto;max-height:350px;" ng-if="statements.length">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Instruction Identification</th>
+                            <th>Statement Date</th>
+                            <th>Statement Reference Number</th>
+                            <th>Account Identification</th>
+                            <th>Statement Servicing Institution</th>
+                            <th>Opening Balance</th>
+                            <th>Closing Balance</th>
+                            <th>Closing Available Balance (Available Funds)</th>
+                            <th>Information to Account Owner</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="statement in statements">
+                            <td>{{statement.InstructionID}}</td>
+                            <td>{{statement.StmtFromDate}}</td>
+                            <td>{{statement.OriginalStatementReference}}</td>
+                            <td>{{statement.StmtAccountNo}}</td>
+                            <td>{{statement.StmtAccServicingInstitution}}</td>
+                            <td>{{statement.StmtAccountOpeningBalance}}</td>
+                            <td>{{statement.StmtAccountClosingBalance}}</td>
+                            <td>{{statement.StmtAccClosingAvailableBal}}</td>
+                            <td>{{statement.StmtAdditionalInfo}}</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+    $(document).ready(function() {
+        $('.DatePicker').datetimepicker({
+            format: "YYYY-MM-DD",
+            useCurrent: false,
+            showClear: true
+        })
+    })
+</script>

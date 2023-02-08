@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <!-- Console Appender -->
+    <Console name="ConsoleAppender" target="SYSTEM_OUT">
+      <PatternLayout pattern="[%t][%-5p] [%d{dd MMM yyyy HH:mm:ss}] %c %x - %m%n" />
+    </Console>
+
+    <!-- Rolling File Appender -->
+    <RollingFile name="RollingFileAppender">
+      <FileName>../logs/VolPayRest.log</FileName>
+      <FilePattern>../logs/VolPayRest.log.%i</FilePattern>
+      <PatternLayout>
+        <Pattern>[%t][%-5p] [%d{dd MMM yyyy HH:mm:ss}] %c %x - %m%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="32" />
+    </RollingFile>
+
+<!-- Rolling Appender Camel -->
+    <RollingFile name="RollingfileAppenderCamel">
+      <FileName>../logs/VolPayRestCamel.log</FileName>
+      <FilePattern>../logs/VolPayRestCamel.log.%i</FilePattern>
+      <PatternLayout>
+        <Pattern>[%t][%-5p] [%d{dd MMM yyyy HH:mm:ss}] %c %x - %m%n</Pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB" />
+      </Policies>
+      <DefaultRolloverStrategy max="32" />
+    </RollingFile>
+
+    </Appenders>
+    <Loggers>
+	<!--<loggerFactory class="org.owasp.esapi.reference.Log4JLoggerFactory"/>-->
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+        </Root>
+	<logger name="com.volante" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+        <logger name="com.volantetech" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+        <logger name="volante.runtime" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+	<logger name="volante.runtime.messageflow" level="TRACE" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+	<logger name="com.tplus.transform.util" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+	<logger name="com.volantetech.volante.services" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+	<logger name="com.volante.component" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+	<logger name="com.tplus.transform.runtime.rest" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFileAppender"/>
+		<!--<AppenderRef ref="Console" />-->
+        </logger>
+        <logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="RollingfileAppenderCamel"/>
+        </logger>
+        <logger name="org.apache.activemq" level="INFO" additivity="false">
+            <AppenderRef ref="RollingfileAppenderCamel"/>
+        </logger>
+        <logger name="org.apache.camel" level="INFO" additivity="false">
+            <AppenderRef ref="RollingfileAppenderCamel"/>
+        </logger>
+	<logger name="com.volantetech.volante.services.camel.routebuilders" level="INFO" additivity="false">
+            <AppenderRef ref="RollingfileAppenderCamel"/>
+        </logger>
+	<logger name="org.quartz" level="INFO" additivity="false">
+            <AppenderRef ref="RollingfileAppenderCamel"/>
+        </logger>
+    </Loggers>
+</Configuration>

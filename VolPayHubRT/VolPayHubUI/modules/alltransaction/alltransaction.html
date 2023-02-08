@@ -1,0 +1,1435 @@
+<style>
+    .badge {
+        white-space: normal;
+        border-radius: 0.75rem !important;
+        background-color: #777;
+    }
+
+    .batchHeight {
+        /*padding-bottom: 1.25rem;*/
+        text-align: center;
+        padding: 0.313rem 0.625rem;
+        width: 7.5rem;
+        /*height: 1.5rem;*/
+    }
+
+    .open>a {
+        box-shadow: none;
+    }
+
+    .all-payment-repair-label {
+        color: #8a6d3b;
+    }
+    .all-payment-primary {
+        /*border: 0.125rem solid #347ab8;*/
+        border-left: 0.313rem solid #347ab8 !important;
+        box-shadow: 0.188rem 0.188rem 0.125rem rgba(168, 203, 234, 0.67)
+    }
+    .all-payment-repair {
+        /*border: 0.125rem solid #347ab8;*/
+        border-left: 0.313rem solid #8a6d3b !important;
+        box-shadow: 0.188rem 0.188rem 0.125rem rgba(233, 204, 154, 0.6)
+    }
+    
+    .all-payment-success {
+        border-left: 0.313rem solid #05862a !important;
+        box-shadow: 0.188rem 0.188rem 0.125rem rgba(177, 212, 187, 0.65)
+        /*border: 0.125rem solid #05862a;*/
+    }
+    
+    .all-payment-danger {
+        border-left: 0.313rem solid #c2272d !important;
+        box-shadow: 0.188rem 0.188rem 0.125rem rgba(255, 158, 162, 0.61)
+        /*border: 0.125rem solid #c2272d;*/
+    }
+    
+    .all-payment-warning {
+        border-left: 0.313rem solid #ff6f00 !important;
+        box-shadow: 0.188rem 0.188rem 0.125rem rgba(241, 213, 192, 0.78)
+        /*border: 0.125rem solid #ff6f00;*/
+    }
+    
+    .all-payments-widget {
+        background: #fff;
+        margin-bottom: 0.625rem;
+        /*border-radius:0.25rem !important;*/
+        box-shadow: rgba(158, 158, 158, 0.7) 0.188rem 0.188rem 0.125rem;
+    }
+    
+    .all-payments-widget:hover {
+        opacity: .8;
+    }
+    
+    .all-payment-success-label {
+        color: #05862a;
+    }
+    
+    .all-payment-primary-label {
+        color: #347ab8;
+    }
+    
+    .all-payment-danger-label {
+        color: #c2272d;
+    }
+    
+    .all-payment-warning-label {
+        color: #ff6f00;
+    }
+
+    /*.all-payment-success-bottom{
+	    border-bottom: 0.063rem solid #05862a;
+	}
+	.all-payment-primary-bottom{
+	     border-bottom: 0.063rem solid #347ab8;
+	}
+	.all-payment-danger-bottom{
+	     border-bottom: 0.063rem solid #c2272d;
+	}
+	.all-payment-warning-bottom{
+	     border-bottom: 0.063rem solid #ff6f00;
+	}*/
+    
+    .header-row {
+        padding: 0.313rem 0;
+    }
+    
+    .header-row .list-inline li {
+        padding-left: 0;
+    }
+    
+    .header-row .list-inline li span {
+        font-weight: 600;
+        font-size: 0.938rem;
+        border-right: 0.125rem solid;
+        padding-right: 0.625rem;
+    }
+
+    /*.header-row .list-inline li:hover span{
+	    border: none !important;
+	}*/
+    
+    .header-row .list-inline li:last-child span {
+        padding: 0;
+    }
+    
+    .header-row,
+    .flex-row {
+        background: #e8e9eb;
+    }
+    
+    .flex-row {
+        padding: 0.188rem 0;
+    }
+    
+    .info-row {
+        padding: 0.313rem 0;
+        background: #e8e9eb;
+    }
+    
+    .header-row .list-inline li:last-child span {
+        border: none;
+    }
+    
+    .pull-right1 {
+        float: right !important;
+    }
+    
+    .input-group .form-control {
+        z-index: 0 !important;
+    }
+
+    .searchContainer {
+       background-color: #e7e9eb;
+       height: auto;
+     }
+
+    .card-header {
+        color: #333;
+        background-color: #f5f5f5;
+        border-color: #ddd;
+        padding: 0.313rem 1.25rem;
+     }
+
+     .custmdropdown{
+      transform: translate3d(0.313rem, 2.188rem, 0rem)!important;
+      }
+
+      .modalwidth{
+        width: 37.5rem;
+      }
+
+      .btnPaddng{
+        padding:0.938rem;
+      }
+
+      .width100{
+        width:100%
+      }
+
+      .alighnTo{
+        border:none;
+        background-color:transparent;
+      }
+
+      .clearBoth{
+        clear:both
+      }
+
+      .iconSearch{
+        cursor:pointer;
+        background-color:#fff;
+        border:none;
+      }
+
+      .savedSearchalighn{
+        margin:0;
+        margin-top:0.313rem;
+        margin-bottom:0.313rem;
+      }
+
+      .savedSearchData{
+        margin-left:0.625rem;
+        display:inline-block;
+        margin-top:0.188rem;
+      }
+
+      .iconTimes{
+        border:0.063rem solid #DE2F2B;
+        background-color:#D05450;
+        border-radius:0.625rem;
+        color:#F5E6E6;
+        font-size:0.813rem;
+      }
+
+      .btnAdvsearch{
+        width:100%;
+        padding-left: 0.188rem;
+      }
+
+      .advSearchdisp{
+        color:#fff !important;
+      }
+
+      .iconAngle{
+        padding-top:0.125rem;
+      }
+
+      .modalTop{
+        top: 12.5rem;
+      }
+
+      .modalContent{
+        padding: 0rem !important; 
+        border: 0rem !important
+      }
+
+      .modalSavesrch{
+        line-height:0.5 !important;
+      }
+
+      .searchNamealighn{
+        padding:0.625rem;
+        margin:0
+      }
+
+      .asterisk{
+        color:#e02222;
+        font-size:0.75rem;
+        padding-left:0.125rem
+      }
+
+      .requiredFld{
+        color:red;
+        margin-left:0.625rem;
+      }
+
+      .modalFtr{
+        float:right;
+        padding:0.625rem;
+        margin:0
+      }
+
+      .advSearchbody{
+        margin:0;
+        margin-bottom:0.5rem;
+        padding:1.25rem; 
+        height: auto;
+      }
+
+      .searchfltr{
+        padding: 0.625rem 0.25rem 0.625rem 0.25rem;
+        margin-bottom:1.25rem;
+      }
+
+      .searchfltrFont{
+        font-size:1.375rem;
+      }
+
+      .addRemoveUl{
+        min-width:13.563rem !important;
+      }
+
+      .addRemoveAlighn{
+        margin:0;
+        margin-top:0.313rem;
+        margin-right: 0.313rem;
+      }
+
+      .addRemovelabel{
+        display:inline-block;
+        margin-top:0.188rem;
+      }
+
+      .addRemoveswitch{
+        width:2.125rem !important; 
+        height:0.875rem !important; 
+        border-radius:1.25rem !important;
+        margin-top:0.313rem;
+      }
+
+      .addRemovesmall{
+        width:0.75rem !important;
+        height:0.75rem !important;
+      }
+
+      .addRemoveopacity{
+        opacity:0;
+        display:none;
+      }
+
+      .addRemoveBtn{
+        margin-right:0.313rem;
+      }
+
+      .txtStart{
+        text-align:start;
+      }
+
+      .crossTablealighn{
+        background-color: white;
+      }
+
+      .selectAlighn{
+        padding: 0.313rem; 
+        float: left;
+        color:#000;
+      }
+
+      .columnFont{
+        font-weight:bold;
+      }
+
+      .crossTableDisp{
+        border: 0.313rem solid rgb(158, 158, 158); 
+        background-color: rgb(231, 233, 235); 
+        min-height: 3.75rem;
+        padding-top:0.938rem;
+      }
+      
+      .crossAddsection{
+        display: inline-block;
+        /* padding: 0rem 1.25rem; 
+        width: 80%; */
+        margin: 0;
+        font-size: 0;
+        text-align: center;
+      }
+
+      .iconPlus{
+        line-height: 1.5rem; 
+        cursor: pointer; 
+        text-decoration: none; 
+        color: rgb(130, 127, 127); 
+        font-size: 1.5rem !important; 
+        opacity: 0.3; 
+        pointer-events: none;
+      }
+
+      .iconMinus{
+        line-height: 1.5rem; 
+        cursor: pointer; 
+        text-decoration: none; 
+        color: rgb(130, 127, 127); 
+        margin-left: 0.625rem; 
+        font-size: 1.5rem !important; 
+        opacity: 1;
+      }
+
+      .hrAlighn{
+        border-color:#ccc;
+      }
+
+      .advSearchBtn{
+        margin-right:0.938rem;
+      }
+
+      .countbarAlighn{
+        padding: 0.313rem;
+        background:#fff
+      }
+
+      .btnView{
+        float:right;
+        box-sizing: border-box;
+        margin-left:0.313rem;
+      }
+
+      .listBtn{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-right:0rem;
+      }
+
+      .gridBtn{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        border-left:0rem
+      }
+
+      .btnDownload{
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+      }
+
+      .dwnIndex{
+        z-index: 10000;
+      }
+
+      .btnExcel{
+        margin-left:2.5rem !important;
+      }
+
+      .btnRefresh{
+        float:right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left:0.313rem;
+      }
+
+      .btnAll{
+        float:right;
+        box-sizing: border-box;
+        margin-left:0.625rem;
+      }
+
+      .btnAlldrop{
+        float:right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left:0.625rem;
+      }
+
+      .btnAllfont{
+        font-size:0.938rem;
+      }
+
+      .btnAllUl{
+        font-size:0.813rem !important
+      }
+
+      .btnAllPointer{
+        pointer-events:none
+      }
+
+      .btnAlldate{
+        text-align:center;
+        color:#000;
+      }
+
+      .btnAction{
+        float:right;
+        box-sizing: border-box;
+      }
+
+      .alertInfobox{
+        width:100%;
+        overflow:auto;
+      }
+
+      .searchByalighn{
+        float:left;
+        width:100%;
+        height:100%;
+        padding: 0.25rem 0.625rem 0.313rem 0.625rem;
+      }
+
+      .alertContainer{
+        margin:0;
+        font-size:0.813rem;
+        word-wrap:break-word;
+      }
+
+      .searchCreteria{
+        margin:0;
+        word-wrap:break-word;
+      }
+
+      .searchNamedisp{
+        word-wrap:break-word;
+      }
+
+      .advParams{
+        font-size:0.813rem;
+        word-wrap:break-word;
+      }
+
+      .btnWrapper{
+        vertical-align:middle;
+      }
+
+      .btnClear{
+        display:block;
+        float:right;
+      }
+
+      .noRecords{
+        margin:0;
+        text-align:center;
+      }
+
+      .cursorPointer{
+        cursor:pointer
+      }
+
+      .checkAlighn{
+        margin-left:1.563rem;
+      }
+
+      .listDisp{
+        border-left:0.313rem solid;
+      }
+
+      .labelValue{
+        font-weight:700
+      }
+
+      .dateInfolabel{
+        font-weight:700;
+        padding-left: 0.313rem;
+      }
+
+      .sortMenufield{
+        font-size:0.813rem;
+      }
+      .info{
+        margin-right: 5px;
+        width: 15px;
+        height: 15px;
+    }
+
+</style>
+<!-- BEGIN PAGE HEADER-->
+<!--<div class="breadCrumb" ng-controller="activeController">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="javascript:void(0);" translate ng-click="goToHome()">Sidebar.Home</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+             <i class="fa fa fa-cog"></i>
+            <a href="javascript:void(0);" translate>Sidebar.PaymentModule</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li translate>
+            AllPayments.PageTitle
+        </li>
+    </ul>
+</div>-->
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-exchange"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span translate class="removeCursor">AllTransactions.PageTitle</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<div class="contentContainer mb-2">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <div class="col-md-3" style="float: right;">
+                        <select ng-show="newPermission.TransactionsACH || newPermission.SentTransactions || newPermission.ReceivedTransactions || newPermission.SOITransactions" class="form-control" ng-model="Section" ng-change="sectionloadiing(Section)" ng-required="true">
+                            <option value="" translate ng-if="Section == '' || Section==null">Placeholder.Select</option>
+                            <option ng-show="newPermission.TransactionsACH" value="TransactionsACH" translate>AllPayments.Transactionachsent</option>
+                            <option ng-show="newPermission.TransactionsACH" value="AllTransactionsReceived" translate>AllPayments.Transactionachrec</option>
+                            <option ng-show="newPermission.SentTransactions" value="SentTransactionsACH" translate>AllPayments.Consultationach</option>
+                            <option ng-show="newPermission.ReceivedTransactions" value="ReceivedTransactionsACH" translate>AllPayments.ReceivedTransactions</option>
+                            <option ng-show="newPermission.SOITransactions" value="SOITransactions" translate>AllPayments.SOI_Transactionssent</option>
+                            <option ng-show="newPermission.SOITransactions" value="SOITransactionsReceived" translate>AllPayments.SOI_Transactionsrec</option>
+                        </select>
+                    </div>
+                    <h2 translate>AllTransactions.PageTitle</h2>
+                    <p translate>AllTransactions.SubTitle</p>
+                </div>
+            </div>
+
+            <div class="col-sm-5">
+                <div>
+                    <div>
+                        <div class="modal fade" id="myModal" role="dialog" tabindex="-1" data-backdrop="static" ng-keydown="dummy($event)">
+                            <div class="modal-dialog">
+                                <div class="modal-content modalwidth">
+                                    <div class="modal-header modalHeaderColor">
+                                        <h5 class="modal-title" translate>ReceivedInstructions.SelectTheDates</h5>
+                                        <button type="button" class="close" data-dismiss="modal" ng-click="filterCancel()">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form ng-submit="FilterByDate1('custom')">
+                                            <div class="col-md-12 btnPaddng">
+                                                <div class="input-group-prepend date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                                    <input type="text" class="form-control DatePicker dateTypeKey width100" ng-model="startDate" id="startDate"  placeholder="{{'BankDataDts.From' | translate}}  ( TimeZone - {{profileName}} )" ng-blur="removeFn()" onpaste="return false" required>
+                                                    <span class="input-group-text" ng-click="focusInfn('startDate')"><span class="fa fa-calendar"></span></span>
+
+                                                    <span class="input-group-text alighnTo">{{'BankDataDts.To' | translate}}</span>
+                                                    <input type="text" class="form-control DatePicker dateTypeKey width100" ng-model="endDate" id="endDate"  placeholder="{{'BankDataDts.To' | translate}}  ( TimeZone - {{profileName}} )" ng-blur="removeFn()" onpaste="return false" required>
+                                                    <span class="input-group-text" ng-click="focusInfn('endDate')"><span class="fa fa-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 txtCenter btnPaddng">
+                                                <button type="button" class="btnDeny btnStyle" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                                                <button type="reset" class="btnDefault btnStyle" ng-click="CustomDatesReset()" translate>BtnGroup.Reset</button>
+                                                <button type="submit" id="okBtn" class="btnSuccess btnStyle" translate>BtnGroup.Submit</button>
+                                            </div>
+                                            <div class="clearBoth"></div>
+                                        </form>
+
+
+
+                                    </div>
+                                    <!--<div class="modal-footer" style="text-align:center;">
+                                    <button type="button" id="okBtn" class="btn btnStyle" data-dismiss="modal" ng-click="FilterByDate1('custom')">OK</button>
+                                    <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="filterCancel()" translate>BtnGroup.Cancel</button>
+                                    <button type="button" class="btn btnStyle" ng-click="CustomDatesReset()" translate>BtnGroup.Reset</button>
+
+                                </div>-->
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!--alert ng-repeat="alert in ErrorAlerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert-->
+    <div id="statusBox" class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger','alert alert-info':alert.type == 'info'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div class="searchholder">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12 showadv-md-7">
+                <div class="form-group ">
+                    <div class="input-group-prepend">
+                        <input type="text" ng-model="paylistsearch" placeholder="{{'PaymentModuleDts.InstructionID' | translate}}" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' onkeyup="keyupfn(event)" ng-keyup="checkinfo($event)" ng-mouseup="checkinfo($event)" id="searchBox" />
+
+                        <span class="input-group-text search-addon iconSearch" ng-click="PaymentListSearch()" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BtnGroup.Search'| translate}}">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 showadv-md-2">
+                <div class="dropdown width100">
+                    <button class="btnDefault btn-block btnStyle dropdown-toggle mega-dropdown1" type="button" id="DropId" data-toggle="dropdown" translate>BtnGroup.SavedSearch
+                    </button>
+
+                    <ul class="dropdown-menu mega-dropdown-menu1 customDropDown1 savedScroll" role="menu" aria-labelledby="menu1">
+                        <li class="dropdown-item" ng-repeat="data in lskey">
+                            <div class="row savedSearchalighn">
+                                <div class="col-md-10" ng-click="selectSearch($event,$index)">
+                                    <span class="savedSearchData" ng-if="data == 'New Search'">{{('AllPayments.'+data) | translate}}</span>
+                                    <span class="savedSearchData" ng-if="data != 'New Search'">{{data}}</span>
+                                </div>
+                                <div class="col-md-2" ng-if="data != 'New Search'">
+                                    <div class="cancel"><i class="fa fa-times cursorPointer iconTimes" ng-click="confirmationAlert($index)" data-toggle="modal" data-target="#alertBox"></i></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 showadv-md-3">
+                <button type="button" class="btnSuccess btnStyle btnAdvsearch" data-toggle="collapse" data-target="#PaymentAdvancedSearch" ng-init="PaymentAdvancedSearch=true;"  ng-click="showSearchWarning = false;advanceSearchCollaspe(); forplaceholder();">
+                    <span ng-if="PaymentAdvancedSearch" class="advSearchdisp"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i class="bold fa fa-angle-right circle-o iconAngle"></i>{{aaa()}}</span>
+                    <span ng-if="!PaymentAdvancedSearch" class="advSearchdisp"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i class="bold fa fa-angle-down circle-o iconAngle"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!--<div class=" searchholder">
+    <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="ccol-lg-12 col-md-12 col-sm-12">
+            <div class="form-group ">
+                <div class="input-group">
+
+                    <input type="text" ng-model="paylistsearch" placeholder="{{'PaymentModuleDts.InstructionID' | translate}}" class="searchBox" onkeydown='return allowOnlyNumbersAlone(event)' onkeyup="keyupfn(event)"  ng-keyup="checkinfo($event)" ng-mouseup="checkinfo($event)" id="searchBox"/>
+
+                    <span class="input-group-addon"  ng-click="PaymentListSearch()" tooltip="{{'BtnGroup.Search'| translate}}" style="cursor:pointer;background-color:#fff;border:none;"    >
+                        <i class="fa fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-6 col-md-5 col-sm-6 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="dropdown" style="width:100%;">
+
+                    <ul class="btn btn-default" style="width:100%;">
+                        <li class="dropdown mega-dropdown1" style="width:100%;"> 
+                            <a class="dropdown-toggle btn" style="text-decoration:none;padding:0 115px;width:100%;" id="DropId" translate>
+                            BtnGroup.SavedSearch
+                        </a>
+
+                            <ul class="dropdown-menu mega-dropdown-menu1 customDropDown1">
+                                <li ng-repeat="data in lskey">
+
+                                    <div class="row" style="margin:0;margin-top:5px;margin-bottom:5px;">
+                                        <div class="col-md-10" ng-click="selectSearch($event,$index)">
+                                            <span style="margin-left:10px;display:inline-block;margin-top:3px;">{{data}}</span>
+                                        </div>
+
+                                        <div class="col-md-2" ng-if="data != 'New Search'">
+
+                                            <div class="cancel"><i style="border:1px solid #DE2F2B;background-color:#D05450;border-radius:10px;color:#F5E6E6;font-size:13px;" class="fa fa-times" ng-click="confirmationAlert($index)" data-toggle="modal" data-target="#alertBox"></i></div>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6 col-md-7 col-sm-6 col-xs-12" style="margin-top:1px">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <button type="button" class="btn" ng-init="PaymentAdvancedSearch=true;" ng-click="PaymentAdvancedSearch=!PaymentAdvancedSearch;showSearchWarning = false;" style="width:100%;">
+                            <span ng-if="PaymentAdvancedSearch" style="color:#fff !important;"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-right circle-o"></i></span>
+                            <span ng-if="!PaymentAdvancedSearch" style="color:#fff !important;"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i style="padding-top:2px;" class="bold fa fa-angle-down circle-o"></i></span>
+                        </button>
+                        </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+</div>-->
+
+    <div class="modal fade" tabindex="-1" id="alertBox" role="dialog">
+        <div class="modal-dialog modal-md modalTop">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header modalContent">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body modalContent">
+                     <h1 translate>BankDataDts.Areyousure</h1>
+                    <h5 translate>BankDataDts.PopupRecoverMsg</h5>
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteSelectedSearch($event)" translate >BankDataDts.Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal1" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content modalwidth">
+                <div class="modal-header modalHeaderColor">
+                    <h5 class="modal-title modalSavesrch">{{'AllPayments.Save Search' | translate}} </h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form ng-submit="saveSearch()">
+                        <div class="form-group searchNamealighn">
+                            <label>{{'AllPayments.Search Name' | translate}} <span ng-hide="false" class="asterisk" aria-required="true">*</span></label>
+                            <input class="form-control" type="text" name="searchname" required ng-model="searchname" placeholder="{{'AllPayments.Enter the search name' | translate}}" />
+                        </div>
+                        <p ng-show="isSearchNameFilled" class="requiredFld">{{'AllPayments.*Please enter the search name' | translate}}</p>
+
+                        <div ng-show="searchNameDuplicated" class="alert alert-warning form-group fade-in-up text-center">
+                            <b>{{'AllPayments.Search name already exists. Do you want to overwrite?' | translate}}</b><br/><br/>
+
+                            <button type="submit" class="btn btn-warning btn-sm" ng-click="saveSearch1()" translate>BankDataDts.Yes</button>
+                            <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal" translate>BankDataDts.No</button>
+                        </div>
+
+                        <div ng-show="isAnyFieldFilled" class="alert alert-warning form-group fade-in-up text-center">
+
+                            <b>{{'AllPayments.Please select any of the fields to save the search' | translate}}</b><br /><br />
+                            <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">OK</button>
+                        </div>
+
+                        <div class="form-group modalFtr">
+
+                            <button type="submit" class="btnSuccess btnStyle btn-sm"translate>BtnGroup.Save</button>
+                            <button type="button" class="btnDefault btnStyle btn-sm" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                        </div>
+                        <div class="clearBoth"></div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- collapse="PaymentAdvancedSearch" -->
+    <div  class="searchContainer collapse advSearchbody" id="PaymentAdvancedSearch">
+        <div class="row searchfltr">
+            <div class="col-md-5 searchfltrFont" translate>PaymentModuleDts.SearchFilters</div>
+
+
+            <div class="col-md-7 col-sm-6 col-xs-12 float-right">
+                <button style="margin-left:5px;" value="SaveSearch" class="btnSuccess float-right btnStyle addRemoveBtn" id="saveSearchBtn" data-keyboard="true" data-toggle="modal" data-target="#myModal1" ng-click="ClearAlert()"><i class="fa fa-floppy-o"></i> <span translate>BtnGroup.SaveSearch</span>  </button>
+                <ul class="float-right" ng-if="filterConfigurable">
+                    <li class="dropdown mega-dropdown" data-toggle="dropdown">
+                        <a href="javascript:;" >
+                            <button class="btnDefaultColor btnStyle" type="button" id="menu1"><i class="fa fa-filter"></i> <span></span></button>
+                        </a>
+                        <ul class="dropdown-menu mega-dropdown-menu custmdropdown addRemoveUl" ng-click="$event.stopPropagation()">
+                            <li ng-repeat="data in FieldsValues" ng-if="!data.mandatory ">
+
+                                <div class="row addRemoveAlighn">
+                                    <div class="col-md-9">
+                                        <span class="addRemovelabel" translate>{{data.label}}</span>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="checkbox m-0">
+                                            <span class="green switch green ng-valid ng-pristine ng-untouched addRemoveswitch" ng-init="active = data.visible" ng-click="active=!active;SelectValue($index);" ng-class="{checked:active}"
+                                                ng-model="active" ng-keydown="toggleFocus($event, $index, true)">
+		                                    <small class="addRemovesmall" tabindex="0" ></small>
+		                                    <input type="checkbox" ng-model="UIRSelect" class="ng-pristine ng-untouched ng-valid addRemoveopacity"/>
+		                                    <span class="switch-text"> </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+
+                <button class="btnDefaultColor float-right btnStyle addRemoveBtn" value="Reset Filter" ng-click="resetFilter()"  ng-focus="focusOutfn()"><i class="fa fa-refresh"></i> <span></span>  </button>
+            </div>
+        </div>
+        <div class="row m-0" ng-show="showSearchWarning">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div id="showWarning" class="alert alert-info alert-block bold text-center">
+                    <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+
+
+        <form class="form-horiaontal" name="bankDataForm"  >
+            <div class="row">
+                <div class="col-md-6 clearSpace" ng-repeat="fields in FieldsValues track by $index" ng-show="fields.visible"  >
+                        <div class="form-group fade-in-up">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="control-label text-left" translate>{{fields.label}}</label>
+                                </div>
+                                <div class="col-md-6" ng-if="fields.type == 'text'">
+                                    <input type="text" class="form-control" ng-model="search[fields.value]"  name="{{fields.value}}"  autocomplete="off"  placeholder="{{fields.label | translate}}"   ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event,fields.label) : ''" />
+                                </div>
+
+                                <div class="col-md-6" ng-if="fields.type == 'dropdown'" style="max-height:100px;overflow-y:scroll;white-space: nowrap; font-size: 14px;">
+                                    <!-- <option value="" translate>Placeholder.Select</option> -->
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='PartyServiceAssociationCode'" style="width: 100%;">
+                                        <option ng-repeat="option in uniqueCurrency" value="{{option}}">{{option}}</option>
+                                    </select>
+                                    <!-- <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='OriginatingEntity'&&originatingparty.length>1" style="width: 100%;">
+                                        <option ng-repeat="option in originatingparty" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                    </select> -->
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='OriginatingEntity'" style="width: 100%;">
+                                        <!-- <option ng-repeat="option in originatingparty track by option.actualvalue" value="{{option.actualvalue}}" ng-init="(originatingparty.length == 1)?search[fields.value] = [originatingparty[0].actualvalue]:''">{{option.displayvalue}}</option> -->
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='ReceivingEntity'" style="width: 100%;">
+                                        <!-- <option ng-repeat="option in receivingparty track by option.actualvalue" value="{{option.actualvalue}}" ng-init="(receivingparty.length==1)?search[fields.value] = [receivingparty[0].actualvalue]:''">{{option.displayvalue}}</option> -->
+                                    </select>
+                                    <!-- <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='ReceivingEntity'&&receivingparty.length==1" style="width: 100%;" ng-disabled= "{{(fields.value== 'ReceivingEntity' &&receivingparty.length==1)}}">
+                                        <option ng-repeat="option in receivingparty" value="{{option.actualvalue}}" ng-init="search[fields.value] = [receivingparty[0].actualvalue]">{{option.displayvalue}}</option> 
+                                    </select> -->
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='Cycle'" style="width: 100%;">
+                                        <option ng-repeat="option in Cycles" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='TypeService'" style="width: 100%;">
+                                        <option ng-repeat="option in TypeService" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='TXCode'" style="width: 100%;">
+                                        <option ng-repeat="option in TXCode" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='Currency'" style="width: 100%;">
+                                        <option ng-repeat="option in uniqueCurrency" value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='MethodOfPayment'" style="width: 100%;">
+                                        <option ng-repeat="option in uniqueMOP"  value="{{option.actualvalue}}">{{option.displayvalue}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='Status'" style="width: 100%;">
+                                        <option ng-repeat="option in uniquePaymentStatusArr" value="{{option}}">{{option}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='OriginalPaymentFunction'" style="width: 100%;">
+                                        <option ng-repeat="option in OriginalPaymentFunction" value="{{option}}">{{option}}</option>
+                                    </select>
+                                    <select class="form-control" name="{{fields.value}}" ng-model="search[fields.value]" multiple="multiple" ng-if="fields.value=='OrigMsgSubFunction'" style="width: 100%;">
+                                        <option ng-repeat="option in OrigMsgSubFunction" value="{{option}}">{{option}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-8" ng-if="fields.type=='dateRange'">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-9">
+                                            <div class="input-group date" data-date-format="yyyy-mm-dd"  data-date-viewmode="years" data-date-minviewmode="months">
+
+                                                <input type="text" class="form-control DatePicker dateTypeKey" autocomplete="off" placeholder="{{'BankDataDts.From' | translate}}  ( TimeZone - {{profileName}} )" id="{{fields.value+'Start'}}" name="{{fields.value+'Start'}}"ng-model="search.InstructionData[fields.value].Start" onpaste="return false">
+                                                <span class="input-group-text" ng-click="focusInfn(fields.value+'Start')">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+
+                                                <!-- <span style="display: none;" class="input-group-text alighnTo">{{'BankDataDts.To' | translate}}</span>
+                                                <input  style="display: none;" type="text" class="form-control DatePicker dateTypeKey txtStart" autocomplete="off"  placeholder="{{'BankDataDts.To' | translate}}   ( TimeZone - {{profileName}} )" id="{{fields.value+'End'}}" name="{{fields.value+'End'}}"  ng-model="search.InstructionData[fields.value].End" onpaste="return false">
+                                                <span style="display: none;"  class="input-group-text" ng-click="focusInfn(fields.value+'End')">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span> -->
+                                            </div>
+                                            <span ng-if="fields.value=='DebitFxRate'" ng-show="Required"  class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true" translate>Placeholder.Required</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-sm-12 col-xs-12" ng-if="fields.type=='amountRange'">
+                                    <div class="row">
+                                        <div class="col-md-5 col-sm-4 col-xs-4">
+                                            <input type="text" class="form-control"  placeholder="{{'BankDataDts.From' | translate}}" autocomplete="off" ng-model="search.InstructionData[fields.value].Start" ng-keypress="(fields.allow == 'number') ? allowNumberWithDecimal($event) : ''">
+                                        </div>
+                                        <div class="col-md-2 col-sm-1 col-xs-1">
+                                            <span class="input-group-addon alighnTo">{{'BankDataDts.To' | translate}}</span>
+                                        </div>
+                                        <div class="col-md-5 col-sm-4 col-xs-4">
+                                            <input type="text" class="form-control"  placeholder="{{'BankDataDts.To' | translate}}" autocomplete="off" ng-model="search.InstructionData[fields.value].End" ng-keypress="(fields.allow == 'number') ? allowNumberWithDecimal($event) : ''">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    <div class="clearfix" id="{{$index}}" ng-if="$index%2 == 1"></div>
+                </div>
+            </div>
+
+
+            <hr class="hrAlighn" />
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="float-right advSearchBtn">
+                        <button type="button" value="Cancel" class="btnDefault btnStyle" ng-click="rstAdvancedSearchFlag();showSearchWarning =false;forplaceholder();submitted=false"><i class="fa fa-times"></i>
+                            <span translate>BtnGroup.Cancel</span> </button>
+                            
+                            <button type="button" value="Search" id="AdSearchBtn"  ng-click="submitform(FieldsValues);" class="btnSuccess btnStyle"> <i class="fa fa-search"></i> <span
+                                    translate>BtnGroup.Search</span> </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="countbarAlighn">
+        <div class="row m-0">
+            <div class="countbar-title row m-0 width100">
+                <div class="col-md-3 col-sm-3 col-xs-4  ng-binding p-0">
+                    <div class="caption">
+                        <!-- <span class="highlight">{{items.length}} out of {{totalData}}</span>{{'BankDataDts.recordsshown' | translate}} -->
+                        <!-- <span class="highlight">{{(items.length && totalData) ? items.length +  ('BankDataDts.Outof' | translate ) + totalData : (items.length && !totalData) ? items.length : '' }}</span>{{(items.length && totalData) || (items.length && !totalData) ?'BankDataDts.recordsshown' : (!items.length && !totalData) ? 'BankDataDts.FetchingData' : '' | translate}} -->
+
+                        <span ng-if="items.length"><span class="highlight"
+                                ng-if="items.length && totalData">{{(totalData && items.length)? items.length +  ('BankDataDts.Outof' | translate ) +totalData : (items.length)?items.length:'' }}
+                            </span>&nbsp;
+                        <span class="highlight">{{(!totalData && items.length)? items.length:'' }}</span>
+
+                        <span translate>BankDataDts.recordsshown</span></span>
+                        <span ng-if="!items.length"> <span class="highlight">0 </span> <span translate>BankDataDts.recordsshown</span></span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-9 col-sm-9 col-xs-8 p-0">
+                    <div class="btn-group btnView">
+                        <!-- <button class="btn btn-md viewbtn" id="btn_1" ng-click="hello('list',$event)" data-toggle="tooltip" title="{{listTooltip}}"><i class="fa fa-list"></i></button>
+                        <button class="btn btn-md viewbtn" id="btn_2" ng-click="hello('grid',$event)" data-toggle="tooltip" title="{{gridTooltip}}"><i class="fa fa-table"></i></button>-->
+
+                        <button class="btn-trans listBtn" id="btn_1" ng-class="changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.ListView' | translate}}"><i
+                                class="fa fa-list fa-fs14"></i></button>
+                        <button class="btn-trans gridBtn" id="btn_2" ng-class="!changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.GridView' | translate}}"><i
+                                class="fa fa-table fa-fs14"></i></button>
+                    </div>
+
+                    <div class="dwnBtn float-right">
+                        <a id='dwnldLnk' style="display:none;"></a>
+                        <button ng-show="exportAllTransactions"  class="btn-trans btnDownload" type="button" data-toggle="{{(items.length)?'dropdown':''}}" ng-click="setHeight($event)" data-toggle-second="tooltip" data-placement="top" data-original-title="{{(items.length)?'ToolTips.Export':'ToolTips.Norecordstoexport' | translate}}" ng-style="{'opacity':(items.length)?'1':'0.5'}"> <i class="fa fa-download"
+                                aria-hidden="true"></i></button>
+
+                        <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
+                            <li>
+                                <!-- <span><input type="radio" name="excelVal" value="Current" checked class="radiobtns" >{{'BankDataDts.CurrentScreen' | translate}}</span> -->
+
+                                <span style="word-break: break-all;text-align: initial;" ><input type="radio" name="excelVal" value="All" class="radiobtns" >{{'BankDataDts.AllMatchingFilter' | translate}}</span>
+                            </li>
+                            <!--  <a id="print" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top"  title="{{'BankDataDts.Print' |translate}}" onclick="Print()">
+                                <i class="fa fa-print fa-lg" aria-hidden="true"></i>
+                            </a> -->
+
+                            <li data-toggle-second="tooltip" data-placement="top" title="{{'SanctionModule.Reporttxt' | translate}}"  class="excelprint" ng-click="exportToExcel('txt')"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            </li>
+                            <li data-toggle-second="tooltip" data-placement="top" title="{{'SanctionModule.ExportCSV' | translate}}"  class="excelprint" ng-click="exportToExcel('csv')"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                            </li>
+                            <li data-toggle-second="tooltip" data-placement="top" title="{{'commissions.PDF' | translate}}"  class="excelprint"  ng-click="exportToExcel('pdf')"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                            </li>
+                              <li data-toggle-second="tooltip" data-placement="top" title="{{'commissions.XLS' | translate}}"  class="excelprint"  ng-click="exportToExcel('xls')"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                            </li>
+                            <!-- <li data-toggle-second="tooltip" data-placement="top" title="{{'SanctionModule.ExportCSV' | translate}}"  class="excelprint" ng-click="exportToExcel('csv')"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                            </li>
+                            <li data-toggle-second="tooltip" data-placement="top" title="{{'commissions.PDF' | translate}}"  class="excelprint"  ng-click="exportToExcel('pdf')"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                            </li>
+                            <li data-toggle-second="tooltip" data-placement="top" title="{{'commissions.XLS' | translate}}"  class="excelprint"  ng-click="exportToExcel('xls')"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                            </li> -->
+                            <li data-toggle="tooltip" data-placement="top" title="{{'BankDataDts.Print' | translate}}" class="excelprint" ng-click="printFn()"><i class="fa fa-print fa-fs14" aria-hidden="true"></i>
+                            </li>
+
+
+                        </ul>
+                    </div>
+
+                    <!-- <div class="btn-group" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left:5px;" tooltip="Print">
+                        <button class="btn-trans" ng-click="printFn()"><i class="fa fa-print fa-fs14"></i></button>
+                    </div>
+
+                    <div class="btn-group" style="float:right;border: 1px solid #fff;box-sizing: border-box;margin-left:5px;" tooltip="Export to Excel">
+                        <button class="btn-trans" ng-click="exportToExcel($event)"><i class="fa fa-file-excel-o fa-fs14"></i></button>
+                    </div> -->
+
+                    <div class="btn-group btnRefresh" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'ToolTips.Refresh' |translate}}">
+                        <button class="btn-trans" ng-click="loadData1()"><i class="fa fa-refresh fa-fs14"></i></button>
+                    </div>
+
+                    <div class="btn-group btnAll">
+                        <div class="dropdown customDropdown btnAlldrop">
+                            <button style="display: none;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'SelectDates.SelectDates' | translate}}"><span id="dropdownBtnTxt"  class="btnAllfont"
+                                    >{{'SelectDates.All' | translate}}</span>
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-default float-right dropdown-menu-right btnAllUl">
+                                <li class="menuClass" id="menulist_1" ng-click="FilterByDate('all',$event)"><a translate>SelectDates.All</a></li>
+                                <li class="menuClass" id="menulist_2" ng-click="FilterByDate('today',$event)"><a translate>SelectDates.Today</a></li>
+                                <li class="menuClass" id="menulist_3" ng-click="FilterByDate('week',$event)"><a translate>SelectDates.Week</a></li>
+                                <li class="menuClass" id="menulist_4" ng-click="FilterByDate('month',$event)"><a translate>SelectDates.Month</a></li>
+                                <li class="menuClass" id="menulist_5" ng-click="FilterByDate('custom',$event)" data-toggle="modal" data-target="#myModal" data-keyboard="true"><a translate>SelectDates.Custom</a>
+                                </li>
+                                <li class="btnAllPointer" ng-if="startDate&&endDate!=''">
+                                    <P class="btnAlldate">From - <b>{{ShowStartDate}}</b> <br />to -
+                                        <b>{{ShowEndDate}}</b></P>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="countbar-title row m-0 width100" style="text-align: center;display: flex;justify-content: center;">
+                <p><img src="themes/icons/bnym/Info.svg" class="info"/></p>
+                <span translate class="AlertText">AllTransactions.InfoMessagePreview</span>
+            </div>
+        </div>
+
+
+        <div class="alert alert-info infoContainer alertInfobox" ng-if="Section" ng-show="!nothingSelected || advancedSearchEnable">
+
+            <div class="searchByalighn">
+                <p ng-show="UIR" class="alertContainer"><b>{{'AllPayments.Search By Instruction' | translate}}
+                    {{'AllPayments.ID/Payment ID' | translate}} </b>&nbsp;&nbsp; - &nbsp;&nbsp;{{paylistsearchValue}}</p>
+                <p ng-show="today" class="searchCreteria"><b translate>SelectDates.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign"><b translate>SelectDates.Today</b></span><span class="leftAlign">({{todayDate}})</b></span></p>
+                <p ng-show="week" class="searchCreteria"><b translate>SelectDates.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign"><b translate>SelectDates.Week</b></span><span class="leftAlign">({{weekStart}})</span>
+                    <span class="leftAlign">{{'BankDataDts.To' | translate}}</span><span class="leftAlign">({{weekEnd}})</span> </p>
+                <p ng-show="month" class="searchCreteria"><b translate>SelectDates.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign"><b translate>SelectDates.Month</b></span><span class="leftAlign">({{monthStart}})</span>
+                    <span class="leftAlign">{{'BankDataDts.To' | translate}}</span><span class="leftAlign">({{monthEnd}})</span> </p>
+                <p ng-show="custom" class="searchCreteria"><b translate>SelectDates.SelectCriteria</b><span class="leftAlign">-</span><span class="leftAlign"><b translate>SelectDates.Custom</b></span><span class="leftAlign">({{ShowStartDate}})</span>
+                    <span class="leftAlign">{{'BankDataDts.To' | translate}}</span><span class="leftAlign">({{ShowEndDate}})</span> </p>
+            </div>
+
+
+            <div ng-show="advancedSearchEnable" class="searchByalighn">
+
+                <p class="bold alertContainer" ng-hide="fromDashboard" ng-show="searchSet" translate>AllPayments.Advanced Search Parameters</p>
+
+                <p ng-if="searchName" class="searchNamedisp"><b translate>AllPayments.Search Name </b> - {{'AllPayments.searchName' | translate}}</p>
+
+                <span class="advParams" ng-repeat="(key, value) in AdsearchParams">
+
+                    <span ng-if="((key=='InstructionData') && ((value.ReceivedDate.Start != '') || (value.ValueDate.Start != '') || (value.Amount.Start != '') ))">
+                        <span class="searchValContainer" ng-repeat="(k,v) in value" ng-if="(v.Start!='')&&(v.End!='')">
+                            <span ng-if="k=='ReceivedDate'"><b>{{('AllPayments.'+k) | translate}}</b> &nbsp;&nbsp; - &nbsp;&nbsp; {{v.Start}}
+                                &nbsp;&nbsp; {{'BankDataDts.to' | translate}} &nbsp;&nbsp; {{v.End}}</span>
+                            <span ng-if="k=='ValueDate'"><b>{{('AllPayments.'+k) | translate}}</b> &nbsp;&nbsp; - &nbsp;&nbsp; {{v.Start}}
+                                &nbsp;&nbsp; {{'BankDataDts.to' | translate}} &nbsp;&nbsp; {{v.End}}</span>
+                            <span ng-if="k=='Amount'"><b>{{('AllPayments.'+k) | translate}}</b> &nbsp;&nbsp; - &nbsp;&nbsp; {{v.Start}} &nbsp;&nbsp;
+                                {{'BankDataDts.to' | translate}} &nbsp;&nbsp; {{v.End}}</span>
+                            <span ng-if="(k !='ReceivedDate')&&(k!='ValueDate')&&(k!='Amount')"><b>{{('AllPayments.'+k) | translate}}</b> &nbsp;&nbsp; - &nbsp;&nbsp; {{v.Start}} &nbsp;&nbsp;
+                                {{'BankDataDts.to' | translate}} &nbsp;&nbsp; {{v.End}}</span>
+<!--
+                            <span class="bold closeIcon cursorPointer" ng-click="spliceSearchArr(key)">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </span>-->
+                        </span>
+                    </span>
+                    <span class="searchValContainer" ng-if="(key !='InstructionData')">
+                        <b >
+                            <span>
+                                {{('AllPayments.'+((key == 'D_Name')?'Debtor Name':(key == 'D_Account')?'Debtor Account':(key =='C_Name')?'Creditor Name':(key == 'C_Account')?
+                                'Creditor Account':(key == 'OrigInstrID')?'Original Instruction ID':(key == 'OrigTxID')?
+                                'Original Transaction ID':((dynamicDashStatus)?(dynamicDashStatus+' : '+key | camelCaseFormatter) : (key | camelCaseFormatter)))) | translate}}
+                            </span>
+                          
+                               </b>
+                        &nbsp;&nbsp; - &nbsp;&nbsp;
+                        {{value | cleanItem}}
+
+                        <span class="bold closeIcon cursorPointer" ng-hide="(value | uppercase) == 'TODOS' || (value | uppercase) == 'TODO' || (value == defaultvalue && key == 'OriginatingEntity') || (key == 'ReceivingEntity' && value == defaultvalues)" ng-click="spliceSearchArr(key)">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </span>
+
+                </span>
+                </span>
+                <div class="clearfix"></div>
+                <br />
+                <p class="bold alertContainer" ng-show="addCrossTable">Join Query Parameters</p>
+
+                <div ng-show="addCrossTable">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="searchValContainer" ng-repeat="(k,v) in crossTable" ng-if="(k !='fields')">
+                                <span><b>{{k}}</b> &nbsp;&nbsp; - &nbsp;&nbsp; {{v}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- <span ng-repeat="val in crossTable.fields">
+                        <span ng-repeat="(kk,vv) in val">
+
+                            {{kk}} -- {{vv}}
+                        </span>
+                    </span>  -->
+                    <br />
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p class="bold">Filters</p>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Column Name</th>
+                                    <th>Column Value</th>
+                                </tr>
+                                <tr ng-repeat="data in crossTable.fields">
+                                    <td>{{data.columnName}}</td>
+                                    <td>{{data.columnValue}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='button-wrapper btnWrapper'>
+                <input type="button" id="searchBtn" class="btnSuccess btn-sm btnStyle btnClear" value="{{'BtnGroup.Clear' | translate}}" ng-click="clearSearch()" />
+            </div>
+        </div>
+
+       <div class="alert alert-info infoContainer alertInfobox bold" ng-if="Section=='TransactionsACH' || Section=='AllTransactionsReceived' " ng-show="!nothingSelected || advancedSearchEnable">
+           <span translate>AllPayments.descriptions</span>
+           <span>{{AdsearchParams['OriginatingEntity']}}</span>
+           <span translate>AllPayments.And</span>
+           <span>{{AdsearchParams['ReceivingEntity']}}</span>
+
+       </div> 
+        
+        <div class="alert alert-warning mt-2" ng-show="items.length == 0">
+            <strong>
+                <h5 class="noRecords"><i class="fa fa-warning"></i> {{'BankDataDts.NoRecordsFound'|translate}}</h5>
+            </strong>
+        </div>
+
+       
+        <div ng-show="!alertMsg" class="row m-0">
+            <div class="width100">
+            <div class="listView FixHead dataGroupsScroll pt-2 m-0" ng-show="!changeViewFlag">
+                <table class="table table-striped table-bordered smallTable floatThead stickyheader headershide" ng-show="items && items.length">
+                    <thead ng-show="items && items.length">
+                        <tr>
+                            <th class="cursorPointer aPhead" ng-repeat="val in sortMenu" ng-click="Sorting(val.FieldName);" nowrap translate>{{val.label}}
+                                <span ng-show="orderByField == val.FieldName && sortReverse" class="fa fa-caret-up"></span>
+                                <span ng-show="orderByField == val.FieldName && !sortReverse" class="fa fa-caret-down"></span>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-repeat="allpayments in items" class="cursorPointer" ng-init="selectedClr = getClr(allpayments.Status);">
+
+                            <td ng-repeat="val in sortMenu" data-ng-click="clickReferenceID({'data':allpayments,'fromPage':'transactions'},Section)" nowrap >
+                                <span ng-if="(val.FieldName != 'PartyServiceAssociationCode')&&(val.FieldName != 'ReceivedDate')&& (val.FieldName != 'Status')&&(val.FieldName != 'Amount')&&(val.FieldName != 'RecipientIdentification')&&(val.FieldName != 'RecipientName')">{{allpayments[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'PartyServiceAssociationCode')">{{allpayments.InstructionData[val.FieldName]}}</span>
+
+                                <span ng-if="(val.FieldName == 'RecipientIdentification')">{{allpayments.Transaction[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'RecipientName')">{{allpayments.Transaction[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'ReceivedDate')">{{allpayments.InstructionData[val.FieldName] | dateFormat}}</span>
+                                <span ng-if="(val.FieldName == 'ClearingSchemeID')">{{allpayments.Creditor[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'EmailID')">{{allpayments.IntermediaryAgent1[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'LegalEntityIdentifier')">{{allpayments.UltmtDebtor[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'SchemeCode')">{{allpayments.CreditorAgent[val.FieldName]}}</span>
+                                <span ng-if="(val.FieldName == 'Amount')" style="float: right;">{{allpayments[val.FieldName]| currency:'$'}}</span>
+                                <span ng-if="val.FieldName == 'IRA_EMAIL'">{{allpayments['Batch']['OriginDescription']}}</span>
+                                
+                                <span ng-if="(val.FieldName == 'Status')" class="cursorPointer badge batchHeight colorWhite" ng-style="{'background-color':selectedClr.ColourA,'opacity':selectedClr.Opacity}">
+
+                                    <i class="fa fa-check-circle-o" ng-show='allpayments.Status=="COMPLETED"'></i>
+                                    <i class="fa fa-times-circle" ng-show='allpayments.Status=="NOT PROCESSED"'></i>
+                                    <i class="fa fa-exclamation-circle" ng-show='allpayments.Status=="NEEDS APPROVAL"'></i>
+                                    <i class="fa fa-question-circle" ng-show='allpayments.Status=="WAREHOUSED"'></i>
+                                    <i class="fa fa-wrench" ng-show='allpayments.Status=="REPAIR"'></i>
+                                    <i class="fa fa-copy" ng-show='allpayments.Status=="DUPLICATE"'></i>
+                                    <i class="fa fa-question-circle" ng-show='allpayments.Status=="FOR_BULKING"'></i>
+                                    <i class="fa fa-exclamation-circle" ng-show='allpayments.Status=="HOLD"'></i>
+                                    <i class="fa fa-times-circle" ng-show='allpayments.Status=="REJECTED"'></i>
+                                    <i class="fa fa-hourglass-half" ng-show='allpayments.Status=="WAITING"'></i>
+                                    {{allpayments.Status}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="(Section=='TransactionsACH' || Section=='AllTransactionsReceived' || Section=='SOITransactions' || Section=='SOITransactionsReceived' ) && !changeViewFlag">
+
+                <table class="table table-striped table-bordered smallTable floatThead stickyheader" ng-show="items && items.length">
+                    <thead ng-show="items && items.length">
+                        <tr style="text-align: center;">
+                            <th scope="row" translate>AllPayments.TransactionValue</th>
+                            <th scope="row" translate>AllPayments.TransactionVolume</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                        <td style="text-align: right;">{{transactionvalue| currency:'$'}}</td>
+                        <td  style="text-align: center;">{{transactionvolume}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+               
+             </div>
+        </div>
+        <div class="row listView  pt-2 m-0 width100"  ng-show="changeViewFlag">
+
+                <div ng-repeat="allpayments in items" ng-init="selectedClr = getClr(allpayments.Status);" class="all-payments-widget col-md-12 pr-0 pl-0 listDisp" ng-style="{'border-color':selectedClr.ColourA}">
+
+                    <div class="cursorPointer" data-ng-click="clickReferenceID({'data':allpayments,'fromPage':'allpayments'})">
+                        <div class="row header-row m-0">
+                            <div class="col-md-6">
+                                <div>
+                                    <ul class="list-inline row pl-2">
+                                        <li><span title="{{'AllPayments.InstructionID' | translate}}" data-toggle="tooltip" data-placement="{{($index == 0)?'bottom':'top'}}" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}">{{allpayments.No}}</span>
+                                        </li>
+                                        <li><span title="{{'AllPayments.PaymentID' | translate}}" data-toggle="tooltip" data-placement="{{($index == 0)?'bottom':'top'}}" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}" class="pl-2">{{allpayments.InstructionID}}</span>
+                                        </li>
+
+                                        <li><span title="{{'AllPayments.OriginalPaymentFunction' | translate}}" data-toggle="tooltip" data-placement="{{($index == 0)?'bottom':'top'}}" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}" class="pl-2">{{allpayments.PaymentID}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="float-right float-left-xs">
+                                    <ul class="list-inline row pr-3">
+                                        <li><span  data-original-title="{{'BtnGroup.Amount' | translate}}" data-toggle="tooltip" data-placement="{{($index == 0)?'bottom':'top'}}" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}">{{allpayments.Amount|currency}}</span>
+                                        </li>
+                                        <li><span title="{{'AllPayments.Currency' | translate}}" data-toggle="tooltip" data-placement="{{($index == 0)?'bottom':'top'}}" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}" class="pl-2">{{allpayments.TypeService}}</span>
+                                        </li>
+
+                                        <li><span title="{{'allpayments.TXType' | translate}}" data-toggle="tooltip" data-placement="{{($index == 0)?'bottom':'top'}}" ng-style="{'color':selectedClr.ColourA,'opacity':selectedClr.Opacity}" class="pl-2">{{allpayments.TXType}}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row info-row m-0">
+                            <div class="col-md-4">
+                                <div class="field-info" ng-repeat="val in sortMenu">
+                                    <span ng-if="(val.FieldName == 'TXCode')"><span class="labelValue" translate>{{val.label}}</span> : <span ng-if="val.FieldName=='TXCode'" class="sortMenufield">{{allpayments[val.FieldName]}}</span></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="field-info" ng-repeat="val in sortMenu">
+                                    <span ng-if="(val.FieldName == 'ReceivingEntity')"><span class="labelValue" translate>{{val.label}}</span> : <span ng-if="val.FieldName=='ReceivingEntity'" class="sortMenufield">{{allpayments[val.FieldName]}}</span></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="field-info float-right float-left-xs" ng-repeat="val in sortMenu">
+                                    <span ng-if="(val.FieldName == 'ReceivingAccount')"><span class="labelValue" translate>{{val.label}}</span> : <span ng-if="val.FieldName=='ReceivingAccount'" class="sortMenufield">{{allpayments[val.FieldName]}}</span></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="field-info" ng-repeat="val in sortMenu">
+                                    <span ng-if="(val.FieldName == 'RecipientIdentification')"><span class="labelValue" translate>{{val.label}}</span> : <span ng-if="val.FieldName=='RecipientIdentification'" class="sortMenufield">{{allpayments.Transaction[val.FieldName]}}</span></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="date-info">
+
+                                    <ul class="list-inline">
+                                        <li class="pl-0" ng-repeat="val in sortMenu" ng-if="(val.FieldName == 'DebitFxRate')"><span> <span class="labelValue" translate>{{val.label}}</span> :
+                                            <span ng-if="(val.FieldName == 'DebitFxRate')">{{allpayments[val.FieldName] | dateFormat}}</span>
+                                            </span>
+                                        </li>
+
+                                    </ul>
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="date-info float-right float-left-xs">
+
+                                    <ul class="list-inline">
+                                        <li class="pl-0" ng-repeat="val in sortMenu" ng-if="(val.FieldName == 'ValueDate')"><span> <span class="dateInfolabel" translate>{{val.label}}</span> :
+                                            <span ng-if="(val.FieldName == 'ValueDate')">{{allpayments[val.FieldName]}}</span>
+
+                                            </span>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</div>
+<script>
+      $(document).ready(function() {
+        var showFlag = false;
+        $('.input-group-text').on('click focus', function(e) {
+            $(this).prev().focus().click()
+        });
+        $('.input-group-text').on('click focus', function(e) {
+            $(this).prev().focus().click()
+
+        })
+
+        setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+
+
+        $('li.dropdown.mega-dropdown a').on('click', function(event) {
+            $(this).parent().addClass("open");
+        });
+
+        $('li.dropdown.mega-dropdown1 a').on('click', function(event) {
+            $(this).parent().toggleClass("open");
+        });
+
+        $('li.dropdown.mega-dropdown a').focus(function(event) {
+            $(this).parent().addClass("open");
+        });
+
+        $('body').click(function(e) {
+
+            // if ($(e.target).attr('id') == 'DropId') {
+            //     if (!showFlag) {
+            //         $('.customDropDown1').show()
+            //     } else {
+            //         $('.customDropDown1').hide()
+            //     }
+            // } else {
+            //     if ($(e.target).parent().hasClass('cancel')) {
+            //         $('.customDropDown1').show()
+            //     } else {
+            //         $('.customDropDown1').hide()
+            //     }
+            // }
+
+            if (!$('li.dropdown.mega-dropdown').is(e.target) && $('li.dropdown.mega-dropdown').has(e.target).length === 0 && $('.open').has(e.target).length === 0) {
+                $('li.dropdown.mega-dropdown').removeClass('open');
+            }
+        })
+    })
+    $(document).ready(function() {
+        setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+
+        $('.input-group-text').on('click focus', function(e) {
+            $(this).prev().focus().click()
+        });
+
+        $('[data-toggle="tooltip"]').tooltip();
+        setTimeout(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('[data-toggle="tooltip"]').click(function() {
+                $(this).trigger('mouseleave');
+            })
+        }, 200)
+    })
+
+    $(document).ready(function() {
+        //	$('.crossTable').select2();
+    })
+
+    $('[data-toggle="tooltip"]').tooltip();
+    setTimeout(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('[data-toggle="tooltip"]').click(function() {
+            $(this).trigger('mouseleave');
+        })
+    }, 200)
+</script>

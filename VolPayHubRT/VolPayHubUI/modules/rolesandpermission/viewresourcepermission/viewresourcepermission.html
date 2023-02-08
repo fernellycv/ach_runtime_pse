@@ -1,0 +1,816 @@
+<style>
+    .modifiedClass {
+        background-color: #ffffb8;
+    }
+    
+    td>pre {
+        background: transparent;
+        max-height: 7.813rem;
+        overflow: auto
+    }
+    
+    table>tbody>tr>th {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+    
+    .fixedWidthTable {
+        table-layout: fixed;
+    }
+
+     .nav-tabs  .nav-link.active{
+    color: #fff;
+    background-color: #333333;
+    }
+
+    .modalAlighn{
+        top: 12.5rem;
+        max-width: 37.5rem;
+    }
+
+    .modalheader{
+        padding: 0rem !important; 
+        border: 0rem !important
+    }
+
+    .modalFooter{
+        padding-right: 4.375rem;
+    }
+
+    .cardTop{
+        margin-top:2.5rem;
+    }
+
+    .cardheader{
+        padding:0.563rem 0.938rem;
+        background-color:#f9f9f9
+    }
+
+    .formRole{
+        color:#666;
+        padding: 0;
+        text-align: right;
+    }
+
+    .formRoleicon{
+        font-size: 1.25rem;
+        line-height:1.25rem;
+        margin-right: 0.625rem;
+    }
+
+    .formRolefont{
+        font-size:1.25rem
+    }
+
+    .cardbody{
+        padding:0.563rem 1.938rem;
+        background-color:transparent;
+    }
+
+    .inlineDisp{
+        display:inline-block
+    }
+
+    .panelBorder{
+        border:0.063rem solid #ccc;
+    }
+
+    .modalcontent{
+        border:0.125rem solid #44b6ae
+    }
+
+    .fieldDisp{
+        margin-top:0.625rem;
+        margin-bottom:2.125rem;
+    }
+
+    .asterisk{
+        color:#e02222;
+        font-size:0.75rem;
+        padding-left:0.125rem
+    }
+
+    .clearBoth{
+        clear:both
+    }
+
+    .formButton{
+        margin-top:1.563rem;
+        margin-right:0.75rem;
+    }
+
+    .formButtonalighn{
+        width:46%;
+        float:right;
+    }
+
+    .btnCancel{
+        margin-left:0.625rem;
+    }
+
+    .navBorder{
+        border-bottom:0.188rem solid black;
+    }
+
+    .navli{
+        margin-right: 0.625rem !important;
+        margin: 5px;
+    }
+
+    .tabcontent{
+        padding-bottom:3.625rem;
+    }
+
+    .tabcontentMargin{
+        margin: 0.188rem 0rem 0.75rem;
+    }
+
+    .legendAlighn{
+        display:inline-block;
+        margin-left:0.938rem;
+        float: right;
+    }
+
+    .legendDisp{
+        width:0.813rem;
+        height:0.813rem;
+        display:inline-block;
+        margin-top:0.188rem;
+    }
+
+    .legendMargin{
+        margin-left:0.188rem;
+    }
+
+    .legendfloat{
+        float:right;
+        margin-top:0.188rem;
+    }
+
+    .legendYes{
+        float:right;
+        margin-top:0.188rem; 
+        margin-right: 0.188rem;
+    }
+
+    .statusAlighn{
+        float:left;
+        margin-top:0.125rem;
+    }
+
+    .editAlldisp{
+        display:inline-block;
+        margin-left:0.188rem;
+        float:right;
+    }
+
+    .editAllalighn{
+        float:left;
+        margin-top:0.563rem;
+    }
+
+    .editAllcheckbox{
+        margin:0;
+        display:inline-block;
+        margin-left:0.875rem;
+    }
+
+    .editAllstatus{
+        width:2.5rem !important; 
+        height:1.25rem !important; 
+        border-radius:1.25rem !important;
+        margin-top:0.5rem;
+    }
+
+    .editAllsmall{
+        width:1.125rem !important;
+        height:1.188rem !important;
+    }
+
+    .editAllinput{
+        opacity:0;
+        display:none;
+    }
+
+    .tdAlighn{
+        text-align:left
+    }
+
+    .tdFont{
+        font-family: 'FontAwesome', Helvetica;
+    }
+
+    .selectFont{
+        font-family: 'FontAwesome', Helvetica; 
+        width:5.625rem;
+    }
+
+    .colorGreen{
+        color:green
+    }
+
+    .colorRed{
+        color:red
+    }
+
+    .colornotSet{
+        color:rgb(119, 116, 116)
+    }
+
+    .expandFont{
+        font-weight:700
+    }
+
+    .attributAlighn{
+        font-family:'Open Sans',sans-serif;
+        font-weight:200
+    }
+
+    .dispnone{
+        display: none;
+    }
+
+    .tdColspan{
+        border:0.063rem solid #ddd !important; 
+        text-align:left;
+        padding:0.938rem 0.313rem !important;
+    }
+
+    .resourceAlighn{
+        padding:0.313rem;
+        font-weight:700
+    }
+
+    .editAllMargin{
+        margin-bottom:0.313rem;
+    }
+
+    .tdborder{
+        border-right:0rem !important
+    }
+
+    .cursorPointer{
+        cursor:pointer;
+    }
+
+    .width100{
+        width: 100%
+    }
+
+    .addnewMargin{
+        margin-top:0.313rem;
+    }
+
+    .btnMargin{
+        padding-top:0.625rem;
+    }
+
+    .buttonCancel{
+        margin-left:0.438rem;
+    }
+
+    .editHeadalighn{
+        margin: 0.313rem 0.938rem 1.25rem 0.938rem;
+        border:0.063rem solid #ccc;
+        background: #fff;
+    }
+
+    .editHeaddisp{
+        border-bottom: 0.063rem solid #dddddd;
+    }
+
+    .editHeadsapce{
+        padding: 0rem 0.938rem;
+    }
+
+    .editHeadbody{
+        max-height: 12.5rem; 
+        overflow-y: auto;
+    }
+
+    .editHeadul{
+        line-height:2.188rem;
+        display: inline-block;
+    }
+
+    .editLogAlighn{
+        margin:0;
+        line-height:1.875rem;
+    }
+
+    .editLogdisp{
+        margin:0;
+        margin-top:0.625rem;
+        margin-bottom:2.125rem;
+        padding-left:0rem;
+    }
+
+    .margin0{
+        margin:0
+    }
+
+    .editheaddisplay{
+        display:block;word-break: break-all;
+    }
+
+    .editspan{
+        float: left; 
+        width: 100%; 
+        padding: 0rem 0.938rem;
+    }
+
+    .editIcon{
+        margin-right: 0.75rem; 
+        font-size: 0.75rem;
+        line-height: 0.75rem;
+    }
+
+    .editCursor{
+        cursor:pointer;
+        font-weight: bolder;
+    }
+
+    .auditModelcontent{
+        padding: 0.625rem 1.25rem;
+        overflow:auto
+    }
+
+    .auditModelheader{
+        padding: 0.625rem 0rem;
+        border: 0rem !important;
+        text-align: left;
+    }
+
+    .auditModelbody{
+        padding: 0rem !important; 
+        border: 0rem !important
+    }
+
+    .auditModelfooter{
+        text-align: left;
+        padding:0
+    }
+
+    .tableFixHead {
+        overflow-y: auto;
+        max-height: 50vh;
+    }
+
+    .tableFixHead table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .tableFixHead th {
+        position: sticky;
+        top: 0;
+    }
+
+    </style>
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-users"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.AdminPanel</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <a href="#/app/roles" translate>Sidebar.RolesPermissions</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    Permissions
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+<div class="contentContainer">
+    <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+    <div  class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts1" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div class="row">
+        <!-- Delete popup Window Start-->
+        <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+            <div class="modal-dialog modal-md modalAlighn" >
+                <div class="modal-content modalbdy animated tada">
+                    <div class="modal-header modalheader">
+                        <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                    </div>
+                    <div class="modal-body modalheader">
+                         <h1 translate>BankDataDts.Areyousure</h1>
+                        <h4 translate>BankDataDts.PopupRecoverMsg</h4>
+                    </div>
+                    <div class="modal-footer modalftr modalFooter">
+                        <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                        <button tabindex="0" type="button" class="buton yess" ng-click="submitDeldata()" translate >BankDataDts.Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" tabindex="-1" id="delPopup1" role="dialog">
+            <div class="modal-dialog modal-md modalAlighn">
+                <div class="modal-content modalbdy animated tada">
+                    <div class="modal-header modalheader">
+                        <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                    </div>
+                    <div class="modal-body modalheader">
+                         <h1 translate>BankDataDts.Areyousure</h1>
+                        <!--  <h4 translate>BankDataDts.PopupRecoverMsg</h4> -->
+                    </div>
+                    <div class="modal-footer modalftr modalFooter">
+                        <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal" translate >BtnGroup.Cancel</button>
+                        <button tabindex="0" type="button" class="buton yess" ng-click="takeDeldata()" translate >BankDataDts.Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Delete popup Window End-->
+        <div class="col-md-12">
+            <div class="card cardTop">
+                <div class="card-header row m-0 cardheader">
+                    <div class="col-md-8 serviceHeading pl-0"  ng-if="RoleID || RoleType">
+                        <span class="ng-binding" ng-style="{'color':(StatusFromRole | chooseStatus)}" data-toggle-second="tooltip" data-placement="top" title="Role ID">{{RoleID+' -'}}</span>
+                        <span class="ng-binding" ng-style="{'color':(StatusFromRole | chooseStatus)}"  data-toggle-second="tooltip" data-placement="top" title="Role Type">{{RoleType}}</span>
+                    </div>
+                    <div class="col-md-4 serviceHeading formRole" ng-if="StatusFromRole"><i  ng-style="{'color':(StatusFromRole | chooseStatus)}" class="fa fa-circle formRoleicon" ng-if="StatusFromRole" data-toggle-second="tooltip" data-placement="bottom" title="{{StatusFromRole}}"></i><span  class="formRolefont">{{StatusFromRole}}</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="card-body row cardbody" ng-if="EffectivedateFromRole">
+                    <div class="col-md-10 pl-0">
+                        {{'RolesAndPermissions.EffectiveDate' | translate}} :
+
+                        <span class="ng-binding">{{EffectivedateFromRole}}
+                                {{((EffectivedateFromRole)&&(EffectivedateTillRole))?' to ':''}}
+                            {{EffectivedateTillRole}}</span>
+
+
+                    </div>
+                    <div class="col-md-2 formRole">
+                        <!--
+                            <a  class="actionIcons inlineDisp" ng-click="(permission.C && RoleID != 'Super Admin' && StatusFromRole != 'DELETED' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')? gotoEdit(resourceGroup[0].ResourceGroupName,RoleID,'Clone') :''" data-toggle-second="tooltip" data-placement="top"
+                            title="{{(permission.C && RoleID != 'Super Admin' && StatusFromRole != 'DELETED' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Clone':'ToolTips.DontPermission' | translate}}" ng-style="(permission.C && RoleID != 'Super Admin' && StatusFromRole != 'DELETED' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i class="fa fa-clone Iclr1"></i></a>
+                        -->
+
+                            <a ng-if ="IsRoleEditable && newPermission.U" class="actionIcons inlineDisp" ng-click="(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')? gotoEdit(resourceGroup[0].ResourceGroupName,RoleID,'Edit') :''" data-toggle-second="tooltip" data-placement="top"
+
+                            title="{{(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Edit':'ToolTips.DontPermission' | translate}}"
+                            ng-style="(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?{'opacity':'','cursor': 'pointer'}:{'opacity':'0.3','cursor': 'not-allowed'}"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+<!--
+                        <a class="actionIcons" data-toggle="modal" data-target="{{(permission.D && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup1':''}}"
+                            ng-style="(permission.D && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"
+                            ng-click="(permission.D && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?gotoDeleteFn(resourceGroup[0].ResourceGroupName,RoleID,true):''" data-toggle-second="tooltip" data-placement="top"
+                            title="{{(permission.D && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin' && StatusFromRole != 'INACTIVE-WAITFORAPPROVAL' && StatusFromRole != 'SUSPENDED-WAITFORAPPROVAL' && StatusFromRole != 'REACTIVATED-WAITFORAPPROVAL')?'ToolTips.Delete':'ToolTips.DontPermission' | translate}}"><i class="fa fa-trash-o Iclr1"></i></a>
+-->
+                        <a class="actionIcons" ng-if="((permission.ReActivate) && StatusFromRole == 'DELETED' )" ng-click="(permission.ReActivate)?gotoReactivate(RoleID):''" data-toggle-second="tooltip" data-placement="top" title="{{(permission.ReActivate)?'ToolTips.ReActivate':'ToolTips.DontPermission' | translate}}"><i
+                                class="fa fa-repeat Iclr1"></i></a>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+    <div class="animated bounce autoAdjustAlert bold"  ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div class="panel-group mt-4 panelBorder" id="accordion">
+
+        <div class="modal fade" id="roleEdit" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+
+
+                <div class="modal-content modalcontent">
+                    <div class="modal-body">
+                        <h5 translate>BankDataDts.PopupMsg</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle" ng-click="looseChanges()" translate>BankDataDts.Yes</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="roleEdit1" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+
+
+                <div class="modal-content modalcontent">
+                    <div class="modal-body">
+                        <h4 translate>BankDataDts.PopupMsg</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btnStyle" ng-click="looseChanges1()" translate>BankDataDts.Yes</button>
+                        <button type="button" class="btn btnStyle" data-dismiss="modal" ng-click="cancelChanges()" translate>BankDataDts.No</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="resetRoleBox" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+
+
+                <div class="modal-content modalcontent">
+                    <div class="modal-body">
+                        <h5 translate>RolesAndPermissions.Areyousure</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btnDeny btnStyle" data-dismiss="modal" translate>BankDataDts.No</button>
+                        <button type="button" class="btnSuccess btnStyle" ng-click="setDefault()" translate>BankDataDts.Yes</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div class="card-body">
+            <div class="portlet-body">
+                <div ng-if="showRoles1">
+
+                    <form class="form-horizontal" role="form" ng-submit="updateExistingRoles(role)">
+                        <div class="form-group col-md-6 row fieldDisp">
+                            <label class="control-label bold col-md-3">Role ID <span class="asterisk" 
+                                    aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" name="RoleID" ng-model="role.RoleID" ng-blur="multipleEmptySpace($event)" required ng-disabled="true">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 row fieldDisp">
+                            <label class="control-label bold col-md-3">Role Name <span class="asterisk" 
+                                    aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="Enter Role Name" name="RoleName" ng-model="role.RoleName" ng-blur="multipleEmptySpace($event)" required>
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group col-md-6" style="margin-top:0.625rem;margin-bottom:2.125rem;">
+                            <label class="control-label bold col-md-3">Super Admin Flag <span style="color:#e02222;font-size:0.75rem;padding-left:0.125rem" aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                               <select class="form-control" name="SUPER_ADMIN_FL" ng-model="role.SUPER_ADMIN_FL" required>
+                                  <option value="">&#45;&#45;Select&#45;&#45;</option>
+                                  <option value="true" ng-selected="(role.SUPER_ADMIN_FL == true)">True</option>
+                                  <option value="false" ng-selected="(role.SUPER_ADMIN_FL == false)">False</option>
+    
+                               </select>
+                            </div>
+                         </div>-->
+                        <div class="form-group col-md-6 row fieldDisp">
+                            <label class="control-label bold col-md-3">Role Type <span class="asterisk" 
+                                    aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="Status" ng-model="role.RoleType" required ng-disabled="true">
+                                    <option value="">--Select--</option>
+                                    <option value="Approver">Approver</option>
+                                    <option value="Operator">Operator</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6 row fieldDisp">
+                            <label class="control-label bold col-md-3">Status <span class="asterisk" 
+                                    aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                                <select class="form-control" name="Status" ng-model="role.Status" required>
+                                    <option value="">--Select--</option>
+                                    <option value="ACTIVE">ACTIVE</option>
+                                    <option value="INACTIVE">INACTIVE</option>
+                                    <option value="SUSPENDED">SUSPENDED</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="clearBoth"></div>
+
+
+                        <div class="form-group formButton">
+                            <div class="row">
+                                <div class="col-md-6"></div>
+
+                                <div class="col-md-6 formButtonalighn">
+                                    <div class="col-md-offset-8">
+                                        <button type="submit" class="btn btnStyle">Update Role</button>
+                                        <button type="button" class="btn btnStyle btnCancel" ng-click="GoBackFromRole($index)" translate>BtnGroup.Cancel</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="tabbable-custom">
+
+
+                    <ul class="nav nav-tabs listGroup navBorder">
+                        <!-- listGroupList -->
+                        <li class=" nav-item navli" id="listGroupListID_{{RoleID | nospace }}_{{$parent.$index}}" ng-repeat="rGroup in resourceGroup" ng-click="getGroupPermission(rGroup.ResourceGroupName,RoleID,$parent.$index,$index)"
+                           >
+                            <!--  && rGroup.ResourceGroupName != 'Payment Module' -->
+                            <!--<input type="checkbox" class="check" id="check_{{$parent.$index}}_{{$index}}" ng-click="checkBox($event,$parent.$index);" style="padding-left: 0.625rem;" ng-disabled=""/>-->
+                            <a data-target="#tab_{{RoleID | nospace }}_{{$parent.$index}}"  ng-class="{'active': ($index == 0) }"  data-toggle="tab" aria-expanded="false" class="liAnchor nav-link pl-2" ng-click="enableStatus(rGroup.ResourceGroupName)" data-resource="{{rGroup.ResourceGroupName}}" translate>
+                                {{('Sidebar.'+rGroup.ResourceGroupName) | nospace}}</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content tabcontent">
+
+                        <div class="tab-pane1">
+
+
+                            <!-- <form name="myform"> -->
+                            <div class="row tabcontentMargin">
+                                <div class="col-md-5 p-0" translate>RolesAndPermissions.Message</div>
+                                <div class="col-md-7 float-right inlineDisp">
+
+
+
+
+                                    <div class="legendAlighn"><span class="redClass legend legendDisp"></span>
+                                        <span class="bold legendMargin" translate>RolesAndPermissions.No</span></div>
+                                    <div class="legendAlighn"><span class="greenClass legend legendDisp"></span>
+                                        <span class="bold legendMargin" translate>RolesAndPermissions.Yes</span></div>
+                                    <div ng-if="EditPermission()" class="rstRoleBtn cursorPointer legendfloat btnDefault" data-toggle="modal" data-target="{{(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin') ? '#resetRoleBox':''}}" ng-click="(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin')?getGroupName($event):'You don&lsquo;t have permission'"
+                                        ng-style="(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" data-toggle-second="tooltip" data-placement="top"
+                                        title="{{((permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin')?'':'ToolTips.DontPermission') | translate}}">
+                                        <span class="statusAlighn">{{'BankDataDts.ResetAll' | translate}}</span>
+                                    </div>
+                                    <div style="border-radius: 8px !important;display: flex;justify-content: center;" class="cursorPointer legendYes btnSuccess" ng-show="changevalue" ng-click="changeValue('no',resourcePermission)" data-toggle-second="tooltip" data-placement="top"  title="{{'RolesAndPermissions.NoAll' | translate}}">
+                                        <span class="statusAlighn" translate>RolesAndPermissions.NoAll</span>
+                                    </div>
+
+                                    <div style="border-radius: 8px !important;display: flex;justify-content: center;" class="cursorPointer legendYes btnSuccess" ng-show="changevalue" ng-click="changeValue('yes',resourcePermission)" data-toggle-second="tooltip" data-placement="top" title="{{'RolesAndPermissions.YesAll' | translate}}">
+                                        <span class="statusAlighn" translate>RolesAndPermissions.YesAll</span>
+                                    </div>
+
+
+                                    <div ng-if="EditPermission()" class="roundedbox editAlldisp" id="editall">
+                                        <span class="bold editAllalighn" translate>RolesAndPermissions.EditAll</span>
+                                        <div class="checkbox editAllcheckbox" data-toggle-second="tooltip" data-placement="top" title="{{((permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin')?'RolesAndPermissions.EditAll':'ToolTips.DontPermission') | translate}}">
+                                            <span class="checkedcolor green switch green ng-valid ng-pristine ng-untouched checkClass editAllstatus" ng-style="(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"
+                                                 ng-click="(permission.U && StatusFromRole != 'DELETED' && StatusFromRole != 'ACTIVE-WAITFORAPPROVAL' && RoleID != 'Super Admin')?checkBox($event,active):''"
+                                                ng-class="{checked:active,'':!active}">
+                                                    <small class="editAllsmall"></small>
+                                                    <input type="checkbox" class="check ng-pristine ng-untouched ng-valid editAllinput" />
+                                                    <span class="switch-text"> </span>
+                                            </span>
+                                        </div>
+                                        <div class="clearBoth"></div>
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <form name="PaymentroleForm" ng-submit="submitAllAttribute(trial, _ResourceName,RoleID);">
+                                    <div class="tableFixHead">
+                                        <table class="table table-bordered" id="rolesTable">
+                                            <thead>
+                                                <tr>
+                                                    <th translate>{{('Sidebar.'+rG) | nospace}}</th>
+                                                    <th class="txtCenter" ng-repeat="ss in actionHeader123">{{('RolesAndPermissions.'+ss) | translate}}</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr ng-repeat-start="resource in resourcePermission">
+                                                    <td class="tdAlighn"  nowrap translate> {{('Sidebar.'+resource.ResourceName) | underscoreRemove  | nospace}}</td>
+                                                    <td class="text-center" nowrap ng-repeat="ss in actionHeader123">
+                                                        <span ng-if="((resourceDetail.Permission == '#ccc')||(!checkBoxChecked))&& getActionValue123(ss,resource.PermissionList).check" class="inlineDisp">
+                                                        <i class="fa fa-circle" aria-hidden="true" ng-style="((getActionValue123(ss,resource.PermissionList).Permission == 'yes') && {'color':'green'}) || ((getActionValue123(ss,resource.PermissionList).Permission == 'no') && {'color':'red'}) || ((getActionValue123(ss,resource.PermissionList).Permission == 'not set') && {'color':'rgb(119, 116, 116)'})"></i>
+                                                    </span>
+                                                        <select id="" class="btn-group form-control selectFont" ng-model="getActionValue123(ss,resource.PermissionList).Permission" ng-if="!(getActionValue123(ss,resource.PermissionList).Permission == '#ccc')&& checkBoxChecked && getActionValue123(ss,resource.PermissionList)"
+                                                            ng-style="((getActionValue123(ss,resource.PermissionList).Permission == 'yes') && {'color':'green'}) || ((getActionValue123(ss,resource.PermissionList).Permission == 'no') && {'color':'red'}) || ((getActionValue123(ss,resource.PermissionList).Permission == 'not set') && {'color':'rgb(119, 116, 116)'});">
+                                                        <option value="yes" class="colorGreen" >&#xf111; {{'RolesAndPermissions.Yes' | translate}}</option>
+                                                        <option value="no" class="colorRed">&#xf111; {{'RolesAndPermissions.No' | translate}}</option>
+                                                    </select>
+
+
+                                                    </td>
+                                                </tr>
+                                                <tr id="{{$index}}" class="expandRow dispnone" ng-repeat-end="">
+                                                    <td colspan="{{actionHeader123.length+2}}" class="tdColspan">
+                                                        <div class="btnMargin" ng-if="trial.Attributes.length">
+                                                            <button type="submit" value="Submit" translate>BtnGroup.Submit</button>
+
+                                                            <button type="button" class="buttonCancel" ng-click="cancelClear()" translate>BtnGroup.Cancel</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <button type="button" class="btnDeny btnStyle buttonCancel" ng-click="keepOriginal()" ng-if="checkBoxChecked" translate>BtnGroup.Cancel</button>
+                                    <button type="button" class="btnSuccess btnStyle" ng-click="saveAll(resourcePermission,RoleID,$index)" ng-if="checkBoxChecked" translate>BtnGroup.Update </button>
+
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-if="editedLog.length">
+            <div class="col-md-12">
+                <div class="panel-group">
+                    <div class="row editLogAlighn">
+                        <div class="row editLogdisp">
+                            <div class="row margin0" ng-repeat="(key,val) in data" ng-style="($index%2 == 0)?{'background-color': 'rgb(245, 245, 245)'}:{'background-color': '#fff'}" ng-if="key != 'View'">
+                                <label class="control-label bold col-md-3 col-sm-3"><span class="col-md-8 ng-binding">{{key
+                                        | camelCaseFormatter}}</span> <span class="col-md-1">:</span> </label>
+                                <div class="control-label col-md-9 col-sm-9 ng-binding subserviceInfo">
+                                    <span class="ng-binding">{{val}}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="editHeadalighn" ng-if="editedLog.length">
+
+                        <div class="editHead editHeaddisp">
+                            <h5 class="mt-2 editHeadsapce" translate>ToolTips.EditLog</h5>
+                        </div>
+
+                        <div class="editBody editHeadbody">
+                            <ul class="editHeadul">
+                                <li ng-repeat="log in editedLog |orderBy: '-userAuditTimeStamp'"  class="editHeadsapce">
+                                    <div class="editheaddisplay">
+                                        <span class="editspan"> <i class="fa fa-circle editIcon"
+                                                aria-hidden="true"></i>
+                                            <u class="editCursor" ng-click="showaudit(log)" data-toggle-second="tooltip" data-placement="top"
+                                                title="{{'ToolTips.Clicktoviewdetails' | translate}}">{{("BankDataDts."+log.action) | translate}}</u>  {{'ToolTips.On' | translate}}
+                                            {{log.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss Z'}} {{'ToolTips.By' | translate}}  {{log.UserId}}.</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="modal fade" tabindex="-1" id="auditModel" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content auditModelcontent">
+                                
+                                <div class="modal-header auditModelheader">
+                                    <b>{{commentVal ? commentVal[0] : ("BankDataDts."+ auditLogDetails.action) | translate}} {{'ToolTips.On' | translate}}
+                                        {{auditLogDetails.userAuditTimeStamp| date:'yyyy-MM-dd HH:mm:ss'}} {{'ToolTips.By' | translate}}
+                                        {{auditLogDetails.UserId}}</b>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body table-responsive auditModelbody">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer auditModelfooter" ng-if="commentVal">
+                                    <p><b  translate>ApprovalDts.Notes: </b>{{commentVal[1]}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+</script>

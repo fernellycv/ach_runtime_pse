@@ -1,0 +1,12 @@
+[{
+        "actualValue": "customercredittransfer",
+        "displayValue": "Customer Credit Transfer"
+    }, {
+        "actualValue": "bankstatement",
+        "displayValue": "Bank Statement"
+    },
+    {
+        "actualValue": "financialinstitutiontransfer",
+        "displayValue": "Financial Institution Transfer"
+    }
+]

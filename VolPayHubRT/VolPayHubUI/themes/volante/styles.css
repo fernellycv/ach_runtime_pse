@@ -1,0 +1,28 @@
+.fixedfooter {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: block;
+    padding: 8px 30px 5px 5px;
+    font-size: 12px;
+}
+
+.fixedfooter,
+.main-footer {
+    // background-color: #364150;
+    /* margin-left: 230px; */
+    transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+}
+
+.footertext1,
+.footertext2 {
+    color: #98a6ba;
+    position: relative;
+
+    // margin-left: 230px;
+}
+
+.loginButton {
+    background-color: #89C4F4 !important;
+    border-color: #72b8f2 !important;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE web-app PUBLIC "-//Sun Microsystems,
+Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/META-INF/spring/*camelContext.xml</param-value>
+    </context-param>
+    <context-param>
+        <param-name>SCOPE</param-name>
+        <param-value>BANKSIMULATOR</param-value>
+    </context-param>
+   <!--  <context-param>
+       <param-name>ISIPV4</param-name>
+       <param-value>FALSE</param-value>
+   </context-param>-->
+     <listener>
+        <listener-class>com.volantetech.volante.services.LoggingStartupListener</listener-class>
+    </listener>
+   <listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+    <listener>
+        <listener-class>com.volantetech.volante.services.ApplicationStartupListener</listener-class>
+    </listener>
+  <servlet>
+		<servlet-name>volante-servlet</servlet-name>
+		<servlet-class>com.tplus.transform.runtime.rest.server.VolanteRestServlet</servlet-class>		
+                <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+		<servlet-name>volante-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>

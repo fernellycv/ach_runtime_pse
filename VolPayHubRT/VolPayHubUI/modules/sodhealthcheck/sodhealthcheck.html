@@ -1,0 +1,263 @@
+<style>
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+    
+    .input-group-addon {
+        padding: 0rem 0.313rem;
+    }
+    
+    .glyphicon {
+        padding: 0.563rem 0.625rem;
+    }
+    
+    .DatePicker,
+    .TimePicker {
+        z-index: 0 !important
+    }
+
+    .filterDisp{
+        border:none;
+        background-color:transparent;
+    }
+
+    .width100{
+        width:100%
+    }
+
+    .btnAlighn{
+        padding:0.188rem;
+        margin:0
+    }
+
+    .titleBox{
+        width:100%;
+        margin-bottom:0
+    }
+
+    .noRecords{
+        margin:0;
+        text-align:center;
+    }
+
+    .tableAlighn{
+        margin:0;
+        overflow:auto;
+        max-height:33.125rem;
+    }
+
+    .tableStatus{
+        height: 1.313rem !important;
+        width: 6.25rem;
+        text-align: left;
+    }
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <!--<li>
+                    <i class="fa fa-home"></i>
+                    <a href="javascript:void(0)" translate ng-click="goToHome()">Sidebar.Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>-->
+                <li>
+                    <i class="fa fa-laptop"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.SystemMonitoring</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate class="removeCursor">Sidebar.SODHealthCheck</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="contentContainer">
+    <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+    <div class="animated bounce autoAdjustAlert bold" ng-repeat="alert in alerts"  ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title__container">
+                    <h2 translate>Sidebar.SODHealthCheck</h2>
+                    <p translate></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+
+        <form class="form-horizontal" role="form" ng-submit="generateSodHealthChecks(dateobj)">
+            <div class="row m-0">
+
+
+
+                <div class="col-md-6 pl-0 pr-0">
+                    <div class="input-group-prepend date col-md-12">
+
+
+                        <span class="input-group-addon mt-2 filterDisp"translate>SodHealthCheck.From</span>
+                        <input type="text" class="form-control DatePicker dateTypeKey width100" ng-model="dateobj.startDate" id="datetimepicker1"  placeholder="{{'SodHealthCheck.From' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)" required data-date-format="YYYY-MM-DD HH:mm:ss">
+                        <span class="input-group-text" ng-click="focusInfn('datetimepicker1')"><span class="fa fa-calendar"></span></span>
+
+
+
+                        <span class="input-group-addon mt-2 filterDisp"translate>SodHealthCheck.To</span>
+                        <input type="text" class="form-control DatePicker dateTypeKey width100" ng-model="dateobj.endDate" id="datetimepicker2"  placeholder="{{'SodHealthCheck.To' | translate}}" ng-blur="removeFn()" onkeypress="return tabOrder(event)" required data-date-format="YYYY-MM-DD HH:mm:ss">
+                        <span class="input-group-text" ng-click="focusInfn('datetimepicker2')"><span class="fa fa-calendar"></span></span>
+
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="form-group btnAlighn">
+                        <button type="submit" class="btnSuccess btnStyle btn-sm" translate>BtnGroup.Search &nbsp;&nbsp;&nbsp;
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+        </form>
+
+
+    </div>
+    <br /><br />
+
+    <div class="portlet-title titleBox">
+
+        <div class="caption caption-md ProfileHeaderStyles">
+            <i class="fa fa-file-pdf-o"></i>
+            <span class="caption-subject bold" translate>Sidebar.SodHealthCheck</span>
+            <!-- <span class="highlight">- {{(totalCount && items.length)? items.length +  ('BankDataDts.Outof' | translate ) +totalCount :
+                (items.length)?items.length:'' }} </span> <span translate>BankDataDts.recordsshown</span> -->
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="portlet-inner-box">
+            <div class="alert alert-warning" ng-if="!data_basedon_Instances[0].length">
+                <strong>
+                    <h5 class="noRecords" translate>BankDataDts.NoRecordsFound</h5>
+                </strong>
+            </div>
+
+            <div class="scrollableDiv table-responsivve tableAlighn" ng-if="data_basedon_Instances[0].length">
+
+                <div ng-repeat="mydata in data_basedon_Instances">
+                    <h6 class="bold"> <span tooltip="Event Name">{{mydata[0].EventName}} </span> <span tooltip="Instance ID">{{
+                            ' - ' + mydata[0].InstanceID}}</span></h6>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span translate>SodHealthCheck.Processor</span> 
+                                </th>
+                                <th>
+                                    <span translate>SodHealthCheck.SchedulerStatus</span> 
+                                </th>
+                                <th>
+                                    <span translate>SodHealthCheck.TimeStamp</span> 
+                                </th>
+                                <th>
+                                    <span translate>SodHealthCheck.Status</span> 
+                                </th>
+                                <th>
+                                    <span translate>SodHealthCheck.Report</span> 
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <tr ng-repeat="mydetaileddata in mydata">
+                                <td>
+                                    <span>{{mydetaileddata.Processor}}</span>
+                                </td>
+                                <td>
+                                    <span>{{mydetaileddata.SchedulerStatus}}</span>
+                                </td>
+                                <td>
+                                    <span>{{mydetaileddata.TimeStamp|datetime}}</span>
+                                </td>
+                                <td>
+                                    <span class=" badge badge-secondary  tableStatus" ng-class="{'badge-success':mydetaileddata.Status=='SUCCESS' || mydetaileddata.Status=='SUCCESSFULL','badge-danger':mydetaileddata.Status=='ERROR'}">
+                                        <i class="fa" ng-class="{'fa-check':mydetaileddata.Status=='SUCCESSFULL'  || mydetaileddata.Status=='SUCCESFULL',' fa-times-circle':mydetaileddata.Status=='ERROR'}"></i>
+
+                                        {{mydetaileddata.Status}}</span>
+                                </td>
+                                <td>
+                                    <span>{{mydetaileddata.ReportBlob | hex2a}}</span>
+                                </td>
+
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        // $('#datetimepicker1').datetimepicker({
+        //     useCurrent: false
+            
+        // });
+        // $('#datetimepicker2').datetimepicker({
+        //     useCurrent: false
+        // });
+
+        // $("#datetimepicker1").on("dp.change", function(e) {
+        //     $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        // });
+
+        // $("#datetimepicker2").on("dp.change", function(e) {
+        //     $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        // });
+
+
+        setTimeout(function() {
+            $('.input-group-text').on('click focus', function(e) {
+                $(this).prev().focus().click()
+            });
+        }, 1000)
+    })
+</script>

@@ -1,0 +1,418 @@
+<style>
+    text {
+        font: 0.75rem sans-serif;
+    }
+    
+    .nvtooltip {
+        z-index: 100000;
+    }
+    
+    .chartBorder {
+        border: 0.063rem solid #d3d1d1;
+        box-shadow: 0.125rem 0.125rem 0.313rem #d3d1d1;
+        padding: 0.313rem 0.625rem;
+    }
+    
+    #barChart svg rect {
+        cursor: default;
+    }
+    
+    .nvd3 text {
+        font: normal 0.675rem sans-serif !important;
+    }
+
+    .pagebarIndex{
+        z-index:2
+    }
+
+    .detailsColor{
+        color:#fff !important;
+    }
+
+    .collapseBox{
+        margin-top:0.75rem;
+        margin-bottom:0.75rem;
+    }
+
+    .barValue{
+        color:#fff;
+    }
+
+    .filenotFound{
+        background-color:#fff;
+        position:absolute;
+        opacity:0.5;
+        left:0%;
+        height:57%;
+        z-index:1;
+        width:100%;
+        top:0%;
+    }
+
+    .noFiles{
+        transform: rotate(-40deg);
+        display:inline-block;
+        font-size:2.5rem;
+        color:#005FFF;
+        position:absolute;
+        left:43%;
+        top:53%;
+        border-top:0.125rem solid red;
+        border-bottom:0.125rem solid red;
+        z-index:2
+    }
+
+    .innerBoxalighn{
+        text-align: center; 
+        padding: 0rem 0.625rem 1.25rem 0.625rem;
+    }
+
+    .chartAlighn{
+        text-align: center; 
+        padding:0rem 0.625rem 0.938rem 0.625rem;
+    }
+
+    .labelFont{
+        font:bold 1rem Arial
+    }
+
+    .chartHeight{
+        height:25rem;
+    }
+
+    .dropvalueAlighn{
+        color:#fff !important;
+        display: none;
+    }
+
+    .dropdwnWidth{
+        min-width:4.063rem;
+    }
+
+    .currencyFilenotfound{
+        background-color:#fff;
+        position:absolute;
+        opacity:0.5;
+        left:0%;
+        height:41%;
+        z-index:1;
+        width:100%;
+        top:58%;
+    }
+
+    .verticalChartheight{
+        height:18.75rem;
+    }
+
+    .clearBoth{
+        clear:both
+    }
+
+    
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+<div class="page-bar breadCrumb pagebarIndex" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa fa-cog"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PaymentModule</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span class="removeCursor" translate>Sidebar.InstructionsDashboard</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+
+<!--<div id="loaderContainer" httploader>
+    <img src="themes/images/preloader.gif" class="httpLoader"/>
+</div>-->
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+
+            <div class="col-lg-8 col-sm-6 col-xs-8">
+                <div class="title__container">
+                    <h2 translate>DashboardFile.PageTitle</h2>
+                    <p translate>DashboardFile.SubTitle</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xs-4">
+                <div class="bar__icons pull-right">
+                    <button class="btn-transdashbrd" ng-click="loadData()"  data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'ToolTips.Refresh' |translate}}"><i class="fa fa-refresh"></i></button>
+                    <button class="btn-transdashbrd" ng-click="dashboardPrint()" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'BankDataDts.Print' |translate}}"><i class="fa fa-print"></i></button>
+                    <!--<button class="btn-trans" ng-click=""><i class="fa fa-file-excel-o"></i></button>
+                    <button class="btn-trans" ng-click=""><i class="fa fa-ellipsis-v"></i></button>-->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- END PAGE HEADER-->
+
+    <!-- BEGIN MAIN CONTENT -->
+    <div>
+        <!-- BEGIN DASHBOARD STATS -->
+
+        <div ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" class="autoAdjustAlert bold" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+            <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+        </div>
+
+
+
+        <!--<div class="row">
+        <div class="col-md-12">
+            <div class="bar__header">
+                <div class="count__head">
+                    <h3><span translate>Instruction Status</span></h3>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>-->
+
+        <div class="row">
+            <div class="col-md-12" style="width: 100%;">
+                <div class="statusbar__wrapper">
+                    <!--<p style="font-size:16px;font-weight:700;color:#666;margin:0" translate>DashboardPayments.SubSubTitle</p>-->
+                    <div class="width100_xs width50_sm width25_md statusBox" ng-class="{'width50':count==2,'width25':count==4,'width33':count==3,'width100':count==1,'width20':count==5,'width16':count==6,}" ng-repeat="barVal in statusBarVal" ng-if="barVal.Visibility">
+                        <div class="dashboard-stat dashboardWidget" ng-click="dashboardToFileList(barVal.searchArr)" ng-style="{'background':barVal.Color}">
+                            <div class="statusbar__widget">
+
+                                <div class="details float-left">
+                                    <div class="number count detailsColor">
+                                        {{barVal.Count}}
+                                    </div>
+                                    <div class="desc payStatus detailsColor">
+                                        {{barVal.Status}}
+                                    </div>
+                                </div>
+                                <div class="visual widgetVisual float-right">
+                                    <i class="DboardFont barValue" ng-class="barVal.Icon"></i>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+            <!--
+    <div class="row" style="margin:0;">
+        <p style="font-size:16px;font-weight:700;color:#666;margin:0" translate>Instruction Status</p>
+        <div class="width100_xs width50_sm statusBox" ng-class="{'width50':count==2,'width25':count==4,'width33':count==3,'width100':count==1,'width20':count==5,'width16':count==6,}" ng-repeat="barVal in statusBarVal" ng-if="barVal.Visibility">
+            <div class="dashboard-stat dashboardWidget" ng-click="dashboardToFileList(barVal.Status)" ng-style="{'background-color':barVal.Color}">
+                <div class="visual widgetVisual">
+                    <i class="DboardFont" ng-class="barVal.Icon" style="color:#fff;"></i>
+                </div>
+                <div class="details">
+                    <div class="number count" style="color:#fff !important;">
+                       {{barVal.Count}}
+                    </div>
+                    <div class="desc payStatus" style="color:#fff !important;">
+                        {{barVal.Status}}
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>-->
+        </div>
+
+        <!-- file chart starts -->
+        <div class="row m-0">
+
+
+
+
+            <div class="col-md-12 droppable">
+
+
+
+                <div class="draggable">
+                    <div class="portlet box green-haze accordion collapseBox" id="collapseReceivedIns">
+                        <div class="portlet-title" ng-init="fileStatus = false" >
+                            <div class="caption cursorPointer toggleTop" ng-click="fileStatus = !fileStatus" data-toggle="collapse" data-target="#fileStatus" aria-expanded="true" aria-controls="fileStatus">
+                                <span translate>DashboardFile.ReceivedInstructions</span>
+
+                            </div>
+
+
+                            <div class="actions">
+
+                                <!-- <div class="dropdown custDropDown" ng-hide="fileStatus">
+
+							<button class="btn-link dropdown-toggle" type="button" data-toggle="dropdown" tooltip="Count"><span class="dropVal" style="color:#fff !important;display: none;" translate>BtnGroup.Count</span>
+								<a><i class="fa fa-list-ol" aria-hidden="true"></i></a><i class="fa fa-angle-down"></i></button>
+							<ul class="dropdown-menu mylist" style="min-width:65px;">
+								<li class="listClass6 listClass" id="li_11" ng-click="fileDetailChart('Count');chartDrop($event);" tooltip="Count"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+								<li class="listClass6 listClass" id="li_12" ng-click="fileDetailChart('Amount');chartDrop($event);" tooltip="Amount"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+							</ul>
+						</div> -->
+                                <div class="collapse-arrow cursorPointer" ng-click="fileStatus = !fileStatus" data-toggle="collapse" data-target="#fileStatus" aria-expanded="true" aria-controls="fileStatus"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !fileStatus, 'fa-arrow-circle-right': fileStatus}"></i></span></div>
+                            </div>
+                        </div>
+                        <!-- collapse="fileStatus" -->
+                        <div class="portlet-body collapse show"  id="fileStatus" data-parent="#collapseReceivedIns">
+                            <div ng-if="uSetting.fileChannel">
+                                <div ng-if="fileNotfound">
+                                    <div class="col-xs-12 filenotFound">
+                                    </div>
+                                    <span class="noFiles">NO FILES</span>
+                                </div>
+
+                                <div class="row portlet-inner-box m-0">
+                                    <div class="col-md-6 col-sm-6 col-xs-12 innerBoxalighn">
+                                        <div>
+                                            <h3 class="labelFont"><span translate>DashboardFile.ReceivedInstructionsbyPSA</span> <span>{{ fileDonutHeader}}</span></h3>
+                                            <div id="FileDetailsDonutChart" class="chart chartBorder chartHeight"><svg></svg></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 chartAlighn">
+                                        <div>
+                                            <h3 class="labelFont"><span translate>DashboardFile.PSA-</span><span>{{individualName}}</span><span translate>DashboardFile.vsStatus</span></h3>
+                                            <div id="lineChart" class="chart chartBorder chartHeight"><svg></svg></div>
+                                        </div>
+                                        <!-- <div>
+								<h3 style="font:bold 16px Arial">{{individualName+' vs Currency'}}</h3>
+								<div id="barChart"  style="height:250px;" class="chart chartBorder"><svg></svg></div>
+							</div>   -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- <div class="draggable">
+			<div class="portlet box green-haze" style="margin-top:12px;margin-bottom:12px;">
+				<div class="portlet-title" ng-init="curStatus = false" >
+					<div class="caption cursorPointer toggleTop" ng-click="curStatus = !curStatus">
+						<span>Received Instruction Currency Distribution</span>
+
+					</div>
+
+
+					<div class="actions">
+
+						  <div class="dropdown custDropDown" ng-hide="fileStatus">
+
+							<button class="btn-link dropdown-toggle" type="button" data-toggle="dropdown" tooltip="Count"><span class="dropVal" style="color:#fff !important;display: none;" translate>BtnGroup.Count</span>
+								<a><i class="fa fa-list-ol" aria-hidden="true"></i></a><i class="fa fa-angle-down"></i></button>
+							<ul class="dropdown-menu mylist" style="min-width:65px;">
+								<li class="listClass6 listClass" id="li_11" ng-click="fileDetailChart('Count');chartDrop($event);" tooltip="Count"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+								<li class="listClass6 listClass" id="li_12" ng-click="fileDetailChart('Amount');chartDrop($event);" tooltip="Amount"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>  
+                        <div class="collapse-arrow cursorPointer" ng-click="curStatus = !curStatus"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !fileStatus, 'fa-arrow-circle-right': fileStatus}"></i></span></div>
+					</div>
+				</div>
+				<div class="portlet-body" collapse="curStatus">
+
+                    <div ng-if="fileNotfound">
+                        <div class="col-xs-12" style="background-color:#fff;position:absolute;opacity:0.5;left:0%;height:80%;z-index:1;width:100%;top:13%;">
+                        </div>
+                        <span style="transform: rotate(-40deg);
+                    display:inline-block;font-size:40px;
+                    color:#005FFF;position:absolute;left:51%;
+                    top:53%;border-top:2px solid red;border-bottom:2px solid red;z-index:1">NO FILES</span>
+                    </div>
+
+					<div class="row portlet-inner-box" style="margin: 0;">
+						
+						<div class="col-md-12 col-sm-12 col-xs-12" style="text-align: center; padding:0px 10px 15px 10px;">
+							
+							  <div>
+								<h3 style="font:bold 16px Arial">{{individualName+' vs Currency'}}</h3>
+								<div id="barChart"  style="height:250px;" class="chart chartBorder"><svg></svg></div>
+							</div>  
+						</div>
+					</div>
+				</div>
+			</div>
+        </div> -->
+
+                <div class="draggable">
+                    <div class="portlet box green-haze accordion collapseBox" id="collapseCurrencystatus">
+                        <div class="portlet-title" ng-init="curStatus1 = false">
+                            <div class="caption cursorPointer toggleTop" ng-click="curStatus1 = !curStatus1" data-toggle="collapse" data-target="#curStatus1" aria-expanded="true" aria-controls="curStatus1">
+                                <span translate>DashboardFile.CurrencyDistributioninReceivedCreditTransferInstructionsbyPSA</span>
+
+                            </div>
+
+
+                            <div class="actions">
+
+                                <div class="dropdown custDropDown" ng-hide="curStatus1" ng-if="uSetting.fileChannel">
+
+                                    <button class="btn-link pr-2" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BtnGroup.Count' | translate}}"><span class="dropVal dropvalueAlighn" translate>BtnGroup.Count</span>
+								<a><i class="fa fa-list-ol" aria-hidden="true"></i></a><i class="fa fa-angle-down "></i></button>
+                                    <ul class="dropdown-menu mylist dropdwnWidth">
+                                        <li class="listClass6 listClass" id="li_11" ng-click="curDisChart('Count');chartDrop($event);" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                        <li class="listClass6 listClass" id="li_12" ng-click="curDisChart('Amount');chartDrop($event);" data-toggle-second="tooltip" data-placement="top"  data-original-title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="collapse-arrow cursorPointer" ng-click="curStatus1 = !curStatus1" data-toggle="collapse" data-target="#curStatus1" aria-expanded="true" aria-controls="curStatus1"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !curStatus1, 'fa-arrow-circle-right': curStatus1}"></i></span></div>
+                            </div>
+                        </div>
+                        <!-- collapse="curStatus1" -->
+                        <div class="portlet-body collapse show" id="curStatus1" data-parent="#collapseCurrencystatus">
+                            <div ng-if="uSetting.fileChannel">
+                                <div ng-if="fileNotfound">
+                                    <div class="col-xs-12 currencyFilenotfound">
+                                    </div>
+                                    <!-- <span style="transform: rotate(-40deg);
+                    display:inline-block;font-size:40px;
+                    color:#005FFF;position:absolute;left:51%;
+                    top:53%;border-top:2px solid red;border-bottom:2px solid red;z-index:1">NO FILES</span> -->
+                                </div>
+
+                                <div class="row portlet-inner-box m-0">
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 chartAlighn">
+
+                                        <div>
+                                            <!-- <h3 style="font:bold 16px Arial">{{individualName+' vs Currency'}}</h3> -->
+                                            <div id="barChart1" class="chart chartBorder verticalChartheight"><svg id='verticalChart'></svg></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="clearBoth"></div>
+        </div>
+        <!-- File charts End -->
+
+    </div>
+    <!-- END MAIN CONTENT -->
+    <!-- BEGIN MAIN JS & CSS -->
+
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+        setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+    </script>
+    <!-- BEGIN MAIN JS & CSS -->

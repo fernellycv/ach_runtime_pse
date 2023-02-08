@@ -1,0 +1,1236 @@
+<style>
+    text {
+        font: 12px sans-serif;
+    }
+    
+    .nvtooltip {
+        z-index: 100000;
+    }
+    
+    .node {
+        cursor: pointer;
+    }
+    
+    .chartBorder {
+        border: 1px solid #d3d1d1;
+        box-shadow: 2px 2px 5px #d3d1d1;
+        padding: 5px 10px;
+    }
+    
+    #barChart svg rect {
+        cursor: default;
+    }
+    
+    .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 2px;
+        stroke-opacity: .2
+    }
+    
+    .lessOpacityCls {
+        opacity: 0.8;
+        pointer-events: none;
+    }
+    
+    .legendHolderCstm1,
+    .legendHolderCstm2 {
+        max-height: 123px;
+        min-height: 123px;
+        overflow: auto;
+        overflow-x: hidden;
+        border-top: 1px solid #dcdde0;
+        background: #fff;
+    }
+    
+    .nvd3 text {
+        font: normal 10.8px sans-serif !important;
+    }
+</style>
+
+<!-- BEGIN PAGE HEADER-->
+
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-home"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.Home</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate class="removeCursor">Sidebar.MyDashboard</span>
+                </li>
+            </ul>
+        </div>
+        <!--<div style="clear:both">    </div>-->
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+<div class="contentContainer">
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-lg-8 col-sm-8 col-xs-8">
+                <div class="title__container">
+                    <h2 translate>MyDashboard.PageTitle</h2>
+                    <p translate>MyDashboard.SubTitle</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-xs-4">
+                <div class="bar__icons pull-right">
+                    <button class="btn-trans" ng-click="initialCall();fileDashboard();" data-toggle-second="tooltip" data-placement="top"  title="{{'ToolTips.Refresh' |translate}}"><i class="fa fa-refresh" ></i></button>
+
+                    <button class="btn-trans" ng-click="dashboardPrint();" data-toggle-second="tooltip" data-placement="top"  title="{{'BankDataDts.Print' |translate}}"><i class="fa fa-print"></i></button>
+
+                    <!--<button class="btn-trans" ng-click=""><i class="fa fa-file-excel-o"></i></button>
+                    <button class="btn-trans" ng-click=""><i class="fa fa-ellipsis-v"></i></button>-->
+                </div>
+            </div>
+
+        </div>
+        <!--<div class="row">
+        <div class="col-sm-5" >
+            <span translate>My Dashboard</span>  <span style="font-size:14px;">- <small translate>DashboardFile.SubTitle</small></span>
+        </div>
+        <div class="col-md-7">
+            <div style="margin-right:1%;font-size:16px;float:right" data-toggle="tooltip"  title="{{'BankDataDts.Print' |translate}}"><button class="btn btn-md green-haze" ng-click="dashboardPrint()"><i class="fa fa-print"></i></button></div>
+            <div style="margin-right:1%;font-size:16px;float:right" data-toggle="tooltip"  title="{{'ToolTips.Refresh' |translate}}"><button class="btn btn-md green-haze" ng-click="initialCall();fileDashboard();"><i class="fa fa-refresh icon-white"></i></button></div>
+        </div>
+
+    </div>-->
+    </div>
+    <!-- END PAGE HEADER-->
+
+    <!-- BEGIN MAIN CONTENT -->
+    <!-- ng-style="{'top':alertStyle+'px','width':alertWidth+'px'}" -->
+    <div  class="autoAdjustAlert bold" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+    <div class="paymentDashboard accordion" id="collapsePaymentSummary">
+        <div class="row sTitle bold cursorPointer" style="margin:0;" ng-init="isPaymentInfoCollapsed = false" ng-click="isPaymentInfoCollapsed = !isPaymentInfoCollapsed" data-toggle="collapse" data-target="#isPaymentInfoCollapsed">{{'Payment Summary'}}
+
+
+            <div class="col float-right">
+                &nbsp;&nbsp;&nbsp;<i style="padding-top:2px;" class="float-right bold fa fa-angle-right" ng-class="{'fa-angle-down': !isPaymentInfoCollapsed, 'fa-angle-right': isPaymentInfoCollapsed}"></i>
+            </div>
+
+        </div>
+        <!-- collapse="isPaymentInfoCollapsed" -->
+        <div class="collapse show" style="padding-top: 10px;" id="isPaymentInfoCollapsed" data-parent="#collapsePaymentSummary">
+            <!--<div class="row" style="margin:0;" >
+        <p style="font-size:16px;font-weight:700;color:#666;margin:0" translate>Pending Payments </p>
+        <div class="width100_xs width50_sm statusBox" ng-class="{'width50':count==2,'width25':count==4,'width33':count==3,'width100':count==1,'width20':count==5,'width16':count==6,}" ng-repeat="barVal in statusBarValPayment" ng-if="barVal.Visibility">
+            <div class="dashboard-stat dashboardWidget" ng-click="dashboardToAllPayment(barVal.Status)" ng-style="{'background-color':barVal.Color}">
+                <div class="visual widgetVisual">
+                    <i class="DboardFont" ng-class="barVal.Icon" style="color:#fff;"></i>
+                </div>
+                <div class="details">
+                    <div class="number count" style="color:#fff !important;">
+                       {{barVal.Count}}
+                    </div>
+                    <div class="desc payStatus" style="color:#fff !important;">
+                        {{barVal.Status}}
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>-->
+            <!--<div class="row">
+        <div class="col-md-12">
+            <div class="bar__header">
+                <div class="count__head">
+                    <h3><span translate>DashboardPayments.SubSubTitle</span></h3>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="statusbar__wrapper">
+                        <!--<p style="font-size:16px;font-weight:700;color:#666;margin:0" translate>DashboardPayments.SubSubTitle</p>-->
+                        <div class="width100_xs width50_sm width25_md statusBox" ng-class="{'width50':count==2,'width25':count==4,'width33':count==3,'width100':count==1,'width20':count==5,'width16':count==6,}" ng-repeat="barVal in statusBarValPayment" ng-if="barVal.Visibility">
+                            <div class="dashboard-stat dashboardWidget" ng-click="dashboardToAllPayment(barVal.Status)" ng-style="{'background':barVal.Color}">
+                                <div class="statusbar__widget">
+
+                                    <div class="details pull-left">
+                                        <div class="number count" style="color:#fff !important;">
+                                            {{barVal.Count}}
+                                        </div>
+                                        <div class="desc payStatus" style="color:#fff !important;">
+                                            {{barVal.Status}}
+                                        </div>
+                                    </div>
+                                    <div class="visual widgetVisual pull-right">
+                                        <i class="DboardFont" ng-class="barVal.Icon" style="color:#fff;"></i>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row" style="margin:0;">
+
+
+                <div class="row sTrack" style="margin:0;width: 100%;">
+
+                    <div class="col-md-4 droppable pr-2" style="padding-right:0px;" id="paymentStatusDist" ng-if="uSetting.paymentDashboard.sankeyChartCustom">
+                        <div class="draggable">
+                            <div class="portlet box green-haze" id="PaymentStatusBox" style="margin-top:12px;margin-bottom:12px;">
+                                <div class="portlet-title dragHandle">
+                                    <div class="caption cursorPointer dynamic-gridcurdis-left" ng-click="collapseState();" data-toggle="collapse" data-target="#collapsePayStatus">
+                                        <span>Payment Status</span>
+                                        <!--<span style="padding:0px 0px;margin-left:15px;"><i style="font-size: 12px;" class=" bold fa fa-chevron-right" ng-class="{'fa-chevron-down': !PayState, 'fa-chevron-right': PayState}"></i></span>-->
+                                    </div>
+                                    <div class="actions dynamic-gridcurdis-right">
+
+                                        <div class="dropdown" ng-hide="true">
+                                            <div class="dropdown">
+                                                <button class="btn-link menu-drop" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.More' | translate}}"><span class="dropVal" translate><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span></button>
+                                                <ul class="dropdown-menu" style="min-width:130px;">
+                                                    <li class="inbndDroplist" data-toggle="modal" data-target="#inbndChartModal" ng-click="InboundModal('InboundModal','PaymentStatus1',$event)">&nbsp;<i class="fa fa-expand" style="display:inline-block;"></i> <a style="display:inline-block;" translate>DashboardDts.Maximize</a></li>
+                                                    <li class="inbndDroplist" ng-click="makeitMove()">&nbsp;<i class="fa fa-arrows-alt" style="display:inline-block;"></i><a style="display:inline-block;" translate> DashboardDts.Move</a></li>
+                                                    <li class="inbndDroplist" ng-click="deleteChart('paymentStatusDist')">&nbsp;<i class="fa fa-times-circle" style="display:inline-block;"></i><a style="display:inline-block;" translate>BtnGroup.Close</a></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="dropdown custDropDown">
+                                                <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" id="dropVal_sankeyChartCustom" style="color:#fff !important;display:none;" translate>BtnGroup.Count</span>
+                                    <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                                <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                                    <li class="listClass2 listClass" id="li_3" ng-click="click('Count','sankeyChart','paymentStatusDist');chartDrop($event)" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                                    <li class="listClass2 listClass" id="li_4" ng-click="click('Amount','sankeyChart','paymentStatusDist');chartDrop($event)" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                            <button class="btn-link" type="button" data-toggle="modal" data-target="#inbndPersonalize" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}" ng-click="getChartName('paymentStatusDist','sankeyChart','PaymentStatus')"><i class="fa fa-line-chart" aria-hidden="true"></i><i class="fa fa-angle-down"></i>
+                        </button>
+
+
+                                        </div>
+                                        <div class="collapse-arrow cursorPointer" ng-click="collapseState();" data-toggle="collapse" data-target="#collapsePayStatus"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !PayState, 'fa-arrow-circle-right': PayState}"></i></span></div>
+                                    </div>
+                                </div>
+                                <!-- collapse="PayState" -->
+                                <div class="portlet-body collapse"  id="collapsePayStatus">
+                                    <div ng-if="paymentstatus==0">
+                                        <div class="col-xs-11" style="height:275px;background-color:#fff;position:absolute;opacity:0.5;left:41px;">
+
+                                        </div>
+                                        <span style="transform: rotate(-40deg);display:inline-block;font-size:40px;color:#005FFF;position:absolute;left:22%;top:220px;border-top:2px solid red;border-bottom:2px solid red;z-index: 1;" translate>DashboardDts.NOPAYMENTS</span>
+                                    </div>
+                                    <div class="InboundTotal" style="font: bold 16px Arial;text-align:center;padding-top:15px;background: #fff;">
+                                        <!-- <span style="color:#fff;">asdfasdfas</span> -->
+                                    </div>
+                                    <div id="sankey" style="background: #fff;" style="height:260px !important;">
+
+                                        <svg id="sankeyChartCustom"></svg>
+                                    </div>
+
+
+
+                                    <div class="legendHolder" ng-class="{'lessOpacityCls' : paymentstatus == 0 }" style="height:auto;padding:0px">
+
+                                        <div ng-if="paymentstatus==0" style="background-color:#fff;opacity:0.5;height:100px;z-index:1;width:99%;height:23%;position:absolute;" class=""></div>
+
+
+                                        <div class="donutChartSelected chartLegends">
+                                            <div id="channelLegendStatus_{{$index}}" class="row channelLegendStatus" ng-repeat="data in valObj.CurDisCustom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'sankeyChartCustom','paymentStatusDist')">
+                                                <div class="col-md-7 col-sm-7 col-xs-7 channelName" style="margin-left:20px;">{{data.Name}}</div>
+
+
+                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                    <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':Colors[$index]}"></div>
+
+                                                    {{findCnt(data.Currency)}}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div style="clear:both"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!---Payment Status Sankey Chart Starts-->
+
+                    <div class="col-md-4 pl-0" id="AttachedMsgStatus" style="padding-right: 8px !important;" ng-if="uSetting.paymentDashboard.sankeyChartCustom">
+                        <div class="">
+                            <div class="portlet box green-haze" id="AttachedMsgStatusBox" style="margin-top:12px;margin-bottom:12px;">
+                                <div class="portlet-title ">
+                                    <div class="caption cursorPointer dynamic-gridcurdis-left" ng-click="collapseState();" data-toggle="collapse" data-target="#collapsePayStatus">
+                                        <span>Attached Message Status</span>
+                                        <!--<span style="padding:0px 0px;margin-left:15px;"><i style="font-size: 12px;" class=" bold fa fa-chevron-right" ng-class="{'fa-chevron-down': !PayState, 'fa-chevron-right': PayState}"></i></span>-->
+                                    </div>
+                                    <div class="actions dynamic-gridcurdis-right">
+
+                                        <div class="dropdown" ng-hide="true">
+                                            <div class="dropdown">
+                                                <button class="btn-link menu-drop" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.More' | translate}}"><span class="dropVal" translate><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span></button>
+                                                <ul class="dropdown-menu" style="min-width:130px;">
+                                                    <li class="inbndDroplist" data-toggle="modal" data-target="#inbndChartModal" ng-click="InboundModal('InboundModal','PaymentStatus1',$event)">&nbsp;<i class="fa fa-expand" style="display:inline-block;"></i> <a style="display:inline-block;" translate>DashboardDts.Maximize</a></li>
+                                                    <li class="inbndDroplist" ng-click="makeitMove()">&nbsp;<i class="fa fa-arrows-alt" style="display:inline-block;"></i><a style="display:inline-block;" translate> DashboardDts.Move</a></li>
+                                                    <li class="inbndDroplist" ng-click="deleteChart('paymentStatusDist')">&nbsp;<i class="fa fa-times-circle" style="display:inline-block;"></i><a style="display:inline-block;" translate>BtnGroup.Close</a></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="dropdown custDropDown">
+                                                <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" id="dropVal_Custm1" style="color:#fff !important;display:none;" translate>BtnGroup.Count</span>
+                                    <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                                <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                                    <li class="listClass2 listClass" id="li_3" ng-click="click('Count','Custm1','CustmChart1');chartDrop($event)" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                                    <li class="listClass2 listClass" id="li_4" ng-click="click('Amount','Custm1','CustmChart1');chartDrop($event)" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                            <button class="btn-link" type="button" data-toggle="modal" data-target="#inbndPersonalize" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}" ng-click="getChartName('CustmChart1','Custm1','PaymentStatus')"><i class="fa fa-line-chart" aria-hidden="true"></i><i class="fa fa-angle-down"></i>
+                        </button>
+
+
+                                        </div>
+                                        <div class="collapse-arrow cursorPointer" ng-click="collapseState();" data-toggle="collapse" data-target="#collapsePayStatus"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !PayState, 'fa-arrow-circle-right': PayState}"></i></span></div>
+                                    </div>
+                                </div>
+                                <!-- collapse="PayState" -->
+                                <div class="portlet-body collapse"  id="collapsePayStatus">
+                                    <div ng-if="noAttchedMessge">
+                                        <div class="col-xs-11" style="height:297px;background-color:#fff;position:absolute;opacity:0.5;left:26px;">
+
+                                        </div>
+                                        <span style="transform: rotate(-40deg);display:inline-block;font-size:40px;color:#005FFF;position:absolute;left:22%;top:220px;border-top:2px solid red;border-bottom:2px solid red;z-index: 1;" translate>DashboardDts.NOPAYMENTS</span>
+                                    </div>
+                                    <div class="InboundTotal" style="font: bold 16px Arial;text-align:center;padding-top:15px;background: #fff;">
+                                        <!-- <span style="color:#fff;">asdfasdfas</span> -->
+                                    </div>
+                                    <div id="CustmChart1" style="background: #fff;height:260px;">
+                                        <svg id="Custm1"></svg>
+                                    </div>
+
+
+
+                                    <div class="legendHolderCstm1" ng-class="{'lessOpacityCls' : noAttchedMessge == true }" style="height:auto;padding:0px">
+
+                                        <div class="chartLegends" style="cursor:pointer;">
+                                            <div id="channelLegendpieStatus_{{$index}}" class="row channelLegendpieStatus" ng-repeat="data in attachObj.Custm1" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'Custm1')">
+                                                <div class="col-md-7 col-sm-7 col-xs-7 channelName" style="margin-left:20px;">{{data.Name}}</div>
+                                                <!-- <div class="col-md-6">
+                                            <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                               {{detail.Count |currency:"":0}}
+                                </span>
+                                        </div> -->
+
+                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                    <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':Colors[$index]}"></div>
+                                                    {{findCnt(data.Currency)}}
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div style="clear:both"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 pl-0" id="InterfaceStatusMsg" style="padding-right: 8px !important;" ng-if="uSetting.paymentDashboard.sankeyChartCustom">
+                        <div class="">
+                            <div class="portlet box green-haze" id="InterfaceStatusMsgBox" style="margin-top:12px;margin-bottom:12px;">
+                                <div class="portlet-title ">
+                                    <div class="caption cursorPointer dynamic-gridcurdis-left" ng-click="collapseState();" data-toggle="collapse" data-target="#collapsePayStatus">
+                                        <span>Interface Status</span>
+                                        <!--<span style="padding:0px 0px;margin-left:15px;"><i style="font-size: 12px;" class=" bold fa fa-chevron-right" ng-class="{'fa-chevron-down': !PayState, 'fa-chevron-right': PayState}"></i></span>-->
+                                    </div>
+                                    <div class="actions dynamic-gridcurdis-right">
+
+                                        <div class="dropdown" ng-hide="true" ng-hide="paymentstatus==0">
+                                            <div class="dropdown">
+                                                <button class="btn-link menu-drop" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.More' | translate}}"><span class="dropVal" translate><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span></button>
+                                                <ul class="dropdown-menu" style="min-width:130px;">
+                                                    <li class="inbndDroplist" data-toggle="modal" data-target="#inbndChartModal" ng-click="InboundModal('InboundModal','PaymentStatus1',$event)">&nbsp;<i class="fa fa-expand" style="display:inline-block;"></i> <a style="display:inline-block;" translate>DashboardDts.Maximize</a></li>
+                                                    <li class="inbndDroplist" ng-click="makeitMove()">&nbsp;<i class="fa fa-arrows-alt" style="display:inline-block;"></i><a style="display:inline-block;" translate> DashboardDts.Move</a></li>
+                                                    <li class="inbndDroplist" ng-click="deleteChart('paymentStatusDist')">&nbsp;<i class="fa fa-times-circle" style="display:inline-block;"></i><a style="display:inline-block;" translate>BtnGroup.Close</a></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="dropdown custDropDown">
+                                                <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" id="dropVal_Custm2" style="color:#fff !important;display:none;" translate>BtnGroup.Count</span>
+                                    <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                                <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                                    <li class="listClass2 listClass" id="li_3" ng-click="click('Count','Custm2','CustmChart2');chartDrop($event)" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                                    <li class="listClass2 listClass" id="li_4" ng-click="click('Amount','Custm2','CustmChart2');chartDrop($event)" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+
+                                                </ul>
+                                            </div>
+                                            <button class="btn-link" type="button" data-toggle="modal" data-target="#inbndPersonalize" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}" ng-click="getChartName('paymentStatusDist','Custm2','PaymentStatus')"><i class="fa fa-line-chart" aria-hidden="true"></i><i class="fa fa-angle-down"></i>
+                        </button>
+
+
+                                        </div>
+                                        <div class="collapse-arrow cursorPointer" ng-click="collapseState();"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !PayState, 'fa-arrow-circle-right': PayState}" data-toggle="collapse" data-target="#collapsePayStatus"></i></span></div>
+                                    </div>
+                                </div>
+                                <!-- collapse="PayState" -->
+                                <div class="portlet-body collapse"  id="collapsePayStatus">
+                                    <div ng-if="noBIDMessage">
+                                        <div class="col-xs-11" style="height:297px;background-color:#fff;position:absolute;opacity:0.5;left:26px;">
+
+                                        </div>
+                                        <span style="transform: rotate(-40deg);display:inline-block;font-size:40px;color:#005FFF;position:absolute;left:22%;top:220px;border-top:2px solid red;border-bottom:2px solid red;z-index: 1;" translate>DashboardDts.NOPAYMENTS</span>
+                                    </div>
+                                    <div class="InboundTotal" style="font: bold 16px Arial;text-align:center;padding-top:15px;background: #fff;">
+                                        <!-- <span style="color:#fff;">asdfasdfas</span> -->
+                                    </div>
+                                    <div id="CustmChart2" style="background: #fff;height:260px;">
+
+                                        <svg id="Custm2"></svg>
+                                    </div>
+
+
+
+                                    <div class="legendHolderCstm2" ng-class="{'lessOpacityCls' : noBIDMessage == true }" style="height:auto;padding:0px">
+
+                                        <!--<div ng-if="paymentstatus==0" style="background-color:#fff;opacity:0.5;height:100px;z-index:1;width:99%;height:23%;position:absolute;"
+                                    class=""></div>-->
+
+
+                                        <div class="chartLegends" style="cursor:pointer;">
+                                            <div id="channelLegendStatus_{{$index}}" class="row channelLegendStatus" ng-repeat="data in bidObj.Custm2" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'Custm2')">
+                                                <div class="col-md-7 col-sm-7 col-xs-7 channelName" style="margin-left:20px;">{{data.Name}}</div>
+                                                <!-- <div class="col-md-6">
+                                            <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                            <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                             {{detail.Count |currency:"":0}}
+                            </span>
+                                        </div> -->
+                                                <div class="col-md-4 col-sm-4 col-xs-4">
+                                                    <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':Colors[$index]}"></div>
+                                                    {{findCnt(data.Currency)}}
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div style="clear:both"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <!---Payment Status Sankey Chart Ends-->
+
+
+
+
+
+                    <!-- Inbound Payment chart Starts-->
+                    <div class="col-md-6 droppable" id="inbndChart" ng-if="uSetting.paymentDashboard.test2Custom" style=" padding-right: 10px;">
+
+                        <div class="draggable">
+                            <div class="portlet box">
+                                <div class="portlet-title dragHandle" ng-init="inboundPayment = false">
+                                    <div class="caption cursorPointer" id="rstDashboard" ng-click="inboundPayment = !inboundPayment" data-toggle="collapse" data-target="#inboundPayment">
+                                        <span>Inbound Payment</span>
+                                        <!--<span style="padding:0px 0px;margin-left:15px;"><i style="font-size: 12px;" class=" bold fa fa-chevron-right" ng-class="{'fa-chevron-down': !inboundPayment, 'fa-chevron-right': inboundPayment}"></i></span>-->
+                                    </div>
+
+
+                                    <div class="actions">
+
+                                        <div class="dropdown" ng-hide="schannel==0;inboundPayment" ng-hide="inboundPayment">
+
+                                            <button class="btn-trans menu-drop" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.More' | translate}}" type="button" data-toggle="dropdown"><span class="dropVal" translate><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
+                             </button>
+                                            <ul class="dropdown-menu menu mylist" style="min-width:130px;">
+                                                <li class="inbndDroplist" data-toggle="modal" data-target="#inbndChartModal" ng-click="InboundModal('InboundModal','SourceChannel',$event)">&nbsp;<i class="fa fa-expand" style="display:inline-block;"></i> <a style="display:inline-block;" translate>DashboardDts.Maximize</a></li>
+                                                <li class="inbndDroplist" ng-click="makeitMove()">&nbsp;<i class="fa fa-arrows-alt" style="display:inline-block;"></i><a style="display:inline-block;" translate> DashboardDts.Move</a></li>
+                                                <li class="inbndDroplist" ng-click="deleteChart('inbndChart')">&nbsp;<i class="fa fa-times-circle" style="display:inline-block;"></i><a style="display:inline-block;" translate>BtnGroup.Close</a></li>
+                                                <!--<li class="inbndDroplist" data-toggle="modal" data-target="#inbndPersonalize" ng-click="getChartName('inbndChart','test2Custom','SourceChannel')">&nbsp;<i class="fa fa-cog" aria-hidden="true" style="display:inline-block;"></i><a style="display:inline-block;"> Personalize</a></li>-->
+                                            </ul>
+                                        </div>
+
+
+
+                                        <div class="dropdown custDropDown" ng-hide="inboundPayment">
+
+
+                                            <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" id="dropVal_test2Custom" style="color:#fff !important;display: none" translate>BtnGroup.Count</span>
+                              <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                            <ul class="dropdown-menu mylist" style="min-width:65px;">
+
+                                                <li class="listClass1 listClass" id="li_1" ng-click="click('Count','test2Custom','inbndChart');chartDrop($event);" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                                <li class="listClass1 listClass" id="li_2" ng-click="click('Amount','test2Custom','inbndChart');chartDrop($event);" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown" ng-hide="inboundPayment">
+                                            <button class="btn-link" type="button" data-toggle="modal" data-target="#inbndPersonalize" ng-hide="inboundPayment" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}" ng-click="getChartName('inbndChart','test2Custom','SourceChannel')"><i class="fa fa-line-chart" aria-hidden="true"></i><i class="fa fa-angle-down"></i>
+                        </button>
+
+
+                                        </div>
+
+                                        <div class="collapse-arrow cursorPointer" ng-click="inboundPayment = !inboundPayment" data-toggle="collapse" data-target="#inboundPayment"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !inboundPayment, 'fa-arrow-circle-right': inboundPayment}"></i></span></div>
+                                    </div>
+                                </div>
+                                <div class="portlet-body collapse show" id="inboundPayment">
+
+                                    <div ng-if="schannel==0">
+
+                                        <div class="col-xs-11 noPayments">
+                                        </div>
+                                        <span style="transform: rotate(-40deg);
+                    display:inline-block;font-size:40px;
+                    color:#005FFF;position:absolute;left:24%;
+                    top:40%;border-top:2px solid red;border-bottom:2px solid red;" translate>DashboardDts.NOPAYMENTS</span>
+                                    </div>
+
+                                    <div class="InboundTotal">
+                                        <span style="color:#fff;">/</span>
+                                    </div>
+
+                                    <div id="inbndParent" class="testBlock" style="background: #fff;">
+                                        <svg id="test2Custom"></svg>
+                                    </div>
+
+
+                                    <div class="legendHolder" style="height:auto;padding:0px;min-height:117px;max-height:117px;">
+
+
+
+                                        <div ng-if="!donutChartVisible" class="col-md-11" style="background-color:#fff;opacity:0.5;position:absolute;height:116px;z-index:1;"></div>
+
+                                        <div class="donutChartSelected chartLegends">
+                                            <div ng-if="!statusFlag.test2Custom" id="channelLegendInbnd_{{$index}}" class="row channelLegendInbnd" ng-repeat="data in valObj.test2Custom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'test2Custom','inbndChart')">
+                                                <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                                <div class="col-md-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                            <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                            {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                            </span>
+                                                </div>
+                                            </div>
+                                            <div ng-if="statusFlag.test2Custom" id="channelLegendAmtInbnd_{{$index}}" class="row channelLegendAmtInbnd" ng-repeat="data in valObj.test2Custom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'test2Custom','inbndChart')">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                   <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                         <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pieChartSelected chartLegends">
+                                            <div ng-if="!statusFlag.test2Custom" id="channelLegendpieInbnd_{{$index}}" class="row channelLegendpieInbnd" ng-repeat="data in valObj.test2Custom" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'test2Custom')">
+                                                <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                                <div class="col-md-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                                </span>
+                                                </div>
+                                            </div>
+                                            <div ng-if="statusFlag.test2Custom" id="channelLegendAmtpieInbnd_{{$index}}" class="row channelLegendAmtpieInbnd" ng-repeat="data in valObj.test2Custom" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'test2Custom')">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                       <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                         <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sankeyChartSelected chartLegends">
+                                            <div ng-if="statusFlag.test2Custom" ng-repeat="PSData1 in srcChannelData" class="legend" style="float:left;margin-left:20px;">
+                                                <span ng-if="PSData1.Name"> {{PSData1.Name | underscoreRemove}}  <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span>{{PSData1.Currency }} <br/>
+                                                <b>
+                                     <span> {{PSData1.Amount | isoCurrency:PSData1.Currency}} </span>
+                                 </b>
+                                            </div>
+
+
+
+                                            <div ng-if="!statusFlag.test2Custom" ng-repeat="PSData1 in srcChannelData" class="legend" style="float:left;margin-left:20px;">
+                                                <span ng-if="PSData1.Name">{{PSData1.Name |underscoreRemove}} <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span> {{PSData1.Currency }}<br/>
+                                                <b>{{PSData1.Count |currency:"":0}}</b>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div style="clear:both"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Inbound Payment chart Ends-->
+
+                    <!---MOP Chart Starts-->
+                    <div class="col-md-6 droppable" id="MOPDist" ng-if="uSetting.paymentDashboard.MopBarCustom" style=" padding-right: 10px;">
+                        <div class="draggable">
+                            <div class="portlet box green-haze" style="margin-bottom:12px;">
+                                <div class="portlet-title  dragHandle" ng-init="MOPayment = false">
+                                    <div class="caption cursorPointer" ng-click="MOPayment = !MOPayment" data-toggle="collapse" data-target="#MOPayment">
+                                        <span>Method of Payment</span>
+                                        <!--<span style="padding:0px 0px;margin-left:15px;"><i style="font-size: 12px;" class=" bold fa fa-chevron-right" ng-class="{'fa-chevron-down': !MOPayment, 'fa-chevron-right': MOPayment}"></i></span>-->
+                                    </div>
+
+
+                                    <div class="actions">
+
+                                        <div class="dropdown" ng-hide="MOPayment">
+
+                                            <button class="btn-trans menu-drop" type="button" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.More' | translate}}" data-toggle="dropdown"><span class="dropVal"  translate><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
+                                            </button>
+                                            <ul class="dropdown-menu mylist" style="min-width:130px;">
+                                                <li class="inbndDroplist" data-toggle="modal" data-target="#inbndChartModal" ng-click="InboundModal('InboundModal','MOP',$event)">&nbsp;<i class="fa fa-expand" style="display:inline-block;"></i> <a style="display:inline-block;" translate>DashboardDts.Maximize</a></li>
+                                                <li class="inbndDroplist" ng-click="makeitMove()">&nbsp;<i class="fa fa-arrows-alt" style="display:inline-block;"></i><a style="display:inline-block;" translate> DashboardDts.Move</a></li>
+                                                <li class="inbndDroplist" ng-click="deleteChart('MOPDist')">&nbsp;<i class="fa fa-times-circle" style="display:inline-block;"></i><a style="display:inline-block;" translate>BtnGroup.Close</a></li>
+                                                <!--<li class="inbndDroplist" data-toggle="modal" data-target="#inbndPersonalize" ng-click="getChartName('MOPDist','MopBarCustom','MOP')">&nbsp;<i class="fa fa-cog" aria-hidden="true" style="display:inline-block;"></i><a style="display:inline-block;"> Personalize</a></li>-->
+                                            </ul>
+                                        </div>
+
+                                        <div class="dropdown custDropDown" ng-hide="MOPayment">
+                                            <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" id="dropVal_MopBarCustom" style="color:#fff !important;display: none" translate>BtnGroup.Count</span> <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                            <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                                <li class="listClass2 listClass" id="li_3" ng-click="click('Count','MopBarCustom','MOPDist');chartDrop($event)" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                                <li class="listClass2 listClass" id="li_4" ng-click="click('Amount','MopBarCustom','MOPDist');chartDrop($event)" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="dropdown" ng-hide="MOPayment">
+                                            <button class="btn-link" type="button" data-toggle="modal" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}" data-target="#inbndPersonalize" ng-click="getChartName('MOPDist','MopBarCustom','MOP')"><i class="fa fa-line-chart" aria-hidden="true"></i><i class="fa fa-angle-down"></i>
+                            </button>
+                                        </div>
+                                        <div class="collapse-arrow cursorPointer" ng-click="MOPayment = !MOPayment" data-toggle="collapse" data-target="#MOPayment"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !MOPayment, 'fa-arrow-circle-right': MOPayment}"></i></span></div>
+                                    </div>
+                                </div>
+                                <div class="portlet-body collapse show" id="MOPayment">
+                                    <div ng-if="mop==0">
+                                        <div class="col-xs-11 noPayments">
+                                        </div>
+                                        <span style="transform: rotate(-40deg);display:inline-block;font-size:40px;color:#005FFF;position:absolute;left:33%;top:50%;border-top:2px solid red;border-bottom:2px solid red;" translate>DashboardDts.NOPAYMENTS</span>
+                                    </div>
+
+                                    <div class="InboundTotal">
+                                        <span style="color:#fff;">asdfasdfas</span>
+                                    </div>
+                                    <div style="background: #fff;"><svg id="MopBarCustom"></svg></div>
+
+
+
+                                    <div class="legendHolder" style="height:auto;padding:0px">
+
+                                        <div ng-if="paymentstatus==0" style="background-color:#fff;opacity:0.5;height:100px;z-index:1;width:99%;height:23%;position:absolute;" class=""></div>
+
+
+                                        <div class="donutChartSelected chartLegends">
+                                            <div ng-if="!statusFlag.sankeyChartCustom" id="channelLegendStatus_{{$index}}" class="row channelLegendStatus" ng-repeat="data in valObj.sankeyChartCustom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'sankeyChartCustom','paymentStatusDist')">
+                                                <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                                <div class="col-md-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                            <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                            {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                            </span>
+                                                </div>
+                                            </div>
+                                            <div ng-if="statusFlag.sankeyChartCustom" id="channelLegendAmtStatus_{{$index}}" class="row channelLegendAmtStatus" ng-repeat="data in valObj.sankeyChartCustom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'sankeyChartCustom','paymentStatusDist')">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                   <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                   <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pieChartSelected chartLegends">
+                                            <div ng-if="!statusFlag.sankeyChartCustom" id="channelLegendpieStatus_{{$index}}" class="row channelLegendpieStatus" ng-repeat="data in valObj.sankeyChartCustom" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'sankeyChartCustom')">
+                                                <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                                <div class="col-md-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                                </span>
+                                                </div>
+                                            </div>
+                                            <div ng-if="statusFlag.sankeyChartCustom" id="channelLegendAmtpieStatus_{{$index}}" class="row channelLegendAmtpieStatus" ng-repeat="data in valObj.sankeyChartCustom" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'sankeyChartCustom')">
+                                                <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                                <div class="col-md-8 col-sm-8 col-xs-8">
+                                                    <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                       <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                        <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sankeyChartSelected chartLegends">
+                                            <div ng-if="statusFlag.sankeyChartCustom" ng-repeat="PSData1 in payStatData" class="legend" style="float:left;margin-left:20px;">
+
+                                                <span ng-if="PSData1.Name"> {{PSData1.Name | underscoreRemove}}  <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span>{{PSData1.Currency }} <br/>
+                                                <b>
+                                        <span> {{PSData1.Amount | isoCurrency:PSData1.Currency}} </span>
+                                    </b>
+                                            </div>
+
+
+
+                                            <div ng-if="!statusFlag.sankeyChartCustom" ng-repeat="PSData1 in payStatData" class="legend" style="float:left;margin-left:20px;">
+                                                <span ng-if="PSData1.Name">{{PSData1.Name | underscoreRemove}} <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span> {{PSData1.Currency }}<br/>
+                                                <b>{{PSData1.Count |currency:"":0}}</b>
+                                            </div>
+                                        </div>
+                                        <div style="clear:both"></div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!---MOP Chart Ends--->
+
+                    <!-- Payment currency distribution charts Starts -->
+                    <div class="col-md-6 droppable" id="pymtCurDisChart" ng-if="uSetting.paymentDashboard.CurDisCustom" style=" padding-right: 10px;">
+                        <div class="portlet box">
+                            <div class="portlet-title dragHandle" ng-init="currencyDist = false">
+                                <div class="caption cursorPointer" ng-click="currencyDist = !currencyDist" data-toggle="collapse" data-target="#currencyDist">
+                                    <span>Payments Currency Distribution</span>
+                                    <!--<span style="padding:0px 0px;margin-left:15px;"><i style="font-size: 12px;" class=" bold fa fa-chevron-right" ng-class="{'fa-chevron-down': !currencyDist, 'fa-chevron-right': currencyDist}"></i></span>-->
+                                </div>
+
+                                <div class="actions">
+
+                                    <div class="dropdown" ng-hide="currencyDist">
+
+                                        <button class="btn-trans menu-drop" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.More' | translate}}" type="button" data-toggle="dropdown"><span class="dropVal" translate><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
+                        </button>
+                                        <ul class="dropdown-menu mylist" style="min-width:130px;">
+                                            <li class="inbndDroplist" data-toggle="modal" data-target="#inbndChartModal" ng-click="InboundModal('InboundModal','PaymentStatus',$event)">&nbsp;<i class="fa fa-expand" style="display:inline-block;"></i> <a style="display:inline-block;" translate>DashboardDts.Maximize</a></li>
+                                            <li class="inbndDroplist" ng-click="makeitMove()">&nbsp;<i class="fa fa-arrows-alt" style="display:inline-block;"></i><a style="display:inline-block;" translate> DashboardDts.Move</a></li>
+                                            <li class="inbndDroplist" ng-click="deleteChart('pymtCurDisChart')">&nbsp;<i class="fa fa-times-circle" style="display:inline-block;"></i><a style="display:inline-block;" translate>BtnGroup.Close</a></li>
+                                            <!--<li class="inbndDroplist" data-toggle="modal" data-target="#inbndPersonalize" ng-click="getChartName('pymtCurDisChart','CurDisCustom','PaymentStatus')">&nbsp;<i class="fa fa-cog" aria-hidden="true" style="display:inline-block;"></i><a style="display:inline-block;"> Personalize</a></li>-->
+                                        </ul>
+                                    </div>
+                                    <div class="dropdown custDropDown" ng-hide="currencyDist">
+
+                                        <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" id="dropVal_CurDisCustom" style="color:#fff !important;display: none" translate>BtnGroup.Count</span>
+                           <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                        <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                            <li class="listClass4 listClass" id="li_7" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}" ng-click="click('Count','CurDisCustom','pymtCurDisChart');chartDrop($event);"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                            <li class="listClass4 listClass" id="li_8" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}" ng-click="click('Amount','CurDisCustom','pymtCurDisChart');chartDrop($event);"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+
+                                        </ul>
+                                    </div>
+
+                                    <div class="dropdown" ng-hide="currencyDist">
+                                        <button class="btn-link" type="button" data-toggle="modal" data-target="#inbndPersonalize" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}" ng-click="getChartName('pymtCurDisChart','CurDisCustom','PaymentStatus')"><i class="fa fa-line-chart" aria-hidden="true"></i><i class="fa fa-angle-down"></i>
+                            </button>
+                                    </div>
+                                    <div class="collapse-arrow cursorPointer" ng-click="currencyDist = !currencyDist" data-toggle="collapse" data-target="#currencyDist"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !currencyDist, 'fa-arrow-circle-right': currencyDist}"></i></span></div>
+                                </div>
+
+                            </div>
+                            <div class="portlet-body collapse show" id="currencyDist">
+                                <div ng-if="noCurrenciesFound">
+                                    <div class="col-xs-11 noPayments">
+                                    </div>
+                                    <span style="transform: rotate(-40deg);
+                            display:inline-block;font-size:40px;
+                            color:#005FFF;position:absolute;left:39%;
+                    top:46%;border-top:2px solid red;border-bottom:2px solid red;" translate>DashboardDts.NOPAYMENTS</span>
+                                </div>
+
+                                <div class="InboundTotal">
+                                    <span style="color:#fff;">aa</span>
+                                </div>
+
+                                <div style="height:310px;background: #fff">
+                                    <svg id="CurDisCustom"></svg>
+                                </div>
+
+                                <div class="legendHolder" style="height:auto;padding:0px;">
+                                    <div ng-if="!donutChartVisible" class="col-md-11" style="background-color:#fff;opacity:0.5;position:absolute;height:116px;z-index:1;"></div>
+
+                                    <div class="donutChartSelected chartLegends">
+                                        <div ng-if="!statusFlag.CurDisCustom" id="channelLegendCurDis_{{$index}}" class="row channelLegendCurDis" ng-repeat="data in valObj.CurDisCustom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'CurDisCustom')">
+                                            <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove }}</div>
+                                            <div class="col-md-8">
+                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                                </span>
+                                            </div>
+                                        </div>
+                                        <div ng-if="statusFlag.CurDisCustom" id="channelLegendAmtCurDis_{{$index}}" class="row channelLegendAmtCurDis" ng-repeat="data in valObj.CurDisCustom" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'CurDisCustom')">
+                                            <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                       <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                        <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="pieChartSelected chartLegends">
+                                        <div ng-if="!statusFlag.CurDisCustom" id="channelLegendpieCurDis_{{$index}}" class="row channelLegendpieCurDis" ng-repeat="data in valObj.CurDisCustom" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'CurDisCustom')">
+                                            <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                            <div class="col-md-8">
+                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                                </span>
+                                            </div>
+                                        </div>
+                                        <div ng-if="statusFlag.CurDisCustom" id="channelLegendAmtpieCurDis_{{$index}}" class="row channelLegendAmtpieCurDis" ng-repeat="data in valObj.CurDisCustom" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'CurDisCustom')">
+                                            <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                       <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                        <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                </span>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="sankeyChartSelected chartLegends">
+
+                                        <div ng-if="statusFlag.CurDisCustom" ng-repeat="PSData1 in curDisData" class="legend" style="float:left;margin-left:20px;">
+                                            <span ng-if="PSData1.Name"> {{PSData1.Currency }}  <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span> {{PSData1.Name | underscoreRemove}} <br/>
+                                            <b>
+                                    <span> {{PSData1.Amount | isoCurrency:PSData1.Currency}} </span>
+                                </b>
+                                        </div>
+
+
+
+                                        <div ng-if="!statusFlag.CurDisCustom" ng-repeat="PSData1 in curDisData" class="legend" style="float:left;margin-left:20px;">
+                                            <span ng-if="PSData1.Name">{{PSData1.Currency }} <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> {{PSData1.Name | underscoreRemove}}</span> <br/>
+                                            <b>{{PSData1.Count |currency:"":0}}</b>
+                                        </div>
+
+                                    </div>
+
+                                    <div style="clear:both"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment currency distribution charts Ends -->
+
+
+
+                </div>
+
+                <div class="modal fade" id="inbndChartModal" role="dialog" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content" id="resizeWindow">
+
+                            <div class="modal-body">
+
+                                <div class="row" style="margin:0;">
+                                    <div class="portlet box" style="margin-top:12px;margin-bottom:12px;width: 100%;">
+                                        <div class="portlet-title">
+                                            <div class="caption" id="rstDashboard">
+                                                <span>Inbound Payment</span>
+                                            </div>
+                                            <div class="actions">
+                                                <div class="dropdown">
+                                                    <button class="btn-trans" type="button" data-toggle="dropdown"><span class="dropVal"><i class="fa fa-line-chart" aria-hidden="true" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.ChartType' | translate}}"></i></span>
+                                            <i class="fa fa-angle-down" style="left: 3px;"></i></button>
+                                                    <ul class="dropdown-menu mylist customCharts personalizeClass">
+                                                        <li class="listInsideModal" ng-click="insideModalPersonalize('InboundModal','pie',$event)"><a translate>DashboardDts.PieChart</a></li>
+                                                        <li class="listInsideModal" ng-click="insideModalPersonalize('InboundModal','donut',$event)"><a translate>DashboardDts.DonutChart</a></li>
+                                                        <li class="listInsideModal" ng-click="insideModalPersonalize('InboundModal','sankey',$event)"><a translate>DashboardDts.SankeyChartHor</a></li>
+                                                        <li class="listInsideModal" ng-click="insideModalPersonalize('InboundModal','verticalsankey',$event)"><a translate>DashboardDts.SankeyChartVer</a></li>
+                                                        <li class="listInsideModal" ng-click="insideModalPersonalize('InboundModal','horizontal',$event)"><a translate>DashboardDts.MultibarChartHor</a></li>
+                                                        <li class="listInsideModal" ng-click="insideModalPersonalize('InboundModal','vertical',$event)"><a translate>DashboardDts.MultibarChartVer</a></li>
+                                                    </ul>
+                                                </div>
+
+
+                                                <div class="dropdown custDropDownInsideModal">
+                                                    <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" style="color:#fff !important;display: none" translate>BtnGroup.Count</span>
+                                            <a><i class="fa fa-list-ol"></i></a><i class="fa fa-angle-down"></i></button>
+                                                    <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                                        <li class="listClassModal listClass" id="Mdlli_Count" ng-click="selectFrmModal('Count','InboundModal');chartDrop($event);" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol"></i></a></li>
+                                                        <li class="listClassModal listClass" id="Mdlli_Amount" ng-click="selectFrmModal('Amount','InboundModal');chartDrop($event);" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <button class="btn-trans" data-dismiss="modal" data-toggle-second="tooltip" data-placement="top"  title="{{'DashboardDts.Minimize' | translate}}"><i class="fa fa-compress" aria-hidden="true"></i></button>
+
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body inbndModalBody collapse show" collapse="inboundPayment">
+
+                                            <div class="col-md-12 modaltestBlock portlet-inner-box" style="float:left;">
+                                                <center>
+
+                                                    <div id="InboundTotalforModal">
+                                                    </div>
+
+                                                    <div ng-if="donutChartVisible" id="inbndmodalParent" class="modaltestBlock">
+                                                        <svg id="InboundModal"></svg></div>
+
+                                                </center>
+                                            </div>
+
+                                            <div class="col-md-12 modalHt legendHolder" style="min-height:10%;max-height:25%;">
+                                                <div class="" style="height:auto;padding:0px;margin-top:22px;margin-bottom:22px;">
+                                                    <div class="chartModalLegends donutChartSelected">
+                                                        <div ng-if="!clickedModal" id="channelLegendModal_{{$index}}" class="row channelLegendModal cursorPointer" ng-repeat="data in modalData" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data,'InboundModal')">
+                                                            <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                                            <div class="col-md-8">
+                                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                            <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                            {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                                            </span>
+                                                            </div>
+                                                        </div>
+                                                        <div ng-if="clickedModal" id="channelLegendAmtMoldal_{{$index}}" class="row channelLegendAmtMoldal cursorPointer" ng-repeat="data in modalData" style="margin-top:5px;" ng-click="CustomDataModify($event,$index, data, 'InboundModal')">
+                                                            <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                            <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+
+                                                <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="chartModalLegends pieChartSelected">
+                                                        <div ng-if="!clickedModal" id="channelLegendpie_{{$index}}" class="row channelLegendpie" ng-repeat="data in modalData" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'InboundModal')">
+                                                            <div class="col-md-3 col-sm-3 col-xs-12 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+                                                            <div class="col-md-8">
+                                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                                <div class="legDivs" ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                                {{detail.Cur}} - {{detail.Count |currency:"":0}}
+                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div ng-if="clickedModal" id="channelLegendAmtpie_{{$index}}" class="row channelLegendAmtpie" ng-repeat="data in modalData" style="margin-top:5px;" ng-click="CustomDataModifyforPie($event,$index, data,'InboundModal')">
+                                                            <div class="col-md-3 col-sm-3 col-xs-3 channelName" style="margin-left:20px;">{{data.Name | underscoreRemove}}</div>
+
+                                                            <div class="col-md-8 col-sm-8 col-xs-8">
+                                                                <span ng-repeat="detail in data.Currency" style="display:inline-block;margin-left:10px;">
+                                       <div ng-style="{'width':'10px','height':'10px','float':'left','margin-top':'4px','margin-right':'3px','display':'inline-block','background-color':detail.color}"></div>
+                                        <span> {{detail.Cur}} - {{detail.Amount | isoCurrency:detail.Cur}} </span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="chartModalLegends sankeyChartSelected">
+                                                        <div ng-if="clickedModal" ng-repeat="PSData1 in inData" class="legend" style="float:left;margin-left:20px;">
+                                                            <span ng-if="PSData1.Name"> {{PSData1.Name | underscoreRemove}}  <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span>{{PSData1.Currency }} <br/>
+                                                            <b>
+                                                    <span> {{PSData1.Amount | isoCurrency:PSData1.Currency}} </span>
+                                                </b>
+                                                        </div>
+                                                        <div ng-if="!clickedModal" ng-repeat="PSData1 in inData" class="legend" style="float:left;margin-left:20px;">
+                                                            <span ng-if="PSData1.Name">{{PSData1.Name | underscoreRemove}} <i class="fa fa-long-arrow-right" aria-hidden="true" ng-if="PSData1.Currency"></i> </span> {{PSData1.Currency }}<br/>
+                                                            <b>{{PSData1.Count |currency:"":0}}</b>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div style="clear:both"></div>
+                                                </div>
+                                            </div>
+
+                                            <div style="clear:both"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div id="inbndPersonalize" class="modal fade" role="dialog" tabindex="-1" data-backdrop="static">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content" style="width: 600px;">
+                            <div class="modal-header modalHeaderColor">
+                                <h5 class="modal-title"translate>DashboardDts.Personalize</h5>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" role="form" ng-submit="personalizeChart(datas)">
+                                    <!--<div class="form-group">
+                            <label class="control-label col-md-3">Title</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="Please Enter Chart Title" ng-model="datas.title">
+                            </div>
+                        </div>-->
+                                    <div class="form-group row">
+                                        <label class="control-label col-md-3 text-sm-left text-md-right text-lg-right text-xl-right mt-2">{{'DashboardDts.ChartType' | translate}} <span style="color:#e02222;font-size:12px;padding-left:2px">*</span></label>
+                                        <div class="col-md-6">
+                                            <select class="form-control" ng-model="datas.chartType" ng-required="true">
+                                                <option value="">--{{'BankDataDts.Select' | translate}}--</option>
+                                                <option value="donut" translate>DashboardDts.DonutChart</option>
+                                                <option value="pie" translate>DashboardDts.PieChart</option>
+                                                <option value="horizontal" translate>DashboardDts.MultibarChartHor</option>
+                                                <option value="vertical" translate>DashboardDts.MultibarChartVer</option>
+                                                <option value="sankey" translate>DashboardDts.SankeyChartHor</option>
+                                                <option value="verticalsankey" translate>DashboardDts.SankeyChartVer</option>
+                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="text-align:center;margin-top:20px;">
+                                        <button type="submit" class="btn btnStyle" translate>BtnGroup.Submit</button>
+                                        <button type="button" class="btn btnStyle" data-dismiss="modal"  translate >BtnGroup.Close</button>
+                                    </div>
+                                </form>
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    <br/>
+
+    <div class="fileDashboard accordion" id="collapseInsSummary">
+        <div class="row sTitle bold cursorPointer accordion" style="margin:0;" ng-init="isFileInfoCollapsed = false" ng-click="isFileInfoCollapsed = !isFileInfoCollapsed" data-toggle="collapse" data-target="#collapseInstruction">{{'Instruction Summary'}}
+            <div class="col float-right">
+                &nbsp;&nbsp;&nbsp;<i style="padding-top:2px;" class="float-right bold fa fa-angle-right" ng-class="{'fa-angle-down': !isFileInfoCollapsed, 'fa-angle-right': isFileInfoCollapsed}"></i>
+            </div>
+        </div>
+        <!-- collapse="isFileInfoCollapsed" -->
+        <div class="collapse show" id="collapseInstruction" data-parent="#collapseInsSummary"  style="padding-top: 10px;">
+            <!--<div class="row">
+        <div class="col-md-12">
+            <div class="bar__header">
+                <div class="count__head">
+                    <h3><span translate>Instruction Status</span></h3>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="statusbar__wrapper">
+                        <!--<p style="font-size:16px;font-weight:700;color:#666;margin:0" translate>DashboardPayments.SubSubTitle</p>-->
+                        <div class="width100_xs width50_sm width25_md statusBox" ng-class="{'width50':countFile==2,'width25':countFile==4,'width33':countFile==3,'width100':countFile==1,'width20':countFile==5,'width16':countFile==6,}" ng-repeat="barVal in statusBarValFile" ng-if="barVal.Visibility">
+                            <div class="dashboard-stat dashboardWidget" ng-click="dashboardToFileList(barVal.Status)" ng-style="{'background':barVal.Color}">
+                                <div class="statusbar__widget">
+                                    <div class="details pull-left">
+                                        <div class="number count" style="color:#fff !important;">
+                                            {{barVal.Count}}
+                                        </div>
+                                        <div class="desc payStatus" style="color:#fff !important;">
+                                            {{barVal.Status}}
+                                        </div>
+                                    </div>
+                                    <div class="visual widgetVisual pull-right">
+                                        <i class="DboardFont" ng-class="barVal.Icon" style="color:#fff;"></i>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- file chart starts -->
+            <div class="row" style="margin:0">
+                <div class="col-md-12 droppable" ng-if="uSetting.fileDashboard.fileChannel">
+                    <div class="draggable">
+                        <div class="portlet box green-haze" style="margin-top:12px;margin-bottom:12px;">
+                            <div class="portlet-title" ng-init="fileStatus = false">
+                                <div class="caption cursorPointer toggleTop" ng-click="fileStatus = !fileStatus" data-toggle="collapse" data-target="#fileStatus">
+                                    <span>Received Instructions</span>
+                                </div>
+                                <div class="actions">
+                                    <!-- <div class="dropdown custDropDown"  ng-hide="fileStatus">
+							<button class="btn-link" type="button" data-toggle="dropdown" tooltip="Count"><span class="dropVal" style="color:#fff !important;display: none" translate>BtnGroup.Count</span>
+								<a><i class="fa fa-list-ol" aria-hidden="true"></i></a><i class="fa fa-angle-down"></i></button>
+							<ul class="dropdown-menu mylist" style="min-width:65px;">
+								<li class="listClass6 listClass" id="li_11" ng-click="fileDetailChart('Count');chartDrop($event);" tooltip="Count"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+								<li class="listClass6 listClass" id="li_12" ng-click="fileDetailChart('Amount');chartDrop($event);" tooltip="Amount"><a translate><i class="fa fa-usd"></i></a></li>
+							</ul>
+						</div> -->
+                                    <div class="collapse-arrow cursorPointer" ng-click="fileStatus = !fileStatus" data-toggle="collapse" data-target="#fileStatus"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !fileStatus, 'fa-arrow-circle-right': fileStatus}"></i></span></div>
+                                </div>
+                            </div>
+
+
+                            <div class="portlet-body collapse show" id="fileStatus">
+                                <div ng-if="fileNotfound">
+                                    <div class="col-xs-12" style="background-color:#fff;position:absolute;opacity:0.5;left:0%;height:57%;z-index:1;width:100%;top:0%;">
+                                    </div>
+                                    <span style="transform: rotate(-40deg);
+                        display:inline-block;font-size:40px;
+                        color:#005FFF;position:absolute;left:43%;
+                        top:53%;border-top:2px solid red;border-bottom:2px solid red;z-index:2">NO FILES</span>
+                                </div>
+
+                                <div class="row portlet-inner-box" style="margin: 0;">
+                                    <div class="col-md-6 col-sm-6 col-xs-12" style="text-align: center; padding: 0px 10px 20px 10px;">
+                                        <div>
+                                            <h3 style="font:bold 16px Arial">{{'Received Instructions by PSA - ' + fileDonutHeader}}</h3>
+                                            <div id="FileDetailsDonutChart" style="height:400px;" class="chart chartBorder"><svg></svg></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12" style="text-align: center; padding:0px 10px 15px 10px;">
+                                        <div>
+                                            <h3 style="font:bold 16px Arial">{{'PSA - '+individualName+' vs Status'}}</h3>
+                                            <div id="lineChart" style="height:400px;" class="chart chartBorder"><svg></svg></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!-- <div ng-if="fileNotfound">
+                        <div class="col-xs-12" style="background-color:#fff;position:absolute;opacity:0.5;left:0%;height:80%;z-index:1;width:100%;top:13%;">
+                        </div>
+                        <span style="transform: rotate(-40deg);
+                    display:inline-block;font-size:40px;
+                    color:#005FFF;position:absolute;left:51%;
+                    top:53%;border-top:2px solid red;border-bottom:2px solid red;z-index:1">NO FILES</span>
+                    </div>
+					<div class="row portlet-inner-box" style="margin: 0;">
+						<div class="col-md-6 col-sm-6 col-xs-12"  style="text-align: center; padding: 0px 10px 20px 10px;">
+							<div>
+								<h3 style="font:bold 16px Arial">{{'Received Instructions by PSA - ' + fileDonutHeader}}</h3>
+								<div id="FileDetailsDonutChart" style="height:400px;" class="chart chartBorder"><svg ></svg></div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12" style="text-align: center; padding:0px 10px 15px 10px;">
+							<div >
+								<h3 style="font:bold 16px Arial">{{'PSA - '+individualName+'  vs Status'}}</h3>
+								<div id="lineChart" style="height:150px;" class="chart chartBorder"><svg></svg></div>
+							</div>
+							<div>
+								<h3 style="font:bold 16px Arial">{{individualName+' vs Currency'}}</h3>
+								<div id="barChart"  style="height:250px;" class="chart chartBorder"><svg></svg></div>
+							</div>
+						</div>
+					</div> -->
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="draggable">
+                        <div class="portlet box green-haze" style="margin-top:12px;margin-bottom:12px;">
+                            <div class="portlet-title" ng-init="curStatus1 = false">
+                                <div class="caption cursorPointer toggleTop" ng-click="curStatus1 = !curStatus1" data-toggle="collapse" data-target="#curStatus1">
+                                    <span>Currency Distribution in Received Credit Transfer Instructions by PSA</span>
+
+                                </div>
+
+
+                                <div class="actions">
+
+                                    <div class="dropdown custDropDown" ng-hide="curStatus1">
+
+                                        <button class="btn-link" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><span class="dropVal" style="color:#fff !important;display: none;" translate>BtnGroup.Count</span>
+                                    <a><i class="fa fa-list-ol" aria-hidden="true"></i></a><i class="fa fa-angle-down"></i></button>
+                                        <ul class="dropdown-menu mylist" style="min-width:65px;">
+                                            <li class="listClass6 listClass" id="li_11" ng-click="curDisChart('Count');chartDrop($event);" data-toggle-second="tooltip" data-placement="top" title="{{'BtnGroup.Count' | translate}}"><a translate><i class="fa fa-list-ol" aria-hidden="true"></i></a></li>
+                                            <li class="listClass6 listClass" id="li_12" ng-click="curDisChart('Amount');chartDrop($event);" data-toggle-second="tooltip" data-placement="top"  title="{{'BtnGroup.Amount' | translate}}"><a translate><i class="fa fa-usd" aria-hidden="true"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="collapse-arrow cursorPointer" ng-click="curStatus1 = !curStatus1" data-toggle="collapse" data-target="#curStatus1"><span class="round-corner"><i class="fa fa-arrow-circle-right" ng-class="{'fa-arrow-circle-down': !curStatus1, 'fa-arrow-circle-right': curStatus1}"></i></span></div>
+                                </div>
+                            </div>
+                            <div class="portlet-body collapse show" id="curStatus1">
+
+                                <div ng-if="fileNotfound">
+                                    <div class="col-xs-12" style="background-color:#fff;position:absolute;opacity:0.5;left:0%;height:41%;z-index:1;width:100%;top:58%;">
+                                    </div>
+                                </div>
+                                <div class="row portlet-inner-box" style="margin: 0;">
+                                    <div class="col-md-12 col-sm-12 col-xs-12" style="text-align: center; padding:0px 10px 15px 10px;">
+                                        <div>
+                                            <div id="barChart1" style="height:300px;" class="chart chartBorder"><svg id='verticalChart'></svg></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div style="clear:both"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- File charts End -->
+
+
+<!-- END MAIN CONTENT -->
+<!-- BEGIN MAIN JS & CSS -->
+
+<script>
+    $('[data-toggle="tooltip"]').tooltip();
+    setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+            }, 1000)
+</script>
+<!-- BEGIN MAIN JS & CSS -->

@@ -1,0 +1,946 @@
+<style>
+    .editHere .form-control {
+        /*margin-top: 7px;*/
+        margin-bottom: 8px !important;
+        width: 100%;
+    }
+    
+    .formDataGroup {
+        margin: 5px 0;
+    }
+    
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-months {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-years {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-decades {
+        display: block;
+    }
+    
+    .input-group-addon {
+        padding: 0px 5px;
+    }
+    
+    .glyphicon {
+        padding: 9px 10px;
+    }
+    
+    .addAdditionalFields {
+        /*color: #333;*/
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+    
+    .addBorder {
+        border: 1px solid #ddd;
+        padding: 10px;
+    }
+    
+    .close {
+        opacity: 1;
+    }
+    
+    .modifiedClass {
+        background-color: #ffffb8;
+    }
+    
+    td>pre {
+        background: transparent;
+        max-height: 125px;
+        overflow: auto
+    }
+    
+    table>tbody>tr>th {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+    
+    .hrClass {
+        margin-top: 0 !important;
+    }
+    
+    #tContainer .select2-container {
+        width: 333px !important;
+    }
+    
+    .select2-container .select2-selection--single {
+        height: 33px;
+    }
+    
+    .bootstrap-datetimepicker-widget {
+        display: block;
+        /* background: #9E9E9E; */
+        color: #000
+    }
+    
+    .bootstrap-datetimepicker-widget:hover {
+        /* background: #9E9E9E; */
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+    
+    .bootstrap-datetimepicker-widget .datepicker-days,
+    .datepicker-months,
+    .datepicker-years:hover {
+        /* background: #9E9E9E; */
+    }
+    
+    #keywordSearchbtn:focus,
+    #keywordSearchbtn:active {
+        outline: none;
+    }
+    
+    #searchBox:focus,
+    #searchBox:active {
+        box-shadow: none;
+    }
+    
+    .nonbtndisable {
+        cursor: not-allowed !important;
+        filter: alpha(opacity=65);
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        opacity: .65;
+        pointer-events: none;
+    }
+    .searchContainer {
+       background-color: #e7e9eb;
+       height: auto;
+     }
+
+
+    
+    .header-row {
+        padding: 0.313rem 0;
+    }
+    
+    .header-row .list-inline li {
+        padding-left: 0;
+    }
+    
+    .header-row .list-inline li span {
+        font-weight: 600;
+        font-size: 0.938rem;
+        border-right: 0.125rem solid;
+        padding-right: 0.625rem;
+    }
+
+    /*.header-row .list-inline li:hover span{
+	    border: none !important;
+	}*/
+    
+    .header-row .list-inline li:last-child span {
+        padding: 0;
+    }
+    
+    .header-row,
+    .flex-row {
+        background: #e8e9eb;
+    }
+    
+    .flex-row {
+        padding: 0.188rem 0;
+    }
+    
+    .info-row {
+        padding: 0.313rem 0;
+        background: #e8e9eb;
+    }
+    
+    .header-row .list-inline li:last-child span {
+        border: none;
+    }
+    
+   
+    
+    .input-group .form-control {
+        z-index: 0 !important;
+    }
+
+    .searchContainer {
+       background-color: #e7e9eb;
+       height: auto;
+     }
+
+    
+
+
+      .advSearchdisp{
+        color:#fff !important;
+      }
+
+     
+      .advSearchbody{
+        margin:0;
+        margin-bottom:0.5rem;
+        padding:1.25rem; 
+        height: auto;
+      }
+
+      .searchfltr{
+        padding: 0.625rem 0.25rem 0.625rem 0.25rem;
+        margin-bottom:1.25rem;
+      }
+      .searchfltrFont{
+        font-size:1.375rem;
+      } 
+</style>
+<!-- BEGIN PAGE HEADER-->
+
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+
+                <li>
+                    <i class="fa fa-users"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.UsersandRoles</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li>
+                    <span translate class="removeCursor">Sidebar.UserManagement</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+
+        </div>
+    </div>
+
+</div>
+<div class="contentContainer mb-2">
+    <div class="pageTitle">
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="title__container">
+                    <h2 translate>UserManagement.PageTitle</h2>
+                    <p translate>UserManagement.SubTitle</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="animated bounce bold" ng-repeat="alert in alerts" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg}}
+    </div>
+
+
+    
+    <!-- Delete popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopup" role="dialog">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                    <h1>Are you sure?</h1>
+                    <!-- <h4>You will not be able to recover this Data!</h4> -->
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal">Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="deleteData();">Yes, delete it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Delete popup Window End-->
+
+    <!-- Draft popup Window Start-->
+    <div class="modal fade" tabindex="-1" id="delPopupDraft" role="dialog" style="z-index: 1150;">
+        <div class="modal-dialog modal-md" style="top: 200px;">
+            <div class="modal-content modalbdy animated tada">
+                <div class="modal-header" style="padding: 0px !important; border: 0px !important">
+                    <div class="iconBox"><i class="exclaLine"></i><i class="exclaDot"></i></div>
+                </div>
+                <div class="modal-body" style="padding: 0px !important; border: 0px !important">
+                    <h1>Are you sure?</h1>
+                    <h4>You will not be able to recover this Draft!</h4>
+                </div>
+                <div class="modal-footer modalftr">
+                    <button tabindex="0" type="button" class="buton cancl" data-dismiss="modal">Cancel</button>
+                    <button tabindex="0" type="button" class="buton yess" ng-click="gotodeleteDraft()">Yes, delete it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Draft popup Window End-->
+
+
+
+    <div class="modal fade" id="DraftListModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <!-- <h4>Saved Drafts - </h4> -->
+                <div class="modal-body draft__modal-saved table-responsive" style="border:5px solid rgb(150, 156, 195) !important">
+                    <h4 class="col-md-11">Saved Drafts - User Management</h4>
+
+
+                    <div class="clearfix"></div>
+
+                    <hr class="hrClass" />
+
+                    <div class="draftViewCls FixHeadDraft">
+                        <table class="table table-bordered drafttable" ng-show="draftdatas.length">
+                            <thead>
+                                <tr style=" font-size: 14px;">
+                                    <th>Business Primary Key</th>
+                                    <th>Last Updated</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+                                <tr ng-repeat="value in draftdatas" ng-class="{oddClas:($index%2)== 1}">
+                                    <td style="font-weight: bolder;word-wrap: break-word;">
+                                        {{value.BPK}}
+                                    </td>
+                                    <td style="font-weight: bolder;word-wrap: break-word;">
+                                        {{value.LastUpdated | dateFormat}}
+                                    </td>
+                                    <td class="text-center" style="font-size: 16px;min-width:120px;">
+                                        <!--<i class="fa fa-eye Iclr" style="cursor:pointer;" ng-click="gotoEditDraft('View',$index,value)"></i>&nbsp;&nbsp;|&nbsp;-->
+                                        <!--listviewLog();userDataFn(userData,$index,true);gotoView(userData,true)-->
+                                        <i class="fa fa-pencil-square-o Iclr" style="cursor:pointer;" ng-click="gotoEditDraft('Edit',$index,value)" data-toggle-second="tooltip" data-placement="top" title="Edit"></i>&nbsp;&nbsp;|&nbsp;
+
+                                        <i class="fa fa-trash-o Iclr" style="cursor:pointer;" data-toggle="modal" data-target="#delPopupDraft" ng-click="takeDeldata(value,$index)" data-toggle-second="tooltip" data-placement="top" title="Delete"></i>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="alert-warning" ng-show="!draftdatas.length" style="padding: 15px 15px 15px 15px;">
+                        <strong>
+							<h5 style="margin:0;text-align:center;" translate>BankDataDts.NoRecordsFound</h5>
+						</strong>
+                    </div>
+
+                    <button type="button" class="btn btnStyle pull-right CanclPopup" data-dismiss="modal" ng-click="cancelChanges()">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+    <!-- Count Bar Starts -->
+    <div class="countbar-title row ml-0 mr-0">
+        <div class="col-md-3 col-sm-3 col-xs-12  ng-binding" style="padding: 0;">
+            <div class="caption">
+                <!-- <span><span class="highlight">{{(restVal.length-1 && totalForCountBar) ? restVal.length-1 + ' out of '+ totalForCountBar : ''}}</span>{{(restVal.length-1 && totalForCountBar) ? ' records shown' : 'Fetching Data...'}}</span> -->
+
+
+                <span class="highlight" ng-if="restVal.length>0"><span>{{(totalForCountBar && restVal.length)? restVal.length +
+						' out of '+totalForCountBar : (restVal.length)?restVal.length:'' }} </span> <span ng-if="restVal.length>0">{{'BankDataDts.recordsshown' | translate}}</span></span>
+
+                <span ng-if="restVal.length == 0"> <span class="highlight">0 </span> <span translate>BankDataDts.recordsshown</span></span>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-9 col-sm-9 col-xs-12">
+            <div class="btn-group" style="float:right;">
+                <button style="box-sizing: border-box;" class=" btn-trans pull-left ng-scope my-tooltip" ng-init="creatingWindow=true" data-original-title="{{(permission.C)?'ToolTips.AddNew':'ToolTips.DontPermission' | translate}}" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"
+                ng-click="(permission.C)?goToCreateUser():''" ng-if="!changeViewFlag && newPermission.C"><i class="fa fa-plus-square fa-fs14"></i></button>
+
+                <button style="border: 1px solid #fff;box-sizing: border-box;margin-left:5px;float:left;" ng-click="loadData()" class="btn-trans" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Refresh' | translate}}"><i class="fa fa-refresh fa-fs14"></i></button>
+
+
+                <div id="sortBy" class="dropdown customDropdown" style="float: left;" ng-show="changeViewFlag">
+                    <button style="border: 1px solid #fff;box-sizing: border-box;margin-left: 5px;" class="btn-trans" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Sort' | translate}}" ng-click="setHeight($event)">
+						<i class="fa fa-sort-amount-desc fa-fs14"></i>
+					</button>
+
+                    <ul class="dropdown-menu dropdown-menu-default pull-right" style="min-width: 300px;padding:10px 0px;">
+                        <form ng-submit="searchFilter(filterParams)">
+                            <li id="sortBy" class="dropdown-header">SORT BY <i> (Click to Sort) </i> <i style="float: right; cursor: pointer; color: #9e9e9e; font-weight: bolder;" ng-click="clearSort('#sort')"><u>Reset All</u></i></li>
+                            <div id="sort" class="dataGroups" style="padding: 0px 15px;margin:0;width:100%;float: left;max-height: 300px;overflow: auto;">
+                                <div ng-repeat="x in FieldsValues" style="color:#fff;display: table;width: 100%;margin-bottom: 2px;">
+                                    <div id="sort_{{$index}}" style="margin-bottom: 2px;display: table-row;width: 100%;">
+                                        <span style="display: table-cell;background: #9e9e9e;padding: 5px 8px;border-right: 1px solid #fff;width: 90%;">{{x.label}}</span>
+                                        <a tooltip-placement="top" style="display: table-cell;background: #9e9e9e;padding: 6px;text-align: center;vertical-align: middle;width: 10%;" ng-click="gotoSorting(x)"><i id="{{x.value}}_icon" class='fa fa-minus fa-sm' style="color:#2b3643 !important"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </ul>
+                </div>
+
+                <div id="Filter" class="dropdown customDropdown" style="float: left;">
+                    <button style="border: 1px solid #fff;box-sizing: border-box;margin-left: 5px;" class="btn-trans" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Filter' | translate}}">
+						<i class="fa fa-filter"></i>
+					</button>
+
+                    <ul class="dropdown-menu dropdown-menu-default float-right xyz dropdown-menu-right" style="min-width: 600px;padding:10px 0px;">
+
+                        <form ng-submit="searchFilter(filterParams)" ng-init="parsed = filterParams.SearchSelect">
+                            <li id="Filter" class="dropdown-header" style="padding: 8px 14px 2px 14px;margin: 0;">{{'APPLYFILTER.APPLY FILTER' | translate}}:</li>
+                            <div id="Filter" class="row input-group parent" style="padding: 8px 0px 2px 14px;margin: 0;display: inline-block;width: 50%;float: left;">
+                                <select id="SearchSelect" name="SearchSelect" class="form-control appendSelect2" select2-model-append ng-model="filterParams.SearchSelect" style="cursor:pointer;width: 100%;" ng-change="parsed = (filterParams.SearchSelect | jsonparse); filterParams.keywordSearch = '';triggerSelect(parsed)">
+									<option value="">Seleccione</option>
+									<option ng-repeat="x in fields" value="{{x}}" ng-if="x.type != 'DateOnly'" translate>{{x.label}}</option>
+								</select>
+                            </div>
+                            <div id="Filter" class="row input-group" style="padding: 8px 14px 2px 0px;margin: 0;display: inline-block;width: 50%;">
+                                <div ng-if="parsed.type == 'string' || !parsed">
+                                    <span class="cstmDrop" style="display:inline-block;color:#000;cursor: pointer;position: relative;box-sizing: border-box; width: 90%;" ng-init="parsedSearchSelect = (filterParams.SearchSelect ? (filterParams.SearchSelect | jsonparse) : false)">
+										<input  ng-if="parsed.name != 'IDType'" name="keywordSearch" style="color: #000;" type="text"  class="form-control ng-pristine ng-untouched ng-valid"  ng-model="filterParams.keywordSearch" placeholder="{{parsed ? ('BtnGroup.Search' | translate)+ ' ' +(parsed.label | translate): 'BankDataDts.KeywordSearch' | translate}}"
+                                         ng-required="showCustom || filterParams.keywordSearch || filterParams.Status.length ? false : true">
+                                         <select  ng-if="parsed.name == 'IDType'" class="form-control" required="true" name="keywordSearch" id="IDType" ng-model="filterParams.keywordSearch" ng-class="{true : 'error'}[submitted && form1.IDType.$invalid]">
+                                            <option value="" >Seleccionar</option>
+                                            <option value="Cédula de Ciudadanía" translate>selectOption.Identity Card</option>
+                                            <option value="Tarjeta de Identidad" translate>selectOption.Identity Card For Minors</option>
+                                            <option value="Pasaporte" translate>selectOption.Passport</option>
+                                            <option value="Cédula Extranjería" translate>selectOption.Foreign Identification Card</option>
+                                            <option value="Tarjeta Extranjería" translate>selectOption.Foreign Card</option>
+                                            <option value="Documento Identidad Extranjería" translate>selectOption.Foreign Identity Document</option>
+                                        </select>
+									</span>
+                                    <span class="input-group-addon" style="cursor:pointer;float: left;width: 10%;height: 100%;padding: 9px;" ng-click="searchFilter(filterParams)" ng-class="filterParams.keywordSearch ? '' : 'nonbtndisable'"><i class="fa fa-search"></i></span>
+                                </div>
+                                <select ng-if="parsed.type == 'select'" name="keywordSearch" class="form-control" style="cursor:pointer;width: 100%;" select2-model-append ng-model="filterParams.keywordSearch">
+									<option value="">Select</option>
+									<option ng-if="parsed.name == 'TimeZone'" ng-repeat="k in parsed.value" value="{{k.TimeZoneId}}">{{k.TimeZoneId}}</option>
+                                    <option ng-if="parsed.name == 'Country'" ng-repeat="k in parsed.value" value="{{k.CountryId}}">{{k.CountryId}}</option>
+									<option ng-if="parsed.name == 'RoleID'" ng-repeat="k in parsed.value" value="{{k.RoleID}}">{{k.RoleID}}</option>
+                                    <option ng-if="parsed.name == 'Department'"
+                                        ng-repeat="k in ['Technology', 'Draft Operations', 'OSA Operations']"
+                                        value="{{k}}">{{k}}</option>
+								</select>
+                            </div>
+
+                            <!-- <div ng-repeat="y in fields" ng-if="status = (y.name === 'Status') ? y.value : ''">
+                                <li id="Filter" class="dropdown-header">FILTER BY {{y.label | uppercase }}</li>
+                                <div id="Filter" style="padding: 8px 10px 2px 10px;">
+
+                                    <button type="button" class="filterBystatus" ng-repeat="x in Status" ng-init="getCountbyStatus(x)" ng-click="setStatusvalue(x.displayvalue,filterParams)" id="{{x.displayvalue}}" ng-class="x.TotalCount ? '' : 'nonbtndisable'">
+
+										<div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+										<div style="clear:both;" ng-if="$index % 2 == 0"></div>
+										<div style="padding: 0px 5px;float: left;">
+											<span class="fa-wrapper">
+												<i class="fa fa-circle" ng-style="{'color':(x.displayvalue | chooseStatus)}"></i></span>
+											<span style="display: inline-block;font-size: 10px;width: auto;text-align: left;line-height: 10px;padding: 2px;">
+												{{x.displayvalue +' ('+x.TotalCount+') '}}</span>
+
+										</div>
+										<div style="clear:both;"></div>
+									</button>
+                                    <div style="clear:both;"></div>
+                                </div>
+                            </div> -->
+                            <div style="clear:both"></div>
+                            <li id="Filter" class="dropdown-header">{{'APPLYFILTER.FILTER BY EFFECTIVE DATE' | translate}}</li>
+                            <div id="Filter" style="padding: 8px 10px 2px 10px;">
+                                <button type="button" class="filterBydate" ng-repeat="x in filterBydate" ng-click="setEffectivedate(x,filterParams)" id="{{x.displayvalue|removeSpace}}">
+									<div class="clearfix" style="background-color: transparent;" ng-if="$index % 2 == 0"></div>
+									<div style="clear:both;" ng-if="$index % 2 == 0"></div>
+									<div style="padding: 0px 5px;float: left;">
+										<span style="display: inline-block;font-size: 10px;width: auto;text-align: left;line-height: 10px;padding: 2px;" translate>
+											{{x.displayvalue}}</span>
+										<i class="fa fa-calendar"></i>
+									</div>
+
+								</button>
+                                <div style="clear:both;"></div>
+                                <div id="customPicker" class="row fade-in-up" ng-show="showCustom" style="padding: 0.625rem 20rem 0rem 0rem">
+                                    <div class="input-group-prepend date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months" style="width: 100%">
+                                        <div class="input-group-prepend col-md-12" style="padding: 0px 0px 0px 20px; width: 46%; float: left;">
+                                            <input type="text" class="form-control DatePicker" ng-model="filterParams.startDate" id="startDate" name="startDate" style="width:100%" placeholder="From" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" ng-required="showCustom">
+                                            <span class="input-group-text" ng-click="focusInfn('startDate')" style="border: 1px solid #eee;height: 35px;"><span class="fa fa-calendar"></span></span>
+                                        </div>
+                                        <span class="input-group-addon" style="border:none; background-color:transparent; width: 6%; float: left; padding: 10px;" translate>BankDataDts.To</span>
+                                        <div class="input-group-prepend col-md-12" style="width: 46%">
+                                            <input type="text" class="form-control DatePicker" ng-model="filterParams.endDate" id="endDate" style="width:100%" placeholder="To" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" ng-required="showCustom">
+                                            <span class="input-group-text" ng-click="focusInfn('endDate')" style="border: 1px solid #eee;height: 35px;"><span class="fa fa-calendar"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="clear:both"></div>
+
+                            <div class="row input-group float-right justify-content-end" style="padding: 8px 14px 2px 14px;margin: 0;">
+
+                                <button type="Button" class="btn-trans btnStyle" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BtnGroup.Cancel' | translate}}" style="margin-right: 10px;" ng-click="clearFilter()"><i
+									 class="fa fa-times"></i></button>
+                                <button type="Submit" class="btn-trans btnStyle" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BtnGroup.Search'| translate}}" style="cursor: pointer;" ng-class="(filterParams.EffectiveDate.displayvalue == 'Custom' ? filterParams.startDate && filterParams.endDate && showCustom : showCustom)|| filterParams.keywordSearch || filterParams.Status.length ? 'cmmonBtnColors' : 'disabledBtnColor'">
+									<i class="fa fa-search"></i>
+								</button>
+                            </div>
+                        </form>
+                    </ul>
+                </div>
+
+                <div class="dwnBtn" ng-if="configData.exportAsExcel.enable" style="float:left;margin-left:5px;">
+                    <!-- <button style="border: 1px solid #fff;box-sizing: border-box;" class="btn-trans dropdown-toggle" type="button" data-toggle="dropdown" ng-click="setHeight($event)" aria-expanded="true"tooltip="{{'Export'}}"> <i class="fa fa-download" aria-hidden="true"></i></button>	 -->
+                    <a id='dwnldLnk' style="display:none;"></a>
+                    <button ng-if="newPermission.Export" style="border: 1px solid #fff;box-sizing: border-box;" class="btn-trans" type="button" data-toggle="{{(restVal.length > 1)?'dropdown':''}}" data-toggle-second="tooltip" data-placement="top" data-original-title="{{(restVal.length > 1)?'ToolTips.Export':'ToolTips.Norecordstoexport' | translate}}" ng-style="{'opacity':(restVal.length > 1)?'1':'0.5'}"> <i class="fa fa-download" aria-hidden="true"></i></button>
+                    <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right" style="z-index: 10000;">
+                        <li>
+                            <span><input type="radio" name="excelVal" value="Current" checked class="radiobtns" ng-click="changeDownloadOption('Current')">{{'BankDataDts.CurrentScreen' | translate}}</span>
+                            <span ng-if="configData.exportAsExcel.enable && !configData.exportAsExcel.disableAllFiltersMatching"><input type="radio" name="excelVal" value="All" class="radiobtns" ng-click="changeDownloadOption('All')">{{'BankDataDts.AllMatchingFilter' | translate}}</span>
+                        </li>
+                        <li data-toggle-second="tooltip" data-placement="top" title="{{'SanctionModule.Reporttxt' | translate}}"  class="excelprint" ng-click="exportAsExcel('txt')" ng-show="enableDownloadBtns('TXT')"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        </li>
+                        <li data-toggle-second="tooltip" data-placement="top" title="{{'SanctionModule.ExportCSV' | translate}}"  class="excelprint" ng-click="exportAsExcel('csv')" ng-show="enableDownloadBtns('CSV')"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                        </li>
+                        <li data-toggle-second="tooltip" data-placement="top" title="{{'commissions.PDF' | translate}}"  class="excelprint"  ng-click="exportAsExcel('pdf')" ng-show="enableDownloadBtns('PDF')"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        </li>
+                        <li data-toggle-second="tooltip" data-placement="top" title="{{'commissions.XLS' | translate}}"  class="excelprint"  ng-click="exportAsExcel('xls')" ng-show="enableDownloadBtns('XLS')"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                        </li>
+                        <li data-toggle-second="tooltip" data-placement="top" data-original-title="{{'BankDataDts.Print' | translate}}" class="excelprint" ng-click="printFn()" ng-show="enableDownloadBtns('PRINT')"><i class="fa fa-print fa-fs14" aria-hidden="true"></i>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btnSuccess btnStyle btnAdvsearch" data-toggle="collapse" data-target="#PaymentAdvancedSearch" ng-init="PaymentAdvancedSearch=true;"  ng-click="showSearchWarning = false;advanceSearchCollaspe(); forplaceholder();">
+                    <span ng-if="PaymentAdvancedSearch" class="advSearchdisp"><span translate>BtnGroup.ShowAdvancedSearch</span> &nbsp;<i class="bold fa fa-angle-right circle-o iconAngle"></i>{{aaa()}}</span>
+                    <span ng-if="!PaymentAdvancedSearch" class="advSearchdisp"><span translate>BtnGroup.HideAdvancedSearch</span> &nbsp;<i class="bold fa fa-angle-down circle-o iconAngle"></i></span>
+                </button>
+
+                <!-- <button ng-show="!changeViewFlag" style="border: 1px solid #fff;box-sizing: border-box;margin-left:5px; float: left" ng-click="(permission.C)? getCurrentDrafts() : '' " class="btn-trans" tooltip="{{(permission.C)?'Show Drafts' : 'You don&lsquo;t have permission'}}"
+                    data-toggle="modal" data-target="{{(permission.C)? '#DraftListModal' : ''}}" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"><i
+					 class="fa fa-sticky-note"></i></button> -->
+                <!-- 
+                <button style="border: 1px solid #fff;box-sizing: border-box;border-right:0px;margin-left:5px" class="btn-trans" id="btn_1" ng-class="changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" tooltip="List View"><i
+					 class="fa fa-list fa-fs14"></i></button> -->
+                <button style="border: 1px solid #fff;box-sizing: border-box;border-left:0px" class="btn-trans " id="btn_2" ng-class="!changeViewFlag?'disabledBtnColor':'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.GridView' | translate}}"><i
+					 class="fa fa-table fa-fs14"></i></button>
+
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+    <!--Count Bar Ends -->
+
+    <div class="modal fade" id="customDate" role="dialog" tabindex="-1" data-backdrop="static" ng-keydown="dummy($event)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modalHeaderColor">
+                    <button type="button" class="close" data-dismiss="modal" ng-click="filterCancel()">&times;</button>
+                    <h4 class="modal-title">Select the Dates</h4>
+                </div>
+                <div class="modal-body">
+                    <form ng-submit="FilterByDate('custom')">
+                        <div class="col-md-12" style="padding:15px;">
+                            <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input type="text" class="form-control" ng-model="customDate.startDate" id="CstartDate" style="width:100%" placeholder="From (TimeZone - {{profileName}})" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" required>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+
+                                <span class="input-group-addon" style="border:none;background-color:transparent;">To</span>
+                                <input type="text" class="form-control" ng-model="customDate.endDate" id="CendDate" style="width:100%" placeholder="To  ( TimeZone - {{profileName}} )" ng-blur="removeFn()" onkeypress="return tabOrder(event)" onpaste="return false" required>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 txtCenter" style="padding:15px;">
+                            <button type="submit" id="okBtn" class="btn btnStyle">OK</button>
+                            <button type="reset" class="btn btnStyle" data-dismiss="modal" ng-click="CustomDatesReset()">Cancel</button>
+                            <button type="reset" class="btn btnStyle" ng-click="CustomDatesReset()">Reset</button>
+                        </div>
+                        <div style="clear:both"></div>
+                    </form>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+      
+<div  class="searchContainer collapse advSearchbody" id="PaymentAdvancedSearch">
+
+ 
+    <div class="row searchfltr">
+        <div class="col-md-5 searchfltrFont" translate>PaymentModuleDts.SearchFilters</div>
+
+
+    </div>
+    <div class="row m-0" ng-show="showSearchWarning">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div id="showWarning" class="alert alert-info alert-block bold text-center">
+                <a class="close" aria-label="close" ng-click="retainAlert($event)">&times;</a> {{'PaymentModuleDts.SelectfieldSearch' | translate}}
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <form class="form-horiaontal">
+        <div class="row">
+            
+            <div class="col-md-6 clearSpace" ng-repeat="fields in FieldsValues_ track by $index" ng-if="fields.visible" >
+               
+                    <div class="form-group fade-in-up">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label text-left" translate>{{fields.label}}</label>
+                            </div>
+                            <div class="col-md-6" ng-if="fields.type == 'text'">
+                                <input  ng-if="fields.value != 'IDType'"  type="text" class="form-control" ng-model="search[fields.value]" placeholder="{{fields.label | translate}}" ng-keypress="(fields.allow == 'number') ? allowOnlyNumbersAlone($event,fields.label) : ''" />
+                                <select ng-if="fields.value == 'IDType'"  class="form-control" name="IDType" id="IDType" ng-model="search[fields.value]">
+                                    <option value="" translate>Placeholder.Select</option>
+                                    <option value="Cédula de Ciudadanía" translate>selectOption.Identity Card</option>
+                                    <option value="Tarjeta de Identidad" translate>selectOption.Identity Card For Minors</option>
+                                    <option value="Pasaporte" translate>selectOption.Passport</option>
+                                    <option value="Cédula Extranjería" translate>selectOption.Foreign Identification Card</option>
+                                    <option value="Tarjeta Extranjería" translate>selectOption.Foreign Card</option>
+                                    <option value="Documento Identidad Extranjería" translate>selectOption.Foreign Identity Document</option>
+                                </select>
+                            </div>
+                           
+                            <div class="col-md-6" ng-if="fields.type == 'dropdown'">
+                                <select class="form-control select2-class" ng-if="fields.value=='PartyName'" name="{{fields.value}}" ng-model="search[fields.value]" style="width: 100%;">
+                                    <option value="">--Select--</option>
+                                    <option ng-if="fields.value=='PartyName'" ng-repeat="operator in partyOptions.PartyCode" value="{{operator.Name}}">{{operator.Name}}</option>
+                                </select>
+                                <select class="form-control select2-class" ng-if="fields.value=='PartyType'" name="{{fields.value}}" ng-model="search[fields.value]" style="width: 100%;">
+                                    <option value="">--Select--</option>
+                                    <option  value="BANCO">BANCO</option>
+                                    <option  value="OPERADOR DE INFORMACIÓN">OPERADOR DE INFORMACIÓN</option>
+                                    <option  value="ADMINISTRADORA">ADMINISTRADORA</option>
+                                    <option  value="SELF">SELF</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-8" ng-if="fields.type=='dateRange'">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-9">
+                                        <div class="input-group date" data-date-format="yyyy-mm-dd" data-date-viewmode="years" data-date-minviewmode="months">
+
+                                            <input type="text" class="form-control DatePicker dateTypeKey" placeholder="From  ( TimeZone - {{profileName}} )" id="{{fields.value+'Start'}}" ng-model="search.InstructionData[fields.value].Start" onpaste="return false">
+                                            <span class="input-group-text" ng-click="focusInfn(fields.value+'Start')"><span
+                                                    class="fa fa-calendar"></span></span>
+
+                                            <span class="input-group-text alighnTo">{{'BankDataDts.To' | translate}}</span>
+                                            <input type="text" class="form-control DatePicker dateTypeKey txtStart" placeholder="To  ( TimeZone - {{profileName}} )" id="{{fields.value+'End'}}" ng-model="search.InstructionData[fields.value].End" onpaste="return false">
+                                            <span class="input-group-text" ng-click="focusInfn(fields.value+'End')"><span
+                                                    class="fa fa-calendar"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-sm-12 col-xs-12" ng-if="fields.type=='amountRange'">
+                                <div class="row">
+                                    <div class="col-md-5 col-sm-4 col-xs-4">
+                                        <input type="text" class="form-control"  placeholder="{{'BankDataDts.From' | translate}}" ng-model="search.InstructionData[fields.value].Start" ng-keypress="(fields.allow == 'number') ? allowNumberWithDecimal($event) : ''">
+                                    </div>
+                                    <div class="col-md-2 col-sm-1 col-xs-1">
+                                        <span class="input-group-addon alighnTo">{{'BankDataDts.To' | translate}}</span>
+                                    </div>
+                                    <div class="col-md-5 col-sm-4 col-xs-4">
+                                        <input type="text" class="form-control"  placeholder="{{'BankDataDts.To' | translate}}" ng-model="search.InstructionData[fields.value].End" ng-keypress="(fields.allow == 'number') ? allowNumberWithDecimal($event) : ''">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+           
+                <div class="clearfix" id="{{$index}}" ng-if="$index%2 == 1"></div>
+            </div>
+        
+        </div>
+    
+
+        <hr class="hrAlighn" />
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="float-right advSearchBtn">
+                    <button type="button" value="Cancel" class="btnDeny btnStyle" ng-click="rstAdvancedSearchFlag();showSearchWarning =false;clearFilter()"><i class="fa fa-times"></i>
+                        <span translate>BtnGroup.Cancel</span> </button>
+                    <button type="button" value="Search" id="AdSearchBtn" class="btnSuccess btnStyle" ng-click="buildSearchs()"> <i class="fa fa-search"></i> <span
+                            translate>BtnGroup.Search</span> </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+   
+    <div class="countbar-title row ml-0 mr-1">
+        <input style="float:right;" type="text" class="form-control"  placeholder="{{'ToolTips.QuickSearch' | translate}}"  ng-model="QuickSearch" />	
+         <div class="clearfix"></div>
+     </div>
+
+    <div style="position:relative;">
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <div class="alert alert-warning" ng-show="restVal.length <= 0">
+                    <strong>
+						<h4 style="margin:0;text-align:center;"><i class="fa fa-warning"></i> {{'BankDataDts.NoRecordsFound'|translate}}</h4>
+					</strong>
+                </div>
+
+                <div class="listView FixHead dataGroupsScroll" id="lflag" ng-show="!changeViewFlag && restVal.length">
+
+                    <table class="table table-bordered maintable" ng-if="restVal.length > 0" style="white-space: nowrap;">
+                        <thead>
+                            <tr>
+                                <th class="cursorPointer" ng-repeat="val in FieldsValues" ng-if="val.visible" ng-click="gotoSorting(val,$index,$event)" translate>
+                                    {{val.label}}
+                    
+                                    <span id="{{val.value}}_Icon" class=""></span>
+                                </th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="userData in restVal | filter:QuickSearch" ng-class="{oddClas:($index%2)== 1}" ng-click="userDataFn(userData,$index,true);gotoView(userData,true)" style="cursor:pointer;" ng-if="(!$first||true)">
+
+                                <td ng-repeat="val in FieldsValues" ng-if="val.visible">
+
+                                    <span>{{userData[val.value]}}</span>
+                                    <!-- <span ng-if="val.value == 'EmailAddress'">{{MaskMailId(userData[val.value])}}</span> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div>
+
+            <div class="row listView" ng-show="changeViewFlag&&false">
+                <!-- <div class="col-md-2 col-sm-6" ng-repeat="userData in restVal" id="listViewPanelHeadingListview_{{$index}}">
+					<div class="formDataGroup txtCenter" id="dataGroup_{{$index}}" style="height:240px;">
+						<div class="col-md-12" style="margin-right:0;">
+							<a data-toggle="modal" data-target="{{(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin')?'#delPopup':''}}" ng-click="(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin')?takeDeldata(userData,$index):''" style="cursor: pointer;float:right;"><i class="fa fa-trash-o Iclr closeIcons" data-toggle="tooltip" data-placement="bottom" title="{{(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin')?'Delete':'You don&lsquo;t have permission'}}"  ng-style="(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}" ></i></a>
+						</div>
+						
+						<img src="themes/images/user.png" style="height: 80px;" alt="" class="img-circle img-responsive userProfileImg dsf">
+
+						<div>
+						<h3 class="firstuser" style="word-break:break-all;font-size:18px;">{{userData.FirstName}} {{userData.LastName}}</h3>
+						<h4 class="firstuser_role">{{userData.RoleID}}</h4>
+						</div>
+						
+						<div ng-click="viewMe = true">
+							<button type="button" class="btn btnStyle btn-xs" data-keyboard="true" data-toggle="modal" ng-click="listviewLog();userDataFn(userData,$index,true);gotoView(userData)"
+							 style="border-radius:25px !important;padding : 5px 10px;">
+										 View Profile
+									</button>
+						</div>
+						
+					</div>
+				</div> -->
+
+                <div class="panel-group">
+                    <div class="col-md-12" style="margin-top:10px;margin-bottom: 15px;padding: 0;">
+                        <div ng-repeat="userData in restVal" ng-init="colIndexx = $index">
+                            <div class="clearfix" style="background-color: transparent;" ng-if="$index % 4 == 0"> </div>
+                            <div style="clear:both" ng-if="$index%4 == 0"></div>
+
+                            <div ng-if="$first" class="panel paneltrans col-md-3 addToolTip">
+                                <!--<div style="background: rgb(158, 158, 158); text-align: center; min-height: 140px; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center;height: 210px;" ng-style="{'height':callStyle()}" ng-click="(permission.C)?goToCreateUser():''">
+									<div style="display: inline-block;font-size: 20px;color: #fff;">
+										<i class="fa fa-plus-square" style="font-size: 70px; line-height: 70px;"></i><br>
+										<span class="ng-binding">Add User</span>
+									</div>
+								</div>-->
+                                <div style="background: #9e9e9e;min-height: 200px;color:#fff;" ng-style="{'height':callStyle()}">
+                                    <div class="row">
+
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <div class="add-holder" title="{{(permission.C)?'':'You don&lsquo;t have permission'}}" data-toggle="tooltip" data-placement="bottom">
+                                                <i class="fa fa-plus-square" style="font-size: 70px; line-height: 70px;" ng-click="(permission.C)?goToCreateUser():''" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"></i><br
+                                                />
+                                                <p style="font-size:15px;" class="bold">Add User</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-sm-6 col-xs-6">
+                                            <div class="show__drafts-holder" title="{{(permission.C)?'':'You don&lsquo;t have permission'}}" data-toggle="tooltip" data-placement="bottom">
+                                                <i class="fa fa-sticky-note" style="font-size: 70px; line-height: 70px;" data-toggle="modal" data-target="{{(permission.C)? '#DraftListModal' : ''}}" ng-style="(permission.C)? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"
+                                                    ng-click="(permission.C)? getCurrentDrafts() : '' "></i>
+                                                <p style="font-size:15px;" class="bold">Show Drafts</p>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="(!$first)" class="panel paneltrans col-md-3">
+                                <div class="panel-heading listViewPanelHeading" id="listViewPanelHeading_{{$index}}" style="padding-bottom:0px;">
+                                    <div class="row dataGroups" id="dataGroup_{{$index}}" ng-click="listviewLog();userDataFn(userData,$index,true);gotoView(userData,true)" style="cursor:pointer;min-height:160px;max-height:160px;">
+                                        <div class="col-md-12" style="padding:5px 15px;position: relative;">
+                                            <div class="panel-wrapper-inside">
+                                                <div class="ruleHead pull-left" title="User ID" data-toggle="tooltip" data-placement="bottom" style="font-size: 19px; word-break: break-all;" ng-style="{'color':(userData.Status | chooseStatus)}">
+                                                    {{userData.UserID}}
+                                                </div>
+
+                                                <!-- <div class="pull-right" title="{{userData['Status']}}" data-toggle="tooltip" data-placement="bottom" ng-style="{'color':(userData.Status | chooseStatus)}">
+                                                    <i style="font-size: 20px;line-height:27px" class="fa fa-circle" ng-if="userData['Status']"></i>
+                                                </div> -->
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8 col-sm-6 col-xs-6">
+                                                <div ng-repeat="val in FieldsValues" ng-if="(val.visible && val.value !='UserID')" style="padding:5px 15px">
+                                                    <div class="bold" style="margin:0;padding: 0px 2px 0px 0px;word-break: break-all;float: left;" ng-if="userData[val.value]">
+                                                        {{val.label}} :
+                                                    </div>
+                                                    <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;float: left; word-break: break-all;" ng-if="userData[val.value] && val.value !='EmailAddress'">
+                                                        <span>{{userData[val.value]}}</span>
+
+                                                    </div>
+
+                                                    <div class="listViewValue" style="margin:0;padding: 0px 0px 0px 2px;float: left; word-break: break-all;" ng-if="userData[val.value] && val.value =='EmailAddress'">
+                                                        <span>{{MaskMailId(userData[val.value])}}</span>
+
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6 col-xs-6">
+                                                <img src="themes/images/user.png" style="height: 87px;" alt="" class="img-circle img-responsive userProfileImg dsf">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="actionRow col-md-12">
+                                            <a ng-init="showEditWin = true" class="actionIcons" ng-style="(isSuperAdmin == 'Super Admin' && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL' && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}: (permission.U && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' &&  userData.RoleID != 'Super Admin' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL' && userData.Status != 'REACTIVATED-WAITFORAPPROVAL') ? {'opacity':'','cursor': 'pointer'} : {'opacity':'0.2','cursor': 'not-allowed'}"
+                                                ng-click="(isSuperAdmin == 'Super Admin' && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')? goToEditOperation(userData,false): (permission.U && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' &&  userData.RoleID != 'Super Admin' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL') ? goToEditOperation(userData,false) : '';isSuperAdmin == 'Super Admin' ? userDataFn(userData,$index,true): (permission.U && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' &&  userData.RoleID != 'Super Admin' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL') ? userDataFn(userData,$index,true) : ''"
+                                                tooltip="{{(isSuperAdmin == 'Super Admin' && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')? 'Edit': (permission.U && userData.Status != 'DELETED' && userData.Status != 'ACTIVE-WAITFORAPPROVAL' &&  userData.RoleID != 'Super Admin' && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL') ? 'Edit' : 'You don&lsquo;t have permission'}}"><i class="fa fa-pencil-square-o Iclr1"></i></a>
+
+                                            <a class="actionIcons" data-toggle="modal" data-target="{{(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin' && userData.UserID != cUser && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')?'#delPopup':''}}"
+                                                ng-click="(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin' && userData.UserID != cUser && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')?takeDeldata(userData,$index):''"
+                                                ng-style="(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin' && userData.UserID != cUser && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')? {'opacity':'','cursor': 'pointer'}:{'opacity':'0.2','cursor': 'not-allowed'}"
+                                                tooltip="{{(permission.D && userData.Status != 'ACTIVE-WAITFORAPPROVAL' && userData.Status != 'DELETED' && userData.RoleID != 'Super Admin' && userData.UserID != cUser && userData.Status != 'INACTIVE-WAITFORAPPROVAL' && userData.Status != 'SUSPENDED-WAITFORAPPROVAL'  && userData.Status != 'REACTIVATED-WAITFORAPPROVAL')?'Delete':'You don&lsquo;t have permission'}}"><i class="fa fa-trash-o Iclr1"></i></a>
+
+                                            <a class="actionIcons" ng-if="((permission.ReActivate) && userData.Status == 'DELETED' )" ng-click="(permission.ReActivate)?gotoReactivate(userData):''" tooltip="{{(permission.ReActivate)?'Re Activate':'You don&lsquo;t have permission'}}"><i class="fa fa-repeat Iclr1"></i></a>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('[data-toggle-second=tooltip]').tooltip({ trigger: "hover" });
+				$('.my-tooltip').tooltip({ trigger: "hover" });
+            }, 1000)
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $('#Filter button:first-child').click(function() {
+                setTimeout(function() {
+                    var parentElement = $(".parent");
+                    $('select[name=SearchSelect]').select2({
+                        allowClear: true,
+                        placeholder: 'Seleccione',
+                        dropdownParent: parentElement
+                    })
+                }, 500)
+
+            })
+            customDateRangePicker('CstartDate', 'CendDate')
+
+            $('.DatePicker').datetimepicker({
+                format: "YYYY-MM-DD",
+                useCurrent: false,
+                showClear: true,
+
+            })
+            setTimeout(function() {
+                $('.input-group-text').on('click focus', function(e) {
+                    $(this).prev().focus().click()
+                });
+            }, 1000)
+
+
+            $('li.dropdown.mega-dropdown a').on('click', function(event) {
+                $(this).parent().addClass("open");
+            });
+
+            $('li.dropdown.mega-dropdown1 a').on('click', function(event) {
+                $(this).parent().toggleClass("open");
+            });
+
+            $('li.dropdown.mega-dropdown a').focus(function(event) {
+                $(this).parent().addClass("open");
+            });
+
+            $('button').focus(function(event) {
+                if (($(this).val() == 'Reset Filter') || ($(this).val() == 'Search')) {
+                    $('li.dropdown.mega-dropdown').removeClass('open')
+                }
+            });
+
+            $('body').on('click', function(e) {
+                if ($(e.target).attr('id') == 'DropId') {
+                    if (!showFlag) {
+                        $('.customDropDown1').show()
+                    } else {
+                        $('.customDropDown1').hide()
+                    }
+                } else {
+                    if ($(e.target).parent().hasClass('cancel')) {
+                        $('.customDropDown1').show()
+                    } else {
+                        $('.customDropDown1').hide()
+                    }
+                }
+
+                if (!$('li.dropdown.mega-dropdown').is(e.target) && $('li.dropdown.mega-dropdown').has(e.target).length === 0 &&
+                    $('.open').has(e.target).length === 0) {
+                    $('li.dropdown.mega-dropdown').removeClass('open');
+                }
+            })
+
+            var selArr = ["TimeZone", "Status", "Country", "Departments"];
+            for (var i in selArr) {
+                $(sanitize('select[name=' + selArr[i] + ']')).select2()
+            }
+            var isIE = /*@cc_on!@*/ false || !!document.documentMode;
+            if (isIE) {
+                var _placeholder;
+                $('input[name=keywordSearch]').mouseenter(function(e) {
+                    _placeholder = $(this).attr('placeholder');
+                    $(this).attr('placeholder', '')
+                }).mouseleave(function() {
+                    $(this).attr('placeholder', _placeholder)
+                })
+            }
+
+        })
+    </script>
