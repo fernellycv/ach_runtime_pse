@@ -2955,6 +2955,8 @@
     "Broadcast": "Broadcast (Difusión)",
     "Alert": "Alert (Alerta)",
     "SMTP": "SMTP (Correo)",
+    "IOBroadcast": "IO Broadcast (Difusión)",
+    "IOAlert": "IO Alert (Alerta)",
     "ActivateOne": "Debe activar al menos 1 Evento",
     "files": "Archivos",
     "filesAlert": "FilesAlert (Alerta Archivos)",

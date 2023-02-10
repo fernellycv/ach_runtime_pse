@@ -2,6 +2,7 @@
     input:required {
         box-shadow: none;
     }
+
     /*input:invalid {
 		box-shadow:0 0 3px red;
 	}*/
@@ -76,30 +77,32 @@
         display: none;
     }
 
-
     .fileUpload {
-    position: relative;
-    overflow: hidden;
-    margin: 10px;
-}
-.fileUpload input.upload {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    padding: 0;
-    font-size: 20px;
-    cursor: pointer;
-    opacity: 0;
-    filter: alpha(opacity=0);
-}
-.fileUpload.btn.btn-primary {
-    width: 25vw;
-    margin-left: 5vw;
-}
-#bolder{
-    font-weight: bold;
-}
+        position: relative;
+        overflow: hidden;
+        margin: 10px;
+    }
+
+    .fileUpload input.upload {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+
+    .fileUpload.btn.btn-primary {
+        width: 25vw;
+        margin-left: 5vw;
+    }
+
+    #bolder{
+        font-weight: bold;
+    }
     /* Colopicker custom Styles Ends  */
 </style>
 
@@ -131,9 +134,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 <div class="contentContainer">
     <div class="pageTitle alertWidthonResize" style="margin: 0rem 0rem 0.625rem 0rem; padding:0">
@@ -180,9 +180,7 @@
             <div class="modal-content" style="padding: 0.625rem 1.25rem;">
                 <button type="button" class="close" data-dismiss="modal">×</button>
                 <div class="modal-header" style="padding: 0rem !important;border: 0rem !important;text-align: left;">
-                    <p>Provide Conditions for the Transport. The condition can be multiplied. The message will be sent to the destination upon satisfying all the conditions by the message. Predicate takes the name of the Condition and Value is the Condition
-                        value.
-                    </p>
+                    <p>Provide Conditions for the Transport. The condition can be multiplied. The message will be sent to the destination upon satisfying all the conditions by the message. Predicate takes the name of the Condition and Value is the Condition value.</p>
                     <p>Conditions can be provided only for <b>Interfaces with ASYNC-OUT direction</b> Transport. Only
                         <b>one default ASYNC-OUT transport</b> can be configured by providing no condition.</p>
                     <p><b><u>NOTE:</u></b> Transport cannot be created, if Condition is provided for other direction or adding more than one another default Transport for ASYNC-OUT.</p>
@@ -193,8 +191,6 @@
 
     <div class="modal fade" id="changesLostModal" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-lg"  style="max-width: 600px;">
-
-
             <div class="modal-content" style="border:0.125rem solid #243250a6;" ng-if="madeChanges">
                 <div class="modal-body">
                     <h5 translate>BankDataDts.PopupMsg</h5>
@@ -204,10 +200,8 @@
                     <button type="button" class="btnSuccess btnStyle" ng-click="gotoClickedPage();" translate>BankDataDts.Yes</button>
                 </div>
             </div>
-
         </div>
     </div>
-
 
     <div class="modal fade" tabindex="-1" id="SetHeaders_model" role="dialog">
         <div class="modal-dialog modal-lg" style="top: 12.5rem;">
@@ -350,8 +344,6 @@
         </div>
     </div>
 
-
-
     <div class="" style="margin:0">
 
         <form role="form" class="simple-form form-horizontal" id="dynamicModuleForm" name="bankDataForm" ng-submit="createData(fieldData,subSectionfieldData); submitted=false;">
@@ -384,7 +376,6 @@
                                 ng-keydown="checkType($event,field.Type)" ng-disabled="calldisabled(field.FieldName)" ng-readonly='!field.enabled' autocomplete="off" ng-keyup="changetoPasswordFormat($event,fieldData[field.FieldName])">
                         </div>
 
-                        <!-- <pre ng-if="field.FieldName == 'FileDuplicatecheck'">{{fieldData | json}}</pre> -->
                         <div ng-class="{'col-md-12 addBorder':nameofthefield == field.FieldName || field.webform,'col-md-9':nameofthefield != field.FieldName && !field.webform}" ng-if="(field.InputType == 'TextArea')" ng-show="field.visible">
                             <textarea ng-if="nameofthefield != field.FieldName && !field.webform" style="resize:vertical" rows="{{getTextAreaRows((field.Rows*field.MaxLength)/150)}}" cols="{{field.MaxLength}}" class="form-control" id="{{field.Label}}" maxlength="{{field.Rows*field.MaxLength}}"
                                 name="{{field.FieldName}}" ng-model="fieldData[field.FieldName]" placeholder="{{(field.Type == 'Integer')?field.Label +' Only Number':('Placeholder.PleaseEnter' | translate)+(field.Label 
@@ -409,7 +400,6 @@
                                                     style="color:#e02222;font-size:0.75rem;padding-left:0.125rem"
                                                     aria-required="true">*</span></label>
                                             <div class="col-sm-7" ng-if="((webformfield.InputType == 'TextField')&&((webformfield.Type == 'Integer')||(webformfield.Type == 'String')||(webformfield.Type == 'BigDecimal')||(webformfield.Type == 'Character')))" ng-show="webformfield.visible">
-
                                                 <input class="form-control" id="{{webformfield.FieldName}}" type="text" maxlength="{{(webformfield.Type == 'Character') ? 1 : webformfield.MaxLength == -1 ? 100 : webformfield.MaxLength}}" name="{{webformfield.FieldName}}" ng-model="fieldData[field.FieldName][webformfield.FieldName]"
                                                     placeholder="{{(webformfield.Type == 'Integer')?webformfield.Label +' Only Number':'Please Enter '+webformfield.Label}}" ng-blur="multipleEmptySpace($event)" ng-required="!(webformfield.Mandatory)" ng-keydown="(webformfield.Type == 'Character')?'':checkType($event,webformfield.Type)"
                                                     ng-disabled="calldisabled(webformfield.FieldName)" ng-readonly="!webformfield.enabled" autocomplete="off">
@@ -421,8 +411,6 @@
                                                     ng-readonly="!webformfield.enabled"></textarea>
                                             </div>
                                             <div class="col-sm-7" ng-if="(webformfield.Type == 'String')&&(webformfield.InputType == 'Choice')" ng-show="webformfield.visible">
-
-
                                                 <select name="{{webformfield.FieldName}}" class="form-control" id="{{webformfield.FieldName}}" ng-model="fieldData[field.FieldName][webformfield.FieldName]" ng-required="!(webformfield.Mandatory)" ng-disabled="calldisabled(webformfield.FieldName)" detailsoffield="{{webformfield}}"
                                                     ng-readonly="!webformfield.enabled">
                                                     <option
@@ -482,9 +470,9 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-12" ng-if="(sub_field.Type == 'String')&&(sub_field.InputType == 'Choice')" style="padding:0" ng-show="sub_field.visible">
                                                         <!-- <select ng-class="(sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(sub_field,field.FieldName,webformfield.FieldName):''" name="{{sub_field.FieldName}}" class="form-control"  id="{{sub_field.FieldName}}"  ng-model="sub_fieldData[sub_field.FieldName]" ng-disabled="calldisabled(sub_field.FieldName)" detailsoffield = "{{sub_field}}">
-													<option ng-if="sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].displayvalue != 'MULTISELECT' ? sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue : false" value="">Select</option>
-													<option ng-if="sub_field.ChoiceOptions[0].displayvalue" ng-repeat="x in sub_field.ChoiceOptions" value="{{x.actualvalue}}">{{x.displayvalue}}</option>
-													</select> -->
+                                                            <option ng-if="sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].displayvalue != 'MULTISELECT' ? sub_field.ChoiceOptions[sub_field.ChoiceOptions.length-1].actualvalue : false" value="">Select</option>
+                                                            <option ng-if="sub_field.ChoiceOptions[0].displayvalue" ng-repeat="x in sub_field.ChoiceOptions" value="{{x.actualvalue}}">{{x.displayvalue}}</option>
+                                                        </select> -->
 
                                                         <select ng-class="(sub_field.ChoiceOptions[0].actualvalue == 'REST')?'appendSelect2':''" select2-model-append ng-init="val=(sub_field.ChoiceOptions[0].actualvalue == 'REST') && (parentInput.Operation != 'Add')?setInitval(sub_field,field.FieldName,webformfield.FieldName, sub_fieldIndex):''"
                                                             name="{{sub_field.FieldName}}" class="form-control" id="{{sub_field.FieldName}}" ng-model="sub_fieldData[sub_field.FieldName]" ng-disabled="calldisabled(sub_field.FieldName)" detailsoffield="{{sub_field}}"
@@ -503,13 +491,11 @@
                                             <div class="pull-right" style="text-align: left;" ng-init="setHeight = ($index == 1)?setHeights($index):''">
                                                 <span ng-if="webformfield.MaxOccarance == -1" style="display: inline-block;padding: 0rem 50rem;margin: 0;font-size: 0;" class="ng-scope">
                                                     <a id="{{'AddSection_'+$index}}"  data-placement="bottom" title="{{'ToolTips.AddNewSection' | translate}}"
-                                                       
                                                         style="font-size: 1.5rem !important;line-height: 1.5rem; cursor:pointer; text-decoration: none; color:#827f7f"
                                                         class="fa fa-plus-circle ng-scope my-tooltip" custom-tooltip aria-hidden="true"
                                                         ng-click="add_Section($index, fieldData[field.FieldName], webformfield.FieldName,webformfield.FieldName+'_'+field.FieldName,webformfield)"
                                                         ng-style="$last ? {'opacity':'1','cursor':'pointer', 'pointer-events': ''}:{'opacity':'0.3', 'pointer-events': 'none'}"></a>
-                                                        <a id="{{'RemoveSection_'+$index}}"  data-placement="bottom" title="{{'ToolTips.RemoveSection' | translate}}"
-                                                       
+                                                    <a id="{{'RemoveSection_'+$index}}"  data-placement="bottom" title="{{'ToolTips.RemoveSection' | translate}}"
                                                         style="line-height: 1.5rem; cursor: pointer; text-decoration: none; color: rgb(130, 127, 127); margin-left: 0.625rem ; font-size: 1.5rem !important;"
                                                         class="fa fa-minus-circle my-tooltip" custom-tooltip aria-hidden="true"
                                                         ng-click="remove_Section($index, fieldData[field.FieldName], webformfield.FieldName,webformfield.FieldName+'_'+field.FieldName)"
@@ -588,7 +574,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--{{bankDataForm[fielded.FieldName].$name + came + 'sd'}}-->
 
                                 <div class="control-group" ng-repeat="fielded in fieldAddedDetails.Subsection" ng-class="{true: 'error'}[submitted && updateForm.{{fielded.FieldName}}.$invalid] && !(subfield.Mandatory)" style="padding: 0rem 1.875rem;">
 
@@ -710,8 +695,6 @@
                             <input type="file" id="uploadBtn" file-model="fieldData[field.FieldName]" class="fileNamealighn" ng-init="showFileSize=false" onchange="angular.element(this).scope().fileNameChanged(this,null);" required/>
                         </div>
 
-                        
-
                         <div ng-if="(field.Type == 'Boolean')&&(field.InputType == 'Choice')" class="col-md-3" style="border:none;" ng-show="field.visible">
                             <label class="radio-inline" ng-repeat="x in field.ChoiceOptions" ng-if="x.actualvalue">
                                 <input type="radio" name="{{field.FieldName}}" class=""
@@ -740,7 +723,6 @@
                         <span class="help-inline" ng-show="(submitted && (bankDataForm.{{field.FieldName}}.$error.required || bankDataForm.{{field.FieldName}}.$modelValue == '')) || (field.FieldName == 'PreferredAccount' && submitted && fieldData.ServiceCode == 'CXC' && !fieldData.PreferredAccount)" style="display:block;margin:0;color:#EF1C1C !important">{{'Placeholder.Required' | translate}}</span>
 
                         <div style="clear:both"></div>
-
                     </div>
                 </div>
                 <div class="control-group"  ng-repeat="field in parentInput.pageInfo.Subsection" ng-class="{true: 'error'}[submitted && updateForm.{{field.FieldName}}.$invalid] && !(subfield.Mandatory)" style="padding: 0rem 1.875rem;" ng-if="(field.FieldName != 'attachment_list') || uploadFiles">
@@ -833,8 +815,6 @@
                                             <span style="padding:0.313rem">{{x.displayvalue | translate}}</span>
                                         </label>
                                     </div>
-
-
                                     <div style="clear:both"></div>
                                     <span class="help-inline" ng-show="submitted && updateForm.{{subfield.FieldName}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>
                                 </div>
@@ -859,7 +839,6 @@
                             </div>
                             <div class="clearfix" style="background-color: transparent;"></div>
                         </div>
-
 
                         <div class="col-md-12 row anitem" ng-if="(parentInput.parentLink != 'notifront')" style="margin:0;padding: 0.625rem  0rem;" ng-repeat="(subIndex, subData) in subSectionfieldData[field.FieldName]" id="{{field.FieldName+'_'+$index}}">
                             <div class="col-lg-8 col-md-12" style="padding:0.313rem 0rem">
@@ -943,7 +922,6 @@
                                             <span style="padding:0.313rem">{{x.displayvalue | translate}}</span>
                                         </label>
                                     </div>
-
 
                                     <div style="clear:both"></div>
                                     <span class="help-inline" ng-show="submitted && updateForm.{{subfield.FieldName}}.$error.required" style="display:block;margin:0;color:#EF1C1C !important">Required</span>

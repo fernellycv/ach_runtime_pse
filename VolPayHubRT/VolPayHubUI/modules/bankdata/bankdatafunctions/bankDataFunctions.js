@@ -1,6 +1,46 @@
 angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $rootScope, $state, $timeout, $interval, $stateParams, $filter, $http, bankData, GlobalService, EntityLockService, LogoutService, editservice, errorservice, customAttrRestIndex, datepickerFaIcons, Idle) {
     var authenticationObject = $rootScope.dynamicAuthObj;
 
+    $(document).on('select2:open', function (e) {
+        let selectOpen = $('select').filter(function () {
+            try {
+                if ($(this).data('select2')) {
+                    return $(this).select2('isOpen') ? true : false;
+                } else {
+                    return false;
+                }
+            } catch (error) {
+                return false;
+            }
+            // return $(this).select2('isOpen') ? true : false;
+        });
+        let selectOpenCount = selectOpen.length
+        const evt = "scroll.select2";
+        $(e.target).parents().off(evt);
+        $(window).off(evt);
+        if (selectOpenCount) {
+            var elementSelectDom = window.document.getElementsByClassName('ForAddNewScroll');
+            for (var i = 0; i < elementSelectDom.length; i++) {
+                var eleId = elementSelectDom[i];
+                // eleId.addEventListener('scroll', function(e) {
+                //     selectOpen.each(function (i, item) {
+                //         if ($(item).data('select2')) {
+                //             $(item).select2("close");
+                //         }
+                //     });
+                //     eleId.removeEventListener('scroll', arguments.callee);
+                // }, true);
+                eleId.onscroll = function(e) {
+                    selectOpen.each(function (i, item) {
+                        if ($(item).data('select2')) {
+                            $(item).select2("close");
+                        }
+                    });
+                };
+            }
+        }
+    });
+
     function convertXml2JSon(xml) {
         var x2js = new X2JS();
         return x2js.xml_str2json(xml);
@@ -72,43 +112,40 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     setTimeout(function() {
                         $("#idletimeout_model").modal("hide");
                     }, 100)
-
                 });
                 $scope.seccount -= 1;
              
                 if ($scope.seccount === 0) {
-                   
                     $scope.stopsecondIdleTimer();
                     $stateParams.input.Operation = "";
                     $scope.gotoParent();
                 }
             }, 1000);
         }
-    }else{
-    //    $scope.stopIdleTimer();
-    //    $scope.stopsecondIdleTimer();
+    } else {
+        //    $scope.stopIdleTimer();
+        //    $scope.stopsecondIdleTimer();
     }
-    
-   
-       $scope.stopsecondIdleTimer = function() {
-           if (angular.isDefined(secondfindEvent)) { 
-               // $(window).off('mousemove keydown click', secondfindEvent); 
-               $(window).off( "mousemove keydown click" );           
-               // clearInterval(secondfindEvent)              
-               $interval.cancel(secondfindEvent);
-               secondfindEvent = undefined;
-            }
-       };
-   
-       $scope.stopIdleTimer = function() {
-           if (angular.isDefined(findEvent)) {
-               // $(window).off('mousemove keydown click', findEvent)ca; 
-               // $(document).off( "mousemove" );           
-               // clearInterval(findEvent)             
-               $interval.cancel(findEvent);
-               findEvent = undefined;
-            }
-       };
+
+    $scope.stopsecondIdleTimer = function () {
+        if (angular.isDefined(secondfindEvent)) {
+            // $(window).off('mousemove keydown click', secondfindEvent); 
+            $(window).off("mousemove keydown click");
+            // clearInterval(secondfindEvent)              
+            $interval.cancel(secondfindEvent);
+            secondfindEvent = undefined;
+        }
+    };
+
+    $scope.stopIdleTimer = function () {
+        if (angular.isDefined(findEvent)) {
+            // $(window).off('mousemove keydown click', findEvent)ca; 
+            // $(document).off( "mousemove" );           
+            // clearInterval(findEvent)             
+            $interval.cancel(findEvent);
+            findEvent = undefined;
+        }
+    };
     $scope.bankDataForm = {};
     $scope.madeChanges = false;
 
@@ -299,10 +336,8 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         data.BusinessPrimaryKey  = JSON.stringify(data.BusinessPrimaryKey);
 
         EntityLockService.checkEntityLock(data).then(function(data){
-                 
             $scope.gotoParent(alertmsg);
-         })
-         .catch(function(response){          
+        }).catch(function (response) {
             var status = response.status;
             var config = response.config;
             if (response.status === 400) {
@@ -382,7 +417,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                 $scope.gotoParent(response.data.responseMessage);
             }
         }, function(resperr) {
-
             if (resperr.data.error.message == 'Draft Already Exists') {
                 $("#draftOverWriteModal").modal("show");
             } else {
@@ -445,7 +479,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         {
             return true;
         }*/
-
 
         if (($scope.parentInput.Operation != 'Clone') && ($scope.parentInput.Operation != ' Add')) {
             if (($scope.parentInput.parentLink == 'partyserviceassociations') && ((($scope.parentInput.fieldData) && ('PartyCode' === x)) || (($scope.parentInput.fieldData) && ('ServiceCode' === x)) || (($scope.parentInput.fieldData) && ('InputFormat' === x)) || (($scope.parentInput.fieldData) && ('UsageMechanism' === x)))) {
@@ -954,8 +987,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     'FieldName': ('name' in obtainedFields[k] ? obtainedFields[k].name : ''),
                     'subSectionData': subSectionData,
                     'PrimaryKey': (obtainedFields[k].name == $scope.primarykey) ? true : false
-                })
-
+                });
             }
         }
 
@@ -995,10 +1027,9 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         //}
 
         if (Object.keys($scope.replaceField['cstmAttr']).length) {
-            Object.keys($scope.replaceField['cstmAttr']).forEach(function(id) {
-                setTimeout(function(name) {
-                    $('[name=' + name + ']').on('change', function() {
-
+            Object.keys($scope.replaceField['cstmAttr']).forEach(function (id) {
+                setTimeout(function (name) {
+                    $('[name=' + name + ']').on('change', function () {
                         if (($(this).attr('name') == 'EODFILESTATUS') && ($('#EODSTATUSREPORTINDICATOR').val() == 'E') && ($("input[name='EODFILESTATUS']:checked").val() == 'true')) {
                             $scope.replaceField['cstmAttr'][id][$(this).val()].EODREPORTEMAIL.Enabled = true
                             $scope.replaceField['cstmAttr'][id][$(this).val()].EODTRANSMISSIONSITE.Enabled = false
@@ -1016,12 +1047,9 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                             $scope.replaceField['cstmAttr'][id][$(this).val()].EODTRANSMISSIONSITE.Enabled = false
                             set_cstm_attr($(this).val(), $scope.replaceField['cstmAttr'][id], '', true);
                         } else if (($('#EODSTATUSREPORTINDICATOR').val() == '') && ($("input[name='EODFILESTATUS']:checked").val() == 'true')) {
-
                             $("#EODREPORTEMAIL").prop("disabled", true);
                             $("#EODTRANSMISSIONSITE").prop("disabled", true);
-
                         } else if (($('#EODSTATUSREPORTINDICATOR').val() == '') && ($("input[name='EODFILESTATUS']:checked").val() == 'false')) {
-
                             $scope.replaceField['cstmAttr'][id][$(this).val()].EODSTATUSREPORTINDICATOR.Enabled = false
                             $scope.replaceField['cstmAttr'][id][$(this).val()].EODREPORTEMAIL.Enabled = false
                             $scope.replaceField['cstmAttr'][id][$(this).val()].EODTRANSMISSIONSITE.Enabled = false
@@ -1039,7 +1067,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                 set_cstm_attr(false, $scope.replaceField['cstmAttr'][id], '');
                             }
                         } else {
-
                             set_cstm_attr($('[name=' + name + ']').val(), $scope.replaceField['cstmAttr'][id], '');
                         }
                         //	set_cstm_attr($('[name=' + name + ']').val(), $scope.replaceField['cstmAttr'][id], '');
@@ -1419,7 +1446,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                                     } else {
                                                         something('GET', convertedUrl, observedIndex, '', { start: 0, count: 500, search: $scope.fieldData[$scope.parentInput.pageInfo.Section[observedIndex].FieldName] });
                                                     }
-
                                                 }, 100)
                                             } else {
                                                 something('GET', convertedUrl, observedIndex, '', { start: 0, count: 500 });
@@ -1439,16 +1465,15 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                 } else {
 
                                     if ($scope.parentInput.pageTitle == 'Branch') {
-                                        if($scope.fieldData){
-                                            if((Object.keys($scope.fieldData).indexOf('PartyCode') != -1) ){
-                                              if ($(sanitize('select[name="PartyCode"]')).hasClass("select2-hidden-accessible")) {
-                                                  $(sanitize('select[name="PartyCode"]')).find('option:nth-child(2)').remove()
-                                              }
-                                             }
-                                          }
-                                           
-                                    }else{
-                                       something('GET', links, observedIndex, '', '')
+                                        if ($scope.fieldData) {
+                                            if ((Object.keys($scope.fieldData).indexOf('PartyCode') != -1)) {
+                                                if ($(sanitize('select[name="PartyCode"]')).hasClass("select2-hidden-accessible")) {
+                                                    $(sanitize('select[name="PartyCode"]')).find('option:nth-child(2)').remove()
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        something('GET', links, observedIndex, '', '')
                                     }
                                 }
                             }
@@ -1468,7 +1493,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                                 } else {
                                                     k = ''
                                                 }
-
                                             }
                                         }
                                         if (k) {
@@ -1479,7 +1503,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                             something('GET', k, observedIndex, '', _query_field)
                                                 // something('GET', k, observedIndex, '', '')
                                         }
-
                                     }
                                 }
                             }, 750)
@@ -2254,14 +2277,14 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
 
                         }
                     }
+                });
 
-                })
                 remoteDataConfig = function() {
                     var add_method = 'GET'
                         //setTimeout(function(){
                     $(".appendSelect2").each(function() {
                             $scope.chkREST = JSON.parse($(this).attr('detailsoffield'));
-                            if (($(this).attr('name') == 'FieldPath' || $(this).attr('name') == 'fldName' || $(this).attr('name') == 'AcctField' || $(this).attr('name') == 'Value' || $(this).attr('name') == 'Name') && $scope.chkREST.property[0].name == 'REST') {
+                            if (($(this).attr('name') == 'FieldPath' || $(this).attr('name') == 'fldName' || $(this).attr('name') == 'batchfldName' || $(this).attr('name') == 'AcctField' || $(this).attr('name') == 'Value' || $(this).attr('name') == 'Name') && $scope.chkREST.property[0].name == 'REST') {
                                 add_method = 'POST'
                             } else {
                                 add_method = 'GET'
@@ -2283,6 +2306,27 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                             if (_link._data[k][_link._name] == $(this).attr('name')) {
                                                 if (_link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails) {
                                                     $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links;
+                                                    if ($scope.links.indexOf('{') !== -1) {
+                                                        var _urlObj, _idObj, backUpUrlObj = $scope.links;
+                                                        for (var url in $scope.links.split('/')) {
+                                                            if ($scope.links.split('/')[url].indexOf('{') !== -1) {
+                                                                _urlObj = $scope.links.split('/')[url];
+                                                                _idObj = _urlObj.substring($scope.links.split('/')[url].indexOf('{') + 1, $scope.links.split('/')[url].indexOf('}'));
+                                                                var $this = this;
+                                                                $('[name=' + _idObj + ']').change(function () {
+                                                                    // setValSelect2($this, '');
+                                                                    delete $scope.fieldData[$($this).attr('name')];
+                                                                })
+                                                                if ($scope.fieldData[_idObj]) {
+                                                                    backUpUrlObj = backUpUrlObj.replace(_urlObj, $scope.fieldData[_idObj]);
+                                                                } else {
+                                                                    backUpUrlObj = $scope.links;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        $scope.links = backUpUrlObj
+                                                    }
                                                 } else {
                                                     for (var _ln in _link._data[k]['property']) {
                                                         if (_link._data[k]['property'][_ln]['name'].indexOf('REST') !== -1) {
@@ -2534,161 +2578,206 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                         }
                     }
 
-                })
+                });
 
                 remoteDataConfig = function() {
                     var add_method = 'GET'
                         //setTimeout(function(){
                     $(".appendSelect2").each(function() {
-
-                            $scope.chkREST = JSON.parse($(this).attr('detailsoffield'))
-
-                            if (($(this).attr('name') == 'FieldPath' || $(this).attr('name') == 'fldName' || $(this).attr('name') == 'AcctField' || $(this).attr('name') == 'Value' || $(this).attr('name') == 'Name') && $scope.chkREST.property[0].name == 'REST') {
-                                add_method = 'POST'
-                            } else {
-                                add_method = 'GET'
-                            }
-                            $(this).select2({
-                                ajax: {
-                                    url: function(params) {
-                                        var _link = ($scope.parentInput.parentLink != 'methodofpayments') ? {
-                                            '_data': $scope.parentInput.pageInfo.Section,
-                                            '_name': 'FieldName'
-                                        } : {
-                                            '_data': $scope.parentInput.pageInfo,
-                                            '_name': 'name'
-                                        };
-                                        for (k in _link._data) {
-                                            if (_link._data[k][_link._name] == $(this).attr('name')) {
-                                                $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links
-                                            }
-                                            if ('webform' in _link._data[k]) {
-                                                for (jk in _link._data[k]['webform'].Subsection[0].subSectionData) {
-                                                    if (_link._data[k]['webform'].Subsection[0].subSectionData[jk][_link._name] == $(this).attr('name')) {
-
-                                                        if ($.isArray(_link._data[k]['webform'].Subsection[0].subSectionData[jk].property)) {
-                                                            $scope.links = _link._data[k]['webform'].Subsection[0].subSectionData[jk].property[0].value;
-
-                                                            if ($scope.links.match('{')) {
-                                                                for (var j in $scope.links.split('/')) {
-                                                                    if ($scope.links.split('/')[j].match('{') && $scope.links.split('/')[j].match('}')) {
-                                                                        var inputs = $scope.links.split('/')[j].replace('{', '').replace('}', '')
-                                                                        $scope.links = $scope.links.replace($scope.links.split('/')[j], $(sanitize('select[name=' + inputs + ']')).val())
+                        $scope.chkREST = JSON.parse($(this).attr('detailsoffield'))
+                        if (($(this).attr('name') == 'FieldPath' || $(this).attr('name') == 'fldName' || $(this).attr('name') == 'batchfldName' || $(this).attr('name') == 'AcctField' || $(this).attr('name') == 'Value' || $(this).attr('name') == 'Name') && $scope.chkREST.property[0].name == 'REST') {
+                            add_method = 'POST'
+                        } else {
+                            add_method = 'GET'
+                        }
+                        $(this).select2({
+                            ajax: {
+                                url: function(params) {
+                                    var _link = ($scope.parentInput.parentLink != 'methodofpayments') ? {
+                                        '_data': $scope.parentInput.pageInfo.Section,
+                                        '_name': 'FieldName'
+                                    } : {
+                                        '_data': $scope.parentInput.pageInfo,
+                                        '_name': 'name'
+                                    };
+                                    for (k in _link._data) {
+                                        if (_link._data[k][_link._name] == $(this).attr('name')) {
+                                            // $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links
+                                            if (_link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails) {
+                                                $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links;
+                                                if ($scope.links.indexOf('{') !== -1) {
+                                                    var _urlObj, _idObj, backUpUrlObj = $scope.links;
+                                                    for (var url in $scope.links.split('/')) {
+                                                        if ($scope.links.split('/')[url].indexOf('{') !== -1) {
+                                                            _urlObj = $scope.links.split('/')[url];
+                                                            _idObj = _urlObj.substring($scope.links.split('/')[url].indexOf('{') + 1, $scope.links.split('/')[url].indexOf('}'));
+                                                            var $this = this;
+                                                            $('[name=' + _idObj + ']').change(function () {
+                                                                // setValSelect2($this, '');
+                                                                delete $scope.fieldData[$($this).attr('name')];
+                                                            })
+                                                            if ($scope.fieldData[_idObj]) {
+                                                                backUpUrlObj = backUpUrlObj.replace(_urlObj, $scope.fieldData[_idObj]);
+                                                            } else {
+                                                                backUpUrlObj = $scope.links;
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                    $scope.links = backUpUrlObj
+                                                }
+                                            } else {
+                                                for (var _ln in _link._data[k]['property']) {
+                                                    if (_link._data[k]['property'][_ln]['name'].indexOf('REST') !== -1) {
+                                                        $scope.links = _link._data[k]['property'][_ln]['value'];
+                                                        if ($scope.links.indexOf('{') !== -1) {
+                                                            var _url, _id, backUpUrl = $scope.links;
+                                                            for (var url in $scope.links.split('/')) {
+                                                                if ($scope.links.split('/')[url].indexOf('{') !== -1) {
+                                                                    _url = $scope.links.split('/')[url];
+                                                                    _id = _url.substring($scope.links.split('/')[url].indexOf('{') + 1, $scope.links.split('/')[url].indexOf('}'));
+                                                                    var $this = this;
+                                                                    $('[name=' + _id + ']').change(function () {
+                                                                        // setValSelect2($this, '');
+                                                                        delete $scope.fieldData[$($this).attr('name')];
+                                                                    })
+                                                                    if ($scope.fieldData[_id]) {
+                                                                        backUpUrl = backUpUrl.replace(_url, $scope.fieldData[_id]);
+                                                                    } else {
+                                                                        backUpUrl = $scope.links;
+                                                                        break;
                                                                     }
                                                                 }
                                                             }
-
-                                                            var query = "?start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
-                                                            if (params.term) {
-                                                                query = "?search=" + params.term + "&start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
-                                                            }
-                                                            $scope.links = $scope.links + query
+                                                            $scope.links = backUpUrl
                                                         }
                                                     }
                                                 }
                                             }
-
                                         }
-                                        if (_link._name == 'FieldName' && $scope.parentInput.pageInfo.Subsection.length && 'subSectionData' in $scope.parentInput.pageInfo.Subsection[0]) {
+                                        if ('webform' in _link._data[k]) {
+                                            for (jk in _link._data[k]['webform'].Subsection[0].subSectionData) {
+                                                if (_link._data[k]['webform'].Subsection[0].subSectionData[jk][_link._name] == $(this).attr('name')) {
 
-                                            for (var _sub_name in $scope.parentInput.pageInfo.Subsection) {
-                                                for (var _sub_name_lvl1 in $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData) {
-                                                    if ($scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].FieldName === $(this).attr('name')) {
-                                                        $scope.links = $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].property[0].value
+                                                    if ($.isArray(_link._data[k]['webform'].Subsection[0].subSectionData[jk].property)) {
+                                                        $scope.links = _link._data[k]['webform'].Subsection[0].subSectionData[jk].property[0].value;
+
+                                                        if ($scope.links.match('{')) {
+                                                            for (var j in $scope.links.split('/')) {
+                                                                if ($scope.links.split('/')[j].match('{') && $scope.links.split('/')[j].match('}')) {
+                                                                    var inputs = $scope.links.split('/')[j].replace('{', '').replace('}', '')
+                                                                    $scope.links = $scope.links.replace($scope.links.split('/')[j], $(sanitize('select[name=' + inputs + ']')).val())
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var query = "?start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
+                                                        if (params.term) {
+                                                            query = "?search=" + params.term + "&start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
+                                                        }
+                                                        $scope.links = $scope.links + query
                                                     }
                                                 }
                                             }
                                         }
-                                        $scope.chkREST = JSON.parse($(this).attr('detailsoffield'))
-                                        if ($scope.links && $scope.links.indexOf('/') === -1) {
-                                            for (var _link in $scope.chkREST['property']) {
-                                                if ($scope.chkREST['property'][_link]['name'] === 'REST') {
-                                                    $scope.links = $scope.chkREST['property'][_link]['value'];
-                                                }
-                                            }
-                                            for (var urlLink in $scope.links.split('/')) {
-                                                if ($scope.links.split('/')[urlLink][0].indexOf('{') !== -1 && $scope.links.split('/')[urlLink][$scope.links.split('/')[urlLink].length - 1].indexOf('}') !== -1) {
-                                                    var replacedName = $scope.links.split('/')[urlLink];
-                                                    replacedName = replacedName.replace('{', '');
-                                                    replacedName = replacedName.replace('}', '');
-                                                    var indexx_ = $(this).parent().parent().parent().parent().attr('id').split('_')[1];
-                                                    if ($scope.replaceWithValue(replacedName, indexx_)) {
-                                                        $scope.links = $scope.links.replace($scope.links.split('/')[urlLink], $scope.replaceWithValue(replacedName, indexx_));
-                                                    }
+                                    }
+                                    if (_link._name == 'FieldName' && $scope.parentInput.pageInfo.Subsection.length && 'subSectionData' in $scope.parentInput.pageInfo.Subsection[0]) {
+                                        for (var _sub_name in $scope.parentInput.pageInfo.Subsection) {
+                                            for (var _sub_name_lvl1 in $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData) {
+                                                if ($scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].FieldName === $(this).attr('name')) {
+                                                    $scope.links = $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].property[0].value
                                                 }
                                             }
                                         }
-
-                                        return BASEURL + "/rest/v2/" + $scope.links
-                                    },
-                                    type: add_method,
-                                    headers: authenticationObject,
-                                    dataType: 'json',
-                                    delay: 250,
-                                    xhrFields: {
-                                        withCredentials: true
-                                    },
-                                    beforeSend: function(xhr) {
-                                        xhr.setRequestHeader('Cookie', sanitize(document.cookie)),
-                                            xhr.withCredentials = true
-                                    },
-                                    crossDomain: true,
-                                    data: function(params) {
-                                        var query = {
-                                            start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
-                                            count: pageLimitCount
-                                        }
-                                        if (params.term) {
-                                            query = {
-                                                search: params.term,
-                                                start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
-                                                count: pageLimitCount,
-                                                'isCaseSensitive' : GlobalService.isCaseSensitiveval || '0'
-                                            };
-                                        }
-
-                                        if ($scope.links && $scope.links.indexOf('start') != -1 && $scope.links.indexOf('count') != -1) {
-                                            query = JSON.stringify({})
-                                        }
-                                        return query;
-                                    },
-                                    /*transport: function(params) {
-                                    var callback = params.success;
-                                    params.success = function(data, textStatus, jqXHR) {
-                                    $scope.responseHeaderTcount = jqXHR.getResponseHeader('totalCount')
-                                    callback({
-                                    items: data,
-                                    total: jqXHR.getResponseHeader('totalCount')
-                                    }, textStatus, jqXHR);
-                                    };
-                                    return $.ajax(params);
-                                    },*/
-                                    processResults: function(data, params) {
-                                        params.page = params.page ? params.page : 0;
-                                        var myarr = []
-                                        for (j in data) {
-                                            myarr.push({
-                                                'id': data[j].actualvalue,
-                                                'text': data[j].displayvalue
-                                            })
-                                        }
-                                        return {
-                                            results: myarr,
-                                            pagination: {
-                                                more: data.length >= pageLimitCount
+                                    }
+                                    $scope.chkREST = JSON.parse($(this).attr('detailsoffield'))
+                                    if ($scope.links && $scope.links.indexOf('/') === -1) {
+                                        for (var _link in $scope.chkREST['property']) {
+                                            if ($scope.chkREST['property'][_link]['name'] === 'REST') {
+                                                $scope.links = $scope.chkREST['property'][_link]['value'];
                                             }
-                                        };
-                                    },
-                                    cache: true
+                                        }
+                                        for (var urlLink in $scope.links.split('/')) {
+                                            if ($scope.links.split('/')[urlLink][0].indexOf('{') !== -1 && $scope.links.split('/')[urlLink][$scope.links.split('/')[urlLink].length - 1].indexOf('}') !== -1) {
+                                                var replacedName = $scope.links.split('/')[urlLink];
+                                                replacedName = replacedName.replace('{', '');
+                                                replacedName = replacedName.replace('}', '');
+                                                var indexx_ = $(this).parent().parent().parent().parent().attr('id').split('_')[1];
+                                                if ($scope.replaceWithValue(replacedName, indexx_)) {
+                                                    $scope.links = $scope.links.replace($scope.links.split('/')[urlLink], $scope.replaceWithValue(replacedName, indexx_));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return BASEURL + "/rest/v2/" + $scope.links
                                 },
-                                placeholder: 'Select',
-                                minimumInputLength: 0,
-                                allowClear: true
+                                type: add_method,
+                                headers: authenticationObject,
+                                dataType: 'json',
+                                delay: 250,
+                                xhrFields: {
+                                    withCredentials: true
+                                },
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('Cookie', sanitize(document.cookie)),
+                                    xhr.withCredentials = true
+                                },
+                                crossDomain: true,
+                                data: function(params) {
+                                    var query = {
+                                        start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
+                                        count: pageLimitCount
+                                    }
 
-                            });
-                        })
-                        //},0)
+                                    if (params.term) {
+                                        query = {
+                                            search: params.term,
+                                            start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
+                                            count: pageLimitCount,
+                                            'isCaseSensitive' : GlobalService.isCaseSensitiveval || '0'
+                                        };
+                                    }
 
+                                    if ($scope.links && $scope.links.indexOf('start') != -1 && $scope.links.indexOf('count') != -1) {
+                                        query = JSON.stringify({})
+                                    }
+                                    return query;
+                                },
+                                /*transport: function(params) {
+                                var callback = params.success;
+                                params.success = function(data, textStatus, jqXHR) {
+                                $scope.responseHeaderTcount = jqXHR.getResponseHeader('totalCount')
+                                callback({
+                                items: data,
+                                total: jqXHR.getResponseHeader('totalCount')
+                                }, textStatus, jqXHR);
+                                };
+                                return $.ajax(params);
+                                },*/
+                                processResults: function(data, params) {
+                                    params.page = params.page ? params.page : 0;
+                                    var myarr = []
+                                    for (j in data) {
+                                        myarr.push({
+                                            'id': data[j].actualvalue,
+                                            'text': data[j].displayvalue
+                                        })
+                                    }
+                                    return {
+                                        results: myarr,
+                                        pagination: {
+                                            more: data.length >= pageLimitCount
+                                        }
+                                    };
+                                },
+                                cache: true
+                            },
+                            placeholder: 'Select',
+                            minimumInputLength: 0,
+                            allowClear: true
+                        });
+                    })
+                    //},0)
                 }
                 remoteDataConfig();
             }
@@ -2709,7 +2798,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                         }
 
                         $scope.fieldData['PartyServiceAssociationCode'] = $('input[name=PartyServiceAssociationCode]').val()
-                            //$scope.parentInput.fieldData['PartyServiceAssociationCode'] = $('input[name=PartyServiceAssociationCode]').val()
+                        //$scope.parentInput.fieldData['PartyServiceAssociationCode'] = $('input[name=PartyServiceAssociationCode]').val()
                     }
                 }
             });
@@ -2728,11 +2817,8 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                             var ReplacethisVal = (getActualValue == 'API') ? '_API' : ''
                             $('input[name=PartyServiceAssociationCode]').val(text.replace('_Tr', ReplacethisVal))
                         }
-
                     }
-
                     $scope.fieldData['PartyServiceAssociationCode'] = $('input[name=PartyServiceAssociationCode]').val();
-
                 }
             }
 
@@ -2749,16 +2835,12 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                         $scope.fieldData[$(this).attr('name')] = false;
                     }
                 }
-
-            })
-
-
+            });
 
             for (var _fieldName in $scope.parentInput.pageInfo.cstmAttr) {
                 $(sanitize('[name=' + _fieldName + ']')).each(function() {
                     if ($(this).attr('type') == 'radio') {
                         if ($scope.parentInput.Operation == 'Clone' && $scope.parentInput.frommodule != 'entitydraft') {
-
                             $scope.cstmAttrfn(this, true)
                         } else {
                             $scope.cstmAttrfn(this)
@@ -2778,7 +2860,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                         }
 
                         if (($scope.parentInput.Operation == 'Clone' || $scope.parentInput.Operation == 'Edit') && ($scope.parentInput.parentLink === 'mandate')) {
-
                             if (($(this).is(":checked")) && ($scope.parentInput.parentLink === 'mandate') && ($(this).attr('name') === 'InheritMandateFromParent')) {
                                 set_cstm_attr($(this).val(), $scope.parentInput.pageInfo.cstmAttr[_fieldName]);
                             } else {
@@ -2788,17 +2869,14 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     }
                 })
             }
-
-        }, 1000)
+        }, 1000);
 
         $scope.backupcstmAttr = {}
         for (var _fieldName in $scope.parentInput.pageInfo.cstmAttr) {
             $('[name=' + _fieldName + ']').on('change', function() {
                 if (($scope.parentInput.parentLink === 'workorder') && ($(this).attr('name') === 'WorkOrderType')) {
-
                     set_cstm_attr($(this).val(), $scope.parentInput.pageInfo.cstmAttr[$(this).attr('name')], true);
                 } else if (($scope.parentInput.parentLink === 'mandate') && ($(this).attr('name') === 'InheritMandateFromParent')) {
-
                     set_cstm_attr($(this).val(), $scope.parentInput.pageInfo.cstmAttr[$(this).attr('name')], true);
                 } else {
                     $scope.cstmAttrfn(this, true);
@@ -2811,132 +2889,170 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
             var add_method = 'GET'
                 //setTimeout(function(){
             $(".appendSelect2").each(function() {
+                $scope.chkREST = JSON.parse($(this).attr('detailsoffield'));
+                if ($(this).attr('name') == 'FieldPath' || $(this).attr('name') == 'fldName' || $(this).attr('name') == 'batchfldName') {
+                    var _multiple = false;
 
-                    if ($(this).attr('name') == 'FieldPath' || $(this).attr('name') == 'fldName' || $(this).attr('name') == 'batchfldName') {
-                        add_method = 'POST'
-                    } else {
-                        add_method = 'GET'
+                    for (var mul in $scope.chkREST['Multiple']) {
+                        if ($scope.chkREST['Multiple'][mul].displayvalue === 'MULTISELECT') {
+                            _multiple = true;
+                            $(sanitize('select[name=' + $(this).attr('name') + ']')).attr('multiple', true);
+                        }
                     }
-                    $(this).select2({
-                        ajax: {
-                            url: function(params) {
-                                var _link = ($scope.parentInput.parentLink != 'methodofpayments') ? {
-                                    '_data': $scope.parentInput.pageInfo.Section,
-                                    '_name': 'FieldName'
-                                } : {
-                                    '_data': $scope.parentInput.pageInfo,
-                                    '_name': 'name'
-                                };
-                                for (k in _link._data) {
-                                    if (_link._data[k][_link._name] == $(this).attr('name')) {
-                                        $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links
-                                    }
-                                    if ('webform' in _link._data[k]) {
-                                        for (jk in _link._data[k]['webform'].Subsection[0].subSectionData) {
-                                            if (_link._data[k]['webform'].Subsection[0].subSectionData[jk][_link._name] == $(this).attr('name')) {
-                                                $scope.links = _link._data[k]['webform'].Subsection[0].subSectionData[jk].property[0].value
-
-                                                if ($scope.links.match('{')) {
-                                                    for (var j in $scope.links.split('/')) {
-                                                        if ($scope.links.split('/')[j].match('{') && $scope.links.split('/')[j].match('}')) {
-                                                            var inputs = $scope.links.split('/')[j].replace('{', '').replace('}', '')
-                                                            $scope.links = $scope.links.replace($scope.links.split('/')[j], $(sanitize('select[name=' + inputs + ']')).val())
+                    add_method = 'POST'
+                } else {
+                    add_method = 'GET'
+                }
+                $(this).select2({
+                    ajax: {
+                        url: function(params) {
+                            var _link = ($scope.parentInput.parentLink != 'methodofpayments') ? {
+                                '_data': $scope.parentInput.pageInfo.Section,
+                                '_name': 'FieldName'
+                            } : {
+                                '_data': $scope.parentInput.pageInfo,
+                                '_name': 'name'
+                            };
+                            for (k in _link._data) {
+                                if (_link._data[k][_link._name] == $(this).attr('name')) {
+                                    // $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links
+                                    if (_link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails) {
+                                        $scope.links = _link._data[k].ChoiceOptions[_link._data[k].ChoiceOptions.length - 1].configDetails.links;
+                                    } else {
+                                        for (var _ln in _link._data[k]['property']) {
+                                            if (_link._data[k]['property'][_ln]['name'].indexOf('REST') !== -1) {
+                                                $scope.links = _link._data[k]['property'][_ln]['value'];
+                                                if ($scope.links.indexOf('{') !== -1) {
+                                                    var _url, _id, backUpUrl = $scope.links;
+                                                    for (var url in $scope.links.split('/')) {
+                                                        if ($scope.links.split('/')[url].indexOf('{') !== -1) {
+                                                            _url = $scope.links.split('/')[url];
+                                                            _id = _url.substring($scope.links.split('/')[url].indexOf('{') + 1, $scope.links.split('/')[url].indexOf('}'));
+                                                            var $this = this;
+                                                            $('[name=' + _id + ']').change(function () {
+                                                                // setValSelect2($this, '');
+                                                                delete $scope.fieldData[$($this).attr('name')];
+                                                            })
+                                                            if ($scope.fieldData[_id]) {
+                                                                backUpUrl = backUpUrl.replace(_url, $scope.fieldData[_id]);
+                                                            } else {
+                                                                backUpUrl = $scope.links;
+                                                                break;
+                                                            }
                                                         }
                                                     }
+                                                    $scope.links = backUpUrl
                                                 }
-
-                                                var query = "?start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
-                                                if (params.term) {
-                                                    query = "?search=" + params.term + "&start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
-                                                }
-                                                $scope.links = $scope.links + query
-                                            }
-                                        }
-                                    }
-
-                                }
-                                if (_link._name == 'FieldName' && $scope.parentInput.pageInfo.Subsection.length && 'subSectionData' in $scope.parentInput.pageInfo.Subsection[0]) {
-                                    /*for(kj in $scope.parentInput.pageInfo.Subsection[0].subSectionData){
-                                    	if($scope.parentInput.pageInfo.Subsection[0].subSectionData[kj][_link._name] == $(this).attr('name')){
-                                    		$scope.links = $scope.parentInput.pageInfo.Subsection[0].subSectionData[kj].property[0].value
-                                     	}
-                                    }*/
-                                    for (var _sub_name in $scope.parentInput.pageInfo.Subsection) {
-                                        for (var _sub_name_lvl1 in $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData) {
-                                            if ($scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].FieldName === $(this).attr('name')) {
-                                                $scope.links = $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].property[0].value
                                             }
                                         }
                                     }
                                 }
-                                return BASEURL + "/rest/v2/" + $scope.links
-                            },
-                            type: add_method,
-                            headers: authenticationObject,
-                            dataType: 'json',
-                            delay: 250,
-                            xhrFields: {
-                                withCredentials: true
-                            },
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader('Cookie', sanitize(document.cookie)),
-                                    xhr.withCredentials = true
-                            },
-                            crossDomain: true,
-                            data: function(params) {
-                                var query = {
-                                    start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
-                                    count: pageLimitCount
-                                }
-                                if (params.term) {
-                                    query = {
-                                        search: params.term,
-                                        start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
-                                        count: pageLimitCount,
-                                        'isCaseSensitive' : GlobalService.isCaseSensitiveval || '0'
-                                    };
-                                }
-                                if ($scope.links && $scope.links.indexOf('start') != -1 && $scope.links.indexOf('count') != -1) {
-                                    query = JSON.stringify({})
-                                }
-                                return query;
-                            },
-                            /*transport: function(params) {
-                            var callback = params.success;
-                            params.success = function(data, textStatus, jqXHR) {
-                            $scope.responseHeaderTcount = jqXHR.getResponseHeader('totalCount')
-                            callback({
-                            items: data,
-                            total: jqXHR.getResponseHeader('totalCount')
-                            }, textStatus, jqXHR);
-                            };
-                            return $.ajax(params);
-                            },*/
-                            processResults: function(data, params) {
-                                params.page = params.page ? params.page : 0;
-                                var myarr = []
-                                for (j in data) {
-                                    myarr.push({
-                                        'id': data[j].actualvalue,
-                                        'text': data[j].displayvalue
-                                    })
-                                }
-                                return {
-                                    results: myarr,
-                                    pagination: {
-                                        more: data.length >= pageLimitCount
+
+                                if ('webform' in _link._data[k]) {
+                                    for (jk in _link._data[k]['webform'].Subsection[0].subSectionData) {
+                                        if (_link._data[k]['webform'].Subsection[0].subSectionData[jk][_link._name] == $(this).attr('name')) {
+                                            $scope.links = _link._data[k]['webform'].Subsection[0].subSectionData[jk].property[0].value
+
+                                            if ($scope.links.match('{')) {
+                                                for (var j in $scope.links.split('/')) {
+                                                    if ($scope.links.split('/')[j].match('{') && $scope.links.split('/')[j].match('}')) {
+                                                        var inputs = $scope.links.split('/')[j].replace('{', '').replace('}', '')
+                                                        $scope.links = $scope.links.replace($scope.links.split('/')[j], $(sanitize('select[name=' + inputs + ']')).val())
+                                                    }
+                                                }
+                                            }
+
+                                            var query = "?start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
+                                            if (params.term) {
+                                                query = "?search=" + params.term + "&start=" + (params.page * pageLimitCount ? params.page * pageLimitCount : 0) + "&count=" + pageLimitCount;
+                                            }
+                                            $scope.links = $scope.links + query
+                                        }
                                     }
-                                };
-                            },
-                            cache: true
+                                }
+                            }
+
+                            if (_link._name == 'FieldName' && $scope.parentInput.pageInfo.Subsection.length && 'subSectionData' in $scope.parentInput.pageInfo.Subsection[0]) {
+                                /*for(kj in $scope.parentInput.pageInfo.Subsection[0].subSectionData){
+                                    if($scope.parentInput.pageInfo.Subsection[0].subSectionData[kj][_link._name] == $(this).attr('name')){
+                                        $scope.links = $scope.parentInput.pageInfo.Subsection[0].subSectionData[kj].property[0].value
+                                    }
+                                }*/
+                                for (var _sub_name in $scope.parentInput.pageInfo.Subsection) {
+                                    for (var _sub_name_lvl1 in $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData) {
+                                        if ($scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].FieldName === $(this).attr('name')) {
+                                            $scope.links = $scope.parentInput.pageInfo.Subsection[_sub_name].subSectionData[_sub_name_lvl1].property[0].value
+                                        }
+                                    }
+                                }
+                            }
+                            return BASEURL + "/rest/v2/" + $scope.links
                         },
-                        placeholder: filter('translate')('Placeholder.Select'),
-                        minimumInputLength: 0,
-                        allowClear: true
-
-                    });
-                })
-                //},0)
+                        type: add_method,
+                        headers: authenticationObject,
+                        dataType: 'json',
+                        delay: 250,
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('Cookie', sanitize(document.cookie)),
+                            xhr.withCredentials = true
+                        },
+                        crossDomain: true,
+                        data: function(params) {
+                            var query = {
+                                start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
+                                count: pageLimitCount
+                            }
+                            if (params.term) {
+                                query = {
+                                    search: params.term,
+                                    start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
+                                    count: pageLimitCount,
+                                    'isCaseSensitive' : GlobalService.isCaseSensitiveval || '0'
+                                };
+                            }
+                            if ($scope.links && $scope.links.indexOf('start') != -1 && $scope.links.indexOf('count') != -1) {
+                                query = JSON.stringify({})
+                            }
+                            return query;
+                        },
+                        /*transport: function(params) {
+                        var callback = params.success;
+                        params.success = function(data, textStatus, jqXHR) {
+                        $scope.responseHeaderTcount = jqXHR.getResponseHeader('totalCount')
+                        callback({
+                        items: data,
+                        total: jqXHR.getResponseHeader('totalCount')
+                        }, textStatus, jqXHR);
+                        };
+                        return $.ajax(params);
+                        },*/
+                        processResults: function(data, params) {
+                            params.page = params.page ? params.page : 0;
+                            var myarr = []
+                            for (j in data) {
+                                myarr.push({
+                                    'id': data[j].actualvalue,
+                                    'text': data[j].displayvalue
+                                });
+                            }
+                            return {
+                                results: myarr,
+                                pagination: {
+                                    more: data.length >= pageLimitCount
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    placeholder: $filter('translate')('Placeholder.Select'),
+                    minimumInputLength: 0,
+                    allowClear: true
+                });
+            })
+            //},0)
         }
 
         $scope.cstmAttrBackup = {};
@@ -2956,6 +3072,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                         }
                     }
                 }
+
                 if ($scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs]) {
                     for (var attr in $scope.cstmAttrBackup) {
                         $scope.parentInput.pageInfo.Section[$scope.cstmAttrBackup[attr]['id']]['Visible'] = $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr]['Visible'];
@@ -2967,14 +3084,12 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                         if (($scope.parentInput.pageInfo.Section[$scope.cstmAttrBackup[attr]['id']]['Visible']) && ($('[name=' + attr + ']').val())) {
 
                         } else {
-                         
                             $scope.fieldData[attr] = ''
                         }
                         // $scope.fieldData[attr] = '';
                     }
                 } else {
                     for (var attr in $scope.cstmAttrBackup) {
-
                         $scope.parentInput.pageInfo.Section[$scope.cstmAttrBackup[attr]['id']]['Visible'] = $scope.cstmAttrBackup[attr]['value']['visible'];
                         $scope.parentInput.pageInfo.Section[$scope.cstmAttrBackup[attr]['id']]['visible'] = $scope.cstmAttrBackup[attr]['value']['visible'];
                         $scope.parentInput.pageInfo.Section[$scope.cstmAttrBackup[attr]['id']]['View'] = $scope.cstmAttrBackup[attr]['value']['visible']
@@ -2984,6 +3099,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     }
                 }
             }
+
             if ($scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs] && $(_this).is(":checked")) {
                 //$scope.backupcstmAttr[$(_this).attr('name')] = {}
                 for (var attr in $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs]) {
@@ -2995,15 +3111,17 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                             $scope.parentInput.pageInfo.Section[sec]['enabled'] = 'Enabled' in $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr] ? $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr]['Enabled'] : ''
                             $scope.parentInput.pageInfo.Section[sec]['Mandatory'] = 'NotNull' in $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr] ? $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr]['NotNull'] : ''
                             $('[name=' + attr + ']').parent().prev().find('span').attr('ng-hide', false).removeClass('ng-hide')
+                            
                             if (flag && $scope.fieldData[attr]) {
                                 if (typeof($scope.fieldData[attr]) == 'object') {
                                     if ($scope.fieldData[attr].Fields) {
-                                        $scope.fieldData[attr].Fields = [{}]
+                                        $scope.fieldData[attr].Fields = [{}];
                                     }
                                 } else {
-                                    $scope.fieldData[attr] = ''
+                                    $scope.fieldData[attr] = '';
                                 }
                             }
+
                             if ('webform' in $scope.parentInput.pageInfo.Section[sec]) {
                                 for (var kk in $scope.parentInput.pageInfo.Section[sec].webform.Subsection[0].subSectionData) {
                                     $scope.parentInput.pageInfo.Section[sec].webform.Subsection[0].subSectionData[kk]['Visible'] = 'Visible' in $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr] ? $scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs][attr]['Visible'] : '';
@@ -3018,9 +3136,10 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                             }
                             setTimeout(function() {
                                 remoteDataConfig1()
-                            }, 100)
+                            }, 100);
                         }
                     }
+
                     for (var subsec in $scope.parentInput.pageInfo.Subsection) {
                         for (var subsecdata in $scope.parentInput.pageInfo.Subsection[subsec].subSectionData) {
                             if ($scope.parentInput.pageInfo.Subsection[subsec].subSectionData[subsecdata].FieldName == attr) {
@@ -3051,12 +3170,10 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                         }
                                     }
                                 }
-
                             }
                         }
                     }
                 }
-
             }
 
             if ($scope.parentInput.parentLink === 'distributionformatpreference' && ($scope.parentInput.pageInfo.cstmAttr[$(_this).attr('name')][inputs])) {
@@ -3085,16 +3202,16 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                     }
                                 }
                             }
-                        })
+                        });
                     }
                 }
             }
+
             if ($scope.parentInput.parentLink === 'schedulerprofile' || $scope.parentInput.parentLink === 'workorder' || $scope.parentInput.parentLink === 'workorderextensionprofile') {
                 inputs = inputs.replace("? string:", "");
                 inputs = inputs.replace(" ?", "")
 
                 // if(inputs.indexOf('? boolean:') != -1){
-
 
                 inputs = inputs.replace("? boolean:", "");
                 inputs = inputs.replace(" ?", "");
@@ -3105,13 +3222,9 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     // inputs = false;
                 }
 
-
-
-
                 if ($scope.parentInput.pageInfo.cstmAttr[_this.getAttribute('name')][inputs]) {
                     $scope.cstmAttrBackup[_this.getAttribute('name')] = $scope.parentInput.pageInfo.cstmAttr[_this.getAttribute('name')][inputs];
                 }
-
 
                 var $id, $argu, $index, id_;
 
@@ -3128,7 +3241,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                 if (Number($index) === i) {
                                     $id = this;
                                 }
-                            })
+                            });
 
                             if (flag) {
                                 if ($.isArray($scope.subSectionfieldData[id_])) {
@@ -3144,6 +3257,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                             }
                             clearselectonchange($id);
                         }
+
                         if ($scope.parentInput.pageInfo.cstmAttr[_this.getAttribute('name')][inputs]) {
                             $argu = $scope.parentInput.pageInfo.cstmAttr[_this.getAttribute('name')][inputs][_attr];
                         } else {
@@ -3152,6 +3266,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
 
                         setDefaultAttr($id, $argu);
                     }
+
                     if ($scope.cstmAttrBackup[_this.getAttribute('name')]) {
                         hideSection($scope.cstmAttrBackup[_this.getAttribute('name')], Number($index), id_);
                     }
@@ -3160,15 +3275,16 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
 
             $scope.$apply(function() {
                 $scope.parentInput.pageInfo = $scope.parentInput.pageInfo;
-            })
+            });
         }
+
         $("select").each(function() {
             var details = $(this).attr('details_field') ? JSON.parse($(this).attr('details_field')) : {};
             if (Object.keys(details).length) {
                 select_fn(details, this);
             }
-        })
-    })
+        });
+    });
 
     /** Dynamic Functionality */
     var obtained_value, select_box = "";
@@ -3181,7 +3297,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
             }
         }
         obtained_value = find_value(details['FieldName'], $scope.fieldData, index) ? find_value(details['FieldName'], $scope.fieldData, index) : find_value(details['FieldName'], $scope.subSectionfieldData, index);
-
         //obtained_value = $scope.find_value(details['FieldName'], index);
         $scope.select2_config = {
             placeholder: 'Select',
@@ -3192,6 +3307,86 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
 
         var multiple = check_multiple(details, $scope.select2_config);
         var http = check_ajax(select_box, $scope.select2_config);
+
+        if (details['property']) {
+            var cstmAttr = {}
+            for (var prop in details['property']) {
+                if (details['property'][prop]['name'].toLowerCase().indexOf('rest') !== -1) {
+                    var pageLimitCount = 500;
+                    var backUpUrl = angular.copy(details['property'][prop]['value']);
+                    buildedUrl = $scope.build_url(angular.copy(details['property'][prop]['value']), select_box);
+                    var ajax = {
+                        url: function (params) {
+                            buildedUrl = $scope.build_url(angular.copy(backUpUrl), select_box);
+                            return BASEURL + "/rest/v2/" + buildedUrl
+                        },
+                        type: 'GET',
+                        headers: {
+                            "Authorization": "SessionToken:" + sessionStorage.SessionToken,
+                            "source-indicator": configData.SourceIndicator,
+                            "Content-Type": "application/json"
+                        },
+                        dataType: 'json',
+                        delay: 250,
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader('Cookie', document.cookie),
+                            xhr.withCredentials = true
+                        },
+                        crossDomain: true,
+                        data: function (params) {
+                            var query = {
+                                start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
+                                count: pageLimitCount
+                            }
+                            if (params.term) {
+                                query = {
+                                    search: params.term,
+                                    start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
+                                    count: pageLimitCount
+                                };
+                            }
+                            if (buildedUrl && buildedUrl.indexOf('start') != -1 && buildedUrl.indexOf('count') != -1) {
+                                query = JSON.stringify({})
+                            }
+                            return query;
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page ? params.page : 0;
+                            var myarr = []
+                            for (j in data) {
+                                myarr.push({
+                                    'id': data[j].actualvalue,
+                                    'text': data[j].displayvalue
+                                });
+                            }
+                            return {
+                                results: myarr,
+                                pagination: {
+                                    more: data.length >= pageLimitCount
+                                }
+                            };
+                        },
+                        cache: true
+                    }
+                    $scope.select2_config['ajax'] = ajax;
+                } else if (details['property'][prop]['name'].toLowerCase().indexOf('value') !== -1) {
+                    cstmAttr[details['property'][prop]['name'].split('|')[1]] = cstmAttr[details['property'][prop]['name'].split('|')[1]] ? Object.assign(cstmAttr[details['property'][prop]['name'].split('|')[1]], JSON.parse(details['property'][prop]['value'])) : JSON.parse(details['property'][prop]['value']);
+                } else {
+
+                }
+            }
+
+            if (Object.keys(cstmAttr).length) {
+                $(select_box).on('change', function () {
+                    set_cstm_attr($(this).val(), cstmAttr, index, true);
+                });
+                set_cstm_attr(obtained_value, cstmAttr, index);
+            }
+        }
+
         if (http['url']) {
             /*var field_details = get_field_details(details['FieldName']);
             field_details['ChoiceOptions'] = [];*/
@@ -3208,7 +3403,9 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                 if (Array.isArray(obtained_value)) {
                     for (var val in obtained_value) {
                         var query = { start: 0, count: 500, search: obtained_value[val] };
-                        input = Object.assign(input, { query, obtained_value });
+                        var obtained = { query: query, obtained_value: obtained_value };
+                        input = $.extend(input, obtained);
+                        // input = Object.assign(input, { query, obtained_value });
                         crudReq_in_loop(input);
                     }
                 } else {
@@ -3226,36 +3423,46 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         }
     }
 
-    var check_multiple = function(details, select2_config = {}) {
-        details['Multiple'].forEach(function(options) {
-            if (options['displayvalue'].toLowerCase() === 'multiselect') {
-                if (options['actualvalue']) {
-                    remove_empty_option(select_box);
-                    select2_config['multiple'] = true;
-                }
-            } else if (options['displayvalue'].toLowerCase() === 'createtag') {
-                if (options['actualvalue']) {
-                    var createTag = {
-                        tags: true,
-                        createTag: function(tag) {
-                            return {
-                                id: tag.term,
-                                text: tag.term,
-                                tag: true
-                            };
-                        }
+    var check_multiple = function (details, select2_config) {
+        if (select2_config == undefined) {
+            select2_config = {};
+        }
+        if (details['Multiple']) {
+            details['Multiple'].forEach(function (options) {
+                if (options['displayvalue'].toLowerCase() === 'multiselect') {
+                    if (options['actualvalue']) {
+                        remove_empty_option(select_box);
+                        select2_config['multiple'] = true;
                     }
-                    select2_config = Object.assign(select2_config, createTag);
+                } else if (options['displayvalue'].toLowerCase() === 'createtag') {
+                    if (options['actualvalue']) {
+                        var createTag = {
+                            tags: true,
+                            createTag: function (tag) {
+                                return {
+                                    id: tag.term,
+                                    text: tag.term,
+                                    tag: true
+                                };
+                            }
+                        }
+                        select2_config = $.extend(select2_config, createTag);
+                        // select2_config = Object.assign(select2_config, createTag);
+                    }
+                } else {
+                    //var option = new Option(options['displayvalue'], options['actualvalue']);											
+                    //$(select_box).append(option).trigger('change.select2');
                 }
-            } else {
-                //var option = new Option(options['displayvalue'], options['actualvalue']);											
-                //$(select_box).append(option).trigger('change.select2');
-            }
-        })
-        return select2_config;
+            })
+            return select2_config;
+        }
     }
 
-    var check_ajax = function(select_box, select2_config = {}, flag = false) {
+    var check_ajax = function (select_box, select2_config, flag) {
+        if (select2_config == undefined) {
+            select2_config = {};
+        }
+        flag = false;
         var cstmAttr = {},
             http = {
                 method: 'GET'
@@ -3306,16 +3513,16 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     if (property['name'].indexOf('|') !== -1) {
                         var match_depended_field_value_ = property['name'].split('|')[0] ? property['name'].split('|')[0].trim() : ''
                         var value = find_value(depended_field, $scope.fieldData) ? find_value(depended_field, $scope.fieldData) : find_value(depended_field, $scope.subSectionfieldData, index);
-                        if (value) {
+                        if(value) {
                             depende_field_value = value;
                         } else {
                             $('[name=' + depended_field + ']').each(function(i) {
                                 if (index === i) {
                                     depende_field_value = $(this).val() ? $(this).val().trim() : '';
                                 }
-                            })
+                            });
                         }
-                        if (depende_field_value && match_depended_field_value_) {
+                        if(depende_field_value && match_depended_field_value_) {
                             if (depende_field_value === match_depended_field_value_) {
                                 match_depended_field_value = angular.copy(match_depended_field_value_);
                                 http['count'] = 500;
@@ -3439,9 +3646,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         }
     }
 
-
-
-    var delete_value = function(name, input, index) {
+    var delete_value = function (name, input, index) {
         for (var data in input) {
             if (data === name) {
                 return delete input[data];
@@ -3543,8 +3748,9 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         return _argu
     }
 
-    var crudReq_in_loop = function({ method, url, data, query, argu, obtained_value }, callback) {
-        crudRequest(method, url, data, query).then(function(response) {
+    var crudReq_in_loop = function (input, callback, argu, obtained_value) {
+        //var crudReq_in_loop = function({ method, url, data, query, argu, obtained_value }, callback) {
+        crudRequest(input['method'], input['url'], input['data'], input['query']).then(function (response) {
             $(argu).find('option').remove();
             if (response['Status'] === 'Success') {
                 response.data.data.forEach(function(item) {
@@ -3618,9 +3824,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
             }
         }
     }
-
-
-
 
     function getObjects(obj, key, val) {
         var objects = [];
@@ -3884,27 +4087,40 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                                             count: 500,
                                             search: ifMulData[k]
                                         }
+                                        var params = {};
+                                        params.method = 'GET';
+                                        params.url = url;
+                                        params.data = '';
+                                        params.query = query;
+                                        params.argu = argu;
+                                        crudReqInForloop(params)
 
-
-                                        crudReqInForloop({
-                                            method: 'GET',
-                                            url,
-                                            'data': '',
-                                            query,
-                                            argu
-                                        });
+                                        // crudReqInForloop({
+                                        //     method: 'GET',
+                                        //     url,
+                                        //     'data': '',
+                                        //     query,
+                                        //     argu
+                                        // });
                                     }
                                 } else {
                                     if (ifMulData) {
                                         query['search'] = ifMulData;
 
-                                        crudReqInForloop({
-                                            method: 'GET',
-                                            url,
-                                            'data': '',
-                                            query,
-                                            argu
-                                        });
+                                        // crudReqInForloop({
+                                        //     method: 'GET',
+                                        //     url,
+                                        //     'data': '',
+                                        //     query,
+                                        //     argu
+                                        // });
+                                        var params = {};
+                                        params.method = 'GET';
+                                        params.url = url;
+                                        params.data = '';
+                                        params.query = query;
+                                        params.argu = argu;
+                                        crudReqInForloop(params)
                                     }
                                 }
                             }
@@ -4236,21 +4452,13 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         }, 5000);
     }
 
-    var crudReqInForloop = function({
-        method,
-        url,
-        data,
-        query,
-        argu
-    }) {
-        crudRequest(method, url, data, query).then(function(response) {
-
+    var crudReqInForloop = function (input) {
+        //var crudReqInForloop = function({method,url,data,query,argu} ) {              
+        crudRequest(input['method'], input['url'], input['data'], input['query']).then(function (response) {
             argu.ChoiceOptions = argu.ChoiceOptions.concat(response.data.data);
             argu.ChoiceOptions = $scope.UniqueOptions(argu.ChoiceOptions);
         })
     }
-
-
 
     function updateTextarea(_link, _input, _index) {
         crudRequest("GET", _link, '').then(function(response) {
@@ -4376,10 +4584,8 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
 
                         $scope[model][$(element).attr('name')] = angular.copy(base64value);
                     })
-
                 };
                 fileReader.readAsDataURL(fileToLoad);
-
             } else {
                 fileReader.onload = function(fileLoadedEvent) {
                     var base64value = fileReader.result;
@@ -5258,8 +5464,9 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         });
         return result
     }
-    $scope.removeEmptyOption = function(argu) {
-        setTimeout(function() {
+
+    $scope.removeEmptyOption = function (argu) {
+        setTimeout(function () {
             if ($(argu).attr('value') == '' || $(argu).text() === 'select' || $(argu).text() === '') {
                 // To Remove select old option elements
                 var mySelect = $(argu);
@@ -5281,8 +5488,8 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         }
     }
 
-    var set_cstm_attr = function(value, cstmProp, flag = false) {
-
+    var set_cstm_attr = function (value, cstmProp, flag) {
+        flag = false;
         value = value ? value.trim() : value;
         if (value in cstmProp) {
             Object.keys(cstmProp[value]).forEach(function(elem) {
@@ -5339,9 +5546,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
             }, 100)
         }
     }
-
-
-
 
     /** Dynamic Functionality */
 
@@ -5457,7 +5661,13 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         if ($(_this).attr('name') in $scope.replaceFieldData) {
             delete $scope.replaceFieldData[$(_this).attr('name')];
             $(_this).val('');
+        } else {
+            $(_this).val('');
+            var f_name = $(_this).attr('name');
+            delete $scope.fieldData[f_name];
         }
+        $(sanitize('select[name=' + $(_this).attr('name') + ']')).val(null).trigger("change");
+
         /*$(_this).val('').trigger('change.select2');
         $(_this).trigger('change');
         var index;
@@ -5471,6 +5681,44 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
 
     }
 
+    $scope.build_url = function (url, _this) {
+        var backup_url = angular.copy(url);
+        if (backup_url.indexOf('{') !== -1 && backup_url.indexOf('}') !== -1) {
+            backup_url.split('/').forEach(function (elem) {
+                if (elem.trim().indexOf('{') !== -1 && elem.trim().indexOf('}') !== -1) {
+                    var field_name, index, value;
+                    if ($(_this).closest('.anitem').length) {
+                        if ($(_this).closest('.anitem').attr('id').indexOf('_') !== -1) {
+                            index = Number($(_this).closest('.anitem').attr('id').split('_')[1]);
+                        }
+                    }
+                    field_name = elem.substring(Number(elem.trim().indexOf('{')) + 1, Number(elem.trim().indexOf('}')));
+                    $(sanitize('[name=' + field_name + ']')).on("change", function () {
+                        var change_index = -1;
+                        if ($(this).closest('.anitem').length) {
+                            if ($(this).closest('.anitem').attr('id').indexOf('_') !== -1) {
+                                change_index = Number($(this).closest('.anitem').attr('id').split('_')[1]);
+                            }
+                        }
+                        if (change_index > -1) {
+                            if (index === change_index) {
+                                $scope.clear_value(_this);
+                            }
+                        } else {
+                            $scope.clear_value(_this);
+                        }
+                    });
+
+                    value = find_value(field_name, index);
+                    if (value) {
+                        backup_url = backup_url.replace(elem, value);
+                    }
+                }
+            })
+        }
+        return backup_url;
+    }
+
     $scope.get_field_details = function(argu) {
         var flag = false;
         for (var section in $scope.parentInput.pageInfo['Section']) {
@@ -5479,6 +5727,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                 return $scope.parentInput.pageInfo['Section'][section];
             }
         }
+        
         if (!flag) {
             for (var subsection in $scope.parentInput.pageInfo['Subsection']) {
                 for (var subsectionSec in $scope.parentInput.pageInfo['Subsection'][subsection]['subSectionData']) {
@@ -5487,8 +5736,8 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     }
                 }
             }
-
         }
+        
         if (!flag) {
             for (var section in $scope.replaceField['Section']) {
                 if ($scope.replaceField['Section'][section]['FieldName'] === argu) {
@@ -5497,6 +5746,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                 }
             }
         }
+        
         if (!flag) {
             for (var subsection in $scope.replaceField['Subsection']) {
                 for (var subsectionSec in $scope.replaceField['Subsection'][subsection]['subSectionData']) {
@@ -5505,8 +5755,8 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     }
                 }
             }
-
         }
+        
         if (!flag) {
             for (var subsection in $scope.parentInput.pageInfo['secondLevelsection']) {
                 for (var subsectionSec in $scope.parentInput.pageInfo['secondLevelsection'][subsection]['secondlevelSectionData']) {
@@ -5515,7 +5765,6 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                     }
                 }
             }
-
         }
     }
 
@@ -5549,6 +5798,7 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
         }
         return _kValue;
     }
+
     $scope.CompareDates= function(){
         if($scope.fieldData['EffectiveFromDate'] > $scope.fieldData['EffectiveTillDate']){
             if($scope.fieldData['EffectiveTillDate']){
@@ -5557,5 +5807,16 @@ angular.module('VolpayApp').controller('bankDataFunctions', function($scope, $ro
                 return false;
             }
         }
+    }
+
+    $scope.Autodatapopulate = function (choiceOptions, fieldName) {
+        if($scope.parentInput.pageTitle === 'Party') {
+            if(fieldName == "PartyType") {
+                $timeout(() => {
+                    $('select[name="ParentPartyID"]').val('').trigger("change");
+                }, 5);
+            }
+        }
+
     }
 });

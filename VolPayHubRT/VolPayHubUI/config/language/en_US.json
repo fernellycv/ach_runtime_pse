@@ -2956,6 +2956,8 @@
     "SMTP": "SMTP (Email)",
     "Alert": "Alert",
     "Broadcast": "Broadcast",
+    "IOBroadcast": "IO Broadcast",
+    "IOAlert": "IO Alert",
     "Error": "Error",
     "Warn": "Warning",
     "Info": "Info",

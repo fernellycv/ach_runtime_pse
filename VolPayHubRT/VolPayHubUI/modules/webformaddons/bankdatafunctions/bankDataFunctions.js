@@ -841,8 +841,7 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                 $scope.parentInput.pageInfo.Subsection[0].subSectionData[2].visible = true;
                 $scope.parentInput.pageInfo.Subsection[0].subSectionData[3].visible = true;
                 $scope.uploadFiles = true;
-            }
-            else {
+            } else {
 
                 $scope.parentInput.pageInfo.Section[8].visible = false;
 
@@ -853,7 +852,6 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                 $scope.uploadFiles = false;
             }
         }
-
     };
 
     $scope.fileNameChanged = function (element, subIndex) {
@@ -1728,6 +1726,14 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
             })
         }
 
+        if($scope.parentInput.pageTitle === 'Notifications') {
+            if(fieldName == "type") {
+                $timeout(() => {
+                    $('select[name="party"]').val('').trigger("change");
+                }, 5);
+            }
+        }
+
     }
 
     $scope.NumberCalculation = function (val) {
@@ -2022,7 +2028,7 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                                 },
                                 beforeSend: function (xhr) {
                                     xhr.setRequestHeader('Cookie', sanitize(document.cookie)),
-                                        xhr.withCredentials = true
+                                    xhr.withCredentials = true
                                 },
                                 crossDomain: true,
                                 data: function (params) {
@@ -2030,12 +2036,17 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                                         start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
                                         count: pageLimitCount
                                     }
+
                                     if (params.term) {
                                         query = {
                                             search: params.term.toUpperCase(),
                                             start: params.page * pageLimitCount ? params.page * pageLimitCount : 0,
                                             count: pageLimitCount
                                         };
+                                    }
+
+                                    if($scope.links == 'notifications/party' &&$scope.fieldData['type'] && ($scope.fieldData['type'] == "IO BROADCAST" || $scope.fieldData['type'] == "IO Alert")){
+                                        query['type'] = $scope.fieldData['type'];
                                     }
                                     return query;
                                 },
