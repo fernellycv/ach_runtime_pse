@@ -6,6 +6,21 @@
 
     <camelContext id="PseIBM_camelContext" xmlns="http://camel.apache.org/schema/spring"  threadNamePattern="PseIBM_camelContext_THREADPOOL-#counter#" useBreadcrumb="false">
         <threadPool id="InterfacePool" threadName="InterfaceThread" poolSize="2" maxPoolSize="4" maxQueueSize="-1"/>
+        <onException>
+            <exception>java.lang.Throwable</exception>
+            <exception>javax.jms.JMSException</exception>
+            <exception>org.apache.camel.CamelException</exception>
+            <exception>org.apache.camel.RuntimeCamelException</exception>
+            <exception>java.lang.RuntimeException</exception>
+            <retryWhile>
+                <method ref="retryRuleset" />
+            </retryWhile>
+            <redeliveryPolicy retryAttemptedLogLevel="WARN" />
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <bean ref="bean:camellogger" method="composeExchangeException" />
+        </onException>
         <route>
             <from uri="direct-vm:PSE.SENDTRANSACTIONS"/>
             <log message="Processing ${id}"/>
