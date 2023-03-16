@@ -3,7 +3,6 @@ angular.module('VolpayApp').controller('fileListController', function($scope, $t
     var authenticationObject = $rootScope.dynamicAuthObj;
 
     !function(a){a.fn.datepicker.dates.es={days:["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"],daysShort:["Dom","Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],daysMin:["Do","Lu","Ma","Mi","Ju","Vi","Sa","Do"],months:["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],monthsShort:["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],today:"Hoy",clear:"Borrar",weekStart:1,format:"dd/mm/yyyy"}}(jQuery);
-    
     $scope.statusREST = {
         "Queryfield": [{
             "ColumnName": "WorkFlowCode",
@@ -1711,8 +1710,8 @@ angular.module('VolpayApp').controller('fileListController', function($scope, $t
 
     $scope.listTooltip = "List View";
     $scope.gridTooltip = "Grid View";
-    $scope.changeViewFlag = GlobalService.viewFlag;
-    $scope.changeViewFlag1 = false;
+    //$scope.changeViewFlag = GlobalService.viewFlag;
+    $scope.changeViewFlag = false;
     $scope.viewMOPStatus = false;
     $scope.viewBatchStatus = true;
     // $('.viewbtn').addClass('cmmonBtnColors').removeClass('disabledBtnColor');
@@ -1734,7 +1733,7 @@ angular.module('VolpayApp').controller('fileListController', function($scope, $t
     /* used to store select view in the global variable for furture use */
     $scope.$watch('changeViewFlag', function(newValue, oldValue, scope) {
         $scope.changeViewFlag1 = false;
-        GlobalService.viewFlag = newValue;
+        //GlobalService.viewFlag = newValue;
         var checkFlagVal = newValue;
         if (checkFlagVal) {
 
