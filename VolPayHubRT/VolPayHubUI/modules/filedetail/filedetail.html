@@ -860,7 +860,7 @@
                             <button class="btnDeny btn-sm" ng-repeat="newbuttons in nActionBtns" ng-click="((!chkObj[newbuttons.ActionName]) && (newbuttons.show == 'Enable'))?forceAction(filedetail,newbuttons):''"  ng-class="{'disabled':newbuttons.show == 'Disable'}" ng-if="newbuttons.AliasName != 'RolesAndPermissions.ForceRejection' && newPermission.ApplyCus">
                                 {{newbuttons.AliasName | translate}}
                             </button>
-                            <button class="btnDeny btn-sm" ng-repeat="newbuttons in nActionBtns" ng-click="RequestRejetion(filedetail,newbuttons)"  ng-class="{'disabled':newbuttons.show == 'Disable'}" ng-if="SCD == null && PCD == null && newPermission.ForceRejection && (filedetail_.FileStatus == 'IN_PROGRESS' || filedetail_.FileStatus == 'ACQUIRED')">
+                            <button class="btnDeny btn-sm" ng-repeat="newbuttons in nActionBtns" ng-click="RequestRejetion(filedetail,newbuttons)"  ng-class="{'disabled':newbuttons.show == 'Disable'}" ng-if="SCD == null && PCD == null && newPermission.ForceRejection && (filedetail_.FileStatus == 'IN_PROGRESS' || filedetail_.FileStatus == 'ACQUIRED') && filedetail.ServiceCode !='ACHSSS'">
                                 {{'RolesAndPermissions.Requestrejection' | translate}}
                             </button>
                         </div>
