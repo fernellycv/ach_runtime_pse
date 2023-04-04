@@ -1,0 +1,568 @@
+<style>
+    .labelText {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .selectStateDetail {
+        display: block;
+        /* height:50px; */
+        width: 200px;
+    }
+
+    .dwnldLnkStateTableDetail {
+        text-align: end;
+    }
+
+    .listViewCBS {
+        overflow: auto;
+    }
+
+    .same-size-button {
+        width: 200px;
+        /* Establece el ancho fijo */
+        height: 40px;
+        /* Establece la altura fija */
+        text-align: center;
+        /* line-height: 50px; */
+    }
+
+    .contentContainer {
+        overflow-y: auto;
+    }
+
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+    }
+
+    /* .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.5s, transform 0.5s;
+    }
+    
+    .popup.visible1 {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    } */
+
+    .popup-inner {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        width: 700px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-radius: 1rem !important;
+    }
+
+    .textMessagePopup::-webkit-input-placeholder {
+        font-size: 12px;
+        color: #777;
+        position: absolute;
+        bottom: 2px;
+        left: 5px;
+        /* transform: translateY(100%); */
+    }
+
+    .buttonPopup {
+        /* margin: 0.5rem; */
+        padding: 0.5rem;
+        margin-top: 1rem;
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+
+    .infoReturnSebraOIAccount {
+        margin: .5rem;
+        padding: .5rem;
+    }
+
+    /* .my-custom-scrollbar::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .my-custom-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 30px;
+        background: -webkit-gradient(linear,left top,left bottom,from(#ff8a00),to(#da1b60));
+        box-shadow: inset 2px 2px 2px rgba(255,255,255,.25), inset -2px -2px 2px rgba(0,0,0,.25);
+    }
+
+    .my-custom-scrollbar::-webkit-scrollbar-track {
+        background-color: #fff;
+        border-radius:10px;
+        background: linear-gradient(to right,#201c29,#201c29 1px,#100e17 1px,#100e17);
+    } */
+
+    .table.table-bordered thead>tr>th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .constrained {
+        max-height: 600px !important;
+        overflow: hidden;
+        overflow-y: auto;
+        /* padding: 0px 10px 0px 0px; */
+        overflow-x: auto !important;
+    }
+
+    .countbarDisp {
+        margin-bottom: 0.625rem;
+        width: 100%;
+    }
+
+    .countbarBtn {
+        float: right;
+        box-sizing: border-box;
+    }
+
+    .refreshIcon {
+        float: right;
+        border: 0.063rem solid #fff;
+        box-sizing: border-box;
+        margin-left: 0.313rem;
+    }
+
+    .containerAlert {
+        width: 100%;
+        overflow: auto;
+    }
+
+    .noRecord {
+        margin: 0;
+        text-align: center;
+    }
+
+    .btnclrSearch {
+        display: block;
+        vertical-align: middle;
+        float: right;
+    }
+
+    .selectedNone {
+        float: left;
+        width: 100%;
+        height: 100%;
+        padding: 0.25rem 0.625rem 0.313rem 0.625rem;
+    }
+
+    .searchByfont {
+        margin: 0;
+        font-size: 0.813rem;
+        word-wrap: break-word;
+    }
+
+    .DoNotReturnToTheContributorButton{
+        font-size: .7rem !important;
+    }
+
+    .disabled-button {
+        background-color: #a9a9a9;
+    }
+
+    .labelDataOI {
+        border-bottom: 2px solid #ccc; 
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
+    }
+
+    .labelNameOI{
+        display: inline-block;
+        width: 130px; /* Ajusta el ancho a tu gusto */
+        text-align: left;
+        padding-right: 1rem;
+    }
+
+</style>
+<!-- Header -->
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-file-o"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PSE</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span class="removeCursor" translate>Sidebar.ADFQueryConsolidatedByState</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<!-- Header End-->
+
+<div class="contentContainer">
+    <div class="animated bounce autoAdjustAlert bold" ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}" ng-repeat="alert in alerts" ng-if="alert.msg != 'Payment not found'">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg | replaceASCII}}
+    </div>
+    <!-- Notification End-->
+
+    <div class="pageTitle alertWidthonResize">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title__container">
+                    <h2 translate>ADFQueryConsolidatedByState.PageTitle</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Container-->
+    <div id="consolidatedByStateTableDetail" class="customClass">
+        <div class="row-fluid card" style="margin-bottom: -1.5rem;">
+            <div class="card rolesPanel mb-3">
+                <div class="card-header">
+                    <span class="bold" translate>ADFQueryConsolidatedByState.TitleConsult</span>
+                </div>
+            </div>
+
+            <div id="divForm">
+                <form class="form-horizontal" id="formConsolidatedByState" name="formConsolidatedByState">
+                    <div class="card rolesPanel mb-3">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <!-- Part 1 -->
+                                <div class="form-group col">
+                                    <!-- Date -->
+                                    <div class="form-group row" style="margin-top: 1rem;">
+                                        <div class="col-md-4">
+                                            <label class="control-label">
+                                                <span>{{'ADFQueryConsolidatedByState.Date' | translate}}</span>
+                                                <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px" aria-required="true">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="col">
+                                            <div class="input-group input-append">
+                                                <input class="form-control" type="text" name="DateADFStateDetail" id="DateADFStateDetail" ng-model="ConsolidatedByStateDetailData.date" autocomplete="off" placeholder="{{'PSEAssistedTransactionQuery.SelectDate' | translate}}" ng-disabled="false" ng-required="true" onpaste="return false" required>
+                                                <span class="input-group-text cursorPointer">
+                                                    <span class="fa fa-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Date End-->
+                                    <!-- State -->
+                                    <div class="form-group row" style="margin-top: 1rem;">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">
+                                                <span>{{'ADFQueryConsolidatedByState.State' | translate}}</span>
+                                            </label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control col" name="State" id="State" ng-model="ConsolidatedByStateDetailData.status">
+                                                <option value="{{state.actualValue}}" ng-repeat="state in consolidationStatements" ng-selected="{{state.actualValue == ConsolidatedByStateDetailData.status}}">
+                                                    {{state.displayValue}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- State End-->
+                                </div>
+                                <!-- Part 1 End-->
+
+                                <!-- Part 2 -->
+                                <div class="form-group col" style="margin-left: 1rem;">
+                                    <!-- Information operator -->
+                                    <div class="form-group row " style="margin-top: 1rem;">
+                                        <div class="col-md-4">
+                                            <label class="control-label" for="">
+                                                <span>{{'ADFQueryConsolidatedByState.InformationOperator' | translate}}</span>
+                                            </label>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control select2DropdownInformationOperator selectStateDetail" name="InformationOperator" id="InformationOperator" ng-model="ConsolidatedByStateDetailData.informationOperator" select2-model-append1 data-width="100%">
+                                                <option value="" disabled translate>ADFQueryConsolidatedByState.All</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Information operator End-->
+                                    <!-- CUS -->
+                                    <div class="form-group row" style="margin-top: 1rem;" id="divCUS">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">
+                                                <span>{{'ADFQueryConsolidatedByState.CUS' | translate}}</span>
+                                            </label>
+                                        </div>
+                                        <div class="col" id="divInputCUS">
+                                            <input type="text" class="form-control input-group-number ng-model" ng-model="ConsolidatedByStateDetailData.cusId" name="inputCUS" id="inputCUS" placeholder="{{'SelectDates.All' | translate}}" allow-only-numbers>
+                                            <!-- <input type="text" ng-model="ConsolidatedByStateDetailData.CUS" name="inputCUS" id="inputCUS"> -->
+                                        </div>
+                                    </div>
+                                    <!-- CUS End-->
+                                    <!-- Spreadsheet -->
+                                    <div class="form-group row " style="margin-top: 1rem;" id="divSpreadsheet">
+                                        <div class="col-md-4">
+                                            <label for="" class="control-label">
+                                                <span>{{'ADFQueryConsolidatedByState.Spreadsheet' | translate}}</span>
+                                            </label>
+                                        </div>
+                                        <div class="col">
+                                            <div id="divInputSpreadsheet">
+                                                <input type="text" class="form-control ng-model input-group-number" ng-model="ConsolidatedByStateDetailData.spreadsheet" name="inputSpreadsheet" id="inputSpreadsheet" placeholder="{{'ADFQueryConsolidatedByState.All' | translate}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Spreadsheet End-->
+                                    <div class="form-group row " style="margin-top: 1rem;" id="divSpreadsheet">
+                                        <!-- button Search  -->
+                                        <div class="col text-right" style="margin-top: 1rem; float: right; text-align: right;">
+                                            <button type=" submit" id="SearchConsolidatedByState" class="btnSuccess btnStyle ng-scope" ng-click="searchConsolidatedByState(ConsolidatedByStateDetailData)"><i class="fa fa-search mr-1"></i>{{'ADFQueryConsolidatedByState.Search' | translate}}</button>
+                                        </div>
+                                        <!-- button Search  End-->
+                                    </div>
+                                </div>
+                                <!-- Part 2 End-->
+                                
+                                <!-- Parte 3 -->
+                                <div class="form-group col" style="margin-top: 1rem; margin-left: 4rem;">
+                                    <div id="UsersOISearch" class="col" style="margin-top: 1rem;">
+                                        <div id="buttonPopus">
+                                            <div id="OIRolUser" ng-show="sessionStorageOI">
+                                                <!-- Roles OI -->
+                                                <button name="ReturnEntityOIButton" id="ReturnEntityOIButton" type="submit" class="btnSuccess btnStyle same-size-button" style="padding: 0.5rem; margin: 0.5rem;" ng-click="showPopupReturnEntity(consADFByStates)" ng-disabled="checkValidation(consADFByStates)">{{'ADFQueryConsolidatedByState.ReturnEntity' | translate}}</button>
+                                                <button name="ReturnSebraOIAccountButton" id="ReturnSebraOIAccountButton" type="submit" class="btnSuccess btnStyle same-size-button" style="padding: 0.5rem; margin: 0.5rem;" ng-click="showReturnSebraOIAccount(consADFByStates)" ng-disabled="checkValidation(consADFByStates)">{{'ADFQueryConsolidatedByState.ReturnSebraOIAccount' | translate}}</button>
+                                                <!-- Roles OI End-->
+                                            </div>
+                                            <!-- Roles AHC -->
+                                            <div id="RolesACH" ng-show="sessionStorageACH">
+                                                <button name="ReturnToTheContributorButton" id="ReturnToTheContributorButton" type="submit" class="btnSuccess btnStyle same-size-button" style="padding: 0.5rem; margin: 0.5rem;" ng-click="showPopupReturnToTheContributor(consADFByStates)"  ng-disabled="checkValidation(consADFByStates)">{{'ADFQueryConsolidatedByState.ReturnToTheContributor' | translate}}</button>
+                                                <button name="DoNotReturnToTheContributorButton" id="DoNotReturnToTheContributorButton" type="submit" class="btnSuccess btnStyle same-size-button" style="padding: 0.5rem; margin: 0.5rem;" ng-click="showPopupDoNotReturnToTheContributor(consADFByStates)"  ng-disabled="checkValidation(consADFByStates)">{{'ADFQueryConsolidatedByState.DoNotReturnToTheContributor' | translate}}</button>
+                                            </div>
+                                            <!-- Roles AHC End-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Parte 3 End-->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="px-3 pb-3">
+                <div class="tobeFixed mb-2" ng-if="consADFByStates.length !== 0">
+                    <div class="row m-0">
+                        <div class="countbar-title row m-0 countbarDisp">
+                            <div class="col-md-8 col-sm-4 col-xs-4 ng-binding caption">
+                                <span class="highlight">{{(consADFByStates.length >= 0 && totalReportCount >= 0) ?
+                                    consADFByStates.length + ('ADFQueryConsolidatedByState.Outof' | translate ) + totalReportCount :
+                                    (consADFByStates.length >= 0 && !totalReportCount) ? consADFByStates.length : ''}}&nbsp;</span>{{(consADFByStates.length >= 0 && totalReportCount >= 0) ||
+                                    (consADFByStates.length >= 0 && !totalReportCount) ? 'ADFQueryConsolidatedByState.RecordsShown' :
+                                    (!consADFByStates.length && !totalReportCount) ? 'ADFQueryConsolidatedByState.FetchingData' : '0 out of 0' | translate}}
+                            </div>
+                            <div class="col-md-4 col-sm-8 col-xs-8 p-0">
+                                <div class="btn-group countbarBtn">
+                                    <button class="btn-trans gridBtn" id="btn_2" ng-class="!changeViewFlag ? 'disabledBtnColor' : 'cmmonBtnColors'" ng-click="changeViewFlag = !changeViewFlag" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.GridView' | translate}}"><i class="fa fa-table fa-fs14"></i></button>
+                                </div>
+                                <div class="btn-group refreshIcon" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ADFQueryConsolidatedByState.Refresh' |translate}}">
+                                    <button class="btn-trans" ng-click="refresh(ConsolidatedByStateDetailData)"><i class="fa fa-refresh fa-fs14"></i></button>
+                                </div>
+                                <div class="btn-group dwnldLnkStateTableDetail float-right" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Export' |translate}}">
+                                    <button style="box-sizing: border-box; opacity: 1;" class="btn-trans ng-scope" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="Exportar" ng-style="{'opacity':(consADFByStates.length > 1)?'1':'0.5'}"><i class="fa fa-download" aria-hidden="true"></i></button>
+                                    <a id='dwnldLnkADFByState' style="display:none;"></a>
+                                    <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
+                                        <li>
+                                            <span style="word-break: break-all;text-align: initial;">
+                                                <input type="radio" name="excelVal" value="txt" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'ADFQueryConsolidatedByState.ExportTXT' | translate}}
+                                            </span>
+                                            <span style="word-break: break-all;text-align: initial;">
+                                                <input type="radio" name="excelVal" value="csv" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'ADFQueryConsolidatedByState.ExportCSV' | translate}}
+                                            </span>
+                                            <span style="word-break: break-all;text-align: initial;">
+                                                <input type="radio" name="excelVal" value="pdf" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'ADFQueryConsolidatedByState.ExportPDF' | translate}}
+                                            </span>
+                                            <span style="word-break: break-all;text-align: initial;">
+                                                <input type="radio" name="excelVal" value="xls" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'ADFQueryConsolidatedByState.ExportXLS' | translate}}
+                                            </span>
+                                        </li>
+                                        <li data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ADFQueryConsolidatedByState.TableDownload' | translate}}" class="excelprint excelIcon" ng-click="exportToExcelFlist($event)">
+                                            <i class="fa fa-file-text-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'txt'"></i>
+                                            <i class="fa fa-file-excel-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'csv'"></i>
+                                            <i class="fa fa-file-excel-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'xls'"></i>
+                                            <i class="fa fa-file-pdf-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'pdf'"></i>
+                                            <i class="fa fa-print fa-fs14" aria-hidden="true" ng-if="!excelVal"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="countbar-title row ml-0 mr-1" ng-show="consADFByStates.length !== 0">
+                    <input style="float:right;" type="text" class="form-control" placeholder="{{'ADFQueryConsolidatedByState.QuickSearch' | translate}}" ng-model="quickSearch" />
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="alert alert-warning mt-2" ng-if="consADFByStates.length === 0">
+                    <strong>
+                        <h5 class="noRecord text-center">
+                            <i class="fa fa-warning"></i>{{'ADFQueryConsolidatedByState.NoRecordsFound'|translate}}
+                        </h5>
+                    </strong>
+                </div>
+
+                <div id="stateTable" class="table-responsive my-custom-scrollbar constrained" ng-if="consADFByStates.length !== 0">
+                    <table class="table table-bordered m-0" infinite-scroll='loadMore(ConsolidatedByStateDetailData)' infinite-scroll-container='".constrained"' infinite-scroll-immediate-check="false" infinite-scroll-parent="true">
+                        <thead>
+                            <tr>
+                                <th id="TableCTBSValueDetail" class="bold text-center" ng-repeat="detail in ConsolidatedByStateDETAIL" ng-if="detail.visible" ng-class="{'text-nowrap': detail.fieldName == 'SelectAll'}">
+                                    <span translate>{{detail.label}}</span>
+                                    <!-- newPermission.Release -->
+                                    <span ng-if="detail.fieldName == 'SelectAll'" class="ml-2 align-middle">
+                                        <!-- class="txtCenter selectall cursorPointer" -->
+                                        <input type="checkbox" name="action" ng-model="checkboxModel.selectAll" ng-change="selectAll(consADFByStates, checkboxModel.selectAll)">
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="adfState in consADFByStates | filter: quickSearch track by $index" ng-init="sectionRowIndex = $index">
+                                <td class="text-center" ng-repeat="detail in ConsolidatedByStateDETAIL track by $index">
+                                    <div class="checkbox checkbox-primary" ng-if="detail.fieldName == 'SelectAll'">
+                                        <input type="checkbox" id="check_{{sectionRowIndex}}" class="checkBoxClass selectall_ cursorPointer" ng-change="checkboxRowSelect(consADFByStates, adfState.select)" ng-model="adfState.select" ng-disabled="checkStatus(adfState)">
+                                        <label for="check_{{sectionRowIndex}}"></label>
+                                    </div>
+                                    <div ng-if="detail.fieldName != 'SelectAll'">
+                                        {{adfState[detail.fieldName]}}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style='clear: both;'></div>
+                    <div class="alert alert-info mt-2" role="alert" ng-show='isLoading'>
+                        <strong>
+                            <h5 class="noRecord text-center">
+                                <i class="fa fa-info mr-2"></i>
+                                <span>{{'ADFQueryConsolidatedByState.LoadingData' | translate}}</span>
+                            </h5>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container End-->
+
+    <!-- Popups -->
+    <!-- Popup Return Entity -->
+    <div ng-show="popupReturnEntity" class="popup">
+        <div class="popup-inner ">
+            <div class="popupTitle" style="margin: 1rem;">
+                <h5>{{'ADFQueryConsolidatedByState.MessagePopupTitle' | translate}}</h5>
+            </div>
+            <div id="bodyPopupReturnEntityVisible">
+                <form name="causalForm">
+                    <textarea name="textPopupReturnEntityVisible" id="textPopupReturnEntityVisible" cols="30" rows="10" class="textMessagePopup" name="causalReturnEntity" ng-model="causalReturnEntity" maxlength="200" required placeholder="{{'ADFQueryConsolidatedByState.MessageTextArea' | translate}}" style="width: 600px;  height: 100px; overflow: auto;"></textarea>
+                </form>
+                <div class="row">
+                    <button ng-disabled="causalForm.$invalid" ng-click="saveDataReturnEntity()" class="btnSuccess btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.SaveButton' | translate}}</button>
+                    <button ng-click="cancelReturnEntity()" class="btnDefault btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.CancelButton' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Popup Return Entity End -->
+
+    <!-- Return Sebra OI Account -->
+    <div ng-show="popupReturnSebraOIAccount" class="popup">
+        <div class="popup-inner">
+            <div class="popupTitle" style="margin: 1rem;">
+                <h5>{{'ADFQueryConsolidatedByState.MessagePopupTitle' | translate}}</h5>
+            </div>
+            <div id="bodyPopupReturnSebraOIAccount">
+                <form name="causalForm2">
+                    <textarea name="textPopupReturnSebraOIAccount" id="textPopupReturnSebraOIAccount" cols="30" rows="10" class="textMessagePopup" name="causalReturnSebraOIAccount" ng-model="causalReturnSebraOIAccount" maxlength="200" required placeholder="{{'ADFQueryConsolidatedByState.MessageTextArea' | translate}}" style="width: 600px; height: 100px; overflow: auto;"></textarea>
+                </form>
+                <div class="col">
+                    <div class="row infoReturnSebraOIAccount">
+                        <label for="" style="padding-right: 1rem;" class="bold labelNameOI">{{'ADFQueryConsolidatedByState.Portfolio' | translate}}</label>
+                        <label for="" class="labelDataOI">09099</label>
+                    </div>
+                    <div class="row infoReturnSebraOIAccount">
+                        <label for="" style="padding-right: 1rem;" class="bold labelNameOI">{{'ADFQueryConsolidatedByState.SebraAccount' | translate}}</label>
+                        <label for="" class="labelDataOI">5</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button ng-disabled="causalForm2.$invalid" ng-click="saveDataReturnSebraOIAccount()" class="btnSuccess btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.SaveButton' | translate}}</button>
+                    <button ng-click="cancelReturnSebraOIAccount()" class="btnDefault btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.CancelButton' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Return Sebra OI Account End-->
+
+    <!-- Return to the contributor -->
+    <div ng-show="popupReturnToTheContributor" class="popup">
+        <div class="popup-inner">
+            <div class="popupTitle" style="margin: 1rem;">
+                <h5>{{'ADFQueryConsolidatedByState.MessagePopupTitle' | translate}}</h5>
+            </div>
+            <div id="bodyPopupReturnToTheContributor">
+                <form name="causalForm3" action="">
+                    <textarea name="textPopupReturnToTheContributor" id="textPopupReturnToTheContributor" cols="30" rows="10" class="textMessagePopup" name="causalReturnToTheContributor" ng-model="causalReturnToTheContributor" maxlength="200" required ng-attr-placeholder="{{'ADFQueryConsolidatedByState.MessageTextArea' | translate}}" style="width: 600px;  height: 100px; overflow: auto;"></textarea>
+                </form>
+                <div class="row">
+                    <button ng-disabled="causalForm3.$invalid" ng-click="saveDataReturnToTheContributor()" class="btnSuccess btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.SaveButton' | translate}}</button>
+                    <button ng-click="cancelReturnToTheContributor()" class="btnDefault btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.CancelButton' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Return to the contributor End-->
+
+    <!-- Do not return to the contributor -->
+    <div ng-show="popupDoNotReturnToTheContributor" class="popup">
+        <div class="popup-inner">
+            <div class="popupTitle" style="margin: 1rem;">
+                <h5>{{'ADFQueryConsolidatedByState.MessagePopupTitle' | translate}}</h5>
+            </div>
+            <div id="bodyDoNotReturnToTheContributor">
+                <form name="causalForm4" action="">
+                    <textarea name="textPopupDoNotReturnToTheContributor" id="textPopupDoNotReturnToTheContributor" cols="30" rows="10" class="textMessagePopup" name="causalDoNotReturnToTheContributor" ng-model="causalDoNotReturnToTheContributor" maxlength="200" required ng-attr-placeholder="{{'ADFQueryConsolidatedByState.MessageTextArea' | translate}}" style="width: 600px;  height: 100px; overflow: auto;"></textarea>
+                </form>
+                <div class="row">
+                    <button ng-disabled="causalForm4.$invalid" ng-click="saveDataDoNotReturnToTheContributor()" class="btnSuccess btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.SaveButton' | translate}}</button>
+                    <button ng-click="cancelDoNotReturnToTheContributor()" class="btnDefault btnStyle col buttonPopup">{{'ADFQueryConsolidatedByState.CancelButton' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Do not return to the contributor End-->
+    <!-- Popups End-->
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.input-group-text').on('click focus', function (e) {
+            $(this).prev().focus().click()
+        });
+    });
+</script>

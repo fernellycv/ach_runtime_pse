@@ -1798,6 +1798,59 @@ angular.module('VolpayApp').config(['$stateProvider', '$urlRouterProvider', '$lo
                     });
                 }]
             }
+        }).state('app.ADFQueryConsolidatedByProcessingDate', {
+            url: "/ADFQueryConsolidatedByProcessingDate",
+            templateUrl: "modules/pse/ADFQueryConsolidated/ConsolidatedADFByProcessingDate.html",
+            data: {
+                pageTitle: ''
+            },
+            controller: "ADFQueryConsolidatedByProcessingDateCrtl",
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'VolpayApp',
+                        files: [
+                            'modules/pse/ADFQueryConsolidated/ConsolidatedADFByProcessingDateCrtl.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.ADFQueryConsolidatedByState', {
+            url: "/ADFQueryConsolidatedByState",
+            templateUrl: "modules/pse/ADFQueryConsolidated/ConsolidatedADFByState.html",
+            data: {
+                pageTitle: ''
+            },
+            controller: "ConsolidatedADFqueryByStateCtrl",
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'VolpayApp',
+                        files: [
+                            'modules/pse/ADFQueryConsolidated/ConsolidatedADFByStateCtrl.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        .state('app.queryrejectedmessages', {
+            url: "/queryrejectedmessages",
+            templateUrl: "modules/pse/queryrejectedmessages/queryrejectedmessages.html",
+            data: {
+                pageTitle: ''
+            },
+            controller: "QueryRejectedMessagesCtrl",
+            resolve: {
+                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'VolpayApp',
+                        files: [
+                            'modules/pse/queryrejectedmessages/queryrejectedmessagesCtrl.js'
+                        ]
+                    });
+                }]
+            }
         })
         //Bank Data
         .state('app.bankData', {

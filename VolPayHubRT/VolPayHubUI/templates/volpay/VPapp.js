@@ -9,7 +9,8 @@ var VolpayApp = angular.module('VolpayApp', [
     'pascalprecht.translate',
     'ngCookies',
     'ngFileSaver',
-    'infinite-scroll'
+    'infinite-scroll',
+    'ngclipboard'
 ]);
 
 angular.module("infinite-scroll").value("THROTTLE_MILLISECONDS", 250);
@@ -59,7 +60,8 @@ VolpayApp.factory('GetPermissions', ['$http', function (http) {
             'DefaultType': false,
             'AlertFiles': false,
             'ForceRejection': false,
-            'ApplyCus': false
+            'ApplyCus': false,
+            'IONotifications': false
         }
         var data = {
             "resourceName": resourceName

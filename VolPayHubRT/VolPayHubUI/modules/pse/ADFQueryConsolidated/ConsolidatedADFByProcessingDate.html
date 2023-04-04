@@ -1,0 +1,338 @@
+<style>
+    .asterisk {
+        color: #e02222;
+        font-size: 0.75rem;
+        padding-left: 0.125rem
+    }
+
+    .cursorPoint {
+        cursor: pointer
+    }
+
+    .ui-datepicker {
+        z-index: 99 !important;
+    }
+
+    .bootstrap-datetimepicker-widget {
+        display: block;
+    }
+
+    .bootstrap-datetimepicker-widget .datepicker-days {
+        display: block;
+    }
+
+    .rolesPanel .card-header {
+        background: #cad5eb;
+        color: #1d2e50;
+    }
+
+    .datepicker>div {
+        display: block;
+    }
+
+    /* .TextboxADF{
+        background-color: #0070C0;
+        border-color: aliceblue;
+        border-radius: 1rem !important;
+        color: black;
+        padding: .5rem;
+        margin: 1rem;
+        width: 10rem;
+        text-align: center;
+        
+    } */
+    .inputData{
+        border: 1px solid hsla(0, 0, 0, 0.3)
+    }
+    .formClass{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .processingDate-header{
+        color: black;
+        padding: .5rem;
+        margin-top: 1rem;     
+        margin-bottom: 1rem;
+        background-color: rgba(0,0,0,.03);
+        border: 1px solid rgba(0,0,0,.125);
+        margin-right: -1px; 
+        margin-left: -1px; 
+        text-align: center;
+        align-items: center;
+    }
+    .consolidatedBSHeader{
+        text-align: center;
+        align-items: center;
+        color: black;
+        width: 50%;
+        padding: .5rem;     
+        margin-bottom: 1rem;
+        background-color: rgba(0,0,0,.03);
+        border: 1px solid rgba(0,0,0,.125);
+    }
+    .TableCTBS{
+        width: 50%;
+    }
+    /* .consolidatedByState{
+        
+    } */
+    .divForm{
+        margin-bottom: 1rem;
+    }
+    .TitleprocessingDateClass{
+        display: inline !important;
+        text-align: left;
+        font-size: 1rem;
+    }
+    .TitleConsolidatedByState{
+        display: inline !important;
+        font-size: 1rem;
+    }
+    .formStateTableDetail{
+        margin-left: 1rem;
+        margin-right: 1rem;
+        padding: 1rem 1rem;
+    }
+    .labelData{
+        text-align: center;
+        /* border: .2rem solid;
+        border-radius: .5rem !important;
+        border-color: #0070C0 !important; */
+        padding: .5rem .5rem;
+        margin-left: .5rem;
+        white-space: nowrap;
+    }
+    .inputStateDetail{
+        align-items: flex-start;
+    }
+    .selectStateDetail{
+        display:block;
+        /* height:50px; */
+        width:300px;
+    }
+    .consultFirst{
+        padding-top: 1rem;
+    }
+    /* .detailsRowValue 
+    table tr:last-child td:nth-last-child(4),
+    table tr:last-child td:nth-last-child(3),
+    table tr:last-child td:nth-last-child(2),
+    table tr:last-child td:last-child {
+        background-color: #7BC0E4;
+        font-weight: bold;
+        text-align: center;
+    } */
+    .detailsRowStateValue {
+        background-color: #7BC0E4;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+<!-- Header -->
+<div class="page-bar breadCrumb" ng-controller="activeController">
+    <div class="row">
+        <div class="col-md-6 ">
+            <ul class="page-breadcrumb">
+                <li>
+                    <i class="fa fa-file-o"></i>
+                    <a href="javascript:void(0);" translate class="removeCursor">Sidebar.PSE</a>
+                    <i class="fa fa-angle-right"></i>
+                </li>
+                <li class="cursorPointer">
+                    <span class="removeCursor" translate>Sidebar.ADFQueryConsolidatedByProcessingDate</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 headerVals">
+            <div data-ng-include="'templates/header/VPheader.html'" data-ng-controller="headerCtrl"></div>
+        </div>
+    </div>
+</div>
+<!-- Header End-->
+
+<div>
+    <div class="contentContainer mb-2">
+
+        <!-- Notification -->
+        <div class="animated bounce autoAdjustAlert bold"
+        ng-class="{'alert alert-success': alert.type == 'success','alert alert-danger':alert.type == 'danger'}"
+        ng-repeat="alert in alerts" ng-if="alert.msg != 'Payment not found'">
+        <a class="close" data-dismiss="alert" aria-label="close">&times;</a> {{alert.msg | replaceASCII}}
+        </div>
+        <!-- Notification End-->
+
+        <div class="pageTitle alertWidthonResize">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="title__container">
+                        <h2 translate>ADFQueryConsolidatedByProcessingDate.PageTitle</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="divForm card">
+                <form id="ADFQueryConsolidatedByProcessingDate" role="form" name="ADFqcbyprocessingdate" ng-submit="ADFqcbyprocessingdate(ADFqcbyprocessingdateDATA)">
+                    
+                    <div class="card rolesPanel mb-3">
+                        <div class="card-header">
+                            <span class="bold" translate>ADFQueryConsolidatedByProcessingDate.TitleConsult</span>
+                        </div>
+                    </div>
+                   
+                    <div class=" formClass consultFirst">
+                        <div class="inputData">   
+                            <div class="form-group row">
+                                <!-- Date -->
+                                <div class="col-md-1">
+                                    <label class="control-label ">
+                                        <label>{{'ADFQueryConsolidatedByProcessingDate.Date' | translate}}</label>
+                                        <span class="alertMsg" style="color:#e02222;font-size:12px;padding-left:2px"
+                                            aria-required="true">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group input-append">
+                                        <input class="form-control" type="text" name="DateADF" id="DateADF" ng-model="ADFqcbyprocessingdateDATA.DateADF" 
+                                                autocomplete="off" ng-required="true" ng-disabled="false">
+                                        <span class="input-group-text cursorPointer">
+                                            <span class="fa fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div> 
+                                <!-- Date End-->
+                                <!-- Operator -->
+                                    <div class="col-md-2">
+                                        <label class="control-label ">
+                                            <!-- <span>{{'PSEAssistedTransactionQuery.InformationOperator' | translate}}</span> -->
+                                            <span> {{'ADFQueryConsolidatedByProcessingDate.InformationOperator' | translate}} </span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control select2DropdownInformationOperator"
+                                            name="InformationOperator" id="InformationOperator"
+                                            ng-model="ADFqcbyprocessingdateDATA.InformationOperator"
+                                            select2-model-append1>
+                                            <option value="" disabled translate>ADFQueryConsolidatedByProcessingDate.All</option>
+                                        </select>
+                                    </div>
+                                <!-- Operator Final-->
+                                <!-- submit -->
+                                <div class="col-md-3">
+                                    <!-- <label class="control-label col-md-2 text-md-right"></label> -->
+                                    <div class="col-md-3">
+                                        <input class="btnSuccess btnStyle" type="submit"
+                                        value="{{'ADFQueryConsolidatedByProcessingDate.ConsultReport'| translate}}" >
+                                        <!-- value="{{'ADFQueryConsolidatedByProcessingDate.GenerateReport'| translate}}" -->
+                                    </div>
+                                </div>
+                                <!-- submit Final-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form End -->
+                </form>
+            </div>
+            <div class="divTables card px-3 pb-3" id="divTables" name="divTables" class="card">
+                <!-- processingDate -->
+                <div id="processingDate" class="processingDateClass">
+                    <div class="processingDate-header row">
+                        <div class="col">
+                            <label class="TitleprocessingDateClass">{{'ADFQueryConsolidatedByProcessingDate.ConsolidatedByProcessinDate' | translate}}</label>
+                        </div>
+                        <div class="col col-lg-1">
+                            <button  style="box-sizing: border-box; opacity: 1;" 
+                            class="btn-trans ng-scope" type="button" data-toggle="dropdown" 
+                            data-toggle-second="tooltip" data-placement="top" data-original-title="Exportar" 
+                            ng-style="{'opacity':(restVal.length > 1)?'1':'0.5'}"> 
+                                <i class="fa fa-download" aria-hidden="true"></i>
+                            </button> 
+                            <a id='dwnldLnkTableByProcessingDate' style="display:none;"></a>
+                                <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
+                                    <li>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="txt" class="radiobtns radioBtnAlighn" >{{'SanctionModule.Reporttxt' | translate}}</span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="csv" class="radiobtns radioBtnAlighn" >{{'SanctionModule.ExportCSV' | translate}}</span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="pdf" class="radiobtns radioBtnAlighn" >{{'commissions.PDF' | translate}}</span>
+                                        <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal" value="xls" class="radiobtns radioBtnAlighn" >{{'commissions.XLS' | translate}}</span>    
+                                    </li>
+                                    <li data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ReportGenerate.TableDownload' | translate}}"  class="excelprint excelIcon" ng-click="exportToExcelFlist($event)"><i class="fa fa-file-excel-o fa-fs14" aria-hidden="true"></i>
+                                    </li>
+                                </ul>   
+                        </div>
+                    </div>  
+                    
+                    <!-- Table consolidated by processing date-->
+                    <div id="consolidatedTableByProcessingDate">
+                        <table class="table table-bordered" id="CTBPD">
+                            <thead>
+                                <tr>
+                                    <th id="TableCTBPDValue" class="bold" style="text-align: center;"  ng-repeat="val in ProcessingDate" ng-if="val.visible"
+                                    translate> {{val.label}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="consolidadoPorFecha in datos">
+                                    <td ng-repeat="consolidadoPorFecha in datos"></td>
+                                    <td>{{consolidadoPorFecha.fechaProcesamiento}}</td>
+                                    <td>{{consolidadoPorFecha.operadorInformacion}}</td>
+                                    <td>{{consolidadoPorFecha.ciclo}}</td>
+                                    <td>{{consolidadoPorFecha.fechaRecepcion}}</td>
+                                    <td>{{consolidadoPorFecha.cantidadTransacciones}}</td>
+                                    <td>{{consolidadoPorFecha.valor}}</td>
+                                    <td>{{consolidadoPorFecha.total}}</td>
+                                </tr>
+
+                                <tr class="detailsRowValue">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Table consolidated by processing date End-->
+                </div>
+                <!-- processingDate End-->
+                <!-- Consolidated by state -->
+                <div id="consolidatedByState" class="consolidatedByState">
+                    <div class="consolidatedBSHeader">
+                        <label class="TitleConsolidatedByState">{{'ADFQueryConsolidatedByProcessingDate.ConsolidatedByState' | translate}}</label>
+                    </div>
+                    <!-- Table Consolidated by state-->
+                    <div id="consolidatedTableByState">
+                        <table class="table table-bordered TableCTBS" id="CTBS">
+                            <thead>
+                                <tr>
+                                    <th id="TableCTBSName" class="bold" style="text-align: center;" ng-repeat="state in ConsolidatedByState" ng-if="state.visible" translate>{{state.label}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="TableCTBSValue" style="text-align: center;" ng-repeat = "register in ConsolidatedByStateTableDETAIL" ng-if="register.visible">
+                                    <td>{{register.estado}}</td>
+                                    <td>{{register.cantidad}}</td>
+                                    <td style="text-decoration: underline;"><a ng-click="seeDetail(register)">{{register.valor}}</a></td>
+                                </tr>
+                                <tr class="detailsRowStateValue">
+                                    <td>{{'ADFQueryConsolidatedByProcessingDate.Total' | translate}}</td>
+                                    <td>{{getTotalTransactions() ? getTotalTransactions() : "0"}}</td>
+                                    <td>{{ getTotalValue() ? getTotalValue() : "0"}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Table Consolidated by state End-->
+                </div>
+                <!-- Consolidated by state End-->
+            </div>
+        </div>
+        
+    </div> 
+</div>

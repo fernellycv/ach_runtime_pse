@@ -26,9 +26,7 @@ angular.module('VolpayApp').directive('webForm', ['$compile', '$http', function 
 }]);
 
 var sectionRemovekey = ['Header', 'Trailer', 'Data', 'webformuiformat', 'fields', 'fieldGroup1', 'webformfieldgroup', 'webformfieldgroup_2', 'webformsectiongroup'];
-
 var $metaInfoStorage = {};
-
 var _name = ''
 
 function beautifyObj(obj) {
@@ -116,7 +114,7 @@ angular.module('VolpayApp').directive('cstmTable', ['$compile', '$http', functio
     };
 }]);
 
-angular.module('VolpayApp').directive('dtpicker', function () {
+angular.module('VolpayApp').directive('dtpicker', function (datepickerFaIcons) {
     return {
         require: '?ngModel',
         restrict: 'A',
@@ -141,6 +139,7 @@ angular.module('VolpayApp').directive('dtpicker', function () {
             function initiate(argu) {
                 argu.datetimepicker({
                     format: checkforFormat(),
+                    icons: datepickerFaIcons.icons,
                     useCurrent: false,
                     showClear: true
                 })
@@ -171,8 +170,8 @@ angular.module('VolpayApp').directive('dtpicker', function () {
                         }
                     });
                 }
-
             });
+
             element.on('dp.hide', function (ev) {
                 if ($(element).closest('.sec-body').length) {
                     $('.rpSec').each(function () {
@@ -250,6 +249,7 @@ angular.module('VolpayApp').directive('fileModel', ['$parse', function ($parse) 
         }
     };
 }]);
+
 angular.module('VolpayApp').directive('select2ModelAppend', ['$sce', function ($sce) {
     return {
         restrict: 'A',
@@ -307,6 +307,7 @@ angular.module('VolpayApp').directive('select2ModelAppend', ['$sce', function ($
         }
     }
 }]);
+
 angular.module('VolpayApp').directive('select2ModelAppend1', ['$sce', function ($sce) {
     return {
         restrict: 'AC',
@@ -333,6 +334,7 @@ angular.module('VolpayApp').directive('select2ModelAppend1', ['$sce', function (
         }
     }
 }]);
+
 angular.module('VolpayApp').directive('customTooltip', function ($transitions) {
     return {
         restrict: 'A',
@@ -361,6 +363,7 @@ angular.module('VolpayApp').directive('customTooltip', function ($transitions) {
         }
     };
 });
+
 angular.module('VolpayApp').directive("select2", function ($timeout, $filter) {
     return {
         restrict: 'AC',
@@ -506,6 +509,11 @@ angular.module('VolpayApp').directive('custimepicker', function (moment, datepic
                     }
                 }
 
+                // Future date restriction in timepicker
+                if (attrs.maxdate.toLowerCase() === 'true') {
+                    picker.maxDate(attrs.maxdate.toLowerCase() === 'true' ? new Date() : false)
+                }
+
                 if (element.val() != ("" || '')) {
                     scope.$apply(setVal);
                 } else {
@@ -539,6 +547,7 @@ angular.module('VolpayApp').directive('custimepicker', function (moment, datepic
         }
     }
 });
+
 angular.module('VolpayApp').directive('infinityscroll', function () {
     return {
         restrict: 'A',
@@ -552,6 +561,7 @@ angular.module('VolpayApp').directive('infinityscroll', function () {
         }
     }
 });
+
 angular.module('VolpayApp').directive('dateMonthYearPicker', function (moment, datepickerFaIcons) {
     return {
         restrict: "A",
@@ -575,6 +585,7 @@ angular.module('VolpayApp').directive('dateMonthYearPicker', function (moment, d
         }
     };
 });
+
 angular.module('VolpayApp').directive('allowOnlyNumbers', function () {
     return {
         restrict: 'A',
