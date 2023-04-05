@@ -220,8 +220,8 @@
     "ACHReports": "Informes ACH",
     "AllPaymentsDashboard": "Tablero de Pagos",
     "ServiceCodeManagement": "Administrar Códigos de Servicio",
-    "ADFQueryConsolidatedByProcessingDate": "Consulta ADF Consolidado por Fecha de Procesamiento",
-    "ADFQueryConsolidatedByState": "Detalle de la consulta ADF consolidada por Estado",
+    "ADFQueryConsolidatedbyProcessingDate": "Consulta ADF Consolidado por Fecha de Procesamiento",
+    "DetailoftheADFQueryConsolidatedbyState": "Detalle de la consulta ADF consolidada por Estado",
     "QueryRejectedMessages": "Consulta Mensajes Rechazados"
   },
   "SearchFilters": {
@@ -1327,11 +1327,11 @@
   },
   "ResendTransactionsClearedPSE": {
     "PageTitle": "Reporte Reenviar Tx Compensadas PSE",
-    "SectionTitle": "Reenviar Tx compensadas PSE",
+    "SectionTitle": "Reenviar Tx Compensadas PSE",
     "ClearingDate": "Fecha",
     "Cycle": "Ciclo",
-    "ResendInformation": "Reenviar Tx compensadas",
-    "Error": "No fue posible realizar el reevío de las transacciones compensadas"
+    "ResendInformation": "Reenviar Tx Compensadas",
+    "Error": "No fue posible realizar el reenvío de las transacciones compensadas"
   },
   "TXmatchingreceivedfromPSEVSclearinginintegra": {
     "PageTitle": "Cuadre Tx Recibidas de PSE VS Compensación en Integra",
@@ -3686,7 +3686,7 @@
     "Export Refunds Report XLS": "Exportar Reporte de Reintegros",
     "Reject Transactions During File Upload": "Rechazar Transacciones Durante Cargue",
     "Reading Files for Bulk Upload": "Lectura Archivos para Cargue Masivo",
-    "PSE and ACHSS Transactions Bulk Upload": "Cargue Masivo Transacciones PSE y ACHSS",
+    "PSE and ACHSSS Transactions Bulk Upload": "Cargue Masivo Transacciones PSE y ACHSSS",
     "Export Approved Transactions Received from PSE TXT/CSV": "Exportar Transacciones Aprobadas Recibidas de PSE TXT/CSV",
     "Export Approved Transactions Received from PSE XLS": "Exportar Transacciones Aprobadas Recibidas de PSE XLS",
     "Export Approved Transactions Received from PSE PDF": "Exportar Transacciones Aprobadas Recibidas de PSE PDF",
@@ -3867,6 +3867,8 @@
     "FetchingData": "Recuperación de datos...",
     "LoadingData": "Cargando datos... ¡Por favor espere!",
     "Refresh": "Actualizar",
+    "CopyToClipboard": "Copiar al Portapapeles",
+    "ClickToDownload": "Haga clic para Descargar",
     "Outof": " de ",
     "ExportTXT": "Exportar TXT",
     "ExportPDF": "Exportar PDF",

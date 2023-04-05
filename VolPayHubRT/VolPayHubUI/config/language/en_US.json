@@ -219,8 +219,8 @@
     "ACHReports": "ACH Reports",
     "AllPaymentsDashboard": "Payments Dashboard",
     "ServiceCodeManagement": "Service Code Management",
-    "ADFQueryConsolidatedByProcessingDate": "ADF Query Consolidated by Processing Date",
-    "ADFQueryConsolidatedByState": "Detail of the ADF Query Consolidated by State",
+    "ADFQueryConsolidatedbyProcessingDate": "ADF Query Consolidated by Processing Date",
+    "DetailoftheADFQueryConsolidatedbyState": "Detail of the ADF Query Consolidated by State",
     "QueryRejectedMessages": "Query Rejected Messages"
   },
   "SearchFilters": {
@@ -3674,7 +3674,7 @@
     "Export Refunds Report XLS": "Export Refunds Report XLS",
     "Reject Transactions During File Upload": "Reject Transactions During File Upload",
     "Reading Files for Bulk Upload": "Reading Files for Bulk Upload",
-    "PSE and ACHSS Transactions Bulk Upload": "PSE and ACHSS Transactions Bulk Upload",
+    "PSE and ACHSSS Transactions Bulk Upload": "PSE and ACHSSS Transactions Bulk Upload",
     "Export Approved Transactions Received from PSE TXT/CSV": "Export Approved Transactions Received from PSE TXT/CSV",
     "Export Approved Transactions Received from PSE XLS": "Export Approved Transactions Received from PSE XLS",
     "Export Approved Transactions Received from PSE PDF": "Export Approved Transactions Received from PSE PDF",
@@ -3843,6 +3843,8 @@
     "FetchingData": "Fetching Data...",
     "LoadingData": "Loading data... Please wait!",
     "Refresh": "Refresh",
+    "CopyToClipboard": "Copy to Clipboard",
+    "ClickToDownload": "Click to Download",
     "Outof": " out of ",
     "ExportTXT": "Export TXT",
     "ExportPDF": "Export PDF",
