@@ -89,9 +89,12 @@
                                         onpaste="return false"> -->
 
                                     <div class="input-group input-append">
-                                        <input class="form-control custimepicker" type="text" name="dateQueryRejectedMsg" id="dateQueryRejectedMsg"
-                                        ng-model="date" autocomplete="off" ng-required="true" custimepicker='{"type": "DateOnly"}' ng-change="searchByDate()" ng-focus="activatePicker($event)"
-                                        ng-disabled="false" onpaste="return false" maxdate="true">
+                                        <input
+                                        class="form-control DatePicker dateTypeKey"
+                                        type="text" name="ClearingDate" id="ClearingDate"
+                                        ng-model="receivedTxnsPSEData.ClearingDate" autocomplete="off"
+                                        custimepicker='{"type": "DateOnly"}' ng-focus="activatePicker($event)"
+                                        ng-required="true" ng-disabled="false">
                                         <span class="input-group-text cursorPointer">
                                             <span class="fa fa-calendar"></span>
                                         </span>
