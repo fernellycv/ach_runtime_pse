@@ -2195,6 +2195,7 @@ angular.module('VolpayApp').controller('filedetailCtrl', function($scope, $rootS
                     }];
                     errorservice.ErrorMsgFunction(config, $scope, $http, status)
                 }
+                $scope.selfCalling();
             });
 
          }).catch(function(response){            
