@@ -612,14 +612,11 @@
 			<convertBodyTo type="byte[]" />
 			<to uri="volante:ACHRprtDeleteDwnld" />
 		</route>
-		<route id="GetFilesAdfOfAWS" startupOrder="15">
+		<!-- 
+<route id="GetFilesAdfOfAWS" startupOrder="15">
 			<from uri="quartz2://ACHGetADFFiles?cron=0+*/5+*+*+*+?&amp;trigger.timeZone=UTC"/>
             <to uri="volante:ACHGetADFFiles" />
         </route>
-		<!-- For process to apply transactions-->
-		<route id="ApplyFlow">
-			<from uri="direct-vm:ApplyFlow.Process" />
-			<to uri="{{QUEUE_PREFIX}}:ApplyFlow.Process" />
-		</route>
+		-->
 	</camelContext>
 </beans>

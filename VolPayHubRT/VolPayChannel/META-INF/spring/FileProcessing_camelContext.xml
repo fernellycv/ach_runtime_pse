@@ -718,10 +718,5 @@
 			<convertBodyTo type="byte[]" />
 			<to uri="volante:ServiceInformationClientFlow" />
 		</route>
-          <!-- For process to apply transactions-->
-        <route id="ApplyFlow">
-            <from uri="{{QUEUE_PREFIX}}:ApplyFlow.Process?concurrentConsumers=1" />
-            <to uri="volante:ApplyTransactionsProcessFlow" />
-        </route>
     </camelContext>
 </beans>
