@@ -853,15 +853,14 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
             }
         }
     };
+    
 
     $scope.fileNameChanged = function (element, subIndex) {
-
         /* uploadHereJQ.css({"pointer-events": "auto",
         "opacity": 1
         }); */
-
+        
         var fileUploadLimit = sessionStorage.fileUploadLimit * 1024;
-
         var file = element.files[0]
         $scope.DeepFile = {
             "name": element.files[0].name,
@@ -880,9 +879,7 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
         
         var str = file.name.split(".").pop().toLowerCase();
         if (supportedFileFormat.indexOf(str) != -1) {
-
             $scope.file = angular.copy($scope.DeepFile)
-
             // var str = file.name.split('.')[1];
             if (str == 'mt') {
                 $scope.SwiftFileType = "*/*"
@@ -892,7 +889,6 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                 $scope.fileType = $scope.file.type;
             }
             $scope.fileStatus = "File selected";
-
             if ($scope.parentInput.parentLink == "notifront") {
                 if ($scope.file.name.length > 200) {
                     $scope.subSectionfieldData['attachment_list']['name'] = $scope.file.namesubstring(0, 200);
@@ -900,9 +896,7 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                     $scope.subSectionfieldData['attachment_list']['name'] = $scope.file.name;
                 }
                 $scope.subSectionfieldData['attachment_list']['type'] = $scope.file.type;
-
                 $scope.subSectionfieldData['attachment_list']['content'] =  element.files[0];
-
             } else {
                 if ($scope.file.name.length > 200) {
                     $scope.fieldData['fileName'] = $scope.file.namesubstring(0, 200);
@@ -910,24 +904,20 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                     $scope.fieldData['fileName'] = $scope.file.name;
                 }
             }
-
             if (($scope.file.size > 1024 * 1024)) {
                 /*** for MB ***/
                 $scope.UploadedFileSize = $scope.file.size / 1024 / 1024; // Bytes to MB
                 if (($scope.UploadedFileSize * 1024) > fileUploadLimit) {
                     $scope.filesizeTooLarge = true;
-
                     $scope.alerts = [{
                         type: 'danger',
                         msg: `${$filter('translate')('FileUpload.ErrorSize')} ${fileUploadLimit / 1024} MB .`
                     }];
-
                 } else {
                     $scope.filesizeTooLarge = false;
                     if ($scope.parentInput.parentLink != "notifront") {
                         $scope.fieldData['fileSize'] = $scope.file.size + " MB";
                     }
-
                     if ($scope.parentInput.parentLink == "notifront") {
                         $scope.subSectionfieldData['attachment_list']['sizeFile'] = $scope.file.size + " MB";
                         if($scope.parentInput.Operation != 'Edit'){
@@ -937,24 +927,10 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                             }];
                         }
                     }
-                    //Alert 
-                    const selectElement = document.querySelector('.fileNamealighn');
-
-                    selectElement.addEventListener('change', () => {
-                        $scope.alerts = [{
-                            type: 'success',
-                            msg: $filter('translate')('FileUpload.NotifyFileSucess')
-                        }];
-                        setTimeout(function () {
-                            $('.alert-success').hide();
-                        }, 3500);
-                    });
-
+                    
                     alertDangerJQ.alert('close')
                 }
-
                 $scope.fileSizeFormat = 'MB';
-
             } else {
                 /*** For KB ***/
                 $scope.UploadedFileSize = $scope.file.size / 1024;
@@ -969,38 +945,38 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                     if ($scope.parentInput.parentLink != "notifront") {
                         $scope.fieldData['fileSize'] = $scope.file.size + " KB";
                     }
-
                     if ($scope.parentInput.parentLink == "notifront") {
                         $scope.subSectionfieldData['attachment_list']['sizeFile'] = $scope.file.size + " KB";
-                        if($scope.parentInput.Operation != 'Edit'){
-                            $scope.alerts = [{
-                                type: 'success',
-                                msg: $filter('translate')('FileUpload.NotifyFileSucess')
-                            }];
-                            setTimeout(function () {
-                                $('.alert-success').hide();
+                        
+                    }
+                    $scope.notificactionforFile = document.getElementById('uploadBtn').addEventListener('change', (e) => {
+                        e.preventDefault();
+                        var file = e.target.files[0];
+                        var fileExtension = file.name.split('.').pop().toLowerCase();
+                        var supportedExtensions = ["jpg", "jpeg", "png"];
+                        if (supportedExtensions.includes(fileExtension)) {
+                            $scope.$apply(() => {
+                                $scope.alerts.length = 0;
+                                $scope.alerts.push({
+                                    type: 'success',
+                                    msg: $filter('translate')('FileUpload.NotifyFileSucess')
+                                });
+                            });
+                            setTimeout(() => {
+                                $scope.$apply(() => {
+                                    $('.alert-success').hide();
+                                });
                             }, 3500);
                         }
-                    } 
-                    //Alert 
-                    const selectElement = document.querySelector('.fileNamealighn');
-
-                    selectElement.addEventListener('change', () => {
-                        $scope.alerts = [{
-                            type: 'success',
-                            msg: $filter('translate')('FileUpload.NotifyFileSucess')
-                        }];
-                        setTimeout(function () {
-                            $('.alert-success').hide();
-                        }, 3500);
-                    }); 
-                    alertDangerJQ.alert('close')
+                    });
+                    
+                    alertDangerJQ.alert('close');
+                    
                 }            
                 $scope.fileSizeFormat = 'KB';
             }
-
-
-            $scope.Deepfile = angular.copy($scope.file)
+            
+            $scope.Deepfile = angular.copy($scope.file);
         } else {
             
             setTimeout(function () {
@@ -1017,15 +993,25 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                     type: 'danger',
                     msg: $filter('translate')('FileUpload.NotifyErrorFileType').replace("??", file.name.split(".").pop())
                 }];
+                setTimeout(function () {
+                    $('.alert-danger').hide();
+                }, 3500);
                 
             } else {
                 $scope.alerts = [{
                     type: 'danger',
                     msg: $filter('translate')('FileUpload.NotifyErrorImageType').replace("??", file.name.split(".").pop())
                 }];
+                setTimeout(function () {
+                    $('.alert-danger').hide();
+                }, 3500);
             }
+
+            
         }
     }
+
+
     //
     
 
@@ -2552,6 +2538,9 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                             start: 0,
                             count: 500
                         }
+                        if($scope.parentInput.pageTitle == "Notifications" && $scope.fieldData['type'] && ($scope.fieldData['type'] == "IO BROADCAST" || $scope.fieldData['type'] == "IO Alert")){
+                            _query['type'] = $scope.fieldData['type'];
+                        }
                         multipleVal.push($scope.fieldData[_name].split(',')[k])
                         crudRequest('GET', argu.property[0].value, '', _query).then(function (response) {
                             for (k in response.data.data) {
@@ -2571,7 +2560,9 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                 start: 0,
                 count: 500
             }
-
+            if($scope.parentInput.pageTitle == "Notifications" && $scope.fieldData['type'] && ($scope.fieldData['type'] == "IO BROADCAST" || $scope.fieldData['type'] == "IO Alert")){
+                _query['type'] = $scope.fieldData['type'];
+            }
             crudRequest('GET', argu.property[0].value, '', _query).then(function (response) {
                 argu.ChoiceOptions = response.data.data
             });
@@ -2791,6 +2782,11 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                                 count: pageLimitCount
                             };
                         }
+
+                        if($scope.links == 'notifications/party' && $scope.fieldData['type'] && ($scope.fieldData['type'] == "IO BROADCAST" || $scope.fieldData['type'] == "IO Alert")){
+                            query['type'] = $scope.fieldData['type'];
+                        }
+
                         return query;
                     },
                     processResults: function (data, params) {
@@ -2814,8 +2810,7 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                 },
                 placeholder: $scope.getSelectplaceholder(argu),
                 minimumInputLength: 0,
-                allowClear: true,
-
+                allowClear: true
             })
         }, 2000);
     }
@@ -2824,20 +2819,16 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
         crudRequest("GET", _link, '').then(function (response) {
             $scope.parentInput.pageInfo.Section[_index]['webform'] = BuildnReplaceField(response, _input);
             if (!_input) {
-
                 if ('Subsection' in $scope.parentInput.pageInfo.Section[_index]['webform']) {
                     $scope.fieldData[$scope.parentInput.pageInfo.Section[_index].FieldName] = {}
                     for (k in $scope.parentInput.pageInfo.Section[_index]['webform'].Subsection) {
-
                         if ($scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].subSectionData[0].FieldName == 'fldName') {
                             $scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].subSectionData[0].ChoiceOptions.splice($scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].subSectionData[0].ChoiceOptions.length - 1, 1)
-
                         }
                         $scope.fieldData[$scope.parentInput.pageInfo.Section[_index].FieldName][$scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].FieldName] = [{}]
                     }
                 }
             } else {
-
                 for (k in $scope.parentInput.pageInfo.Section[_index]['webform'].Subsection) {
                     if ($scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].subSectionData[0].FieldName == 'fldName') {
                         $scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].subSectionData[0].ChoiceOptions.splice($scope.parentInput.pageInfo.Section[_index]['webform'].Subsection[k].subSectionData[0].ChoiceOptions.length - 1, 1)
@@ -2883,13 +2874,12 @@ angular.module('VolpayApp').controller('webbankDataFunctions', function ($scope,
                                 if ($(this).children().length) {
                                     constuctfromXml[parentName] = constuctfromXmlarr
                                     $(this).children().each(function (e) {
-                                        constuctfromXmlObj[$(this).prop("tagName")] = $(this).text()
-                                        constuctfromXmlarr.push(constuctfromXmlObj)
-                                        constuctfromXmlObj = {}
+                                        constuctfromXmlObj[$(this).prop("tagName")] = $(this).text();
+                                        constuctfromXmlarr.push(constuctfromXmlObj);
+                                        constuctfromXmlObj = {};
                                     })
                                 } else {
-                                    constuctfromXml[parentName] = $(this).text()
-
+                                    constuctfromXml[parentName] = $(this).text();
                                 }
                             })
                         });
