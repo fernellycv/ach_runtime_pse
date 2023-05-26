@@ -612,16 +612,35 @@
 			<convertBodyTo type="byte[]" />
 			<to uri="volante:ACHRprtDeleteDwnld" />
 		</route>
-		<!-- 
 		<route id="GetFilesAdfOfAWS" startupOrder="15">
 			<from uri="quartz2://ACHGetADFFiles?cron=0+*/5+*+*+*+?&amp;trigger.timeZone=UTC"/>
             <to uri="volante:ACHGetADFFiles" />
         </route>
-		-->
 		<!-- For process to apply transactions-->
 		<route id="ApplyFlow">
 			<from uri="direct-vm:ApplyFlow.Process" />
 			<to uri="{{QUEUE_PREFIX}}:ApplyFlow.Process" />
 		</route>
+
+
+		<route id="ClearLogsOlderThan7Days">      
+			<from uri="quartz2://ClearLogsOlderThan7Days?cron=0+0+0+*+*+?*&amp;trigger.timeZone=UTC"/> 
+			<to uri="volante:ClearLogsOlderThan7Days"/> 
+		</route>		
+
+<!--
+		<route id="ClearLogsOlderThan7Days">      
+			<from uri="quartz2://ClearLogsOlderThan7Days?cron=0+0/3+*+*+*+?"/> 
+			<to uri="volante:ClearLogsOlderThan7Days"/> 
+		</route>
+-->				
+
+<!-- 
+		<route id="ClearLogsOlderThan7Days">
+            <from uri="quartz2://ClearLogsOlderThan7Days?cron=0+0/1+*+*+*+?"/>
+            <to uri="volante:ClearLogsOlderThan7Days"/>
+    	</route>
+
+			-->
 	</camelContext>
 </beans>
