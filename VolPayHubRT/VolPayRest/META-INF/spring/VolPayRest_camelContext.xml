@@ -606,6 +606,18 @@
 			<convertBodyTo type="byte[]" />
 			<to uri="volante:PCDQueryExtractor" />
 		</route>
+		<route id="AuditSendReportAsync">
+            <from uri="direct-vm:AuditSendReportAsync" />
+            <removeHeaders pattern="JMS*" />
+            <convertBodyTo type="byte[]" />
+            <to uri="{{QUEUE_PREFIX}}:AuditSendReportAsync" />
+        </route>
+        <route id="AuditSendReportAsyncFrmQueue">
+            <from uri="{{QUEUE_PREFIX}}:AuditSendReportAsync?concurrentConsumers=20&amp;transacted=true" />
+            <removeHeaders pattern="JMS*" />
+            <convertBodyTo type="byte[]" />
+            <to uri="volante:AuditQueryExtractor" />
+        </route>
 		<route id="DeleteDownloadedACHReport">
 			<from uri="quartz2://DeleteDownloadedACHReport?cron=0+0+0+*+*+?&amp;trigger.timeZone=UTC" />
 			<removeHeaders pattern="JMS*" />

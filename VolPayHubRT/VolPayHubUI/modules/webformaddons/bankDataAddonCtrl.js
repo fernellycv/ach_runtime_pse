@@ -2345,22 +2345,32 @@ angular.module('VolpayApp').controller('bankDataAddonCtrl', function($scope,$roo
             export_data.start = 0;
             var dlnk = document.getElementById('dwnldLnk');
         
-            $http.post(BASEURL + '/rest/v2/ach/auditable/export/' + (format=='xls'?'xlsx':format), $scope.restInputData).then((response) => {
-        
-                var res = atob(response.data.Report);   
-                var universalBOM = "\uFEFF";
-                if(format=='csv'){
-                    $scope.Details ="data:text/csv; charset=utf-8," +  encodeURIComponent(universalBOM+res); 
-                }else{
-                    $scope.Details = 'data:application/octet-stream;base64,' + response.data.Report;
+            $http.post(BASEURL + '/rest/v2/ach/auditable/export/' + format, $scope.restInputData).then((response) => {
+                var data = response.data;
+                var status = response.status;
+                var statusText = response.statusText;
+                var headers = response.headers;
+                var config = response.config;
+                if (response.data['FileName']) {
+                    response.data['filename'] = response.data['FileName']
                 }
-                dlnk.href = $scope.Details;
-                dlnk.href = $scope.Details;
-                dlnk.download =   $filter('translate')($scope.showPageTitle) + '.' + format
-                dlnk.click();
+                if (data.Approval.ID && status == 200) {
+                    $scope.navigateToACHReports(data.Approval.ID);
+                }
             })
         }
     
+    }
+
+    $scope.navigateToACHReports = function (reportId) {
+        sessionStorage.selectedMenu = 'achreports';
+        sessionStorage.menuSelection = JSON.stringify({ "val": "Reports", "subVal": "ACHReports" });
+        $state.go('app.achreports', {
+            reportId: reportId
+        });
+
+        let menuObj = JSON.parse(sessionStorage.menuSelection);
+        sidebarMenuControl(menuObj.val, menuObj.subVal);
     }
 
     $scope.changeDownloadOption = function(val) {
