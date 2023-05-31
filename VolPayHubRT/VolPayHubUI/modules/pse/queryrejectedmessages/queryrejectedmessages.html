@@ -219,6 +219,7 @@
   }
 </style>
 <!-- Header -->
+<!-- This comment is intentionally added for this file to be visualized as a change in git -->
 <div class="page-bar breadCrumb" ng-controller="activeController">
   <div class="row">
     <div class="col-md-6 ">
@@ -285,52 +286,12 @@
                       <span class="fa fa-calendar"></span>
                     </span>
                   </div>
-                  <!-- <div class="col-auto my-1">
-                    <button type="submit" id="SearchConsolidatedByState" class="btnSuccess btnStyle">
-                      <i class="fa fa-search mr-1"></i>
-                      <span>{{'QueryRejectedMessages.Search' | translate}}</span>
-                    </button>
-                  </div> -->
                 </div>
               </form>
             </div>
 
             <!-- processingDate -->
             <div id="processingDate" class="processingDateClass">
-              <!-- <div class="processingDate-header row">
-                <div class="col">
-                  <label class="TitleprocessingDateClass">
-                    <span>{{'QueryRejectedMessages.ConsolidatedByQueryRejectedMessagesDate' | translate}}</span>
-                  </label>
-                </div>
-                <div class="col col-lg-1">
-                  <button style="box-sizing: border-box; opacity: 1;" class="btn-trans ng-scope" type="button"
-                    data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top"
-                    data-original-title="Exportar" ng-style="{'opacity':(restVal.length > 1)?'1':'0.5'}">
-                    <i class="fa fa-download" aria-hidden="true"></i>
-                  </button>
-                  <a id='dwnldLnkTableByProcessingDate' style="display:none;"></a>
-                  <ul
-                    class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
-                    <li>
-                      <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal"
-                          value="txt" class="radiobtns radioBtnAlighn">{{'SanctionModule.Reporttxt' | translate}}</span>
-                      <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal"
-                          value="csv" class="radiobtns radioBtnAlighn">{{'SanctionModule.ExportCSV' | translate}}</span>
-                      <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal"
-                          value="pdf" class="radiobtns radioBtnAlighn">{{'commissions.PDF' | translate}}</span>
-                      <span style="word-break: break-all;text-align: initial;"><input type="radio" name="excelVal"
-                          value="xls" class="radiobtns radioBtnAlighn">{{'commissions.XLS' | translate}}</span>
-                    </li>
-                    <li data-toggle-second="tooltip" data-placement="top"
-                      data-original-title="{{'ReportGenerate.TableDownload' | translate}}" class="excelprint excelIcon"
-                      ng-click="exportToExcelFlist($event)"><i class="fa fa-file-excel-o fa-fs14"
-                        aria-hidden="true"></i>
-                    </li>
-                  </ul>
-                </div>
-              </div> -->
-
               <div class="tobeFixed mb-2" ng-if="QueryRejectedMsgData.length !== 0">
                 <div class="row m-0">
                     <div class="countbar-title row m-0 countbarDisp">
@@ -348,33 +309,6 @@
                             <div class="btn-group refreshIcon">
                                 <button class="btn-trans" ng-click="refresh()" custom-tooltip data-toggle="tooltip" data-original-title="{{'QueryRejectedMessages.Refresh' | translate}}"><i class="fa fa-refresh fa-fs14"></i></button>
                             </div>
-                            <!-- <div class="btn-group dwnldLnkStateTableDetail float-right" data-toggle-second="tooltip" data-placement="top" data-original-title="{{'ToolTips.Export' |translate}}">
-                                <button style="box-sizing: border-box; opacity: 1;" class="btn-trans ng-scope" type="button" data-toggle="dropdown" data-toggle-second="tooltip" data-placement="top" data-original-title="Exportar" ng-style="{'opacity':(QueryRejectedMsgData.length > 1)?'1':'0.5'}"><i class="fa fa-download" aria-hidden="true"></i></button>
-                                <a id='dwnldLnkADFByState' style="display:none;"></a>
-                                <ul class="download-window dropdown-menu dropdown-menu-excel float-right dropdown-menu-right dwnIndex">
-                                    <li>
-                                        <span style="word-break: break-all;text-align: initial;">
-                                            <input type="radio" name="excelVal" value="txt" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'QueryRejectedMessages.ExportTXT' | translate}}
-                                        </span>
-                                        <span style="word-break: break-all;text-align: initial;">
-                                            <input type="radio" name="excelVal" value="csv" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'QueryRejectedMessages.ExportCSV' | translate}}
-                                        </span>
-                                        <span style="word-break: break-all;text-align: initial;">
-                                            <input type="radio" name="excelVal" value="pdf" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'QueryRejectedMessages.ExportPDF' | translate}}
-                                        </span>
-                                        <span style="word-break: break-all;text-align: initial;">
-                                            <input type="radio" name="excelVal" value="xls" class="radiobtns radioBtnAlighn" ng-model="excelVal">{{'QueryRejectedMessages.ExportXLS' | translate}}
-                                        </span>
-                                    </li>
-                                    <li data-toggle-second="tooltip" data-placement="top" data-original-title="{{'QueryRejectedMessages.TableDownload' | translate}}" class="excelprint excelIcon" ng-click="exportToExcelFlist($event)">
-                                        <i class="fa fa-file-text-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'txt'"></i>
-                                        <i class="fa fa-file-excel-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'csv'"></i>
-                                        <i class="fa fa-file-excel-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'xls'"></i>
-                                        <i class="fa fa-file-pdf-o fa-fs14" aria-hidden="true" ng-if="excelVal == 'pdf'"></i>
-                                        <i class="fa fa-print fa-fs14" aria-hidden="true" ng-if="!excelVal"></i>
-                                    </li>
-                                </ul>
-                            </div> -->
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -421,8 +355,8 @@
                         <div class="code-exapanded">
                           <pre ng-attr-id="{{'pre'+ $index}}">{{getParseValue(datos.message) | json}}</pre>
                           <div class="btn-group position-top-align" role="group" aria-label="Received Message">
-                            <button type="button" class="btn btn-ach btn-ach-custom-color copy" ngclipboard data-clipboard-target="{{'#pre'+ $index}}" ngclipboard-success="onSuccess(e, '#pre'+ $index);" ngclipboard-error="onError(e, '#pre'+ $index);" custom-tooltip data-toggle="tooltip" title="Copy to Clipboard"><i class="fa fa-clipboard fa-1x" aria-hidden="true"></i><span class="visually-hidden">Copy to Clipboard</span></button>
-                            <button type="button" class="btn btn-ach btn-ach-custom-color download" ng-click="downloadRejectecMsg('pre'+ $index, datos.message)" custom-tooltip data-toggle="tooltip" title="Click to Download"><i class="fa fa-download fa-1x" aria-hidden="true"></i><span class="visually-hidden">Click to Download</span></button>
+                            <button type="button" class="btn btn-ach btn-ach-custom-color copy" ngclipboard data-clipboard-target="{{'#pre'+ $index}}" ngclipboard-success="onSuccess(e, '#pre'+ $index, datos.message);" custom-tooltip data-toggle="tooltip" data-title="{{'QueryRejectedMessages.CopyToClipboard' | translate}}"><i class="fa fa-clipboard fa-1x" aria-hidden="true"></i><span class="visually-hidden">Copy to Clipboard</span></button>
+                            <button type="button" class="btn btn-ach btn-ach-custom-color download" ng-click="downloadRejectedMsg('pre'+ $index, datos.message)" custom-tooltip data-toggle="tooltip" data-title="{{'QueryRejectedMessages.ClickToDownload' | translate}}"><i class="fa fa-download fa-1x" aria-hidden="true"></i><span class="visually-hidden">Click to Download</span></button>
                           </div>
                         </div>
                       </td>

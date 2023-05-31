@@ -1,4 +1,4 @@
-angular.module('VolpayApp').controller('QueryRejectedMessagesCtrl', function ($scope, $timeout, $http, $filter, $state, $window, $location) {
+angular.module('VolpayApp').controller('QueryRejectedMessagesCtrl', function ($scope, $http) {
 
   //Init Form 
   $scope.initFormat = function () {
@@ -48,22 +48,15 @@ angular.module('VolpayApp').controller('QueryRejectedMessagesCtrl', function ($s
   }
 
   // You can still access the clipboard.js event
-  $scope.onSuccess = function (e, id) {
-    console.info('Action:', e.action);
-    console.info('Text:', e.text);
-    console.info('Trigger:', e.trigger);
-
+  $scope.onSuccess = function (e, id, data) {
+    // This API is for Audit Logs entries based on the user Event Emitted
+    $http.post(BASEURL + '/rest/v2/ach/psetrxrejected/cpy', data).then(function onSuccess(res) { }).catch(function onError(err) { });
     e.clearSelection();
   };
 
-  $scope.onError = function (e, id) {
-    console.error('Action:', e.action);
-    console.error('Trigger:', e.trigger);
-  }
-
-  $scope.downloadRejectecMsg = function (input, name) {
+  $scope.downloadRejectedMsg = function (input, data) {
     const text = document.getElementById(input).innerHTML;
-    const filename = (JSON.parse(name)).header.messageUid;
+    const filename = (JSON.parse(data)).header.messageUid;
 
     if (window.navigator && window.navigator.msSaveOrOpenBlob) {
       //IE11 and the legacy version Edge support
@@ -83,7 +76,7 @@ angular.module('VolpayApp').controller('QueryRejectedMessagesCtrl', function ($s
     }
   };
 
-  function GetQeuryRejectedMsgData(page, limit, data) {
+  function GetQueryRejectedMsgData(page, limit, data) {
     $scope.isLoading = true;
 
     let obj = {
@@ -122,17 +115,17 @@ angular.module('VolpayApp').controller('QueryRejectedMessagesCtrl', function ($s
         $scope.totalQueryCount = headers.totalcount;
         $scope.TotalCount = $scope.QueryRejectedMsgData.length;
         $scope.isLoading = false;
-      }).catch(function onError(response) {
+      }).catch(function onError(errorRes) {
         // Handle error
-        var data = response.data;
-        var status = response.status;
-        var statusText = response.statusText;
-        var headers = response.headers;
-        var config = response.config;
+        var data = errorRes.data;
+        var status = errorRes.status;
+        var statusText = errorRes.statusText;
+        var headers = errorRes.headers;
+        var config = errorRes.config;
 
         $scope.alerts = [{
-            type: 'danger',
-            msg: data.error.message
+          type: 'danger',
+          msg: data.error.message
         }]
 
         $scope.isLoading = false;
@@ -151,14 +144,15 @@ angular.module('VolpayApp').controller('QueryRejectedMessagesCtrl', function ($s
     let data = { "date": $scope.date };
     if ($scope.CurrentPage * $scope.CurrentLimit <= $scope.TotalCount) {
       $scope.CurrentPage += 1;
-      GetQeuryRejectedMsgData($scope.CurrentPage, $scope.CurrentLimit, data);
+      GetQueryRejectedMsgData($scope.CurrentPage, $scope.CurrentLimit, data);
     } else if ($scope.CurrentPage == 1 && $scope.TotalCount == 0) {
-      GetQeuryRejectedMsgData($scope.CurrentPage, $scope.CurrentLimit, data);
+      GetQueryRejectedMsgData($scope.CurrentPage, $scope.CurrentLimit, data);
     }
   }
+  $scope.loadMore();
 
-   //Query Function
-   $scope.searchByDate = function () {
+  //Query Function
+  $scope.searchByDate = function () {
     $scope.CurrentPage = 1;
     $scope.CurrentLimit = 20;
     $scope.TotalCount = 0;
